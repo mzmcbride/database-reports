@@ -20,7 +20,7 @@ import MySQLdb
 import datetime
 
 report_template = u'''
-Pages whose page length is greater than 150,000 bytes and whose page title does not contain "/"; data as of <onlyinclude>%s</onlyinclude>.
+Pages whose page length is greater than 175,000 bytes and whose page title does not contain "/"; data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -47,7 +47,7 @@ FROM page
 JOIN toolserver.namespace
 ON page_namespace = ns_id
 AND dbname = 'enwiki_p'
-WHERE page_len > 150000
+WHERE page_len > 175000
 AND page_title NOT LIKE "%/%"
 ORDER BY page_namespace ASC;
 ''')
