@@ -118,7 +118,7 @@ for row in cursor.fetchall():
     else:
         page_title = '[[%s]]' % (page_title)
     
-    if re.search(r'\\', row[2], re.I|re.U) or re.search(r'(archive|^Image:|^Image_talk:|^File:|^File_talk:|^Category:|^User:|^User_talk:|^Template:)', row[2], re.I|re.U):
+    if re.search(r'\\', row[2], re.I|re.U) or re.search(r'(archive|^Image:|^Image_talk:|^File:|^File_talk:|^Category:|^User:|^User_talk:|^Template:|^Talk:Talk:)', row[2], re.I|re.U):
         pass
 
     elif talkpage.exists() and "G8-exempt" not in talkpage.templates() and "Go away" not in talkpage.templates():
