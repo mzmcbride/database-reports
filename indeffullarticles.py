@@ -22,7 +22,7 @@ import datetime
 report_template = u'''
 Articles that are indefinitely fully-protected from editing; data as of <onlyinclude>%s</onlyinclude>.
 
-{| class="wikitable sortable" style="width:100%%; margin:auto;"
+{| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
 ! No.
 ! Article
