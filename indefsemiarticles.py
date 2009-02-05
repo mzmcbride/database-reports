@@ -70,9 +70,9 @@ output = []
 for row in cursor.fetchall():
     redirect = row[0]
     if redirect == 1:
-        title = u'<i>[[%s]]</i>' % unicode(row[1], 'utf-8')
+        title = u'<i>{{plh|1=%s}}</i>' % unicode(row[1], 'utf-8')
     else:
-        title = u'[[%s]]' % unicode(row[1], 'utf-8')
+        title = u'{{plh|1=%s}}' % unicode(row[1], 'utf-8')
     user = row[2]
     if user:
         user = u'[[User talk:%s|]]' % unicode(user, 'utf-8')
