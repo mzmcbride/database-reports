@@ -57,8 +57,7 @@ JOIN user
 ON log_user = user_id
 WHERE log_type='delete'
 AND log_action != 'restore'
-AND log_action != 'delete'
-LIMIT 1;
+AND log_action != 'delete';
 ''')
 
 i = 1
