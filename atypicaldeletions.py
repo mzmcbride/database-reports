@@ -51,7 +51,7 @@ SELECT
   log_comment
 FROM logging
 JOIN toolserver.namespace
-ON page_namespace = ns_id
+ON log_namespace = ns_id
 AND dbname = 'enwiki_p'
 JOIN user
 ON log_user = user_id
