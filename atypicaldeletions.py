@@ -71,7 +71,7 @@ for row in cursor.fetchall():
     log_action = row[4]
     log_title = u'%s' % unicode(row[5], 'utf-8')
     if log_comment:
-        log_comment u'<nowiki>%s</nowiki>' % unicode(row[6], 'utf-8')
+        log_comment = u'<nowiki>%s</nowiki>' % unicode(row[6], 'utf-8')
     if log_namespace == 6 or log_namespace == 14:
         log_title = '[[:%s:%s]]' % (ns_name, log_title)
     elif ns_name:
@@ -93,8 +93,7 @@ rep_lag = cursor.fetchone()[0]
 current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
 
 report = wikipedia.Page(site, 'Wikipedia:Database reports/Atypical deletion log actions')
-#report.put(report_template % (current_of, '\n'.join(output)), 'updated page', True, False)
-print report_template % (current_of, '\n'.join(output))
+report.put(report_template % (current_of, '\n'.join(output)), 'updated page', True, False)
 cursor.close()
 conn.close()
 
