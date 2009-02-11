@@ -70,8 +70,7 @@ for row in cursor.fetchall():
     log_timestamp = row[3]
     log_action = row[4]
     log_title = u'%s' % unicode(row[5], 'utf-8')
-    if log_comment:
-        log_comment = u'<nowiki>%s</nowiki>' % unicode(row[6], 'utf-8')
+    log_comment = u'<nowiki>%s</nowiki>' % unicode(row[6], 'utf-8')
     if log_namespace == 6 or log_namespace == 14:
         log_title = '[[:%s:%s]]' % (ns_name, log_title)
     elif ns_name:
