@@ -62,7 +62,7 @@ AND NOT EXISTS (SELECT
 i = 1
 output = []
 for row in cursor.fetchall():
-    if not re.search(r'(-importance|-class|non-article|assess)', row[0], re.I|re.U):
+    if not re.search(r'(-importance|-class|non-article|assess|_articles_missing_|_articles_in_need_of_|_articles_undergoing_|_articles_to_be_|_articles_not_yet_|Wikipedia_featured_topics)', row[0], re.I|re.U):
        page_title = u'{{clh|1=%s}}' % unicode(row[0], 'utf-8')
        page_len = row[1]
        table_row = u'''| %d
