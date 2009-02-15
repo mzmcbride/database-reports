@@ -47,7 +47,7 @@ Articles containing links to User: or User_talk: pages; data as of <onlyinclude>
 
 wiki = wikitools.Wiki()
 wiki.login(wikitools.settings.username, wikitools.settings.password)
-output_file = open(datetime.datetime.utcnow().strftime('/home/mzmcbride/scripts/database_reports/userlinks/output-%Y%m%d.txt'), 'a')
+output_file = open(datetime.datetime.utcnow().strftime('/home/mzmcbride/scripts/database-reports/userlinks/output-%Y%m%d.txt'), 'a')
 
 i = 1
 output = []
