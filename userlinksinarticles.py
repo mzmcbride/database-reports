@@ -29,7 +29,7 @@ WHERE page_namespace = 0
 AND page_is_redirect = 0;
 ''')
 
-all_pages = [row[0] for row in cursor.fetchall()]
+all_pages = [row[0] for row in cursor1.fetchall()]
 cursor1.close()
 conn1.close()
 
