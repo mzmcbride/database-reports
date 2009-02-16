@@ -21,7 +21,7 @@ import MySQLdb
 import datetime
 
 report_template = u'''
-Empty categories not in [[:Category:Wikipedia category redirects]], not in [[:Category:Disambiguation categories]], and do not contain "(-importance|-class|non-article|assess)"; data as of <onlyinclude>%s</onlyinclude>.
+Empty categories not in [[:Category:Wikipedia category redirects]], not in [[:Category:Disambiguation categories]], and do not contain "(-importance|-class|non-article|assess|_articles_missing_|_articles_in_need_of_|_articles_undergoing_|_articles_to_be_|_articles_not_yet_|Wikipedia_featured_topics)"; data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"

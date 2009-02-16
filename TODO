@@ -24,3 +24,6 @@ Templates that transclude themselves
 * User cats
 ** Add members column
 ** Add last edited column
+
+* Add {{/header}}-type thing
+** Make compatible with current data as of column on main page
