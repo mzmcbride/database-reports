@@ -56,7 +56,13 @@ AND NOT EXISTS (SELECT
                   1
                 FROM categorylinks
                 WHERE cl_from = page_id
-                AND cl_to = 'Disambiguation_categories');
+                AND cl_to = 'Disambiguation_categories')
+AND NOT EXISTS (SELECT
+                  1
+                FROM templatelinks
+                WHERE tl_from = page_id
+                AND tl_namespace = 10
+                AND tl_title = 'Empty_category');
 ''')
 
 i = 1
