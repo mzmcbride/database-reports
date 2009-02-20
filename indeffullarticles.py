@@ -22,6 +22,19 @@ import datetime
 report_template = u'''
 Articles that are indefinitely fully-protected from editing; data as of <onlyinclude>%s</onlyinclude>.
 
+== Non-redirects ==
+{| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
+|- style="white-space:nowrap;"
+! No.
+! Article
+! Protector
+! Timestamp
+! Reason
+|-
+%s
+|}
+
+== Redirects ==
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
 ! No.
@@ -66,13 +79,12 @@ WHERE CASE WHEN (NOT ISNULL(log_timestamp))
 ''')
 
 i = 1
-output = []
+h = 1
+output1 = []
+output2 = []
 for row in cursor.fetchall():
     redirect = row[0]
-    if redirect == 1:
-        title = u'<i>{{plh|1=%s}}</i>' % unicode(row[1], 'utf-8')
-    else:
-        title = u'{{plh|1=%s}}' % unicode(row[1], 'utf-8')
+    title = row[1]
     user = row[2]
     if user:
         user = u'[[User talk:%s|]]' % unicode(user, 'utf-8')
@@ -88,21 +100,31 @@ for row in cursor.fetchall():
         comment = u'<nowiki>%s</nowiki>' % unicode(comment, 'utf-8')
     else:
         comment = ''
+    if redirect == 0:
+        title = u'{{plh|1=%s}}' % unicode(title, 'utf-8')
+        num = i
+        i += 1
+    else:
+        title = u'{{plhnr|1=%s}}' % unicode(title, 'utf-8')
+        num = h
+        h += 1
     table_row = u'''| %d
 | %s
 | %s
 | %s
 | %s
-|-''' % (i, title, user, timestamp, comment)
-    output.append(table_row)
-    i += 1
+|-''' % (num, title, user, timestamp, comment)
+    if redirect == 0:
+        output1.append(table_row)
+    else:
+        output2.append(table_row)
 
 cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
 rep_lag = cursor.fetchone()[0]
 current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
 
 report = wikipedia.Page(site, 'Wikipedia:Database reports/Indefinitely fully-protected articles')
-report.put(report_template % (current_of, '\n'.join(output)), 'updated page', True, False)
+report.put(report_template % (current_of, '\n'.join(output1), '\n'.join(output2)), 'updated page', True, False)
 cursor.close()
 conn.close()
 
