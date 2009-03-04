@@ -21,7 +21,7 @@ import MySQLdb
 import datetime
 
 report_template = '''
-Excessively long (more than two years) blocks of IPs; data as of <onlyinclude>%s</onlyinclude>.
+Excessively long (more than two years) blocks of IPs whose block reasons do not contain "proxy"; data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -57,7 +57,7 @@ AND ipb_user = 0;
 i = 1
 output = []
 for row in cursor.fetchall():
-    if not re.search(r'(\{\{blocked proxy\}\}|\{\{openproxy\}\})', row[4], re.I|re.U):
+    if not re.search(r'(proxy)', row[4], re.I|re.U):
         ipb_address = u'[[User talk:%s|]]' % unicode(row[0], 'utf-8')
         ipb_by_text = u'%s' % unicode(row[1], 'utf-8')
         ipb_timestamp = u'%s' % unicode(row[2], 'utf-8')
