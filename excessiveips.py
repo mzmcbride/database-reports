@@ -21,7 +21,7 @@ import MySQLdb
 import datetime
 
 report_template = '''
-Excessively long (more than five years) blocks of IPs; data as of <onlyinclude>%s</onlyinclude>.
+Excessively long (more than two years) blocks of IPs; data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -49,7 +49,7 @@ SELECT
   ipb_expiry,
   ipb_reason
 FROM ipblocks
-WHERE ipb_expiry > DATE_FORMAT(DATE_ADD(NOW(),INTERVAL 5 YEAR),'%Y%m%d%H%i%s')
+WHERE ipb_expiry > DATE_FORMAT(DATE_ADD(NOW(),INTERVAL 2 YEAR),'%Y%m%d%H%i%s')
 AND ipb_expiry != "infinity"
 AND ipb_user = 0;
 ''')
