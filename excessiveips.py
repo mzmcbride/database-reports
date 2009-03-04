@@ -57,24 +57,25 @@ AND ipb_user = 0;
 i = 1
 output = []
 for row in cursor.fetchall():
-    ipb_address = u'[[User talk:%s|]]' % unicode(row[0], 'utf-8')
-    ipb_by_text = u'%s' % unicode(row[1], 'utf-8')
-    ipb_timestamp = u'%s' % unicode(row[2], 'utf-8')
-    ipb_expiry = u'%s' % unicode(row[3], 'utf-8')
-    ipb_reason = row[4]
-    if ipb_reason:
-        ipb_reason = u'<nowiki>%s</nowiki>' % unicode(ipb_reason, 'utf-8')
-    else:
-        ipb_reason = ''
-    table_row = u'''| %d
+    if not re.search(r'(\{\{blocked proxy\}\}|\{\{openproxy\}\})', row[4], re.I|re.U):
+        ipb_address = u'[[User talk:%s|]]' % unicode(row[0], 'utf-8')
+        ipb_by_text = u'%s' % unicode(row[1], 'utf-8')
+        ipb_timestamp = u'%s' % unicode(row[2], 'utf-8')
+        ipb_expiry = u'%s' % unicode(row[3], 'utf-8')
+        ipb_reason = row[4]
+        if ipb_reason:
+            ipb_reason = u'<nowiki>%s</nowiki>' % unicode(ipb_reason, 'utf-8')
+        else:
+            ipb_reason = ''
+        table_row = u'''| %d
 | %s
 | %s
 | %s
 | %s
 | %s
 |-''' % (i, ipb_address, ipb_by_text, ipb_timestamp, ipb_expiry, ipb_reason)
-    output.append(table_row)
-    i += 1
+        output.append(table_row)
+        i += 1
 
 cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
 rep_lag = cursor.fetchone()[0]
