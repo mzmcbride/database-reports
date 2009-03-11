@@ -13,10 +13,24 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import datetime
 import MySQLdb
 import wikitools
-import datetime
 import wikitools.settings
+
+report_title = 'Wikipedia:Database reports/Articles containing links to the user space'
+
+report_template = u'''
+Articles containing links to User: or User_talk: pages; data as of <onlyinclude>%s</onlyinclude>.
+ 
+{| class="wikitable sortable" style="width:100%%; margin:auto;"
+|- style="white-space:nowrap;"
+! No.
+! Article
+|-
+%s
+|}
+'''
 
 conn1 = MySQLdb.connect(host='sql-s1', db='enwiki_p', read_default_file='~/.my.cnf')
 cursor1 = conn1.cursor()
@@ -32,18 +46,6 @@ AND page_is_redirect = 0;
 all_pages = [row[0] for row in cursor1.fetchall()]
 cursor1.close()
 conn1.close()
-
-report_template = u'''
-Articles containing links to User: or User_talk: pages; data as of <onlyinclude>%s</onlyinclude>.
- 
-{| class="wikitable sortable" style="width:100%%; margin:auto;"
-|- style="white-space:nowrap;"
-! No.
-! Article
-|-
-%s
-|}
-'''
 
 wiki = wikitools.Wiki()
 wiki.login(wikitools.settings.username, wikitools.settings.password)
@@ -81,6 +83,9 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 cursor2.close()
 conn2.close()
 
-report = wikitools.Page(wiki, 'Wikipedia:Database reports/Articles containing links to the user space')
-report.edit(report_template % (current_of, '\n'.join(output)), summary='updated page')
+report = wikitools.Page(wiki, report_title)
+report_text = report_template % (current_of, '\n'.join(output))
+report_text = report_text.encode('utf-8')
+report.edit(report_text, summary='updated page')
+
 output_file.close()

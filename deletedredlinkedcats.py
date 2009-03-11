@@ -15,9 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import wikipedia
-import MySQLdb
 import datetime
+import MySQLdb
+import wikitools
+import settings
+
+report_title = 'Wikipedia:Database reports/Deleted red-linked categories/%i'
 
 report_template = u'''
 Deleted red-linked categories; data as of <onlyinclude>%s</onlyinclude>.
@@ -35,9 +38,9 @@ Deleted red-linked categories; data as of <onlyinclude>%s</onlyinclude>.
 '''
 
 rows_per_page = 800
-report_title = 'Wikipedia:Database reports/Deleted red-linked categories/%i'
 
-site = wikipedia.getSite()
+wiki = wikitools.Wiki()
+wiki.login(settings.username, settings.password)
 
 conn = MySQLdb.connect(host='sql-s1', db='enwiki_p', read_default_file='~/.my.cnf')
 cursor = conn.cursor()
@@ -100,11 +103,11 @@ end = rows_per_page
 page = 1
 for start in range(0, len(output), rows_per_page):
     report = wikipedia.Page(site, report_title % page)
-    report.put(report_template % (current_of, '\n'.join(output[start:end])), 'updated page', True, False)
+    report_text = report_template % (current_of, '\n'.join(output[start:end]))
+    report_text = report_text.encode('utf-8')
+    report.edit(report_text, summary='updated page')
     page += 1
     end += rows_per_page
 
 cursor.close()
 conn.close()
-
-wikipedia.stopme()

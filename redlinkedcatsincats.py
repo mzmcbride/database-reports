@@ -15,9 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import wikipedia
-import MySQLdb
 import datetime
+import MySQLdb
+import wikitools
+import settings
+
+report_title = 'Wikipedia:Database reports/Categories categorized in red-linked categories'
 
 report_template = u'''
 Categories categorized in red-linked categories; data as of <onlyinclude>%s</onlyinclude>.
@@ -32,7 +35,8 @@ Categories categorized in red-linked categories; data as of <onlyinclude>%s</onl
 |}
 '''
 
-site = wikipedia.getSite()
+wiki = wikitools.Wiki()
+wiki.login(settings.username, settings.password)
 
 conn = MySQLdb.connect(host='sql-s1', db='enwiki_p', read_default_file='~/.my.cnf')
 cursor = conn.cursor()
@@ -74,9 +78,10 @@ cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM rece
 rep_lag = cursor.fetchone()[0]
 current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
 
-report = wikipedia.Page(site, 'Wikipedia:Database reports/Categories categorized in red-linked categories')
-report.put(report_template % (current_of, '\n'.join(output)), 'updated page', True, False)
+report = wikitools.Page(wiki, report_title)
+report_text = report_template % (current_of, '\n'.join(output))
+report_text = report_text.encode('utf-8')
+report.edit(report_text, summary='updated page')
+
 cursor.close()
 conn.close()
-
-wikipedia.stopme()
