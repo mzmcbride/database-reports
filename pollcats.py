@@ -54,6 +54,14 @@ AND EXISTS (SELECT
             ON pg2.page_id = cl.cl_from
             WHERE pg2.page_namespace = 0
             AND cat.cl_to = cl.cl_to)
+AND cl_to NOT IN (SELECT
+                    page_title
+                  FROM page
+                  JOIN templatelinks
+                  ON tl_from = page_id
+                  WHERE page_namespace = 14
+                  AND tl_namespace = 10
+                  AND tl_title = 'Pollutedcat')
 LIMIT 250;
 ''')
 
