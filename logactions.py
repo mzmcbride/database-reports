@@ -77,7 +77,7 @@ for query in query_list:
 
 output = u''
 
-report_template = u'Users by log action; data as of <onlyinclude>%s</onlyinclude>.\n%s'
+report_template = u'{{shortcut|WP:LOGACTIONS}}\nUsers by log action; data as of <onlyinclude>%s</onlyinclude>.\n%s'
 
 table_template = u'''
 == %s ==
