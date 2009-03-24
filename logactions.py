@@ -74,7 +74,7 @@ for query in query_list:
             user_stats[user] = {query['name']: count}
         else:
             user_stats[user][query['name']] = count
-            
+
 output = u''
 
 report_template = u'Users by log action; data as of <onlyinclude>%s</onlyinclude>.\n%s'
@@ -90,7 +90,7 @@ table_template = u'''
 %s
 |}
 '''
-            
+
 for query in query_list:
     stat_dict = {}
     for user,stats in user_stats.iteritems():
@@ -103,9 +103,13 @@ for query in query_list:
         rows.append(u'''| %d\n| %s\n| %s\n|-''' % (i, user, count))
         i += 1
     output += table_template % (query['name'], '\n'.join(rows))
+    if query['len'] > 25:
+        output += "Full results are available [[{{FULLPAGENAME}}#Totals|below]].\n"
 
 master_table_template = u'''
 == Totals ==
+Hover over the abbreviations to see the full action name.
+
 {| class="wikitable sortable" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
 ! No.
@@ -124,7 +128,7 @@ new_query_list = []
 for query in query_list:
     if query['len'] > 25:
         new_query_list.append(query)
-        
+
 query_list = new_query_list
 
 rows = []
@@ -154,7 +158,7 @@ output += master_table_template % (
     '\n'.join(rows),
     '\n'.join([u'! style="text-align:left;" | %d' % totals[query['name']] for query in query_list]) + u'\n! style="text-align:left;" | %d' % totals['total']
 )
-    
+
 cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
 rep_lag = cursor.fetchone()[0]
 current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
