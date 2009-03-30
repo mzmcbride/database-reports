@@ -112,11 +112,11 @@ for row in cursor.fetchall():
     else:
         comment = ''
     if redirect == 0:
-        title = unicode('{{plh|1=%s:%s}}' % (namespace, title, 'utf-8')
+        title = unicode('{{plh|1=%s:%s}}' % (namespace, title, 'utf-8'))
         num = i
         i += 1
     else:
-        title = unicode('{{plhnr|1=%s:%s}}' % (namespace, title, 'utf-8')
+        title = unicode('{{plhnr|1=%s:%s}}' % (namespace, title, 'utf-8'))
         num = h
         h += 1
     table_row = u'''| %d
