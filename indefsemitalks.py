@@ -23,7 +23,7 @@ import settings
 report_title = 'Wikipedia:Database reports/Indefinitely semi-protected talk pages'
 
 report_template = u'''
-Talk pages that are indefinitely semi-protected from editing; data as of <onlyinclude>%s</onlyinclude>.
+Talk pages that are indefinitely semi-protected from editing (archives excluded); data as of <onlyinclude>%s</onlyinclude>.
 
 == Non-redirects ==
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
@@ -85,7 +85,8 @@ WHERE CASE WHEN (NOT ISNULL(log_timestamp))
                         WHERE log_title = page_title 
                         AND log_namespace = page_namespace
                         AND log_type = 'protect') 
-  ELSE 1 END;
+  ELSE 1 END
+AND page_title NOT LIKE "%rchive%";
 ''')
 
 i = 1
@@ -96,6 +97,7 @@ for row in cursor.fetchall():
     redirect = row[0]
     namespace = row[1]
     title = row[2]
+    page_title = '%s:%s' % (namespace, title)
     user = row[3]
     if user:
         user = u'[[User talk:%s|]]' % unicode(user, 'utf-8')
@@ -112,11 +114,11 @@ for row in cursor.fetchall():
     else:
         comment = ''
     if redirect == 0:
-        title = unicode('{{plh|1=%s:%s}}' % (namespace, title, 'utf-8'))
+        page_title = u'{{plh|1=%s}}' % unicode(page_title, 'utf-8')
         num = i
         i += 1
     else:
-        title = unicode('{{plhnr|1=%s:%s}}' % (namespace, title, 'utf-8'))
+        page_title = u'{{plhnr|1=%s}}' % unicode(page_title, 'utf-8')
         num = h
         h += 1
     table_row = u'''| %d
@@ -124,7 +126,7 @@ for row in cursor.fetchall():
 | %s
 | %s
 | %s
-|-''' % (num, title, user, timestamp, comment)
+|-''' % (num, page_title, user, timestamp, comment)
     if redirect == 0:
         output1.append(table_row)
     else:
