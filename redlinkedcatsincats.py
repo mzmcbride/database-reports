@@ -20,7 +20,7 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = 'Wikipedia:Database reports/Categories categorized in red-linked categories'
+report_title = 'Wikipedia:Database reports/Categories categorized in red-linked categories/%i'
 
 report_template = u'''
 Categories categorized in red-linked categories; data as of <onlyinclude>%s</onlyinclude>.
@@ -34,6 +34,8 @@ Categories categorized in red-linked categories; data as of <onlyinclude>%s</onl
 %s
 |}
 '''
+
+rows_per_page = 800
 
 wiki = wikitools.Wiki()
 wiki.login(settings.username, settings.password)
@@ -78,10 +80,15 @@ cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM rece
 rep_lag = cursor.fetchone()[0]
 current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
 
-report = wikitools.Page(wiki, report_title)
-report_text = report_template % (current_of, '\n'.join(output))
-report_text = report_text.encode('utf-8')
-report.edit(report_text, summary='updated page')
+end = rows_per_page
+page = 1
+for start in range(0, len(output), rows_per_page):
+    report = wikitools.Page(wiki, report_title % page)
+    report_text = report_template % (current_of, '\n'.join(output[start:end]))
+    report_text = report_text.encode('utf-8')
+    report.edit(report_text, summary='updated page')
+    page += 1
+    end += rows_per_page
 
 cursor.close()
 conn.close()
