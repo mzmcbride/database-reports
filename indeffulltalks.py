@@ -123,7 +123,7 @@ for start in range(0, len(output), rows_per_page):
     report_text = report_text.encode('utf-8')
     try:
         report.edit(report_text, summary='updated page')
-    except ServerError:
+    except:
         try:
             time.sleep(3)
             report.edit(report_text, summary='updated page')
