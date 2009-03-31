@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+import time
 import MySQLdb
 import wikitools
 import settings
@@ -120,7 +121,14 @@ for start in range(0, len(output), rows_per_page):
     report = wikitools.Page(wiki, report_title % page)
     report_text = report_template % (current_of, '\n'.join(output[start:end]))
     report_text = report_text.encode('utf-8')
-    report.edit(report_text, summary='updated page')
+    try:
+        report.edit(report_text, summary='updated page')
+    except ServerError:
+        try:
+            time.sleep(3)
+            report.edit(report_text, summary='updated page')
+        except:
+            print "Man, this really sucks that it can't edit."
     page += 1
     end += rows_per_page
 
