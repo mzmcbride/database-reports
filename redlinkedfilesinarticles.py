@@ -66,8 +66,14 @@ AND page_namespace = 0;
 i = 1
 output = []
 for row in cursor.fetchall():
-    page_title = u'[[%s|]]' % unicode(row[0], 'utf-8')
-    il_to = u'%s' % unicode(row[1], 'utf-8')
+    try:
+        page_title = u'[[%s|]]' % unicode(row[0], 'utf-8')
+    except UnicodeDecodeError:
+        continue
+    try:
+        il_to = u'%s' % unicode(row[1], 'utf-8')
+    except UnicodeDecodeError:
+        continue
     table_row = u'''|-
 | %d
 | %s
