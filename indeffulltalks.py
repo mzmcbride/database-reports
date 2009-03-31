@@ -20,24 +20,11 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = 'Wikipedia:Database reports/Indefinitely fully-protected talk pages'
+report_title = 'Wikipedia:Database reports/Indefinitely fully-protected talk pages/%i'
 
 report_template = u'''
 Talk pages that are indefinitely fully-protected from editing (archives excluded); data as of <onlyinclude>%s</onlyinclude>.
 
-== Non-redirects ==
-{| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
-|- style="white-space:nowrap;"
-! No.
-! Page
-! Protector
-! Timestamp
-! Reason
-|-
-%s
-|}
-
-== Redirects ==
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
 ! No.
@@ -49,6 +36,8 @@ Talk pages that are indefinitely fully-protected from editing (archives excluded
 %s
 |}
 '''
+
+rows_per_page = 800
 
 wiki = wikitools.Wiki()
 wiki.login(settings.username, settings.password)
@@ -90,9 +79,7 @@ AND page_title NOT LIKE "%rchive%";
 ''')
 
 i = 1
-h = 1
-output1 = []
-output2 = []
+output = []
 for row in cursor.fetchall():
     redirect = row[0]
     namespace = row[1]
@@ -113,33 +100,29 @@ for row in cursor.fetchall():
         comment = u'<nowiki>%s</nowiki>' % unicode(comment, 'utf-8')
     else:
         comment = ''
-    if redirect == 0:
-        page_title = u'{{plh|1=%s}}' % unicode(page_title, 'utf-8')
-        num = i
-        i += 1
-    else:
-        page_title = u'{{plhnr|1=%s}}' % unicode(page_title, 'utf-8')
-        num = h
-        h += 1
+    page_title = u'{{plh|1=%s}}' % unicode(page_title, 'utf-8')
     table_row = u'''| %d
 | %s
 | %s
 | %s
 | %s
 |-''' % (num, page_title, user, timestamp, comment)
-    if redirect == 0:
-        output1.append(table_row)
-    else:
-        output2.append(table_row)
+    output.append(table_row)
+    i += 1
 
 cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
 rep_lag = cursor.fetchone()[0]
 current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
 
-report = wikitools.Page(wiki, report_title)
-report_text = report_template % (current_of, '\n'.join(output1), '\n'.join(output2))
-report_text = report_text.encode('utf-8')
-report.edit(report_text, summary='updated page')
+end = rows_per_page
+page = 1
+for start in range(0, len(output), rows_per_page):
+    report = wikitools.Page(wiki, report_title % page)
+    report_text = report_template % (current_of, '\n'.join(output[start:end]))
+    report_text = report_text.encode('utf-8')
+    report.edit(report_text, summary='updated page')
+    page += 1
+    end += rows_per_page
 
 cursor.close()
 conn.close()
