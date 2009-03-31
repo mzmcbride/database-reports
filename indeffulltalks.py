@@ -106,7 +106,7 @@ for row in cursor.fetchall():
 | %s
 | %s
 | %s
-|-''' % (num, page_title, user, timestamp, comment)
+|-''' % (i, page_title, user, timestamp, comment)
     output.append(table_row)
     i += 1
 
