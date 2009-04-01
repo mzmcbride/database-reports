@@ -86,7 +86,7 @@ for row in cursor.fetchall():
             target = redirect.getRedirectTarget()
             lastedit = datetime.datetime.strptime(redirect.editTime(), '%Y%m%d%H%M%S')
             print redirect
-            if not target.exists() and datetime.datetime.utcnow() - lastedit > datetime.timedelta(days=4)
+            if not target.exists() and datetime.datetime.utcnow() - lastedit > datetime.timedelta(days=4) \
               and not re.search(r'(CAT:)', row[2], re.U):
                 try:
                     if delete:
