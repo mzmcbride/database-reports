@@ -21,19 +21,21 @@ import re
 import datetime
 import time
 
-sleep_time = 0
+report_title = 'Wikipedia:Database reports/Orphaned talk pages'
 
 report_template = u'''
-Orphaned talk pages; data as of <onlyinclude>%s</onlyinclude>.
+Orphaned talk pages; data as of <onlyinclude>%s</onlyinclude>. Colored rows would be deleted.
 
 {| class="wikitable sortable" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
 ! No.
 ! Page
-|-
 %s
 |}
 '''
+
+delete = False
+sleep_time = 0
 
 site = wikipedia.getSite()
 
@@ -50,6 +52,7 @@ JOIN toolserver.namespace
 ON p1.page_namespace = ns_id
 AND dbname = 'enwiki_p'
 WHERE p1.page_title NOT LIKE "%/%"
+AND p1.page_namespace NOT IN (0,2,3,4,6,7,8,9,10,12,14,16,18,100,102,104)
 AND CASE WHEN p1.page_namespace = 1
   THEN NOT EXISTS (SELECT
                      1
@@ -98,9 +101,6 @@ AND CASE WHEN p1.page_namespace = 101
                    FROM page AS p2
                    WHERE p2.page_namespace = 100
                    AND p1.page_title = p2.page_title)
-  ELSE 1 END
-AND CASE WHEN p1.page_namespace IN (0,2,3,4,6,7,8,9,10,12,14,16,18,100,102,104)
-  THEN 1 != 1
   ELSE 1 END;
 ''')
 
@@ -125,15 +125,23 @@ for row in cursor.fetchall():
         lastedit = datetime.datetime.strptime(talkpage.editTime(), '%Y%m%d%H%M%S')
         if datetime.datetime.utcnow() - lastedit > datetime.timedelta(days=7):
             try:
-                talkpage.delete('[[WP:CSD#G8|CSD G8]]', False, False)
-                time.sleep(sleep_time)
-                continue
+                if delete:
+                    talkpage.delete('[[WP:CSD#G8|CSD G8]]', False, False)
+                    time.sleep(sleep_time)
+                    continue
+                else:
+                    table_row = u'''|- style="background:#EBE3F4;"
+| %d
+| %s''' % (i, page_title)
+                    output.append(table_row)
+                    i += 1
+                    continue
             except wikipedia.BadTitle:
                 print 'Skipped [[en:%s]]: had unknown issues' % talkpage.title()
                 continue
-    table_row = u'''| %d
-| %s
-|-''' % (i, page_title)
+    table_row = u'''|-
+| %d
+| %s''' % (i, page_title)
     output.append(table_row)
     i += 1
 
@@ -141,7 +149,7 @@ cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM rece
 rep_lag = cursor.fetchone()[0]
 current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
 
-report = wikipedia.Page(site, 'Wikipedia:Database reports/Orphaned talk pages')
+report = wikipedia.Page(site, report_title)
 report.put(report_template % (current_of, '\n'.join(output)), 'updated page', True, False)
 cursor.close()
 conn.close()
