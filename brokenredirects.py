@@ -24,7 +24,7 @@ import time
 report_title = 'Wikipedia:Database reports/Broken redirects'
 
 report_template = u'''
-Broken redirects; data as of <onlyinclude>%s</onlyinclude>.
+Broken redirects; data as of <onlyinclude>%s</onlyinclude>. Colored rows would be deleted.
 
 {| class="wikitable sortable" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -93,11 +93,12 @@ for row in cursor.fetchall():
                         time.sleep(sleep_time)
                         continue
                     else:
-                        table_row = u'''|- style="background:#DDCEF2;"
+                        table_row = u'''|- style="background:#EBE3F4;"
 | %d
 | %s''' % (i, page_title)
                         output.append(table_row)
                         i += 1
+                        continue
                 except wikipedia.BadTitle:
                     print 'Skipped [[en:%s]]: malformed redirect' % redirect.title()
                     continue
