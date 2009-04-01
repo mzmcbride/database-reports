@@ -21,7 +21,7 @@ import re
 import datetime
 import time
 
-sleep_time = 0
+report_title = 'Wikipedia:Database reports/Broken redirects'
 
 report_template = u'''
 Broken redirects; data as of <onlyinclude>%s</onlyinclude>.
@@ -30,10 +30,12 @@ Broken redirects; data as of <onlyinclude>%s</onlyinclude>.
 |- style="white-space:nowrap;"
 ! No.
 ! Redirect
-|-
 %s
 |}
 '''
+
+delete = False
+sleep_time = 0
 
 site = wikipedia.getSite()
 
@@ -87,18 +89,25 @@ for row in cursor.fetchall():
             if not target.exists() and datetime.datetime.utcnow() - lastedit > datetime.timedelta(days=4)
               and not re.search(r'(CAT:)', row[2], re.U):
                 try:
-                    redirect.delete('[[WP:CSD#G8|CSD G8]]: [[%s]]' % target.title(), False, False)
-                    time.sleep(sleep_time)
-                    continue
+                    if delete:
+                        redirect.delete('[[WP:CSD#G8|CSD G8]]: [[%s]]' % target.title(), False, False)
+                        time.sleep(sleep_time)
+                        continue
+                    else:
+                        table_row = u'''|- style="background:#DDCEF2;"
+| %d
+| %s''' % (i, page_title)
+                        output.append(table_row)
+                        i += 1
                 except wikipedia.BadTitle:
                     print 'Skipped [[en:%s]]: malformed redirect' % redirect.title()
                     continue
         except:
             print 'Skipped [[en:%s]]: malformed redirect' % redirect.title()
             continue
-    table_row = u'''| %d
-| %s
-|-''' % (i, page_title)
+    table_row = u'''|-
+| %d
+| %s''' % (i, page_title)
     output.append(table_row)
     i += 1
 
@@ -106,7 +115,7 @@ cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM rece
 rep_lag = cursor.fetchone()[0]
 current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
 
-report = wikipedia.Page(site, 'Wikipedia:Database reports/Broken redirects')
+report = wikipedia.Page(site, report_title)
 report.put(report_template % (current_of, '\n'.join(output)), 'updated page', True, False)
 cursor.close()
 conn.close()
