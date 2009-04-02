@@ -24,9 +24,11 @@ import time
 report_title = 'Wikipedia:Database reports/Orphaned talk pages'
 
 report_template = u'''
-Orphaned talk pages; data as of <onlyinclude>%s</onlyinclude>. Colored rows would be deleted.
+Orphaned talk pages; data as of <onlyinclude>%s</onlyinclude>.
 
-{| class="wikitable sortable" style="width:100%%; margin:auto;"
+Colored rows have been checked and can be deleted without review.
+
+{| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
 ! No.
 ! Page
@@ -112,11 +114,11 @@ for row in cursor.fetchall():
     ns_name = u'%s' % unicode(row[1], 'utf-8')
     page_title = u'%s' % unicode(row[2], 'utf-8')
     if page_namespace == 6 or page_namespace == 14:
-        page_title = '[[:%s:%s]]' % (ns_name, page_title)
+        page_title = ':%s:%s' % (ns_name, page_title)
     elif ns_name:
-        page_title = '[[%s:%s]]' % (ns_name, page_title)
+        page_title = '%s:%s' % (ns_name, page_title)
     else:
-        page_title = '[[%s]]' % (page_title)
+        page_title = '%s' % (page_title)
     
     if re.search(r'\\', row[2], re.I|re.U) or re.search(r'(archive|^Image:|^Image_talk:|^File:|^File_talk:|^Category:|^User:|^User_talk:|^Template:|^Talk:Talk:)', row[2], re.I|re.U):
         pass
@@ -132,7 +134,7 @@ for row in cursor.fetchall():
                 else:
                     table_row = u'''|- style="background:#EBE3F4;"
 | %d
-| %s''' % (i, page_title)
+| [[%s]] {{ddot|1=%s}}''' % (i, page_title, page_title)
                     output.append(table_row)
                     i += 1
                     continue
@@ -141,7 +143,7 @@ for row in cursor.fetchall():
                 continue
     table_row = u'''|-
 | %d
-| %s''' % (i, page_title)
+| [[%s]]''' % (i, page_title)
     output.append(table_row)
     i += 1
 
