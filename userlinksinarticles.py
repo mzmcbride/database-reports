@@ -25,7 +25,7 @@ report_title = 'Wikipedia:Database reports/Articles containing links to the user
 report_template = u'''
 Articles containing links to User: or User_talk: pages; data as of <onlyinclude>%s</onlyinclude>.
  
-{| class="wikitable sortable" style="width:100%%; margin:auto;"
+{| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
 ! No.
 ! Article
