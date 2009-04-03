@@ -1,3 +1,5 @@
+#!/usr/bin/env python2.5
+
 # Copyright 2008 bjweeks, MZMcBride
 
 # This program is free software: you can redistribute it and/or modify
@@ -16,7 +18,7 @@
 import datetime
 import MySQLdb
 import wikitools
-import wikitools.settings
+import settings
 
 report_title = 'Wikipedia:Database reports/Articles containing links to the user space'
 
@@ -32,60 +34,44 @@ Articles containing links to User: or User_talk: pages; data as of <onlyinclude>
 |}
 '''
 
-conn1 = MySQLdb.connect(host='sql-s1', db='enwiki_p', read_default_file='~/.my.cnf')
-cursor1 = conn1.cursor()
-cursor1.execute('''
-/* userlinksinarticles.py SLOW_OK */
-SELECT
-  page_title
-FROM page
-WHERE page_namespace = 0
-AND page_is_redirect = 0;
-''')
-
-all_pages = [row[0] for row in cursor1.fetchall()]
-cursor1.close()
-conn1.close()
-
 wiki = wikitools.Wiki()
-wiki.login(wikitools.settings.username, wikitools.settings.password)
-output_file = open(datetime.datetime.utcnow().strftime('/home/mzmcbride/scripts/database-reports/userlinks/output-%Y%m%d.txt'), 'a')
+wiki.login(settings.username, settings.password)
+
+conn = MySQLdb.connect(host='sql-s1', db='enwiki_p', read_default_file='~/.my.cnf')
+cursor = conn.cursor()
+cursor.execute('''
+/* userlinksinarticles.py SLOW_OK */
+SELECT DISTINCT
+  page_title
+FROM page AS pg1
+JOIN pagelinks
+ON pl_from = pg1.page_id
+WHERE page_namespace = 0
+AND EXISTS (SELECT
+              1
+            FROM pagelinks
+            WHERE pl_from = pg1.page_id
+            AND pl_namespace IN (2,3));
+''')
 
 i = 1
 output = []
-step = int(wiki.limit/10)
-stop = step
-for start in range(0, len(all_pages), step):
-    print 'Checking %d pages.' % start
-    params = {
-        'action': 'query',
-        'prop': 'links',
-        'titles': '|'.join([unicode(page.replace('_', ' '), 'utf-8').encode('ascii', 'xmlcharrefreplace') for page in all_pages[start:stop]]),
-        'plnamespace': '2|3'
-    }
-    request = wikitools.APIRequest(wiki, params)
-    query = request.query(querycontinue=False)
-    page_list = query['query']['pages']
-    for page in page_list.values():
-        if 'links' in page:
-            output_file.write(page['title'].encode('ascii', 'xmlcharrefreplace') + '\n')
-            output_file.flush()
-            table_row = u'| %d\n| [[%s]]\n|-' % (i, page['title'].encode('ascii', 'xmlcharrefreplace'))
-            output.append(table_row)
-            i += 1
-    stop += step
+for row in cursor.fetchall():
+    page_title = u'%s' % unicode(row[0], 'utf-8')
+    table_row = u'''| %d
+| {{plenr|1=%s}}
+|-''' % (i, page_title)
+    output.append(table_row)
+    i += 1
 
-conn2 = MySQLdb.connect(host='sql-s1', db='enwiki_p', read_default_file='~/.my.cnf')
-cursor2 = conn2.cursor()
-cursor2.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
-rep_lag = cursor2.fetchone()[0]
+cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
+rep_lag = cursor.fetchone()[0]
 current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
-cursor2.close()
-conn2.close()
 
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
 report.edit(report_text, summary='updated page')
 
-output_file.close()
+cursor.close()
+conn.close()
