@@ -26,7 +26,8 @@ report_title = 'Wikipedia:Database reports/Orphaned talk pages'
 report_template = u'''
 Orphaned talk pages; data as of <onlyinclude>%s</onlyinclude>.
 
-Colored rows have been checked and can be deleted without review.
+Colored rows have been checked and can be deleted without review. Pages transcluding \
+{{[[Template:Go away|Go away]]}} or {{[[Template:G8-exempt|G8-exempt]]}} have been excluded.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -55,6 +56,20 @@ ON p1.page_namespace = ns_id
 AND dbname = 'enwiki_p'
 WHERE p1.page_title NOT LIKE "%/%"
 AND p1.page_namespace NOT IN (0,2,3,4,6,7,8,9,10,12,14,16,18,100,102,104)
+AND p1.page_id NOT IN (SELECT
+                         page_id
+                       FROM page
+                       JOIN templatelinks
+                       ON page_id = tl_from
+                       WHERE tl_title="G8-exempt"
+                       AND tl_namespace = 10)
+AND p1.page_id NOT IN (SELECT
+                         page_id
+                       FROM page
+                       JOIN templatelinks
+                       ON page_id = tl_from
+                       WHERE tl_title="Go_away"
+                       AND tl_namespace = 10)   
 AND CASE WHEN p1.page_namespace = 1
   THEN NOT EXISTS (SELECT
                      1
