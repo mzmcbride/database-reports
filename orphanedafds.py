@@ -46,11 +46,16 @@ SELECT
   page_title
 FROM page
 LEFT JOIN pagelinks
-ON pl_from = page_id
+ON pl_title = page_title
+AND pl_namespace = page_namespace
+LEFT JOIN templatelinks
+ON tl_title = page_title
+AND tl_namespace = page_namespace
 WHERE page_namespace = 4
 AND page_is_redirect = 0
 AND page_title LIKE "Articles_for_deletion/%"
-AND ISNULL(pl_from);
+AND ISNULL(pl_namespace)
+AND ISNULL(tl_namespace);
 ''')
 
 i = 1
