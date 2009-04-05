@@ -56,20 +56,6 @@ ON p1.page_namespace = ns_id
 AND dbname = 'enwiki_p'
 WHERE p1.page_title NOT LIKE "%/%"
 AND p1.page_namespace NOT IN (0,2,3,4,6,7,8,9,10,12,14,16,18,100,102,104)
-AND p1.page_id NOT IN (SELECT
-                         page_id
-                       FROM page
-                       JOIN templatelinks
-                       ON page_id = tl_from
-                       WHERE tl_title="G8-exempt"
-                       AND tl_namespace = 10)
-AND p1.page_id NOT IN (SELECT
-                         page_id
-                       FROM page
-                       JOIN templatelinks
-                       ON page_id = tl_from
-                       WHERE tl_title="Go_away"
-                       AND tl_namespace = 10)   
 AND CASE WHEN p1.page_namespace = 1
   THEN NOT EXISTS (SELECT
                      1
@@ -118,7 +104,21 @@ AND CASE WHEN p1.page_namespace = 101
                    FROM page AS p2
                    WHERE p2.page_namespace = 100
                    AND p1.page_title = p2.page_title)
-  ELSE 1 END;
+  ELSE 1 END
+AND p1.page_id NOT IN (SELECT
+                         page_id
+                       FROM page
+                       JOIN templatelinks
+                       ON page_id = tl_from
+                       WHERE tl_title="G8-exempt"
+                       AND tl_namespace = 10)
+AND p1.page_id NOT IN (SELECT
+                         page_id
+                       FROM page
+                       JOIN templatelinks
+                       ON page_id = tl_from
+                       WHERE tl_title="Go_away"
+                       AND tl_namespace = 10);
 ''')
 
 i = 1
