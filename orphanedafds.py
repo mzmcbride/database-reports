@@ -59,7 +59,7 @@ for row in cursor.fetchall():
     page_title = u'{{pllh|1=Wikipedia:%s}}' % unicode(row[0], 'utf-8')
     table_row = u'''| %d
 | %s
-|-''' % (i, page_title, page_len)
+|-''' % (i, page_title)
     output.append(table_row)
     i += 1
 
