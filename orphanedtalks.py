@@ -143,7 +143,7 @@ AND p1.page_id NOT IN (SELECT
 i = 1
 output = []
 for row in cursor.fetchall():
-    talkpage = u'%s:%s' % (unicode(row[1], 'utf-8'), unicode(row[2], 'utf-8'))
+    talkpage = wikitools.Page(wiki, u'%s:%s' % (unicode(row[1], 'utf-8'), unicode(row[2], 'utf-8')))
     page_namespace = row[0]
     ns_name = u'%s' % unicode(row[1], 'utf-8')
     page_title = u'%s' % unicode(row[2], 'utf-8')
@@ -157,7 +157,7 @@ for row in cursor.fetchall():
     if re.search(r'\\', row[2], re.I|re.U) or re.search(r'(archive|^Image:|^Image_talk:|^File:|^File_talk:|^Category:|^User:|^User_talk:|^Template:|^Talk:Talk:)', row[2], re.I|re.U):
         pass
 
-    elif talkpage.exists() and hasNoRecentRevs(talkpage):
+    elif talkpage.exists() and hasNoRecentRevs(talkpage.title):
         try:
             if delete:
                 talkpage.delete('[[WP:CSD#G8|CSD G8]]', followRedir=False)
