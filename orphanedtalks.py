@@ -15,11 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import wikipedia
-import MySQLdb
-import re
 import datetime
+import re
 import time
+import MySQLdb
+import wikitools
+import settings
 
 report_title = 'Wikipedia:Database reports/Orphaned talk pages'
 
@@ -40,7 +41,25 @@ Colored rows have been checked and can be deleted without review. Pages transclu
 delete = False
 sleep_time = 0
 
-site = wikipedia.getSite()
+wiki = wikitools.Wiki()
+wiki.login(settings.userwhip, settings.passwhip)
+
+def hasNoRecentRevs(talkpage):
+    params = {
+        'action': 'query', 
+        'titles': '%s' % talkpage, 
+        'prop': 'revisions', 
+        'rvprop': 'timestamp', 
+        'format': 'json', 
+        'rvlimit': '1'
+    }
+    request = wikitools.APIRequest(wiki, params)
+    response = request.query(querycontinue=False)
+    query = response['query']['pages'].values()[0]
+    if 'missing' in query:
+        return True
+    timestamp = datetime.datetime.strptime(query['revisions'][0]['timestamp'], '%Y-%m-%dT%H:%M:%SZ')
+    return datetime.datetime.utcnow() - timestamp > datetime.timedelta(days=7)
 
 conn = MySQLdb.connect(host='sql-s1', db='enwiki_p', read_default_file='~/.my.cnf')
 cursor = conn.cursor()
@@ -124,7 +143,7 @@ AND p1.page_id NOT IN (SELECT
 i = 1
 output = []
 for row in cursor.fetchall():
-    talkpage = wikipedia.Page(site, '%s:%s' % (row[1], unicode(row[2], 'utf-8')))
+    talkpage = u'%s:%s' % (unicode(row[1], 'utf-8'), unicode(row[2], 'utf-8'))
     page_namespace = row[0]
     ns_name = u'%s' % unicode(row[1], 'utf-8')
     page_title = u'%s' % unicode(row[2], 'utf-8')
@@ -134,28 +153,26 @@ for row in cursor.fetchall():
         page_title = '%s:%s' % (ns_name, page_title)
     else:
         page_title = '%s' % (page_title)
-    
+
     if re.search(r'\\', row[2], re.I|re.U) or re.search(r'(archive|^Image:|^Image_talk:|^File:|^File_talk:|^Category:|^User:|^User_talk:|^Template:|^Talk:Talk:)', row[2], re.I|re.U):
         pass
 
-    elif talkpage.exists() and "G8-exempt" not in talkpage.templates() and "Go away" not in talkpage.templates():
-        lastedit = datetime.datetime.strptime(talkpage.editTime(), '%Y%m%d%H%M%S')
-        if datetime.datetime.utcnow() - lastedit > datetime.timedelta(days=7):
-            try:
-                if delete:
-                    talkpage.delete('[[WP:CSD#G8|CSD G8]]', False, False)
-                    time.sleep(sleep_time)
-                    continue
-                else:
-                    table_row = u'''|- style="background:#EBE3F4;"
+    elif talkpage.exists() and hasNoRecentRevs(talkpage):
+        try:
+            if delete:
+                talkpage.delete('[[WP:CSD#G8|CSD G8]]', followRedir=False)
+                time.sleep(sleep_time)
+                continue
+            else:
+                table_row = u'''|- style="background:#EBE3F4;"
 | %d
 | [[%s]] {{ddot|1=%s}}''' % (i, page_title, page_title)
-                    output.append(table_row)
-                    i += 1
-                    continue
-            except wikipedia.BadTitle:
-                print 'Skipped [[en:%s]]: had unknown issues' % talkpage.title()
+                output.append(table_row)
+                i += 1
                 continue
+        except:
+            print 'Skipped [[en:%s]]: had unknown issues' % talkpage.title()
+            continue
     table_row = u'''|-
 | %d
 | [[%s]]''' % (i, page_title)
@@ -166,9 +183,10 @@ cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM rece
 rep_lag = cursor.fetchone()[0]
 current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
 
-report = wikipedia.Page(site, report_title)
-report.put(report_template % (current_of, '\n'.join(output)), 'updated page', True, False)
+report = wikitools.Page(wiki, report_title)
+report_text = report_template % (current_of, '\n'.join(output))
+report_text = report_text.encode('utf-8')
+report.edit(report_text, summary='updated page')
+
 cursor.close()
 conn.close()
-
-wikipedia.stopme()
