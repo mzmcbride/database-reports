@@ -175,7 +175,7 @@ for row in cursor.fetchall():
             continue
     table_row = u'''|-
 | %d
-| [[%s]]''' % (i, page_title)
+| {{plnr|1=%s}}''' % (i, page_title)
     output.append(table_row)
     i += 1
 
