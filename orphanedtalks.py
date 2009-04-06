@@ -166,7 +166,7 @@ for row in cursor.fetchall():
             else:
                 table_row = u'''|- style="background:#EBE3F4;"
 | %d
-| [[%s]] {{ddot|1=%s}}''' % (i, page_title, page_title)
+| {{plnr|1=%s}} {{ddot|1=%s}}''' % (i, page_title, page_title)
                 output.append(table_row)
                 i += 1
                 continue
