@@ -119,7 +119,7 @@ rep_lag = cursor.fetchone()[0]
 current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
 
 report = wikipedia.Page(site, report_title)
-report.put(report_template % (current_of, '\n'.join(output)), 'updated page', True, False)
+report.put(report_template % (current_of, '\n'.join(output)), '[[Wikipedia:Bots/Requests for approval/Whip, dip, and slide|Bot]]: Updated page.', True, False)
 cursor.close()
 conn.close()
 
