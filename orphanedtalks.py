@@ -149,6 +149,13 @@ AND p1.page_id NOT IN (SELECT
                        JOIN templatelinks
                        ON page_id = tl_from
                        WHERE tl_title="Go_away"
+                       AND tl_namespace = 10)
+AND p1.page_id NOT IN (SELECT
+                         page_id
+                       FROM page
+                       JOIN templatelinks
+                       ON page_id = tl_from
+                       WHERE tl_title="Rtd"
                        AND tl_namespace = 10);
 ''')
 
