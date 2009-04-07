@@ -49,17 +49,20 @@ SELECT
 FROM page
 JOIN imagelinks
 ON page_id = il_from
-WHERE (NOT EXISTS(
- SELECT
-   1
- FROM image
- WHERE img_name = il_to))
-AND (NOT EXISTS(
- SELECT
-   1
- FROM commonswiki_p.page
- WHERE page_title = il_to
- AND page_namespace = 6))
+WHERE (NOT EXISTS (SELECT
+                     1
+                   FROM image
+                   WHERE img_name = il_to))
+AND (NOT EXISTS (SELECT
+                   1
+                 FROM commonswiki_p.page
+                 WHERE page_title = il_to
+                 AND page_namespace = 6))
+AND (NOT EXISTS (SELECT
+                   1
+                 FROM page
+                 WHERE page_title = il_to
+                 AND page_namespace = 6))
 AND page_namespace = 0;
 ''')
 
