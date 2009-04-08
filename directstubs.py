@@ -70,7 +70,6 @@ for row in cursor.fetchall():
     page_title = u'[[%s]]' % unicode(row[0], 'utf-8')
     table_row = u'''|-
 | %d
-| %s
 | %s''' % (i, page_title)
     output.append(table_row)
     i += 1
