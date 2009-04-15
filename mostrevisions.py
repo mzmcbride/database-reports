@@ -59,8 +59,6 @@ LIMIT 1000;
 
 i = 1
 output = []
-ns_count_tcol = 0
-ns_count_r_tcol = 0
 for row in cursor.fetchall():
     page_namespace = row[0]
     ns_name = u'%s' % unicode(row[1], 'utf-8')
