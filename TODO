@@ -1,29 +1,51 @@
-* Add report "Articles containing red-linked categories"
-** Indefinitely on hold; too many results (~24,000)
-* Automate "Articles containing links to the user space"
-** Should re-open connection to calculate replag or calculate it first...
-
-* Sync all wiki config subpages to actual files
-* Automate R1 / G8 scripts?
-** For G8 script, get image talk pages working correctly
-** For G8 script, don't print {{G8-exempt}}d pages
-** For R1 script, don't print pages that don't exist (replag safety valve)
-
-* Paginate ownerless.py ?
-
-* Indef protected pages
-** Add Redirect column
-
+-- General
 * Switch to wikitools (almost) completely?
-* Setup template
+** Pretty much done except "brokenredirects.py"
+* Automate R1 / G8 scripts?
+** Automation at "good enough" point with delete variable
+** For R1 script, don't print pages that don't exist (replag safety valve)
+* Add {{/header}}-type thing
+** Make compatible with current data as of column on main page
 
-Templates that transclude themselves
-  Template:FUHSD
 
-* Fix %% bug in "Articles containing red-linked images"
+-- Report adjustments
+* Change crontab for polluted cats
+** Twice weekly or something
+* Sync all wiki config subpages to actual files
+* Subpages without incoming links
+** http://en.wikipedia.org/wiki/Talk:World_War_III/Archive_1
+** Have query for this now # BUMP PRIORITY
+* Orphaned subpages part II
+** List all pages in NS:4
+** Move titles that contain a / to a separate file
+** Run through dpn.py
 * User cats
 ** Add members column
 ** Add last edited column
 
-* Add {{/header}}-type thing
-** Make compatible with current data as of column on main page
+
+-- Report ideas
+* Fix archive names?
+** Query page titles in NS:1 that aren't redirects
+*** SELECT page_title FROM page WHERE page_namespace = 1 AND page_is_redirect = 0;
+** Grep for "archive_"
+* Pages with _/ or /_
+* User / user pages of users with 0 edits
+** Filter out redirects
+* User / user talk page redirects with zero incoming links
+** RFBailey's subpage
+* Subpages where the root page doesn't exist
+** Need to figure out cases like Foo/bar/baz where only bar doesn't exist
+* Plaintext (spam) user pages
+** Run through appropriate filters too. ("founded by", etc.)
+* "Populated category redirects"
+** Need template list from Vega
+* Templates that transclude themselves
+** Query available somewhere in my queries directory
+* Add report "Articles containing red-linked categories"
+** Indefinitely on hold; too many results (~24,000)
+
+
+-- Two helpful checks in queries
+* If page is a subpage
+* If page exists (when querying from logging table)
