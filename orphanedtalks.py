@@ -27,7 +27,7 @@ report_title = 'Wikipedia:Database reports/Orphaned talk pages'
 report_template = u'''
 Orphaned talk pages; data as of <onlyinclude>%s</onlyinclude>.
 
-Colored rows have been checked and can be deleted without review. Pages transcluding \
+Colored rows have been reviewed. Pages transcluding \
 {{[[Template:Go away|Go away]]}} or {{[[Template:G8-exempt|G8-exempt]]}} have been excluded.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"

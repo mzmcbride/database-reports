@@ -26,7 +26,7 @@ report_title = 'Wikipedia:Database reports/Broken redirects'
 report_template = u'''
 Broken redirects; data as of <onlyinclude>%s</onlyinclude>.
 
-Colored rows have been checked and can be deleted without review.
+Colored rows have been reviewed.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
