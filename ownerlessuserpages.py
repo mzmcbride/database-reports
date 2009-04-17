@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
-import re
 import MySQLdb
 import wikitools
 import settings
@@ -31,6 +30,8 @@ Pages in the user space that do not belong to a [[Special:ListUsers|registered u
 ! No.
 ! Page
 ! Length
+! Creator
+! Creation date
 |-
 %s
 |}
@@ -47,18 +48,31 @@ SELECT
   page_namespace,
   ns_name,
   page_title,
-  page_len
-FROM page
+  page_len,
+  rev_user_text,
+  rev_timestamp
+FROM revision
+JOIN (SELECT
+        page_id,
+        page_namespace,
+        page_title,
+        page_len
+      FROM page
+      LEFT JOIN user
+      ON user_name = REPLACE(page_title, '_', ' ')
+      WHERE page_namespace IN (2,3)
+      AND page_is_redirect = 0
+      AND page_title NOT LIKE "%/%"
+      AND page_title NOT RLIKE "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
+      AND ISNULL(user_name)) AS pgtmp
+ON pgtmp.page_id = rev_page
 JOIN toolserver.namespace
-ON page_namespace = ns_id
+ON pgtmp.page_namespace = ns_id
 AND dbname = 'enwiki_p'
-LEFT JOIN user
-ON user_name = REPLACE(page_title, '_', ' ')
-WHERE page_namespace IN (2,3)
-AND page_is_redirect = 0
-AND page_title NOT LIKE "%/%"
-AND page_title NOT RLIKE "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
-AND user_name IS NULL;
+AND rev_timestamp = (SELECT
+                       MIN(rev_timestamp)
+                     FROM revision
+                     WHERE rev_page = pgtmp.page_id);
 ''')
 
 i = 1
@@ -68,10 +82,14 @@ for row in cursor.fetchall():
     ns_name = u'%s' % unicode(row[1], 'utf-8')
     page_title = u'[[%s:%s]]' % (ns_name, unicode(row[2], 'utf-8'))
     page_len = row[3]
+    rev_user_text = u'%s' % unicode(row[4], 'utf-8')
+    rev_timestamp = row[5]
     table_row = u'''| %d
 | %s
 | %s
-|-''' % (i, page_title, page_len)
+| %s
+| %s
+|-''' % (i, page_title, page_len, rev_user_text, rev_timestamp)
     output.append(table_row)
     i += 1
 
