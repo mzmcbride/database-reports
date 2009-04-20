@@ -122,11 +122,11 @@ for start in range(0, len(output), rows_per_page):
     report_text = report_template % (current_of, '\n'.join(output[start:end]))
     report_text = report_text.encode('utf-8')
     try:
-        report.edit(report_text, summary='updated page')
+        report.edit(report_text, summary='[[Wikipedia:Bots/Requests for approval/Basketrabbit|Bot]]: Updated page.')
     except:
         try:
             time.sleep(3)
-            report.edit(report_text, summary='updated page')
+            report.edit(report_text, summary='[[Wikipedia:Bots/Requests for approval/Basketrabbit|Bot]]: Updated page.')
         except:
             print "Man, this really sucks that it can't edit."
     page += 1

@@ -166,7 +166,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 final_output = report_template % (current_of, output)
 final_output = final_output.encode('utf-8')
 report = wikitools.Page(wiki, report_title)
-report.edit(final_output, summary='updated page')
+report.edit(final_output, summary='[[Wikipedia:Bots/Requests for approval/Basketrabbit|Bot]]: Updated page.')
 
 cursor.close()
 conn.close()

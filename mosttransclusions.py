@@ -55,7 +55,8 @@ LIMIT 1000;
 i = 1
 output = []
 for row in cursor.fetchall():
-    tl_title = u'[[Template:%s]]' % unicode(row[0], 'utf-8')
+    tl_title = u'%s' % unicode(row[0], 'utf-8')##FIXME
+    tl_title = u'[[Template:%s|%s]]' % (tl_title, tl_title)
     uses = row[1]
     table_row = u'''| %d
 | %s
@@ -71,7 +72,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary='updated page')
+report.edit(report_text, summary='[[Wikipedia:Bots/Requests for approval/Basketrabbit|Bot]]: Updated page.')
 
 cursor.close()
 conn.close()

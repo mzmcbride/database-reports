@@ -139,7 +139,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output1), '\n'.join(output2))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary='updated page')
+report.edit(report_text, summary='[[Wikipedia:Bots/Requests for approval/Basketrabbit|Bot]]: Updated page.')
 
 cursor.close()
 conn.close()
