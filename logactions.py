@@ -49,6 +49,7 @@ query_list = [
     {'name': 'Undeletions', 'short_name': 'UD', 'type': 'delete', 'action': 'restore'},
     {'name': 'Revision deletions', 'short_name': 'RD', 'type': 'delete', 'action': 'revision'},
     {'name': 'Event suppressions', 'short_name': 'ES', 'type': 'suppress', 'action': 'event'},
+    {'name': 'Username suppressions', 'short_name': 'US', 'type': 'suppress', 'action': 'reblock'},
     {'name': 'Protections', 'short_name': 'PT', 'type': 'protect', 'action': 'protect'},
     {'name': 'Unprotections', 'short_name': 'UP', 'type': 'protect', 'action': 'unprotect'},
     {'name': 'Protection modifications', 'short_name': 'PM', 'type': 'protect', 'action': 'modify'},
