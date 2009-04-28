@@ -21,7 +21,7 @@ import re
 import datetime
 import time
 
-report_title = 'Wikipedia:Database reports/Broken redirects'
+report_title = settings.rootpage + 'Broken redirects'
 
 report_template = u'''
 Broken redirects; data as of <onlyinclude>%s</onlyinclude>.
@@ -41,7 +41,7 @@ sleep_time = 0
 
 site = wikipedia.getSite()
 
-conn = MySQLdb.connect(host='sql-s1', db='enwiki_p', read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* brokenredirects.py SLOW_OK */
@@ -119,7 +119,7 @@ rep_lag = cursor.fetchone()[0]
 current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
 
 report = wikipedia.Page(site, report_title)
-report.put(report_template % (current_of, '\n'.join(output)), '[[Wikipedia:Bots/Requests for approval/Whip, dip, and slide|Bot]]: Updated page.', True, False)
+report.put(report_template % (current_of, '\n'.join(output)), settings.editwhip, True, False)
 cursor.close()
 conn.close()
 

@@ -20,10 +20,13 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = 'Wikipedia:Database reports/Biographies of living persons containing unsourced statements'
+report_title = settings.rootpage + 'Biographies of living persons containing unsourced statements'
 
 report_template = u'''
-Pages in [[:Category:Living people]] that [[Special:WhatLinksHere/Template:Fact|transclude]] [[Template:Fact]] (limited to the first 500 entries); data as of <onlyinclude>%s</onlyinclude>.
+{{shortcut|WP:DR/BLP}}
+Pages in [[:Category:Living people]] that [[Special:WhatLinksHere/Template:Fact|transclude]] \
+[[Template:Fact]] (limited to the first 500 entries); data as of <onlyinclude>%s</onlyinclude>. \
+{{NOINDEX}}
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -34,10 +37,10 @@ Pages in [[:Category:Living people]] that [[Special:WhatLinksHere/Template:Fact|
 |}
 '''
 
-wiki = wikitools.Wiki()
+wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
-conn = MySQLdb.connect(host='sql-s1', db='enwiki_p', read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* unsourcedblps.py SLOW_OK */
@@ -72,7 +75,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary='[[Wikipedia:Bots/Requests for approval/Basketrabbit|Bot]]: Updated page.')
+report.edit(report_text, summary=settings.editsumm, bot=1)
 
 cursor.close()
 conn.close()

@@ -20,7 +20,7 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = 'Wikipedia:Database reports/Cross-namespace redirects'
+report_title = settings.rootpage + 'Cross-namespace redirects'
 
 report_template = u'''
 Cross-namespace redirects from (Main) to any other namespace; data as of <onlyinclude>%s</onlyinclude>.
@@ -35,10 +35,10 @@ Cross-namespace redirects from (Main) to any other namespace; data as of <onlyin
 |}
 '''
 
-wiki = wikitools.Wiki()
+wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
-conn = MySQLdb.connect(host='sql-s1', db='enwiki_p', read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* crossredirects.py SLOW_OK */
@@ -86,7 +86,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary='[[Wikipedia:Bots/Requests for approval/Basketrabbit|Bot]]: Updated page.')
+report.edit(report_text, summary=settings.editsumm, bot=1)
 
 cursor.close()
 conn.close()

@@ -20,7 +20,7 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = 'Wikipedia:Database reports/Templates containing red-linked files/%i'
+report_title = settings.rootpage + 'Templates containing red-linked files/%i'
 
 report_template = u'''
 Templates containing a red-linked file; data as of <onlyinclude>%s</onlyinclude>.
@@ -36,10 +36,10 @@ Templates containing a red-linked file; data as of <onlyinclude>%s</onlyinclude>
 
 rows_per_page = 800
 
-wiki = wikitools.Wiki()
+wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
-conn = MySQLdb.connect(host='sql-s1', db='enwiki_p', read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* redlinkedfilesintemplates.py SLOW_OK */
@@ -88,7 +88,7 @@ for start in range(0, len(output), rows_per_page):
     report = wikitools.Page(wiki, report_title % page)
     report_text = report_template % (current_of, '\n'.join(output[start:end]))
     report_text = report_text.encode('utf-8')
-    report.edit(report_text, summary='[[Wikipedia:Bots/Requests for approval/Basketrabbit|Bot]]: Updated page.')
+    report.edit(report_text, summary=settings.editsumm, bot=1)
     page += 1
     end += rows_per_page
 

@@ -22,7 +22,7 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = 'Wikipedia:Database reports/Orphaned talk pages'
+report_title = settings.rootpage + 'Orphaned talk pages'
 
 report_template = u'''
 Orphaned talk pages; data as of <onlyinclude>%s</onlyinclude>.
@@ -41,7 +41,7 @@ Colored rows have been reviewed. Pages transcluding \
 delete = False
 sleep_time = 0
 
-wiki = wikitools.Wiki()
+wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.userwhip, settings.passwhip)
 
 def hasNoRecentRevs(talkpage):
@@ -61,7 +61,7 @@ def hasNoRecentRevs(talkpage):
     timestamp = datetime.datetime.strptime(query['revisions'][0]['timestamp'], '%Y-%m-%dT%H:%M:%SZ')
     return datetime.datetime.utcnow() - timestamp > datetime.timedelta(days=7)
 
-conn = MySQLdb.connect(host='sql-s1', db='enwiki_p', read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* orphanedtalks.py SLOW_OK */
@@ -205,7 +205,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary='[[Wikipedia:Bots/Requests for approval/Whip, dip, and slide|Bot]]: Updated page.')
+report.edit(report_text, summary=settings.editwhip, bot=1)
 
 cursor.close()
 conn.close()

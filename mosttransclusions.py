@@ -20,7 +20,7 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = 'Wikipedia:Database reports/Templates with the most transclusions'
+report_title = settings.rootpage + 'Templates with the most transclusions'
 
 report_template = u'''
 Templates with the most transclusions (limited to the first 1000 entries); data as of <onlyinclude>%s</onlyinclude>.
@@ -35,10 +35,10 @@ Templates with the most transclusions (limited to the first 1000 entries); data 
 |}
 '''
 
-wiki = wikitools.Wiki()
+wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
-conn = MySQLdb.connect(host='sql-s1', db='enwiki_p', read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* mosttransclusions.py SLOW_OK */
@@ -55,7 +55,7 @@ LIMIT 1000;
 i = 1
 output = []
 for row in cursor.fetchall():
-    tl_title = u'%s' % unicode(row[0], 'utf-8')##FIXME
+    tl_title = u'%s' % unicode(row[0], 'utf-8')
     tl_title = u'[[Template:%s|%s]]' % (tl_title, tl_title)
     uses = row[1]
     table_row = u'''| %d
@@ -72,7 +72,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary='[[Wikipedia:Bots/Requests for approval/Basketrabbit|Bot]]: Updated page.')
-
+#report.edit(report_text, summary=settings.editsumm, bot=1)
+print report_text
 cursor.close()
 conn.close()

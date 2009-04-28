@@ -20,7 +20,7 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = 'Wikipedia:Database reports/Categories categorized in red-linked categories/%i'
+report_title = settings.rootpage + 'Categories categorized in red-linked categories/%i'
 
 report_template = u'''
 Categories categorized in red-linked categories; data as of <onlyinclude>%s</onlyinclude>.
@@ -37,10 +37,10 @@ Categories categorized in red-linked categories; data as of <onlyinclude>%s</onl
 
 rows_per_page = 800
 
-wiki = wikitools.Wiki()
+wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
-conn = MySQLdb.connect(host='sql-s1', db='enwiki_p', read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* redlinkedcatsincats.py SLOW_OK */
@@ -53,7 +53,8 @@ JOIN
    cl_to,
    cl_from
  FROM categorylinks
- LEFT JOIN page ON cl_to = page_title
+ LEFT JOIN page
+ ON cl_to = page_title
  AND page_namespace = 14
  WHERE page_title IS NULL) AS cattmp
 ON cattmp.cl_from = page_id
@@ -86,7 +87,7 @@ for start in range(0, len(output), rows_per_page):
     report = wikitools.Page(wiki, report_title % page)
     report_text = report_template % (current_of, '\n'.join(output[start:end]))
     report_text = report_text.encode('utf-8')
-    report.edit(report_text, summary='[[Wikipedia:Bots/Requests for approval/Basketrabbit|Bot]]: Updated page.')
+    report.edit(report_text, summary=settings.editsumm, bot=1)
     page += 1
     end += rows_per_page
 

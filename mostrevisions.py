@@ -20,7 +20,7 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = 'Wikipedia:Database reports/Pages with the most revisions'
+report_title = settings.rootpage + 'Pages with the most revisions'
 
 report_template = u'''
 Pages with the most revisions (limited to the first 1000 entries); data as of <onlyinclude>%s</onlyinclude>.
@@ -36,10 +36,10 @@ Pages with the most revisions (limited to the first 1000 entries); data as of <o
 |}
 '''
 
-wiki = wikitools.Wiki()
+wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
-conn = MySQLdb.connect(host='sql-s1', db='enwiki_p', read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* mostrevisions.py SLOW_OK */
@@ -49,8 +49,10 @@ SELECT
   page_title,
   COUNT(*)
 FROM revision
-JOIN page ON page_id = rev_page
-JOIN toolserver.namespace ON page_namespace = ns_id
+JOIN page
+ON page_id = rev_page
+JOIN toolserver.namespace
+ON page_namespace = ns_id
 AND dbname = 'enwiki_p'
 GROUP BY page_namespace, page_title
 ORDER BY COUNT(*) DESC
@@ -85,7 +87,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary='[[Wikipedia:Bots/Requests for approval/Basketrabbit|Bot]]: Updated page.')
+report.edit(report_text, summary=settings.editsumm, bot=1)
 
 cursor.close()
 conn.close()

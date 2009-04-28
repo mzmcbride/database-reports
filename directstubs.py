@@ -20,7 +20,7 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = 'Wikipedia:Database reports/Stubs included directly in stub categories/%i'
+report_title = settings.rootpage + 'Stubs included directly in stub categories/%i'
 
 report_template = u'''
 Stubs included directly in stub categories; data as of <onlyinclude>%s</onlyinclude>.
@@ -35,10 +35,10 @@ Stubs included directly in stub categories; data as of <onlyinclude>%s</onlyincl
 
 rows_per_page = 800
 
-wiki = wikitools.Wiki()
+wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
-conn = MySQLdb.connect(host='sql-s1', db='enwiki_p', read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* directstubs.py SLOW_OK */
@@ -84,7 +84,7 @@ for start in range(0, len(output), rows_per_page):
     report = wikitools.Page(wiki, report_title % page)
     report_text = report_template % (current_of, '\n'.join(output[start:end]))
     report_text = report_text.encode('utf-8')
-    report.edit(report_text, summary='[[Wikipedia:Bots/Requests for approval/Basketrabbit|Bot]]: Updated page.')
+    report.edit(report_text, summary=settings.editsumm, bot=1)
     page += 1
     end += rows_per_page
 

@@ -21,12 +21,12 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = 'Wikipedia:Database reports/Users by log action'
+report_title = settings.rootpage + 'Users by log action'
 
-wiki = wikitools.Wiki()
+wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
-conn = MySQLdb.connect(host='sql-s1', db='enwiki_p', read_default_file='~/.my.cnf', use_unicode=True)
+conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf', use_unicode=True)
 cursor = conn.cursor()
 
 def get_stats(type, action):
@@ -167,7 +167,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 final_output = report_template % (current_of, output)
 final_output = final_output.encode('utf-8')
 report = wikitools.Page(wiki, report_title)
-report.edit(final_output, summary='[[Wikipedia:Bots/Requests for approval/Basketrabbit|Bot]]: Updated page.')
+report.edit(final_output, summary=settings.editsumm, bot=1)
 
 cursor.close()
 conn.close()
