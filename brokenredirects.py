@@ -15,11 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import wikipedia
-import MySQLdb
-import re
 import datetime
+import re
 import time
+import MySQLdb
+import wikipedia
+import settings
 
 report_title = settings.rootpage + 'Broken redirects'
 
