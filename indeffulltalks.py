@@ -76,7 +76,8 @@ WHERE CASE WHEN (NOT ISNULL(log_timestamp))
                         AND log_namespace = page_namespace
                         AND log_type = 'protect') 
   ELSE 1 END
-AND page_title NOT LIKE "%rchive%";
+AND page_title NOT LIKE "%/%"
+AND page_is_redirect = 0;
 ''')
 
 i = 1
