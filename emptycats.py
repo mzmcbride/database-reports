@@ -24,7 +24,11 @@ import settings
 report_title = settings.rootpage + 'Empty categories'
 
 report_template = u'''
-Empty categories not in [[:Category:Wikipedia category redirects]], not in [[:Category:Disambiguation categories]], and do not contain "(-importance|-class|non-article|assess|_articles_missing_|_articles_in_need_of_|_articles_undergoing_|_articles_to_be_|_articles_not_yet_|Wikipedia_featured_topics)"; data as of <onlyinclude>%s</onlyinclude>.
+Empty categories not in [[:Category:Wikipedia category redirects]], not in \
+[[:Category:Disambiguation categories]], and do not contain "(-importance|\
+-class|non-article|assess|articles missing|articles in need of|articles undergoing|\
+articles to be|articles not yet|articles with|articles without|articles needing|\
+Wikipedia featured topics)"; data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -72,7 +76,7 @@ AND NOT EXISTS (SELECT
 i = 1
 output = []
 for row in cursor.fetchall():
-    if not re.search(r'(-importance|-class|non-article|assess|_articles_missing_|_articles_in_need_of_|_articles_undergoing_|_articles_to_be_|_articles_not_yet_|Wikipedia_featured_topics)', row[0], re.I|re.U):
+    if not re.search(r'(-importance|-class|non-article|assess|_articles_missing_|_articles_in_need_of_|_articles_undergoing_|_articles_to_be_|_articles_not_yet_|_articles_with_|_articles_without_|_articles_needing_|Wikipedia_featured_topics)', row[0], re.I|re.U):
        page_title = u'{{clh|1=%s}}' % unicode(row[0], 'utf-8')
        page_len = row[1]
        table_row = u'''| %d
