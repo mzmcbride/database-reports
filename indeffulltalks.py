@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+import math
 import time
 import MySQLdb
 import wikitools
@@ -132,6 +133,16 @@ for start in range(0, len(output), rows_per_page):
             print "Man, this really sucks that it can't edit."
     page += 1
     end += rows_per_page
+
+page = math.ceil(len(output) / float(rows_per_page)) + 1
+while 1:
+    report = wikitools.Page(wiki, report_title % page)
+    report_text = settings.blankcontent
+    report_text = report_text.encode('utf-8')
+    if not report.exists:
+        break
+    report.edit(report_text, summary=settings.blanksumm, bot=1)
+    page += 1
 
 cursor.close()
 conn.close()
