@@ -72,7 +72,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-#report.edit(report_text, summary=settings.editsumm, bot=1)
-print report_text
+report.edit(report_text, summary=settings.editsumm, bot=1)
+
 cursor.close()
 conn.close()
