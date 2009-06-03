@@ -45,23 +45,27 @@ def get_stats(type, action):
     return cursor.fetchall()
 
 query_list = [
-    {'name': 'Deletions', 'short_name': 'DL', 'type': 'delete', 'action': 'delete'},
-    {'name': 'Undeletions', 'short_name': 'UD', 'type': 'delete', 'action': 'restore'},
-    {'name': 'Revision deletions', 'short_name': 'RD', 'type': 'delete', 'action': 'revision'},
-    {'name': 'Event suppressions', 'short_name': 'ES', 'type': 'suppress', 'action': 'event'},
-    {'name': 'Username suppressions', 'short_name': 'US', 'type': 'suppress', 'action': 'reblock'},
-    {'name': 'Protections', 'short_name': 'PT', 'type': 'protect', 'action': 'protect'},
-    {'name': 'Unprotections', 'short_name': 'UP', 'type': 'protect', 'action': 'unprotect'},
-    {'name': 'Protection modifications', 'short_name': 'PM', 'type': 'protect', 'action': 'modify'},
-    {'name': 'Blocks', 'short_name': 'BL', 'type': 'block', 'action': 'block'},
-    {'name': 'Unblocks', 'short_name': 'UB', 'type': 'block', 'action': 'unblock'},
-    {'name': 'Block modifications', 'short_name': 'BM', 'type': 'block', 'action': 'reblock'},
-    {'name': 'User renames', 'short_name': 'UR', 'type': 'renameuser', 'action': 'renameuser'},
-    {'name': 'User rights modifications', 'short_name': 'RM', 'type': 'rights', 'action': 'rights'},
-    {'name': 'Bot flaggings', 'short_name': 'BF', 'type': 'makebot', 'action': 'grant'},
-    {'name': 'Bot de-flaggings', 'short_name': 'BD', 'type': 'makebot', 'action': 'revoke'},
-    {'name': 'Whitelistings', 'short_name': 'WL', 'type': 'gblblock', 'action': 'whitelist'},
-    {'name': 'De-whitelistings', 'short_name': 'DW', 'type': 'gblblock', 'action': 'dwhitelist'}
+    {'name': 'Deletions',                 'short_name': 'DL', 'type': 'delete',     'action': 'delete'},
+    {'name': 'Undeletions',               'short_name': 'UD', 'type': 'delete',     'action': 'restore'},
+    {'name': 'Revision deletions',        'short_name': 'RD', 'type': 'delete',     'action': 'revision'},
+    {'name': 'Event deletions',           'short_name': 'ED', 'type': 'delete',     'action': 'event'},
+    {'name': 'Deletion suppressions',     'short_name': 'DS', 'type': 'suppress',   'action': 'delete'},
+    {'name': 'Revision suppressions',     'short_name': 'RS', 'type': 'suppress',   'action': 'revision'},
+    {'name': 'Event suppressions',        'short_name': 'ES', 'type': 'suppress',   'action': 'event'},
+    {'name': 'Username suppressions',     'short_name': 'US', 'type': 'suppress',   'action': 'reblock'},
+    {'name': 'Protections',               'short_name': 'PT', 'type': 'protect',    'action': 'protect'},
+    {'name': 'Unprotections',             'short_name': 'UP', 'type': 'protect',    'action': 'unprotect'},
+    {'name': 'Protection modifications',  'short_name': 'PM', 'type': 'protect',    'action': 'modify'},
+    {'name': 'Blocks',                    'short_name': 'BL', 'type': 'block',      'action': 'block'},
+    {'name': 'Unblocks',                  'short_name': 'UB', 'type': 'block',      'action': 'unblock'},
+    {'name': 'Block modifications',       'short_name': 'BM', 'type': 'block',      'action': 'reblock'},
+    {'name': 'User renames',              'short_name': 'UR', 'type': 'renameuser', 'action': 'renameuser'},
+    {'name': 'User rights modifications', 'short_name': 'RM', 'type': 'rights',     'action': 'rights'},
+    {'name': 'Bot flaggings',             'short_name': 'BF', 'type': 'makebot',    'action': 'grant'},
+    {'name': 'Bot de-flaggings',          'short_name': 'BD', 'type': 'makebot',    'action': 'revoke'},
+    {'name': 'Whitelistings',             'short_name': 'WL', 'type': 'gblblock',   'action': 'whitelist'},
+    {'name': 'De-whitelistings',          'short_name': 'DW', 'type': 'gblblock',   'action': 'dwhitelist'}
+    {'name': 'AbuseFilter modifications', 'short_name': 'AM', 'type': 'abusefilte', 'action': 'modify'}
 ]
 user_stats = {}
 
