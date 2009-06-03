@@ -64,7 +64,7 @@ query_list = [
     {'name': 'Bot flaggings',             'short_name': 'BF', 'type': 'makebot',    'action': 'grant'},
     {'name': 'Bot de-flaggings',          'short_name': 'BD', 'type': 'makebot',    'action': 'revoke'},
     {'name': 'Whitelistings',             'short_name': 'WL', 'type': 'gblblock',   'action': 'whitelist'},
-    {'name': 'De-whitelistings',          'short_name': 'DW', 'type': 'gblblock',   'action': 'dwhitelist'}
+    {'name': 'De-whitelistings',          'short_name': 'DW', 'type': 'gblblock',   'action': 'dwhitelist'},
     {'name': 'AbuseFilter modifications', 'short_name': 'AM', 'type': 'abusefilte', 'action': 'modify'}
 ]
 user_stats = {}
