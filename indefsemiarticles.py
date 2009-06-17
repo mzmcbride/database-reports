@@ -105,11 +105,11 @@ for row in cursor.fetchall():
     else:
         comment = ''
     if redirect == 0:
-        title = u'{{plh|1=%s}}' % unicode(title, 'utf-8')
+        title = u'{{plth|1=%s}}' % unicode(title, 'utf-8')
         num = i
         i += 1
     else:
-        title = u'{{plhnr|1=%s}}' % unicode(title, 'utf-8')
+        title = u'{{plthnr|1=%s}}' % unicode(title, 'utf-8')
         num = h
         h += 1
     table_row = u'''| %d
