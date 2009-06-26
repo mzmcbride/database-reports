@@ -20,7 +20,7 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = settings.rootpage + 'Biographies of living persons containing unsourced statements'
+report_title = settings.rootpage + 'Biographies of living people containing unsourced statements'
 
 report_template = u'''
 {{shortcut|WP:DR/BLP}}
