@@ -23,7 +23,8 @@ import settings
 report_title = settings.rootpage + 'Unused templates'
 
 report_template = u'''
-Unused templates that are not redirects (limited to the first 150 entries); data as of <onlyinclude>%s</onlyinclude>.
+Unused templates that are not redirects and do not contain "/" \
+(limited to the first 150 entries); data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
