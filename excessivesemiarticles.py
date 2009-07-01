@@ -20,7 +20,7 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = settings.rootpage + 'Semi-protected articles with excessively long expiries'
+report_title = settings.rootpage + 'Semi-protected articles with unusually long expiries'
 
 report_template = u'''
 Articles that are semi-protected from editing for more than one year; data as of <onlyinclude>%s</onlyinclude>.

@@ -21,10 +21,10 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = settings.rootpage + 'Excessively long user blocks'
+report_title = settings.rootpage + 'Unusually long user blocks'
 
 report_template = '''
-Excessively long (more than two years) blocks of users; data as of <onlyinclude>%s</onlyinclude>.
+Unusually long (more than two years) blocks of users; data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
