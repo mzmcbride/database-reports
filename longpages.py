@@ -23,13 +23,30 @@ import settings
 report_title = settings.rootpage + 'Long pages'
 
 report_template = u'''
-Pages whose page length is greater than 175,000 bytes and whose page title does not contain "/"; data as of <onlyinclude>%s</onlyinclude>.
+Long pages; data as of <onlyinclude>%s</onlyinclude>.
+
+== Specified talk pages ==
+Talk pages whose page length is greater than 175,000 bytes (excluding subpages and pages in the user space).
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
 ! No.
 ! Page
 ! Length
+! Last edit
+|-
+%s
+|}
+
+== All pages ==
+All pages whose page length is greater than 500,000 bytes.
+
+{| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
+|- style="white-space:nowrap;"
+! No.
+! Page
+! Length
+! Last edit
 |-
 %s
 |}
@@ -43,35 +60,84 @@ cursor = conn.cursor()
 cursor.execute('''
 /* longpages.py SLOW_OK */
 SELECT
-  page_namespace,
   ns_name,
   page_title,
-  page_len
+  page_len,
+  rev_timestamp
 FROM page
 JOIN toolserver.namespace
 ON page_namespace = ns_id
 AND dbname = 'enwiki_p'
+JOIN revision
+ON rev_page = page_id
 WHERE page_len > 175000
 AND page_title NOT LIKE "%/%"
-ORDER BY page_namespace ASC;
+AND page_namespace != 3
+AND page_namespace mod 2 != 0
+AND rev_timestamp = (SELECT
+                       MAX(rev_timestamp)
+                     FROM revision
+                     WHERE rev_page = page_id)
+ORDER BY page_len, page_namespace ASC;
 ''')
 
 i = 1
-output = []
+output1 = []
 for row in cursor.fetchall():
-    page_namespace = row[0]
-    ns_name = u'%s' % unicode(row[1], 'utf-8')
-    page_title = u'%s' % unicode(row[2], 'utf-8')
+    ns_name = u'%s' % unicode(row[0], 'utf-8')
+    page_title = u'%s' % unicode(row[1], 'utf-8')
     if ns_name:
         page_title = '{{pler|1=%s:%s}}' % (ns_name, page_title)
     else:
         page_title = '{{pler|1=%s}}' % (page_title)
-    page_len = row[3]
+    page_len = row[2]
+    rev_timestamp = row[3]
     table_row = u'''| %d
 | %s
 | %s
-|-''' % (i, page_title, page_len)
-    output.append(table_row)
+| %s
+|-''' % (i, page_title, page_len, rev_timestamp)
+    output1.append(table_row)
+    i += 1
+
+cursor.execute('''
+/* longpages.py SLOW_OK */
+SELECT
+  ns_name,
+  page_title,
+  page_len,
+  rev_timestamp
+FROM page
+JOIN toolserver.namespace
+ON page_namespace = ns_id
+AND dbname = 'enwiki_p'
+JOIN revision
+ON rev_page = page_id
+WHERE page_len > 500000
+AND rev_timestamp = (SELECT
+                       MAX(rev_timestamp)
+                     FROM revision
+                     WHERE rev_page = page_id)
+ORDER BY page_len, page_namespace ASC;
+''')
+
+i = 1
+output2 = []
+for row in cursor.fetchall():
+    ns_name = u'%s' % unicode(row[0], 'utf-8')
+    page_title = u'%s' % unicode(row[1], 'utf-8')
+    if ns_name:
+        page_title = '{{pler|1=%s:%s}}' % (ns_name, page_title)
+    else:
+        page_title = '{{pler|1=%s}}' % (page_title)
+    page_len = row[2]
+    rev_timestamp = row[3]
+    table_row = u'''| %d
+| %s
+| %s
+| %s
+|-''' % (i, page_title, page_len, rev_timestamp)
+    output2.append(table_row)
     i += 1
 
 cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
@@ -79,7 +145,7 @@ rep_lag = cursor.fetchone()[0]
 current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
 
 report = wikitools.Page(wiki, report_title)
-report_text = report_template % (current_of, '\n'.join(output))
+report_text = report_template % (current_of, '\n'.join(output1), '\n'.join(output2))
 report_text = report_text.encode('utf-8')
 report.edit(report_text, summary=settings.editsumm, bot=1)
 
