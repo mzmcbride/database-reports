@@ -70,15 +70,15 @@ for row in cursor.fetchall():
     else:
         page_title = u'[[%s:%s]]' % (ns_name, page_title)
     if page_namespace == 8:
-        pass
-    elif page_namespace in (2,3) and not re.search(r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$', page_title, re.I|re.U):
-        pass
-    else:
-        table_row = u'''| %d
+        continue
+    elif page_namespace in (2,3):
+        if not re.search(r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$', unicode(row[2], 'utf-8'), re.I|re.U):
+            continue
+    table_row = u'''| %d
 | %s
 |-''' % (i, page_title)
-        output.append(table_row)
-        i += 1
+    output.append(table_row)
+    i += 1
 
 cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
 rep_lag = cursor.fetchone()[0]
