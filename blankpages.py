@@ -17,6 +17,7 @@
 
 import datetime
 import MySQLdb
+import re
 import wikitools
 import settings
 
