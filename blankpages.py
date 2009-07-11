@@ -64,11 +64,11 @@ for row in cursor.fetchall():
     ns_name = unicode(row[1], 'utf-8')
     page_title = unicode(row[2], 'utf-8')
     if page_namespace in (6,14):
-        page_title = u'[[:%s:%s]]' % (ns_name, page_title)
+        page_title = u'{{plh|1=:%s:%s}}' % (ns_name, page_title)
     elif page_namespace == 0:
-        page_title = u'[[%s]]' % (page_title)
+        page_title = u'{{plh|1=%s}}' % (page_title)
     else:
-        page_title = u'[[%s:%s]]' % (ns_name, page_title)
+        page_title = u'{{plh|1=%s:%s}}' % (ns_name, page_title)
     if page_namespace == 8:
         continue
     elif page_namespace in (2,3):
