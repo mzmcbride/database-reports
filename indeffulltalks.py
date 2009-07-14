@@ -41,8 +41,28 @@ Talk pages that are indefinitely fully-protected from editing (subpages and redi
 
 rows_per_page = 800
 
-wiki = wikitools.Wiki(settings.apiurl)
+wiki = wikitools.Wiki(settings.apiurl); wiki.setMaxlag(-1)
 wiki.login(settings.username, settings.password)
+
+def lastLogEntry(page):
+    params = {
+        'action': 'query',
+        'list': 'logevents',
+        'lelimit': '1',
+        'letitle': page,
+        'format': 'json',
+        'ledir': 'older',
+        'letype': 'protect',
+        'leprop': 'user|timestamp|comment'
+    }
+    request = wikitools.APIRequest(wiki, params)
+    response = request.query(querycontinue=False)
+    lastlog = response['query']['logevents']
+    timestamp = datetime.datetime.strptime(lastlog[0]['timestamp'], '%Y-%m-%dT%H:%M:%SZ').strftime('%Y%m%d%H%M%S')
+    user = lastlog[0]['user']
+    comment = lastlog[0]['comment']
+    return { 'timestamp': timestamp, 'user': user, 'comment': comment }
+
 
 conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
@@ -51,10 +71,7 @@ cursor.execute('''
 SELECT
   page_is_redirect,
   ns_name,
-  page_title,
-  user_name,
-  logs.log_timestamp,
-  logs.log_comment
+  page_title
 FROM page
 JOIN toolserver.namespace
 ON ns_id = page_namespace
@@ -65,18 +82,6 @@ AND page_namespace mod 2 != 0
 AND pr_type = 'edit'
 AND pr_level = 'sysop'
 AND pr_expiry = 'infinity'
-LEFT JOIN logging AS logs ON logs.log_title = page_title
-                         AND logs.log_namespace = page_namespace
-                         AND logs.log_type = 'protect'
-LEFT JOIN user ON logs.log_user = user_id 
-WHERE CASE WHEN (NOT ISNULL(log_timestamp)) 
-  THEN log_timestamp = (SELECT
-                          MAX(last.log_timestamp)
-                        FROM logging AS last 
-                        WHERE log_title = page_title 
-                        AND log_namespace = page_namespace
-                        AND log_type = 'protect') 
-  ELSE 1 END
 AND page_title NOT LIKE "%/%"
 AND page_is_redirect = 0;
 ''')
@@ -84,26 +89,15 @@ AND page_is_redirect = 0;
 i = 1
 output = []
 for row in cursor.fetchall():
+    page = wikitools.Page(wiki, u'%s:%s' % (unicode(row[1], 'utf-8'), unicode(row[2], 'utf-8')), followRedir=False)
     redirect = row[0]
     namespace = row[1]
     title = row[2]
     page_title = '%s:%s' % (namespace, title)
-    user = row[3]
-    if user:
-        user = u'[[User talk:%s|]]' % unicode(user, 'utf-8')
-    else:
-        user = ''
-    timestamp = row[4]
-    if timestamp:
-        timestamp = u'%s' % unicode(timestamp, 'utf-8')
-    else:
-        timestamp = ''
-    comment = row[5]
-    if comment:
-        comment = u'<nowiki>%s</nowiki>' % unicode(comment, 'utf-8')
-    else:
-        comment = ''
     page_title = u'{{plh|1=%s}}' % unicode(page_title, 'utf-8')
+    user = u'[[User talk:%s|]]' % lastLogEntry(page.title)['user']
+    timestamp = lastLogEntry(page.title)['timestamp']
+    comment = u'<nowiki>%s</nowiki>' % lastLogEntry(page.title)['comment']
     table_row = u'''| %d
 | %s
 | %s

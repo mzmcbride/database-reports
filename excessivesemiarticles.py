@@ -41,6 +41,25 @@ Articles that are semi-protected from editing for more than one year; data as of
 wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
+def lastLogEntry(page):
+    params = {
+        'action': 'query',
+        'list': 'logevents',
+        'lelimit': '1',
+        'letitle': page,
+        'format': 'json',
+        'ledir': 'older',
+        'letype': 'protect',
+        'leprop': 'user|timestamp|comment'
+    }
+    request = wikitools.APIRequest(wiki, params)
+    response = request.query(querycontinue=False)
+    lastlog = response['query']['logevents']
+    timestamp = datetime.datetime.strptime(lastlog[0]['timestamp'], '%Y-%m-%dT%H:%M:%SZ').strftime('%Y%m%d%H%M%S')
+    user = lastlog[0]['user']
+    comment = lastlog[0]['comment']
+    return { 'timestamp': timestamp, 'user': user, 'comment': comment }
+
 conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
@@ -48,61 +67,37 @@ cursor.execute('''
 SELECT
   page_is_redirect,
   page_title,
-  user_name,
-  logs.log_timestamp,
-  pr_expiry,
-  logs.log_comment
-FROM page
-JOIN page_restrictions ON page_id = pr_page
-AND page_namespace = 0
+  pr_expiry
+FROM page_restrictions
+JOIN page
+ON page_id = pr_page
+WHERE page_namespace = 0
 AND pr_type = 'edit'
 AND pr_level = 'autoconfirmed'
 AND pr_expiry > DATE_FORMAT(DATE_ADD(NOW(),INTERVAL 1 YEAR),'%Y%m%d%H%i%s')
-AND pr_expiry != 'infinity'
-LEFT JOIN logging AS logs ON logs.log_title = page_title
-                         AND logs.log_namespace = 0
-                         AND logs.log_type = 'protect'
-LEFT JOIN user ON logs.log_user = user_id 
-WHERE CASE WHEN (NOT ISNULL(log_timestamp)) 
-  THEN log_timestamp = (SELECT MAX(last.log_timestamp)
-                        FROM logging AS last 
-                        WHERE log_title = page_title 
-                        AND log_namespace = 0
-                        AND log_type = 'protect') 
-  ELSE 1 END;
+AND pr_expiry != 'infinity';
 ''')
 
 i = 1
 output = []
 for row in cursor.fetchall():
+    page = wikitools.Page(wiki, u'%s' % (unicode(row[1], 'utf-8')), followRedir=False)
     redirect = row[0]
     if redirect == 1:
-        title = u'<i>[[%s]]</i>' % unicode(row[1], 'utf-8')
+        page_title = u'<i>[[%s]]</i>' % unicode(row[1], 'utf-8')
     else:
-        title = u'[[%s]]' % unicode(row[1], 'utf-8')
-    user = row[2]
-    if user:
-        user = u'[[User talk:%s|]]' % unicode(user, 'utf-8')
-    else:
-        user = ''
-    timestamp = row[3]
-    if timestamp:
-        timestamp = u'%s' % unicode(timestamp, 'utf-8')
-    else:
-        timestamp = ''
-    expiry = u'%s' % unicode(row[4], 'utf-8')
-    comment = row[5]
-    if comment:
-        comment = u'<nowiki>%s</nowiki>' % unicode(comment, 'utf-8')
-    else:
-        comment = ''
+        page_title = u'[[%s]]' % unicode(row[1], 'utf-8')
+    user = u'[[User talk:%s|]]' % lastLogEntry(page.title)['user']
+    timestamp = lastLogEntry(page.title)['timestamp']
+    pr_expiry = row[2]
+    comment = u'<nowiki>%s</nowiki>' % lastLogEntry(page.title)['comment']
     table_row = u'''| %d
 | %s
 | %s
 | %s
 | %s
 | %s
-|-''' % (i, title, user, timestamp, expiry, comment)
+|-''' % (i, page_title, user, timestamp, pr_expiry, comment)
     output.append(table_row)
     i += 1
 
