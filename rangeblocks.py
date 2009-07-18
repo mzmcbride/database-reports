@@ -20,10 +20,10 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = settings.rootpage + 'Rangeblocks'
+report_title = settings.rootpage + 'Range blocks'
 
 report_template = '''
-Rangeblocks; data as of <onlyinclude>%s</onlyinclude>.
+Range blocks; data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
