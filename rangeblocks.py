@@ -29,6 +29,7 @@ Range blocks; data as of <onlyinclude>%s</onlyinclude>.
 |- style="white-space:nowrap;"
 ! No.
 ! Range
+! Size
 ! Admin
 ! Timestamp
 ! Expiry
@@ -59,6 +60,7 @@ i = 1
 output = []
 for row in cursor.fetchall():
     ipb_address = u'{{ipr|1=%s}}' % unicode(row[0], 'utf-8')
+    range_size = u'%s' % unicode(row[0].split('/')[1], 'utf-8')
     ipb_by_text = u'[[User talk:%s|]]' % unicode(row[1], 'utf-8')
     ipb_timestamp = row[2]
     ipb_expiry = u'%s' % unicode(row[3], 'utf-8')
@@ -73,7 +75,8 @@ for row in cursor.fetchall():
 | %s
 | %s
 | %s
-|-''' % (i, ipb_address, ipb_by_text, ipb_timestamp, ipb_expiry, ipb_reason)
+| %s
+|-''' % (i, ipb_address, range_size, ipb_by_text, ipb_timestamp, ipb_expiry, ipb_reason)
     output.append(table_row)
     i += 1
 
