@@ -58,9 +58,18 @@ def lastLogEntry(page):
     request = wikitools.APIRequest(wiki, params)
     response = request.query(querycontinue=False)
     lastlog = response['query']['logevents']
-    timestamp = datetime.datetime.strptime(lastlog[0]['timestamp'], '%Y-%m-%dT%H:%M:%SZ').strftime('%Y%m%d%H%M%S')
-    user = lastlog[0]['user']
-    comment = lastlog[0]['comment']
+    try:
+        timestamp = datetime.datetime.strptime(lastlog[0]['timestamp'], '%Y-%m-%dT%H:%M:%SZ').strftime('%Y%m%d%H%M%S')
+    except:
+        timestamp = ''
+    try:
+        user = lastlog[0]['user']
+    except:
+        user = ''
+    try:
+        comment = lastlog[0]['comment']
+    except:
+        comment = ''
     return { 'timestamp': timestamp, 'user': user, 'comment': comment }
 
 

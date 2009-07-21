@@ -23,7 +23,8 @@ import settings
 report_title = settings.rootpage + 'Indefinitely semi-protected talk pages'
 
 report_template = u'''
-Talk pages that are indefinitely semi-protected from editing (archives excluded); data as of <onlyinclude>%s</onlyinclude>.
+Talk pages that are indefinitely semi-protected from editing (archives excluded); \
+data as of <onlyinclude>%s</onlyinclude>.
 
 == Non-redirects ==
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
@@ -67,9 +68,18 @@ def lastLogEntry(page):
     request = wikitools.APIRequest(wiki, params)
     response = request.query(querycontinue=False)
     lastlog = response['query']['logevents']
-    timestamp = datetime.datetime.strptime(lastlog[0]['timestamp'], '%Y-%m-%dT%H:%M:%SZ').strftime('%Y%m%d%H%M%S')
-    user = lastlog[0]['user']
-    comment = lastlog[0]['comment']
+    try:
+        timestamp = datetime.datetime.strptime(lastlog[0]['timestamp'], '%Y-%m-%dT%H:%M:%SZ').strftime('%Y%m%d%H%M%S')
+    except:
+        timestamp = ''
+    try:
+        user = lastlog[0]['user']
+    except:
+        user = ''
+    try:
+        comment = lastlog[0]['comment']
+    except:
+        comment = ''
     return { 'timestamp': timestamp, 'user': user, 'comment': comment }
 
 conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
