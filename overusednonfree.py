@@ -23,7 +23,7 @@ import settings
 report_title = settings.rootpage + 'Overused non-free files'
 
 report_template = u'''
-Non-free files used on more than 8 pages; data as of <onlyinclude>%s</onlyinclude>.
+Non-free files used on more than four pages; data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -61,15 +61,15 @@ JOIN (SELECT
       AND page_namespace = 6) AS pgtmp
 ON pgtmp.page_title = il_to
 GROUP BY il_to
-HAVING COUNT(*) > 8
+HAVING COUNT(*) > 4
 ORDER BY COUNT(*) ASC;
 ''')
 
 i = 1
 output = []
 for row in cursor.fetchall():
-    ns_name = row[0]
-    page_title = '[[:%s:%s|%s]]' % (ns_name, unicode(row[1], 'utf-8'), unicode(row[1], 'utf-8'))
+    ns_name = u'%s' % unicode(row[0], 'utf-8')
+    page_title = u'[[:%s:%s|%s]]' % (ns_name, unicode(row[1], 'utf-8'), unicode(row[1], 'utf-8'))
     count = row[2]
     table_row = u'''| %d
 | %s
