@@ -39,39 +39,59 @@ Pages with the most revisions (limited to the first 1000 entries); data as of <o
 wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
+def namespace_names(cursor, dbname):
+    nsdict = {}
+    cursor.execute('''
+    /* mostrevisions.py namespace_names */
+    SELECT
+      ns_id,
+      ns_name
+    FROM namespace
+    WHERE dbname = %s
+    AND ns_id > -1
+    ORDER BY ns_id ASC;
+    ''', settings.dbname)
+    for row in cursor.fetchall():
+        ns_id = str(row[0])
+        ns_name = str(row[1])
+        nsdict[ns_id] = ns_name
+    return nsdict
+
+conn = MySQLdb.connect(host='sql-s3', db='toolserver', read_default_file='~/.my.cnf')
+cursor = conn.cursor()
+nsdict = namespace_names(cursor, settings.dbname)
+cursor.close()
+conn.close()
+
 conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* mostrevisions.py SLOW_OK */
 SELECT
   page_namespace,
-  ns_name,
   page_title,
   COUNT(*)
 FROM revision
 JOIN page
 ON page_id = rev_page
-JOIN toolserver.namespace
-ON page_namespace = ns_id
-AND dbname = 'enwiki_p'
 GROUP BY page_namespace, page_title
-ORDER BY COUNT(*) DESC
+ORDER BY COUNT(*) DESC, page_title ASC
 LIMIT 1000;
 ''')
 
 i = 1
 output = []
 for row in cursor.fetchall():
-    page_namespace = row[0]
-    ns_name = u'%s' % unicode(row[1], 'utf-8')
-    page_title = u'%s' % unicode(row[2], 'utf-8')
-    if page_namespace == 6 or page_namespace == 14:
-        page_title = '[[:%s:%s]]' % (ns_name, page_title)
-    elif ns_name:
-        page_title = '[[%s:%s]]' % (ns_name, page_title)
-    else:
+    ns_id = row[0]
+    page_namespace = str(row[0])
+    page_title = u'%s' % unicode(row[1], 'utf-8')
+    if ns_id == 6 or ns_id == 14:
+        page_title = '[[:%s:%s]]' % (nsdict[page_namespace], page_title)
+    elif ns_id == 0:
         page_title = '[[%s]]' % (page_title)
-    revisions = row[3]
+    else:
+        page_title = '[[%s:%s]]' % (nsdict[page_namespace], page_title)
+    revisions = row[2]
     table_row = u'''| %d
 | %s
 | %s
