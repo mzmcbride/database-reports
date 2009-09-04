@@ -69,7 +69,7 @@ i = 1
 output = []
 for row in cursor.fetchall():
     page_title = u'{{plnr|1=%s:%s}}' % (unicode(row[0], 'utf-8'), unicode(row[1], 'utf-8'))
-    red_links = unicode(row[3], 'utf-8')
+    red_links = unicode(row[2], 'utf-8')
     table_row = u'''| %d
 | %s
 | %s
