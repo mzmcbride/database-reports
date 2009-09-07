@@ -23,7 +23,7 @@ import settings
 report_title = settings.rootpage + 'Most-watched pages'
 
 report_template = u'''
-Most-watched pages (limited to the first 1000 entries); data as of <onlyinclude>%s</onlyinclude>.
+Most-watched non-deleted pages (limited to the first 1000 entries); data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -72,6 +72,9 @@ SELECT
   wl_title,
   COUNT(*)
 FROM watchlist
+JOIN page
+ON wl_namespace = page_namespace
+AND wl_title = page_title
 WHERE wl_namespace mod 2 = 0
 AND wl_namespace >= 0
 GROUP BY wl_namespace, wl_title
