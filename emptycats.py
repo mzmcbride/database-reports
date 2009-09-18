@@ -67,6 +67,11 @@ AND NOT EXISTS (SELECT
                 AND cl_to = 'Disambiguation_categories')
 AND NOT EXISTS (SELECT
                   1
+                FROM categorylinks
+                WHERE cl_from = page_id
+                AND cl_to LIKE 'Empty_categories%')
+AND NOT EXISTS (SELECT
+                  1
                 FROM templatelinks
                 WHERE tl_from = page_id
                 AND tl_namespace = 10
