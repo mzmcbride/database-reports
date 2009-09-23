@@ -12,6 +12,7 @@
 * Change crontab for polluted cats
 ** Twice weekly or something
 * Sync all wiki config subpages to actual files
+** Automate this?
 * Subpages without incoming links
 ** http://en.wikipedia.org/wiki/Talk:World_War_III/Archive_1
 ** Have query for this now # BUMP PRIORITY
@@ -22,6 +23,10 @@
 * User cats
 ** Add members column
 ** Add last edited column
+* Shebang needs to be updated (I think)
+* Scripts need newline at the bottom
+* userlinksinarticles.py
+** Queries are out of order
 
 
 -- Report ideas
