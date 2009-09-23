@@ -37,9 +37,26 @@ Articles containing links to User: or User_talk: pages; data as of <onlyinclude>
 wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
+all_pages = []
 skip_pages = []
 conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
+cursor.execute('''
+/* userlinksinarticles.py SLOW_OK */
+SELECT DISTINCT
+  page_title
+FROM page
+JOIN pagelinks AS pgl1
+ON pgl1.pl_from = page_id
+JOIN pagelinks AS pgl2
+ON pgl2.pl_from = page_id
+WHERE page_namespace = 0
+AND pgl2.pl_namespace IN (2,3);
+''')
+for row in cursor.fetchall():
+    page_title = u'%s' % unicode(row[0], 'utf-8')
+    all_pages.append(page_title)
+
 cursor.execute('''
 /* userlinksinarticles.py SLOW_OK */
 SELECT
@@ -52,27 +69,12 @@ AND tl_namespace = 10
 AND page_namespace = 0;
 ''')
 for row in cursor.fetchall():
-    skip_pages.append(row[0])
-
-cursor.execute('''
-/* userlinksinarticles.py SLOW_OK */
-SELECT DISTINCT
-  page_title
-FROM page AS pg1
-JOIN pagelinks
-ON pl_from = pg1.page_id
-WHERE page_namespace = 0
-AND EXISTS (SELECT
-              1
-            FROM pagelinks
-            WHERE pl_from = pg1.page_id
-            AND pl_namespace IN (2,3));
-''')
+    skip_title = u'%s' % unicode(row[0], 'utf-8')
+    skip_pages.append(skip_title)
 
 i = 1
 output = []
-for row in cursor.fetchall():
-    page_title = u'%s' % unicode(row[0], 'utf-8')
+for page_title in all_pages:
     if page_title in skip_pages:
         continue
     table_row = u'''| %d
