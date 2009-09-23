@@ -37,8 +37,23 @@ Articles containing links to User: or User_talk: pages; data as of <onlyinclude>
 wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
+skip_pages = []
 conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
+cursor.execute('''
+/* userlinksinarticles.py SLOW_OK */
+SELECT
+  page_title
+FROM page
+JOIN templatelinks
+ON tl_from = page_id
+WHERE tl_title IN ('Db-meta', 'Under_construction')
+AND tl_namespace = 10
+AND page_namespace = 0;
+''')
+for row in cursor.fetchall():
+    skip_pages.append(row[0])
+
 cursor.execute('''
 /* userlinksinarticles.py SLOW_OK */
 SELECT DISTINCT
@@ -58,6 +73,8 @@ i = 1
 output = []
 for row in cursor.fetchall():
     page_title = u'%s' % unicode(row[0], 'utf-8')
+    if page_title in skip_pages:
+        continue
     table_row = u'''| %d
 | {{plenr|1=%s}}
 |-''' % (i, page_title)
