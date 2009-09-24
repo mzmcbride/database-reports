@@ -22,10 +22,10 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = settings.rootpage + 'Indefinitely fully-protected talk pages/%i'
+report_title = settings.rootpage + 'Indefinitely fully protected talk pages/%i'
 
 report_template = u'''
-Talk pages that are indefinitely fully-protected from editing (subpages and redirects excluded); data as of <onlyinclude>%s</onlyinclude>.
+Talk pages that are indefinitely fully protected from editing (subpages and redirects excluded); data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"

@@ -20,10 +20,10 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = settings.rootpage + 'Indefinitely fully-protected articles'
+report_title = settings.rootpage + 'Indefinitely fully protected articles'
 
 report_template = u'''
-Articles that are indefinitely fully-protected from editing; data as of <onlyinclude>%s</onlyinclude>.
+Articles that are indefinitely fully protected from editing; data as of <onlyinclude>%s</onlyinclude>.
 
 == Non-redirects ==
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"

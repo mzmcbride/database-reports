@@ -21,10 +21,10 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = settings.rootpage + 'Indefinitely-blocked IPs'
+report_title = settings.rootpage + 'Indefinitely blocked IPs'
 
 report_template = '''
-Indefinitely-blocked IPs whose block reasons do not contain "(proxies|proxy|checkuser)"; data as of <onlyinclude>%s</onlyinclude>.
+Indefinitely blocked IPs whose block reasons do not contain "(proxies|proxy|checkuser)"; data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"

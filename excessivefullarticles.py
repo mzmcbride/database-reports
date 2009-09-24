@@ -20,10 +20,10 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = settings.rootpage + 'Fully-protected articles with unusually long expiries'
+report_title = settings.rootpage + 'Fully protected articles with unusually long expiries'
 
 report_template = u'''
-Articles that are fully-protected from editing for more than one year; data as of <onlyinclude>%s</onlyinclude>.
+Articles that are fully protected from editing for more than one year; data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
