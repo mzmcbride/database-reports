@@ -24,7 +24,7 @@ report_title = settings.rootpage + 'Unused templates'
 
 report_template = u'''
 Unused templates that are not redirects and do not contain "/" \
-(limited to the first 150 entries); data as of <onlyinclude>%s</onlyinclude>.
+(limited to the first 800 entries); data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -54,13 +54,13 @@ JOIN revision
 ON rev_page = page_id
 WHERE page_namespace = 10
 AND page_is_redirect = 0
-AND page_title NOT LIKE "%/%"
+AND page_title NOT LIKE '%/%'
 AND tl_from IS NULL
 AND rev_timestamp = (SELECT
                        MAX(rev_timestamp)
                      FROM revision
                      WHERE rev_page = page_id)
-LIMIT 150;
+LIMIT 800;
 ''')
 
 i = 1
