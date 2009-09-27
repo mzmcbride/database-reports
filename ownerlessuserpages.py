@@ -59,11 +59,10 @@ JOIN (SELECT
         page_len
       FROM page
       LEFT JOIN user
-      ON user_name = REPLACE(page_title, '_', ' ')
+      ON user_name = REPLACE(SUBSTRING_INDEX(page_title, '/', 1), '_', ' ')
       WHERE page_namespace IN (2,3)
       AND page_is_redirect = 0
-      AND page_title NOT LIKE "%/%"
-      AND page_title NOT RLIKE "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
+      AND page_title NOT RLIKE '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
       AND ISNULL(user_name)) AS pgtmp
 ON pgtmp.page_id = rev_page
 JOIN toolserver.namespace
