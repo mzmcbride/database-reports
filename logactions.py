@@ -38,8 +38,8 @@ def get_stats(type, action):
         FROM logging
         JOIN user_ids
         ON user_id = log_user
-        WHERE log_type = "%s"
-        AND log_action = "%s"
+        WHERE log_type = '%s'
+        AND log_action = '%s'
         GROUP BY log_user;
     ''' % (type, action))
     return cursor.fetchall()
@@ -61,8 +61,6 @@ query_list = [
     {'name': 'Block modifications',       'short_name': 'BM', 'type': 'block',      'action': 'reblock'},
     {'name': 'User renames',              'short_name': 'UR', 'type': 'renameuser', 'action': 'renameuser'},
     {'name': 'User rights modifications', 'short_name': 'RM', 'type': 'rights',     'action': 'rights'},
-    {'name': 'Bot flaggings',             'short_name': 'BF', 'type': 'makebot',    'action': 'grant'},
-    {'name': 'Bot de-flaggings',          'short_name': 'BD', 'type': 'makebot',    'action': 'revoke'},
     {'name': 'Whitelistings',             'short_name': 'WL', 'type': 'gblblock',   'action': 'whitelist'},
     {'name': 'De-whitelistings',          'short_name': 'DW', 'type': 'gblblock',   'action': 'dwhitelist'},
 #    {'name': 'AbuseFilter modifications', 'short_name': 'AM', 'type': 'abusefilte', 'action': 'modify'}
