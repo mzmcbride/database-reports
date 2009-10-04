@@ -66,8 +66,8 @@ ON il_to = pg1.page_title
 WHERE pg1.page_namespace = 6
 AND cl_to = 'All_non-free_media'
 GROUP BY imgtmp.page_namespace, imgtmp.page_title
-HAVING COUNT(cl_to) > 9
-ORDER BY COUNT(cl_to) ASC;
+HAVING COUNT(cl_to) > 6
+ORDER BY COUNT(cl_to) DESC;
 ''')
 
 i = 1
