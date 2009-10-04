@@ -75,7 +75,7 @@ for row in cursor.fetchall():
     except UnicodeDecodeError:
         continue
     try:
-        il_to = u'%s' % unicode(row[1], 'utf-8')
+        il_to = u'[[:File:%s]]' % unicode(row[1], 'utf-8')
     except UnicodeDecodeError:
         continue
     table_row = u'''|-
