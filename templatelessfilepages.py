@@ -45,20 +45,26 @@ cursor.execute('''
 /* templatelessfilepages.py SLOW_OK */
 SELECT
   ns_name,
-  page_title,
-  page_len
-FROM page
+  pg1.page_title,
+  pg1.page_len
+FROM page AS pg1
 JOIN toolserver.namespace
 ON dbname = 'enwiki_p'
-AND ns_id = page_namespace
+AND ns_id = pg1.page_namespace
 LEFT JOIN templatelinks
-ON tl_from = page_id
+ON tl_from = pg1.page_id
 WHERE NOT EXISTS (SELECT
                     img_name
                   FROM commonswiki_p.image
-                  WHERE img_name = page_title)
-AND page_namespace = 6
-AND page_is_redirect = 0
+                  WHERE img_name = pg1.page_title)
+AND NOT EXISTS (SELECT
+                  1
+                FROM commonswiki_p.page AS pg2
+                WHERE pg2.page_namespace = 6
+                AND pg2.page_title = pg1.page_title
+                AND pg2.page_is_redirect = 1)
+AND pg1.page_namespace = 6
+AND pg1.page_is_redirect = 0
 AND tl_from IS NULL
 LIMIT 800;
 ''')

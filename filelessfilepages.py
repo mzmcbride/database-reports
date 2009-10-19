@@ -43,21 +43,27 @@ cursor.execute('''
 /* filelessfilepages.py SLOW_OK */
 SELECT
   ns_name,
-  page_title
-FROM page
+  pg1.page_title
+FROM page AS pg1
 JOIN toolserver.namespace
 ON dbname = 'enwiki_p'
-AND page_namespace = ns_id
+AND pg1.page_namespace = ns_id
 WHERE NOT EXISTS (SELECT
                     img_name
                   FROM image
-                  WHERE img_name = page_title)
+                  WHERE img_name = pg1.page_title)
 AND NOT EXISTS (SELECT
                   img_name
                 FROM commonswiki_p.image
-                WHERE img_name = page_title)
-AND page_namespace = 6
-AND page_is_redirect = 0;
+                WHERE img_name = pg1.page_title)
+AND NOT EXISTS (SELECT
+                  1
+                FROM commonswiki_p.page AS pg2
+                WHERE pg2.page_namespace = 6
+                AND pg2.page_title = pg1.page_title
+                AND pg2.page_is_redirect = 1)
+AND pg1.page_namespace = 6
+AND pg1.page_is_redirect = 0;
 ''')
 
 i = 1
