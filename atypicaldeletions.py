@@ -16,11 +16,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+import math
 import MySQLdb
 import wikitools
 import settings
 
-report_title = settings.rootpage + 'Atypical deletion log actions'
+report_title = settings.rootpage + 'Atypical deletion log actions/%i'
 
 report_template = u'''
 Atypical deletion log actions; data as of <onlyinclude>%s</onlyinclude>.
@@ -37,6 +38,8 @@ Atypical deletion log actions; data as of <onlyinclude>%s</onlyinclude>.
 %s
 |}
 '''
+
+rows_per_page = 800
 
 wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
@@ -61,7 +64,8 @@ JOIN user
 ON log_user = user_id
 WHERE log_type='delete'
 AND log_action != 'restore'
-AND log_action != 'delete';
+AND log_action != 'delete'
+ORDER BY log_timestamp DESC;
 ''')
 
 i = 1
@@ -74,7 +78,9 @@ for row in cursor.fetchall():
     log_action = row[4]
     log_title = u'%s' % unicode(row[5], 'utf-8')
     log_comment = u'<nowiki>%s</nowiki>' % unicode(row[6], 'utf-8')
-    if log_namespace == 6 or log_namespace == 14:
+    if log_title == '':
+        log_title = ''
+    elif log_namespace == 6 or log_namespace == 14:
         log_title = '[[:%s:%s]]' % (ns_name, log_title)
     elif ns_name:
         log_title = '[[%s:%s]]' % (ns_name, log_title)
@@ -94,10 +100,25 @@ cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM rece
 rep_lag = cursor.fetchone()[0]
 current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
 
-report = wikitools.Page(wiki, report_title)
-report_text = report_template % (current_of, '\n'.join(output))
-report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+end = rows_per_page
+page = 1
+for start in range(0, len(output), rows_per_page):
+    report = wikitools.Page(wiki, report_title % page)
+    report_text = report_template % (current_of, '\n'.join(output[start:end]))
+    report_text = report_text.encode('utf-8')
+    report.edit(report_text, summary=settings.editsumm, bot=1)
+    page += 1
+    end += rows_per_page
+
+page = math.ceil(len(output) / float(rows_per_page)) + 1
+while 1:
+    report = wikitools.Page(wiki, report_title % page)
+    report_text = settings.blankcontent
+    report_text = report_text.encode('utf-8')
+    if not report.exists:
+        break
+    report.edit(report_text, summary=settings.blanksumm, bot=1)
+    page += 1
 
 cursor.close()
 conn.close()
