@@ -43,58 +43,75 @@ rows_per_page = 800
 wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
+def last_log_entry(page):
+    params = {
+        'action': 'query',
+        'list': 'logevents',
+        'lelimit': '1',
+        'letitle': page,
+        'format': 'json',
+        'ledir': 'older',
+        'letype': 'delete',
+        'leprop': 'user|timestamp|comment'
+    }
+    request = wikitools.APIRequest(wiki, params)
+    response = request.query(querycontinue=False)
+    lastlog = response['query']['logevents']
+    timestamp = datetime.datetime.strptime(lastlog[0]['timestamp'], '%Y-%m-%dT%H:%M:%SZ').strftime('%Y%m%d%H%M%S')
+    user = lastlog[0]['user']
+    comment = lastlog[0]['comment']
+    return { 'timestamp': timestamp, 'user': user, 'comment': comment }
+
 conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* deletedredlinkedcats.py SLOW_OK */
-SELECT
-  cattmp.cl_to,
-  cattmp.cl_count,
-  user_name,
-  log_timestamp,
-  log_comment
-FROM logging
-JOIN user ON log_user = user_id
-JOIN
-(SELECT
-   cl_to,
-   COUNT(cl_to) AS cl_count
- FROM categorylinks
- LEFT JOIN page ON cl_to = page_title
- AND page_namespace = 14
- WHERE page_title IS NULL
- GROUP BY cl_to) AS cattmp
-ON log_title = cattmp.cl_to
-WHERE log_namespace = 14
-AND log_type = "delete"
-AND log_timestamp = (SELECT
-                       MAX(log_timestamp)
-                     FROM logging AS last
-                     WHERE log_namespace = 14
-                     AND cattmp.cl_to = last.log_title);
+SELECT DISTINCT
+  ns_name,
+  cl_to,
+  cat_pages
+FROM categorylinks
+JOIN category
+ON cl_to = cat_title
+JOIN toolserver.namespace
+ON dbname = 'enwiki_p'
+AND ns_id = 14
+LEFT JOIN page
+ON cl_to = page_title
+AND page_namespace = 14
+WHERE page_title IS NULL
+AND cat_pages > 0;
 ''')
 
 i = 1
 output = []
 for row in cursor.fetchall():
-    cl_to = row[0]
-    if cl_to:
-        cl_to = u'[[:Category:%s|]]' % unicode(cl_to, 'utf-8')
-    cl_count = row[1]
-    user_name = u'%s' % unicode(row[2], 'utf-8')
-    log_timestamp = row[3]
-    log_comment = row[4]
-    if log_comment:
-        log_comment = u'<nowiki>%s</nowiki>' % unicode(log_comment, 'utf-8')
-    table_row = u'''|-
+    page = wikitools.Page(wiki, u'%s:%s' % (unicode(row[0], 'utf-8'), unicode(row[1], 'utf-8')), followRedir=False)
+    cl_to = page.title
+    cl_count = row[2]
+    try:
+        log_props = last_log_entry(page.title)
+        user_name = log_props['user']
+        log_timestamp = log_props['timestamp']
+        log_comment = log_props['comment']
+        if log_comment != '':
+            log_comment = u'<nowiki>%s</nowiki>' % log_comment
+    except:
+        user_name = None
+        log_timestamp = None
+        log_comment = None
+    if user_name is None or log_timestamp is None:
+        continue
+    else:
+        table_row = u'''|-
 | %d
 | %s
 | %s
 | %s
 | %s
 | %s''' % (i, cl_to, cl_count, user_name, log_timestamp, log_comment)
-    output.append(table_row)
-    i += 1
+        output.append(table_row)
+        i += 1
 
 cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
 rep_lag = cursor.fetchone()[0]
