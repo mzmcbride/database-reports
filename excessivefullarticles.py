@@ -41,7 +41,7 @@ Articles that are fully protected from editing for more than one year; data as o
 wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
-def lastLogEntry(page):
+def last_log_entry(page):
     params = {
         'action': 'query',
         'list': 'logevents',
@@ -87,10 +87,11 @@ for row in cursor.fetchall():
         page_title = u'<i>[[%s]]</i>' % unicode(row[1], 'utf-8')
     else:
         page_title = u'[[%s]]' % unicode(row[1], 'utf-8')
-    user = u'[[User talk:%s|]]' % lastLogEntry(page.title)['user']
-    timestamp = lastLogEntry(page.title)['timestamp']
+    log_props = last_log_entry(page.title)
+    user = u'[[User talk:%s|]]' % log_props['user']
+    timestamp = log_props['timestamp']
     pr_expiry = row[2]
-    comment = u'<nowiki>%s</nowiki>' % lastLogEntry(page.title)['comment']
+    comment = u'<nowiki>%s</nowiki>' % log_props['comment']
     table_row = u'''| %d
 | %s
 | %s

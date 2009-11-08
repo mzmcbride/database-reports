@@ -53,7 +53,7 @@ Articles that are indefinitely fully protected from editing; data as of <onlyinc
 wiki = wikitools.Wiki(settings.apiurl); wiki.setMaxlag(-1)
 wiki.login(settings.username, settings.password)
 
-def lastLogEntry(page):
+def last_log_entry(page):
     params = {
         'action': 'query',
         'list': 'logevents',
@@ -104,9 +104,10 @@ for row in cursor.fetchall():
         page_title = u'{{plthnr|1=%s}}' % unicode(page_title, 'utf-8')
         num = h
         h += 1
-    user = u'[[User talk:%s|]]' % lastLogEntry(page.title)['user']
-    timestamp = lastLogEntry(page.title)['timestamp']
-    comment = u'<nowiki>%s</nowiki>' % lastLogEntry(page.title)['comment']
+    log_props = last_log_entry(page.title)
+    user = u'[[User talk:%s|]]' % log_props['user']
+    timestamp = log_props['timestamp']
+    comment = u'<nowiki>%s</nowiki>' % log_props['comment']
     table_row = u'''| %d
 | %s
 | %s
