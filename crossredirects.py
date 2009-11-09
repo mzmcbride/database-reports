@@ -16,11 +16,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+import math
 import MySQLdb
 import wikitools
 import settings
 
-report_title = settings.rootpage + 'Cross-namespace redirects'
+report_title = settings.rootpage + 'Cross-namespace redirects/%i'
 
 report_template = u'''
 Cross-namespace redirects from (Main) to any other namespace; data as of <onlyinclude>%s</onlyinclude>.
@@ -30,16 +31,33 @@ Cross-namespace redirects from (Main) to any other namespace; data as of <onlyin
 ! No.
 ! Redirect
 ! Target
+! Categorized?
 |-
 %s
 |}
 '''
 
+rows_per_page = 800
+
 wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
+skip_pages = []
 conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
+cursor.execute('''
+/* crossredirects.py SLOW_OK */
+SELECT
+  page_title
+FROM page
+JOIN categorylinks
+ON cl_from = page_id
+WHERE cl_to = 'Cross-namespace_redirects';
+''')
+for row in cursor.fetchall():
+    skip_title = u'%s' % unicode(row[0], 'utf-8')
+    skip_pages.append(skip_title)
+
 cursor.execute('''
 /* crossredirects.py SLOW_OK */
 SELECT
@@ -63,19 +81,20 @@ i = 1
 output = []
 for row in cursor.fetchall():
     page_namespace = row[0]
-    page_title = u'{{rlw|1=%s}}' % unicode(row[1], 'utf-8')
+    page_title = u'%s' % unicode(row[1], 'utf-8')
+    if page_title in skip_pages:
+        categorized = 'Yes'
+    else:
+        categorized = 'No'
+    page_title = u'{{rlw|1=%s}}' % page_title
     ns_name = u'%s' % unicode(row[2], 'utf-8')
     rd_title = u'%s' % unicode(row[3], 'utf-8')
-    if page_namespace == 6 or page_namespace == 14:
-        rd_title = '[[:%s:%s]]' % (ns_name, rd_title)
-    elif ns_name:
-        rd_title = '[[%s:%s]]' % (ns_name, rd_title)
-    else:
-        rd_title = '[[%s]]' % (rd_title)
+    rd_title = '{{plnr|1=%s:%s}}' % (ns_name, rd_title)
     table_row = u'''| %d
 | %s
 | %s
-|-''' % (i, page_title, rd_title)
+| %s
+|-''' % (i, page_title, rd_title, categorized)
     output.append(table_row)
     i += 1
 
@@ -83,10 +102,25 @@ cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM rece
 rep_lag = cursor.fetchone()[0]
 current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
 
-report = wikitools.Page(wiki, report_title)
-report_text = report_template % (current_of, '\n'.join(output))
-report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+end = rows_per_page
+page = 1
+for start in range(0, len(output), rows_per_page):
+    report = wikitools.Page(wiki, report_title % page)
+    report_text = report_template % (current_of, '\n'.join(output[start:end]))
+    report_text = report_text.encode('utf-8')
+    report.edit(report_text, summary=settings.editsumm, bot=1)
+    page += 1
+    end += rows_per_page
+
+page = math.ceil(len(output) / float(rows_per_page)) + 1
+while 1:
+    report = wikitools.Page(wiki, report_title % page)
+    report_text = settings.blankcontent
+    report_text = report_text.encode('utf-8')
+    if not report.exists:
+        break
+    report.edit(report_text, summary=settings.blanksumm, bot=1)
+    page += 1
 
 cursor.close()
 conn.close()
