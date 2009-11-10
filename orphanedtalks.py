@@ -42,7 +42,7 @@ delete = False
 sleep_time = 0
 
 wiki = wikitools.Wiki(settings.apiurl)
-wiki.login(settings.userwhip, settings.passwhip)
+wiki.login(settings.username, settings.password)
 
 def hasNoRecentRevs(talkpage):
     params = {
@@ -205,7 +205,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editwhip, bot=1)
+report.edit(report_text, summary=settings.editsumm, bot=1)
 
 cursor.close()
 conn.close()
