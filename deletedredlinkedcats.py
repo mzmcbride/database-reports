@@ -87,7 +87,7 @@ i = 1
 output = []
 for row in cursor.fetchall():
     page = wikitools.Page(wiki, u'%s:%s' % (unicode(row[0], 'utf-8'), unicode(row[1], 'utf-8')), followRedir=False)
-    cl_to = page.title
+    cl_to = u'[[:%s|]]' % page.title
     cl_count = row[2]
     try:
         log_props = last_log_entry(page.title)
