@@ -23,7 +23,7 @@ import settings
 report_title = settings.rootpage + 'Orphaned single-author project pages'
 
 report_template = u'''
-Uncategorized categories; data as of <onlyinclude>%s</onlyinclude>.
+Orphaned single-author project pages; data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
