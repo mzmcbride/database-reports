@@ -76,7 +76,8 @@ AND NOT EXISTS (SELECT
                 ON tl_from = pg3.page_id
                 WHERE tl_namespace = 4
                 AND tl_title = pg1.page_title
-                AND pg3.page_namespace = 4);
+                AND pg3.page_namespace = 4)
+LIMIT 1000;
 ''')
 
 i = 1
