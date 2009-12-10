@@ -52,8 +52,8 @@ SELECT
 FROM logging
 WHERE log_type = 'block'
 AND log_namespace = 2
-AND log_title RLIKE '^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$';
-''')
+AND log_title RLIKE %s;
+''' , r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
 
 while True:
     row = cursor.fetchone()
@@ -67,8 +67,8 @@ cursor.execute('''
 SELECT
   afl_user_text
 FROM abuse_filter_log
-WHERE afl_user_text RLIKE '^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$';
-''')
+WHERE afl_user_text RLIKE %s;
+''' , r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
 
 while True:
     row = cursor.fetchone()
@@ -94,13 +94,14 @@ AND dbname = 'enwiki_p'
 WHERE page_namespace = 2
 AND ISNULL(rev_user_text)
 AND ISNULL(ar_user_text)
-AND page_title RLIKE %s
-LIMIT 1000;
+AND page_title RLIKE %s;
 ''' , r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
 
 i = 1
 output = []
 for row in cursor.fetchall():
+    if i > 1000:
+        break
     ns_name = u'%s' % unicode(row[0], 'utf-8')
     page_title = u'%s' % unicode(row[1], 'utf-8')
     full_page_title = u'[[%s:%s|%s]]' % (ns_name, page_title, page_title)
