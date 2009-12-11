@@ -23,7 +23,7 @@ import settings
 report_title = settings.rootpage + 'Short user talk pages for IPs'
 
 report_template = u'''
-Users talk pages of anonymous users where the only contributors to the page \
+User talk pages of anonymous users where the only contributors to the page \
 are anonymous, the page is less than 50 bytes in length, and it contains no \
 templates (limited to the first 1000 entries); data as of <onlyinclude>%s</onlyinclude>.
 
