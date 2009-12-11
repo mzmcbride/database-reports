@@ -77,7 +77,7 @@ for row in cursor.fetchall():
         page_title = u'{{plh|1=%s}}' % (page_title)
     else:
         page_title = u'{{plh|1=%s:%s}}' % (ns_name, page_title)
-    if page_namespace == 8:
+    if page_namespace == 8 or page_namespace == 10:
         continue
     elif page_namespace in (2,3):
         if not re.search(r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$', unicode(row[2], 'utf-8'), re.I|re.U):
