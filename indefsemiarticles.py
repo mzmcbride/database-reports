@@ -16,11 +16,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+import math
 import MySQLdb
 import wikitools
 import settings
 
-report_title = settings.rootpage + 'Indefinitely semi-protected articles'
+report_title = settings.rootpage + 'Indefinitely semi-protected articles/%i'
 
 report_template = u'''
 Articles that are indefinitely semi-protected from editing; data as of <onlyinclude>%s</onlyinclude>.
@@ -49,6 +50,8 @@ Articles that are indefinitely semi-protected from editing; data as of <onlyincl
 %s
 |}
 '''
+
+rows_per_page = 800
 
 wiki = wikitools.Wiki(settings.apiurl); wiki.setMaxlag(-1)
 wiki.login(settings.username, settings.password)
@@ -123,10 +126,25 @@ cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM rece
 rep_lag = cursor.fetchone()[0]
 current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
 
-report = wikitools.Page(wiki, report_title)
-report_text = report_template % (current_of, '\n'.join(output1), '\n'.join(output2))
-report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+end = rows_per_page
+page = 1
+for start in range(0, len(output), rows_per_page):
+    report = wikitools.Page(wiki, report_title % page)
+    report_text = report_template % (current_of, '\n'.join(output[start:end]))
+    report_text = report_text.encode('utf-8')
+    report.edit(report_text, summary=settings.editsumm, bot=1)
+    page += 1
+    end += rows_per_page
+
+page = math.ceil(len(output) / float(rows_per_page)) + 1
+while 1:
+    report = wikitools.Page(wiki, report_title % page)
+    report_text = settings.blankcontent
+    report_text = report_text.encode('utf-8')
+    if not report.exists:
+        break
+    report.edit(report_text, summary=settings.blanksumm, bot=1)
+    page += 1
 
 cursor.close()
 conn.close()
