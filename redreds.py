@@ -63,7 +63,7 @@ WHERE pg1.page_namespace IS NULL
 AND pg2.page_is_redirect = 1
 GROUP BY pg2.page_namespace, pg2.page_title
 LIMIT 800;
-''' , settings.dbname)
+''' , (settings.dbname, settings.dbname))
 
 i = 1
 output = []
