@@ -71,7 +71,7 @@ AND dbname = %s
 JOIN revision
 ON rev_page = page_id
 WHERE page_len > 175000
-AND page_title NOT LIKE "%/%"
+AND page_title NOT LIKE "%%/%%"
 AND page_namespace != 3
 AND page_namespace mod 2 != 0
 AND rev_timestamp = (SELECT

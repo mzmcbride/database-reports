@@ -73,7 +73,7 @@ FROM page AS p1
 JOIN toolserver.namespace
 ON p1.page_namespace = ns_id
 AND dbname = %s
-WHERE p1.page_title NOT LIKE "%/%"
+WHERE p1.page_title NOT LIKE "%%/%%"
 AND p1.page_namespace NOT IN (0,2,3,4,6,8,9,10,12,14,16,18,100,102,104)
 AND CASE WHEN p1.page_namespace = 1
   THEN NOT EXISTS (SELECT

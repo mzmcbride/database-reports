@@ -100,7 +100,7 @@ AND page_namespace mod 2 != 0
 AND pr_type = 'edit'
 AND pr_level = 'autoconfirmed'
 AND pr_expiry = 'infinity'
-AND page_title NOT LIKE "%rchive%";
+AND page_title NOT LIKE "%%rchive%%";
 ''' , settings.dbname)
 
 i = 1
