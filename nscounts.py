@@ -70,36 +70,36 @@ GROUP BY page_namespace;
 
 i = 1
 output = []
-ns_count_tcol = 0
-ns_count_r_tcol = 0
+ns_count_total_column = 0
+ns_count_redirects_total_column = 0
 for row in cursor.fetchall():
     page_namespace = row[0]
     ns_name = row[1]
     if ns_name:
         ns_name = u'%s' % unicode(ns_name, 'utf-8')
     else:
-        ns_name = '(Article)'
+        ns_name = '(Main)'
     ns_count = row[2]
     if ns_count:
         ns_count = ns_count
     else:
-        ns_count = '0'
-    ns_count_r = row[3]
-    if ns_count_r:
-        ns_count_r = ns_count_r
+        ns_count = 0
+    ns_count_redirects = row[3]
+    if ns_count_redirects:
+        ns_count_redirects = ns_count_redirects
     else:
-        ns_count_r = '0'
-    ns_count_trow = int(ns_count) + int(ns_count_r)
-    ns_count_tcol += ns_count
-    ns_count_r_tcol += ns_count_r
-    ns_count_gtotal = ns_count_tcol + ns_count_r_tcol
+        ns_count_redirects = 0
+    ns_count_total_row = int(ns_count) + int(ns_count_redirects)
+    ns_count_total_column += ns_count
+    ns_count_redirects_total_column += ns_count_redirects
+    ns_count_global_total = ns_count_total_column + ns_count_redirects_total_column
     table_row = u'''| %d
 | %s
 | %s
 | %s
 | %s
 | %s
-|-''' % (i, page_namespace, ns_name, ns_count, ns_count_r, ns_count_trow)
+|-''' % (i, page_namespace, ns_name, ns_count, ns_count_redirects, ns_count_total_row)
     output.append(table_row)
     i += 1
 
@@ -108,7 +108,7 @@ rep_lag = cursor.fetchone()[0]
 current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
 
 report = wikitools.Page(wiki, report_title)
-report_text = report_template % (current_of, '\n'.join(output), ns_count_tcol, ns_count_r_tcol, ns_count_gtotal)
+report_text = report_template % (current_of, '\n'.join(output), ns_count_total_column, ns_count_redirects_total_column, ns_count_global_total)
 report_text = report_text.encode('utf-8')
 report.edit(report_text, summary=settings.editsumm, bot=1)
 
