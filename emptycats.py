@@ -59,7 +59,7 @@ AND NOT EXISTS (SELECT
                   1
                 FROM categorylinks
                 WHERE cl_from = page_id
-                AND cl_to = 'Wikipedia_category_redirects')
+                AND cl_to = 'Wikipedia_soft_redirected_categories')
 AND NOT EXISTS (SELECT
                   1
                 FROM categorylinks

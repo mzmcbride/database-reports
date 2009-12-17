@@ -40,7 +40,7 @@ Deleted red-linked categories; data as of <onlyinclude>%s</onlyinclude>.
 
 rows_per_page = 800
 
-wiki = wikitools.Wiki(settings.apiurl)
+wiki = wikitools.Wiki(settings.apiurl); wiki.setMaxlag(-1)
 wiki.login(settings.username, settings.password)
 
 def last_log_entry(page):
