@@ -74,14 +74,14 @@ FROM categorylinks
 JOIN category
 ON cl_to = cat_title
 JOIN toolserver.namespace
-ON dbname = 'enwiki_p'
+ON dbname = %s
 AND ns_id = 14
 LEFT JOIN page
 ON cl_to = page_title
 AND page_namespace = 14
 WHERE page_title IS NULL
 AND cat_pages > 0;
-''')
+''' , settings.dbname)
 
 i = 1
 output = []

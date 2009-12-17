@@ -76,7 +76,7 @@ JOIN templatelinks
 ON tl_namespace = page_namespace
 AND tl_title = page_title
 JOIN toolserver.namespace
-ON dbname = 'enwiki_p'
+ON dbname = %s
 AND page_namespace = ns_id
 JOIN page_restrictions
 ON pr_page = page_id
@@ -86,7 +86,7 @@ AND pr_level = 'sysop'
 AND pr_expiry = 'infinity'
 GROUP BY page_namespace, page_title
 HAVING COUNT(*) < 100;
-''')
+''' , settings.dbname)
 
 i = 1
 output = []

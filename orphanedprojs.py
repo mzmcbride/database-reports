@@ -46,7 +46,7 @@ SELECT DISTINCT
   pg1.page_title
 FROM page AS pg1
 JOIN toolserver.namespace
-ON dbname = 'enwiki_p'
+ON dbname = %s
 AND pg1.page_namespace = ns_id
 JOIN revision
 ON rev_page = pg1.page_id
@@ -78,7 +78,7 @@ AND NOT EXISTS (SELECT
                 AND tl_title = pg1.page_title
                 AND pg3.page_namespace = 4)
 LIMIT 1000;
-''')
+''' , settings.dbname)
 
 i = 1
 output = []

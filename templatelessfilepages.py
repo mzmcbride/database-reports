@@ -49,7 +49,7 @@ SELECT
   pg1.page_len
 FROM page AS pg1
 JOIN toolserver.namespace
-ON dbname = 'enwiki_p'
+ON dbname = %s
 AND ns_id = pg1.page_namespace
 LEFT JOIN templatelinks
 ON tl_from = pg1.page_id
@@ -67,7 +67,7 @@ AND pg1.page_namespace = 6
 AND pg1.page_is_redirect = 0
 AND tl_from IS NULL
 LIMIT 800;
-''')
+''' , settings.dbname)
 
 i = 1
 output = []

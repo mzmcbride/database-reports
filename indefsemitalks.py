@@ -93,7 +93,7 @@ SELECT
 FROM page
 JOIN toolserver.namespace
 ON ns_id = page_namespace
-AND dbname = 'enwiki_p'
+AND dbname = %s
 JOIN page_restrictions
 ON page_id = pr_page
 AND page_namespace mod 2 != 0
@@ -101,7 +101,7 @@ AND pr_type = 'edit'
 AND pr_level = 'autoconfirmed'
 AND pr_expiry = 'infinity'
 AND page_title NOT LIKE "%rchive%";
-''')
+''' , settings.dbname)
 
 i = 1
 h = 1

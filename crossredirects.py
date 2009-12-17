@@ -68,14 +68,14 @@ SELECT
 FROM redirect, page AS pf, page AS pt
 JOIN toolserver.namespace
 ON pt.page_namespace = ns_id
-AND dbname = 'enwiki_p'
+AND dbname = %s
 WHERE pf.page_namespace = 0
 AND rd_title = pt.page_title
 AND rd_namespace = pt.page_namespace
 AND pt.page_namespace != 0
 AND rd_from = pf.page_id
 AND pf.page_namespace = 0;
-''')
+''' , settings.dbname)
 
 i = 1
 output = []

@@ -43,15 +43,25 @@ cursor = conn.cursor()
 cursor.execute('''
 /* mistaggedfiles.py SLOW_OK */
 SELECT
-  DISTINCT(enwiki_p.page.page_title),
+  DISTINCT(%s.page.page_title),
   commonswiki_p.image.img_name
-FROM enwiki_p.image, commonswiki_p.image, enwiki_p.categorylinks, enwiki_p.page
-WHERE enwiki_p.image.img_sha1 = commonswiki_p.image.img_sha1
-AND enwiki_p.page.page_title = enwiki_p.image.img_name
-AND enwiki_p.categorylinks.cl_from = enwiki_p.page.page_id
-AND enwiki_p.categorylinks.cl_to = 'All_non-free_media'
-AND enwiki_p.image.img_sha1 != 'phoiac9h4m842xq45sp7s6u21eteeq1';
-''')
+FROM %s.image, commonswiki_p.image, %s.categorylinks, %s.page
+WHERE %s.image.img_sha1 = commonswiki_p.image.img_sha1
+AND %s.page.page_title = %s.image.img_name
+AND %s.categorylinks.cl_from = %s.page.page_id
+AND %s.categorylinks.cl_to = 'All_non-free_media'
+AND %s.image.img_sha1 != 'phoiac9h4m842xq45sp7s6u21eteeq1';
+''' , (settings.dbname,
+       settings.dbname,
+       settings.dbname,
+       settings.dbname,
+       settings.dbname,
+       settings.dbname,
+       settings.dbname,
+       settings.dbname,
+       settings.dbname,
+       settings.dbname,
+       settings.dbname))
 
 i = 1
 output = []

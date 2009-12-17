@@ -50,7 +50,7 @@ SELECT DISTINCT
   page_len
 FROM page
 JOIN toolserver.namespace
-ON dbname = 'enwiki_p'
+ON dbname = %s
 AND page_namespace = ns_id
 LEFT JOIN templatelinks
 ON tl_from = page_id
@@ -66,7 +66,7 @@ AND NOT EXISTS (SELECT
 AND page_len < 50
 AND ISNULL(tl_from)
 LIMIT 1000;
-''' , r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
+''' , (settings.dbname, r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'))
 
 i = 1
 output = []

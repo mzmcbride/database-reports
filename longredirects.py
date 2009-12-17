@@ -50,11 +50,11 @@ SELECT
 FROM page
 JOIN toolserver.namespace
 ON page_namespace = ns_id
-AND dbname = 'enwiki_p'
+AND dbname = %s
 WHERE page_is_redirect = 1
 HAVING page_len > 449
 ORDER BY page_namespace ASC;
-''')
+''' , settings.dbname)
 
 i = 1
 output = []

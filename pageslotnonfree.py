@@ -58,7 +58,7 @@ JOIN (SELECT
         il_to
       FROM page AS pg2
       JOIN toolserver.namespace
-      ON dbname = 'enwiki_p'
+      ON dbname = %s
       AND pg2.page_namespace = ns_id
       JOIN imagelinks
       ON il_from = page_id) AS imgtmp
@@ -68,7 +68,7 @@ AND cl_to = 'All_non-free_media'
 GROUP BY imgtmp.page_namespace, imgtmp.page_title
 HAVING COUNT(cl_to) > 6
 ORDER BY COUNT(cl_to) DESC;
-''')
+''' , settings.dbname)
 
 i = 1
 output = []

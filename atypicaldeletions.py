@@ -59,14 +59,14 @@ SELECT
 FROM logging
 JOIN toolserver.namespace
 ON log_namespace = ns_id
-AND dbname = 'enwiki_p'
+AND dbname = %s
 JOIN user
 ON log_user = user_id
 WHERE log_type='delete'
 AND log_action != 'restore'
 AND log_action != 'delete'
 ORDER BY log_timestamp DESC;
-''')
+''' , settings.dbname)
 
 i = 1
 output = []

@@ -46,7 +46,7 @@ SELECT
   pg1.page_title
 FROM page AS pg1
 JOIN toolserver.namespace
-ON dbname = 'enwiki_p'
+ON dbname = %s
 AND pg1.page_namespace = ns_id
 WHERE NOT EXISTS (SELECT
                     img_name
@@ -64,7 +64,7 @@ AND NOT EXISTS (SELECT
                 AND pg2.page_is_redirect = 1)
 AND pg1.page_namespace = 6
 AND pg1.page_is_redirect = 0;
-''')
+''' , settings.dbname)
 
 i = 1
 output = []

@@ -67,12 +67,12 @@ JOIN (SELECT
 ON pgtmp.page_id = rev_page
 JOIN toolserver.namespace
 ON pgtmp.page_namespace = ns_id
-AND dbname = 'enwiki_p'
+AND dbname = %s
 AND rev_timestamp = (SELECT
                        MIN(rev_timestamp)
                      FROM revision
                      WHERE rev_page = pgtmp.page_id);
-''')
+''' , settings.dbname)
 
 i = 1
 output = []

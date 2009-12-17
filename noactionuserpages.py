@@ -90,12 +90,12 @@ LEFT JOIN archive
 ON ar_user_text = page_title
 JOIN toolserver.namespace
 ON ns_id = page_namespace
-AND dbname = 'enwiki_p'
+AND dbname = %s
 WHERE page_namespace = 2
 AND ISNULL(rev_user_text)
 AND ISNULL(ar_user_text)
 AND page_title RLIKE %s;
-''' , r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
+''' , (settings.dbname, r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'))
 
 i = 1
 output = []

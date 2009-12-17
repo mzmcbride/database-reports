@@ -53,7 +53,7 @@ JOIN (SELECT
         page_title
       FROM page
       JOIN toolserver.namespace
-      ON dbname = 'enwiki_p'
+      ON dbname = %s
       AND page_namespace = ns_id
       JOIN categorylinks
       ON cl_from = page_id
@@ -63,7 +63,7 @@ ON pgtmp.page_title = il_to
 GROUP BY il_to
 HAVING COUNT(*) > 4
 ORDER BY COUNT(*) ASC;
-''')
+''' , settings.dbname)
 
 i = 1
 output = []

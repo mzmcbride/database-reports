@@ -51,7 +51,7 @@ SELECT
 FROM page
 JOIN toolserver.namespace
 ON page_namespace = ns_id
-AND dbname = 'enwiki_p'
+AND dbname = %s
 LEFT JOIN templatelinks
 ON tl_from = page_id
 WHERE page_is_redirect = 0
@@ -62,7 +62,7 @@ AND (SELECT
        COUNT(DISTINCT rev_user_text)
      FROM revision
      WHERE rev_page = page_id) = 1;
-''')
+''' , settings.dbname)
 
 i = 1
 output = []

@@ -84,7 +84,7 @@ SELECT
 FROM page
 JOIN toolserver.namespace
 ON ns_id = page_namespace
-AND dbname = 'enwiki_p'
+AND dbname = %s
 JOIN page_restrictions
 ON page_id = pr_page
 AND page_namespace mod 2 != 0
@@ -93,7 +93,7 @@ AND pr_level = 'sysop'
 AND pr_expiry = 'infinity'
 AND page_title NOT LIKE "%/%"
 AND page_is_redirect = 0;
-''')
+''' , settings.dbname)
 
 i = 1
 output = []

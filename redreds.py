@@ -54,16 +54,16 @@ AND pl_title = pg1.page_title
 LEFT JOIN page AS pg2
 ON pl_from = pg2.page_id
 JOIN toolserver.namespace AS ns1
-ON ns1.dbname = 'enwiki_p'
+ON ns1.dbname = %s
 AND ns1.ns_id = pg2.page_namespace
 JOIN toolserver.namespace AS ns2
-ON ns2.dbname = 'enwiki_p'
+ON ns2.dbname = %s
 AND ns2.ns_id = pl_namespace
 WHERE pg1.page_namespace IS NULL
 AND pg2.page_is_redirect = 1
 GROUP BY pg2.page_namespace, pg2.page_title
 LIMIT 800;
-''')
+''' , settings.dbname)
 
 i = 1
 output = []

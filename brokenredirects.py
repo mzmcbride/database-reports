@@ -49,16 +49,16 @@ SELECT
 FROM redirect AS rd
 JOIN page p1
 ON rd.rd_from = p1.page_id
-  JOIN toolserver.namespace
-  ON p1.page_namespace = ns_id
-  AND dbname = 'enwiki_p'
+JOIN toolserver.namespace
+ON p1.page_namespace = ns_id
+AND dbname = %s
 LEFT JOIN page AS p2
 ON rd_namespace = p2.page_namespace
 AND rd_title = p2.page_title
 WHERE rd_namespace >= 0
 AND p2.page_namespace IS NULL
 ORDER BY p1.page_namespace ASC;
-''')
+''' , settings.dbname)
 
 i = 1
 output = []

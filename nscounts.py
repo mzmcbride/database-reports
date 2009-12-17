@@ -55,17 +55,18 @@ SELECT
   ns_name,
   MAX(notredir),
   MAX(redir)
-FROM (
-  SELECT page.page_namespace,
-         IF( page_is_redirect, COUNT(page.page_namespace), 0 ) AS redir,
-         IF( page_is_redirect, 0, COUNT(page.page_namespace)) AS notredir
-  FROM page
-  GROUP BY page_is_redirect, page_namespace
-  ORDER BY page_namespace, page_is_redirect
-) AS pagetmp
-JOIN toolserver.namespace ON page_namespace = ns_id AND dbname = 'enwiki_p'
+FROM (SELECT
+        page.page_namespace,
+        IF( page_is_redirect, COUNT(page.page_namespace), 0 ) AS redir,
+        IF( page_is_redirect, 0, COUNT(page.page_namespace)) AS notredir
+      FROM page
+      GROUP BY page_is_redirect, page_namespace
+      ORDER BY page_namespace, page_is_redirect) AS pagetmp
+JOIN toolserver.namespace
+ON page_namespace = ns_id
+AND dbname = %s
 GROUP BY page_namespace;
-''')
+''' , settings.dbname)
 
 i = 1
 output = []
