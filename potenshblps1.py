@@ -66,7 +66,15 @@ AND NOT EXISTS (SELECT
                 ON pg3.page_id = cl_from
                 WHERE pg1.page_title = pg3.page_title
                 AND pg3.page_namespace = 0
-                AND cl_to = 'Possibly_living_people');
+                AND cl_to = 'Possibly_living_people')
+AND NOT EXISTS (SELECT
+                  1
+                FROM page AS pg4
+                JOIN categorylinks
+                ON pg4.page_id = cl_from
+                WHERE pg1.page_title = pg4.page_title
+                AND pg4.page_namespace = 0
+                AND cl_to RLIKE '^[0-9]{4}_deaths$');
 ''')
 
 i = 1
