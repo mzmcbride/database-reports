@@ -69,6 +69,11 @@ AND NOT EXISTS (SELECT
                 FROM categorylinks
                 WHERE cl_from = page_id
                 AND cl_to = 'Possibly_living_people')
+AND NOT EXISTS (SELECT
+                  1
+                FROM categorylinks
+                WHERE cl_from = page_id
+                AND cl_to = 'Disappeared_people')
 ORDER BY cl_to DESC
 LIMIT 1000;
 ''')
