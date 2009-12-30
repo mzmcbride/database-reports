@@ -63,10 +63,12 @@ AND EXISTS (SELECT
 i = 1
 output = []
 for row in cursor.fetchall():
-    page_title = u'[[%s]]' % unicode(row[0], 'utf-8')
+    page_title = re.sub('_', ' ', u'%s' % unicode(row[0], 'utf-8'))
     table_row = u'''| %d
 | %s
 |-''' % (i, page_title)
+    if re.search(r'(\b&\b|\band\b|\bbrothers\b|\bsisters\b|\bquintuplets\b)', page_title):
+        continue
     output.append(table_row)
     i += 1
 
