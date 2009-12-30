@@ -58,7 +58,9 @@ AND EXISTS (SELECT
               1
             FROM categorylinks AS cl3
             WHERE cl3.cl_from = page_id
-            AND cl3.cl_to RLIKE '^[0-9]{4}_deaths$');
+            AND cl3.cl_to RLIKE '^[0-9]{4}_deaths$')
+AND page_namespace = 0
+AND page_is_redirect = 0;
 ''')
 
 i = 1
@@ -66,9 +68,9 @@ output = []
 for row in cursor.fetchall():
     page_title = re.sub('_', ' ', u'%s' % unicode(row[0], 'utf-8'))
     table_row = u'''| %d
-| %s
+| [[%s]]
 |-''' % (i, page_title)
-    if re.search(r'(\b&\b|\band\b|\bbrothers\b|\bsisters\b|\bquintuplets\b)', page_title):
+    if re.search(r'(&|\band\b|\bbrothers\b|\bsisters\b|\bquintuplets\b)', page_title):
         continue
     output.append(table_row)
     i += 1
