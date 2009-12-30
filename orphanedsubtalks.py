@@ -49,7 +49,7 @@ FROM page AS pg1
 JOIN toolserver.namespace
 ON dbname = %s
 AND page_namespace = ns_id
-WHERE pg1.page_title LIKE '%/%'
+WHERE pg1.page_title LIKE '%%/%%'
 AND pg1.page_namespace IN (1,5,7,9,11,13,101)
 AND NOT EXISTS (SELECT
                   1
