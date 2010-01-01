@@ -23,7 +23,8 @@ import settings
 report_title = settings.rootpage + 'Large non-free files'
 
 report_template = u'''
-Files in [[:Category:All non-free media]] that are larger than 999999 bytes; \
+Files in [[:Category:All non-free media]] that are larger than 999999 bytes \
+and are not in [[:Category:Non-free Wikipedia file size reduction request]]; \
 data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
@@ -57,7 +58,12 @@ JOIN categorylinks
 ON cl_from = page_id
 WHERE page_namespace = 6
 AND cl_to = 'All_non-free_media'
-AND img_size > 999999;
+AND img_size > 999999
+AND NOT EXISTS (SELECT
+                  1
+                FROM categorylinks
+                WHERE page_id = cl_from
+                AND cl_to = 'Non-free_Wikipedia_file_size_reduction_request');
 ''')
 
 i = 1
