@@ -72,8 +72,8 @@ SELECT
 FROM page AS p1
 JOIN toolserver.namespace
 ON p1.page_namespace = ns_id
-AND dbname = 'enwiki_p'
-WHERE p1.page_title NOT LIKE '%/%'
+AND dbname = %s
+WHERE p1.page_title NOT LIKE '%%/%%'
 AND p1.page_namespace mod 2 != 0
 AND p1.page_namespace NOT IN (3,9)
 AND CASE WHEN p1.page_namespace = 1
@@ -184,21 +184,21 @@ AND p1.page_id NOT IN (SELECT
                        FROM page
                        JOIN templatelinks
                        ON page_id = tl_from
-                       WHERE tl_title="G8-exempt"
+                       WHERE tl_title = 'G8-exempt'
                        AND tl_namespace = 10)
 AND p1.page_id NOT IN (SELECT
                          page_id
                        FROM page
                        JOIN templatelinks
                        ON page_id = tl_from
-                       WHERE tl_title="Go_away"
+                       WHERE tl_title = 'Go_away'
                        AND tl_namespace = 10)
 AND p1.page_id NOT IN (SELECT
                          page_id
                        FROM page
                        JOIN templatelinks
                        ON page_id = tl_from
-                       WHERE tl_title="Rtd"
+                       WHERE tl_title = 'Rtd'
                        AND tl_namespace = 10);
 ''' , settings.dbname)
 
