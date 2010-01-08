@@ -72,9 +72,10 @@ SELECT
 FROM page AS p1
 JOIN toolserver.namespace
 ON p1.page_namespace = ns_id
-AND dbname = %s
-WHERE p1.page_title NOT LIKE "%%/%%"
-AND p1.page_namespace NOT IN (0,2,3,4,6,8,9,10,12,14,16,18,100,102,104)
+AND dbname = 'enwiki_p'
+WHERE p1.page_title NOT LIKE '%/%'
+AND p1.page_namespace mod 2 != 0
+AND p1.page_namespace NOT IN (3,9)
 AND CASE WHEN p1.page_namespace = 1
   THEN NOT EXISTS (SELECT
                      1
@@ -134,6 +135,48 @@ AND CASE WHEN p1.page_namespace = 101
                      1
                    FROM page AS p2
                    WHERE p2.page_namespace = 100
+                   AND p1.page_title = p2.page_title)
+  ELSE 1 END
+AND CASE WHEN p1.page_namespace = 103
+  THEN NOT EXISTS (SELECT
+                     1
+                   FROM page AS p2
+                   WHERE p2.page_namespace = 102
+                   AND p1.page_title = p2.page_title)
+  ELSE 1 END
+AND CASE WHEN p1.page_namespace = 105
+  THEN NOT EXISTS (SELECT
+                     1
+                   FROM page AS p2
+                   WHERE p2.page_namespace = 104
+                   AND p1.page_title = p2.page_title)
+  ELSE 1 END
+AND CASE WHEN p1.page_namespace = 107
+  THEN NOT EXISTS (SELECT
+                     1
+                   FROM page AS p2
+                   WHERE p2.page_namespace = 106
+                   AND p1.page_title = p2.page_title)
+  ELSE 1 END
+AND CASE WHEN p1.page_namespace = 109
+  THEN NOT EXISTS (SELECT
+                     1
+                   FROM page AS p2
+                   WHERE p2.page_namespace = 108
+                   AND p1.page_title = p2.page_title)
+  ELSE 1 END
+AND CASE WHEN p1.page_namespace = 111
+  THEN NOT EXISTS (SELECT
+                     1
+                   FROM page AS p2
+                   WHERE p2.page_namespace = 110
+                   AND p1.page_title = p2.page_title)
+  ELSE 1 END
+AND CASE WHEN p1.page_namespace = 113
+  THEN NOT EXISTS (SELECT
+                     1
+                   FROM page AS p2
+                   WHERE p2.page_namespace = 112
                    AND p1.page_title = p2.page_title)
   ELSE 1 END
 AND p1.page_id NOT IN (SELECT
