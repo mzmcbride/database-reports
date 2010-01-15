@@ -25,7 +25,7 @@ import settings
 report_title = settings.rootpage + 'Non-free files missing a rationale'
 
 report_template = u'''
-Non-free files missing a [[WP:FUR|fair use rationale]]; \
+Non-free files missing a [[WP:FUR|fair use rationale]] (limited results); \
 data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
@@ -42,7 +42,7 @@ r'=.*(fair[ -]?use|non[ -]?free|rationale).*=',
 r'rationale for the fair use',
 r'qualifies as fair use',
 r'fair use in \[\[',
-r'\'\'\'fair use rationale\'\'\'',
+r'\'\'\'fair use rationale[:]?\'\'\'',
 r'the doctrine of fair use',
 r'the purpose of this image',
 r'this low quality image',
@@ -55,6 +55,15 @@ r'use of this low-resolution version',
 r'does not in any way limit the ability of the copyright',
 r'rationale for use on',
 r'image is suitable for fair use on',
+r'is a low resolution copy of the original',
+r'rationale:',
+r'is only being used for informational purposes',	
+r'constitutes fair use',
+r'does not deprive the owner of any revenue',
+r'no free substitute can be made',
+r'does not limit the copyright owner\'s rights',
+r'within fair use guidelines',
+r'fair use rationale:',
 ]
 
 find_fair_use_strings = re.compile(r"(%s)" % '|'.join(str(i) for i in fair_use_strings), re.I)
