@@ -31,16 +31,16 @@ cursor = conn.cursor()
 
 def get_stats(type, action):
     cursor.execute(u'''
-        /* logactions.py SLOW_OK */
-        SELECT
-          user_name,
-          COUNT(log_timestamp)
-        FROM logging
-        JOIN user_ids
-        ON user_id = log_user
-        WHERE log_type = '%s'
-        AND log_action = '%s'
-        GROUP BY log_user;
+    /* logactions.py SLOW_OK */
+    SELECT
+      user_name,
+      COUNT(log_timestamp)
+    FROM logging
+    JOIN user_ids
+    ON user_id = log_user
+    WHERE log_type = '%s'
+    AND log_action = '%s'
+    GROUP BY log_user;
     ''' % (type, action))
     return cursor.fetchall()
 
@@ -86,9 +86,9 @@ table_template = u'''
 == %s ==
 {| class="wikitable sortable" style="width:23em;"
 |- style="white-space:nowrap;"
-! No.
-! User
-! Count
+!No.
+!User
+!Count
 |-
 %s
 |}
@@ -103,7 +103,7 @@ for query in query_list:
     rows = []
     i = 1
     for user, count in stats:
-        rows.append(u'''| %d\n| %s\n| %s\n|-''' % (i, user, count))
+        rows.append(u'''|%d||%s||%s\n|-''' % (i, user, count))
         i += 1
     output += table_template % (query['name'], '\n'.join(rows))
     if query['len'] > 25:
@@ -115,13 +115,13 @@ Hover over the abbreviations to see the full action name.
 
 {| class="wikitable sortable" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
-! No.
-! User
+!No.
+!User
 %s
-! Total
+!Total
 |-
 %s class="sortbottom"
-! colspan="2" | Totals
+!colspan="2"|Totals
 %s
 |}
 '''
@@ -153,13 +153,13 @@ for user,stats in user_stats_sorted:
         else:
             row.append('0')
     row.append(str(total))
-    rows.append('| %s \n|-' % ('\n| '.join(row)))
+    rows.append('|%s\n|-' % ('||'.join(row)))
     i += 1
 
 output += master_table_template % (
-    '\n'.join(['! <span title="%s">%s</span>' % (query['name'], query['short_name']) for query in query_list]), 
+    '\n'.join(['!<span title="%s">%s</span>' % (query['name'], query['short_name']) for query in query_list]), 
     '\n'.join(rows),
-    '\n'.join([u'! style="text-align:left;" | %d' % totals[query['name']] for query in query_list]) + u'\n! style="text-align:left;" | %d' % totals['total']
+    '\n'.join([u'!style="text-align:left;"|%d' % totals[query['name']] for query in query_list]) + u'\n!style="text-align:left;"|%d' % totals['total']
 )
 
 cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
