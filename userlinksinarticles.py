@@ -23,7 +23,8 @@ import settings
 report_title = settings.rootpage + 'Articles containing links to the user space'
 
 report_template = u'''
-Articles containing links to User: or User_talk: pages; data as of <onlyinclude>%s</onlyinclude>.
+Articles containing links to the user space; \
+data as of <onlyinclude>%s</onlyinclude>.
  
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -46,12 +47,10 @@ cursor.execute('''
 SELECT DISTINCT
   page_title
 FROM page
-JOIN pagelinks AS pgl1
-ON pgl1.pl_from = page_id
-JOIN pagelinks AS pgl2
-ON pgl2.pl_from = page_id
+JOIN pagelinks
+ON pl_from = page_id
 WHERE page_namespace = 0
-AND pgl2.pl_namespace IN (2,3);
+AND pl_namespace IN (2,3);
 ''')
 for row in cursor.fetchall():
     page_title = u'%s' % unicode(row[0], 'utf-8')
@@ -78,7 +77,7 @@ for page_title in all_pages:
     if page_title in skip_pages:
         continue
     table_row = u'''| %d
-| {{plenr|1=%s}}
+| [[%s]]
 |-''' % (i, page_title)
     output.append(table_row)
     i += 1
