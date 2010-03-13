@@ -23,7 +23,7 @@ import settings
 report_title = settings.rootpage + 'Unused templates'
 
 report_template = u'''
-Unused templates that are not redirects and do not contain "/" \
+Unused templates that are not redirects, do not contain "/", and do not end with "-stub" \
 (limited to the first 800 entries); data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
@@ -44,9 +44,13 @@ cursor = conn.cursor()
 cursor.execute('''
 /* unusedtemplates.py SLOW_OK */
 SELECT
+  ns_name,
   page_title,
   rev_timestamp
 FROM page
+JOIN toolserver.namespace
+ON dbname = 'enwiki_p'
+AND page_namespace = ns_id
 LEFT JOIN templatelinks
 ON page_namespace = tl_namespace
 AND page_title = tl_title
@@ -55,6 +59,7 @@ ON rev_page = page_id
 WHERE page_namespace = 10
 AND page_is_redirect = 0
 AND page_title NOT LIKE '%/%'
+AND page_title NOT LIKE '%-stub'
 AND tl_from IS NULL
 AND rev_timestamp = (SELECT
                        MAX(rev_timestamp)
@@ -66,12 +71,14 @@ LIMIT 800;
 i = 1
 output = []
 for row in cursor.fetchall():
-    page_title = u'[[Template:%s|]]' % unicode(row[0], 'utf-8')
-    rev_timestamp = row[1]
+    ns_name = u'%s' % unicode(row[0], 'utf-8')
+    page_title = u'%s' % unicode(row[1], 'utf-8')
+    full_page_title = u'[[%s:%s|%s]]' % (ns_name, page_title, page_title)
+    rev_timestamp = row[2]
     table_row = u'''| %d
 | %s
 | %s
-|-''' % (i, page_title, rev_timestamp)
+|-''' % (i, full_page_title, rev_timestamp)
     output.append(table_row)
     i += 1
 
