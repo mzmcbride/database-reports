@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.5
 
-# Copyright 2009 bjweeks, MZMcBride
+# Copyright 2010 bjweeks, MZMcBride
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,8 +23,7 @@ import settings
 report_title = settings.rootpage + 'Unused stub templates'
 
 report_template = u'''
-Unused stub templates (limited to the first 800 entries); \
-data as of <onlyinclude>%s</onlyinclude>.
+Unused stub templates; data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -63,8 +62,7 @@ AND tl_from IS NULL
 AND rev_timestamp = (SELECT
                        MAX(rev_timestamp)
                      FROM revision
-                     WHERE rev_page = page_id)
-LIMIT 800;
+                     WHERE rev_page = page_id);
 ''')
 
 i = 1
