@@ -76,7 +76,7 @@ for row in cursor.fetchall():
         full_page_title = u'[[%s]]' % page_title
     else:
         full_page_title = u'[[%s:%s]]' % (ns_name, page_title)
-    full_cl_to = u'[[Category:%s|%s]]' % (cl_to, cl_to)
+    full_cl_to = u'[[:Category:%s|%s]]' % (cl_to, cl_to)
     table_row = u'''| %d
 | %s
 | %s
