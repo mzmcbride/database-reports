@@ -73,7 +73,7 @@ i = 1
 output = []
 for row in cursor.fetchall():
     full_template_title = u'[[%s:%s|%s]]' % ('Template', unicode(row[1], 'utf-8'), unicode(row[1], 'utf-8')) 
-    full_page_title = u'[[%s]]' % (unicode(row[4], 'utf-8'))
+    full_page_title = u'[[%s]]' % (unicode(row[3], 'utf-8'))
     table_row = u'''| %d
 | %s
 | %s
