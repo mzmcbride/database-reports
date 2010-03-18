@@ -41,6 +41,7 @@ wiki.login(settings.username, settings.password)
 
 conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
+cursor.execute('SET SESSION group_concat_max_len = 1000000;')
 cursor.execute('''
 /* redreds.py SLOW_OK */
 SELECT
