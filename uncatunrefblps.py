@@ -55,8 +55,8 @@ for category in ['Wikipedia_maintenance', 'Hidden_categories']:
     AND cl_to = %s;
     ''' , category)
     for row in cursor.fetchall():
-         member_category = u'%s' % unicode(row[0], 'utf-8')
-         excluded_categories.append(member_category)
+        member_category = u'%s' % unicode(row[0], 'utf-8')
+        excluded_categories.append(member_category)
 
 excluded_categories_re = re.compile(r'(%s)' % '|'.join(str(r'^%s$' % i.encode('utf-8')) for i in excluded_categories), re.U)
 
