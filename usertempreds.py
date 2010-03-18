@@ -49,13 +49,13 @@ SELECT
   rd_title
 FROM page
 JOIN toolserver.namespace
-ON dbname = 'enwiki_p'
+ON dbname = %s
 AND ns_id = page_namespace
 JOIN redirect
 ON rd_from = page_id
 WHERE rd_namespace = 2
 AND page_namespace = 10;
-''')
+''' , settings.dbname)
 
 i = 1
 output = []

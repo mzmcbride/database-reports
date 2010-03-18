@@ -50,13 +50,13 @@ SELECT
   page_title
 FROM page
 JOIN toolserver.namespace
-ON dbname = 'enwiki_p'
+ON dbname = %s
 AND ns_id = page_namespace
 JOIN templatelinks
 ON tl_from = page_id
 WHERE page_namespace IN (0,10)
 AND tl_namespace = 2;
-''')
+''' , settings.dbname)
 
 i = 1
 output = []

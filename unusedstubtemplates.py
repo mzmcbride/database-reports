@@ -48,7 +48,7 @@ SELECT
   rev_timestamp
 FROM page
 JOIN toolserver.namespace
-ON dbname = 'enwiki_p'
+ON dbname = %s
 AND page_namespace = ns_id
 LEFT JOIN templatelinks
 ON page_namespace = tl_namespace
@@ -57,13 +57,13 @@ JOIN revision
 ON rev_page = page_id
 WHERE page_namespace = 10
 AND page_is_redirect = 0
-AND page_title LIKE '%-stub'
+AND page_title LIKE '%%-stub'
 AND tl_from IS NULL
 AND rev_timestamp = (SELECT
                        MAX(rev_timestamp)
                      FROM revision
                      WHERE rev_page = page_id);
-''')
+''' , settings.dbname)
 
 i = 1
 output = []

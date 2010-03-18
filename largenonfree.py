@@ -50,7 +50,7 @@ SELECT
   img_size
 FROM page
 JOIN toolserver.namespace
-ON dbname = 'enwiki_p'
+ON dbname = %s
 AND page_namespace = ns_id
 JOIN image
 ON img_name = page_title
@@ -64,7 +64,7 @@ AND NOT EXISTS (SELECT
                 FROM categorylinks
                 WHERE page_id = cl_from
                 AND cl_to = 'Non-free_Wikipedia_file_size_reduction_request');
-''')
+''' , settings.dbname)
 
 i = 1
 output = []
