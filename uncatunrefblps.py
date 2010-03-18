@@ -84,7 +84,7 @@ for row in cursor.fetchall():
     legit_categories = []
     for cat in cl_to.split('|'):
         if not excluded_categories_re.search(cat):
-             legit_categories.append(cat)
+            legit_categories.append(cat)
     if len(legit_categories) == 0:
         table_row = u'''| %d
 | %s
