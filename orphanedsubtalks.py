@@ -61,7 +61,7 @@ JOIN toolserver.namespace
 ON dbname = %s
 AND page_namespace = ns_id
 WHERE pg1.page_title LIKE '%%/%%'
-AND pg1.page_namespace IN (1,5,7,9,11,13,101)
+AND pg1.page_namespace IN (1,5,7,9,11,13,101,103)
 AND NOT EXISTS (SELECT
                   1
                 FROM page AS pg2
@@ -76,7 +76,13 @@ AND NOT EXISTS (SELECT
                   1
                 FROM page AS pg4
                 WHERE pg4.page_namespace = pg1.page_namespace - 1
-                AND pg4.page_title = SUBSTRING_INDEX(pg1.page_title, '/', 1));
+                AND pg4.page_title = SUBSTRING_INDEX(pg1.page_title, '/', 1))
+AND NOT EXISTS (SELECT
+                  1
+                FROM templatelinks
+                WHERE tl_from = pg1.page_id
+                AND tl_namespace = 10
+                AND tl_title = 'G8-exempt');
 ''' , settings.dbname)
 
 i = 1
