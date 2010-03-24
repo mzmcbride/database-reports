@@ -23,8 +23,20 @@ import settings
 
 report_title = settings.rootpage + 'Indefinitely semi-protected articles/%i'
 
-report_template = u'''
+report_template_1 = u'''
 Articles that are indefinitely semi-protected from editing; data as of <onlyinclude>%s</onlyinclude>.
+
+== Redirects ==
+{| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
+|- style="white-space:nowrap;"
+! No.
+! Article
+! Protector
+! Timestamp
+! Reason
+|-
+%s
+|}
 
 == Non-redirects ==
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
@@ -37,8 +49,12 @@ Articles that are indefinitely semi-protected from editing; data as of <onlyincl
 |-
 %s
 |}
+'''
 
-== Redirects ==
+report_template_2 = u'''
+Articles that are indefinitely semi-protected from editing; data as of <onlyinclude>%s</onlyinclude>.
+
+== Non-redirects ==
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
 ! No.
@@ -88,7 +104,8 @@ ON page_id = pr_page
 AND page_namespace = 0
 AND pr_type = 'edit'
 AND pr_level = 'autoconfirmed'
-AND pr_expiry = 'infinity';
+AND pr_expiry = 'infinity'
+ORDER BY page_is_redirect DESC, page_title ASC;
 ''')
 
 i = 1
@@ -117,7 +134,7 @@ for row in cursor.fetchall():
 | %s
 | %s
 |-''' % (num, page_title, user, timestamp, comment)
-    if redirect == 0:
+    if redirect == 1:
         output1.append(table_row)
     else:
         output2.append(table_row)
@@ -128,15 +145,26 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 
 end = rows_per_page
 page = 1
-for start in range(0, len(output), rows_per_page):
+for start in range(0, len(output1), rows_per_page):
     report = wikitools.Page(wiki, report_title % page)
-    report_text = report_template % (current_of, '\n'.join(output[start:end]))
+    if page == 1:
+        end = rows_per_page - len(output1)
+        first_end = rows_per_page - len(output1)
+        report_text = report_template_1 % (current_of, '\n'.join(output1[start:end]), '\n'.join(output2[start:end]))
+        end += rows_per_page
+    else:
+        continue
+
+page = 2
+for start in range(first_end, len(output2)-first_end, rows_per_page):
+    report = wikitools.Page(wiki, report_title % page)
+    report_text = report_template_2 % (current_of, '\n'.join(output2[start:end]))
     report_text = report_text.encode('utf-8')
     report.edit(report_text, summary=settings.editsumm, bot=1)
     page += 1
     end += rows_per_page
 
-page = math.ceil(len(output) / float(rows_per_page)) + 1
+page = math.ceil(len(output1 + output2) / float(rows_per_page)) + 1
 while 1:
     report = wikitools.Page(wiki, report_title % page)
     report_text = settings.blankcontent
