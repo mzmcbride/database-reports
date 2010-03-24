@@ -152,6 +152,7 @@ for start in range(0, len(output1), rows_per_page):
         first_end = rows_per_page - len(output1)
         report_text = report_template_1 % (current_of, '\n'.join(output1[start:end]), '\n'.join(output2[start:end]))
         end += rows_per_page
+        report.edit(report_text, summary=settings.editsumm, bot=1)
     else:
         continue
 
