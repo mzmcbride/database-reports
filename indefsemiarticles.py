@@ -161,7 +161,10 @@ for start in range(first_end, len(output2)-first_end, rows_per_page):
     report = wikitools.Page(wiki, report_title % page)
     report_text = report_template_2 % (current_of, '\n'.join(output2[start:end]))
     report_text = report_text.encode('utf-8')
-    report.edit(report_text, summary=settings.editsumm, bot=1)
+    try:
+        report.edit(report_text, summary=settings.editsumm, bot=1)
+    except UnicodeEncodeError:
+        report.edit(report_text, summary=settings.editsumm, bot=1, skipmd5=True)
     page += 1
     end += rows_per_page
 
@@ -172,7 +175,10 @@ while 1:
     report_text = report_text.encode('utf-8')
     if not report.exists:
         break
-    report.edit(report_text, summary=settings.blanksumm, bot=1)
+    try:
+        report.edit(report_text, summary=settings.editsumm, bot=1)
+    except UnicodeEncodeError:
+        report.edit(report_text, summary=settings.editsumm, bot=1, skipmd5=True)
     page += 1
 
 cursor.close()
