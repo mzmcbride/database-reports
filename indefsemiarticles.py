@@ -171,7 +171,7 @@ for start in range(first_end, len(output2)-first_end, rows_per_page):
     page += 1
     end += rows_per_page
 
-page = math.ceil(len(output) / float(rows_per_page)) + 1
+page = math.ceil(len(output1 + output2) / float(rows_per_page)) + 1
 while 1:
     report = wikitools.Page(wiki, report_title % page)
     report_text = settings.blankcontent
