@@ -46,7 +46,7 @@ wiki.login(settings.username, settings.password)
 def namespace_names(cursor, dbname):
     nsdict = {}
     cursor.execute('''
-    /* mostwatched.py namespace_names */
+    /* mostwatchedperns.py namespace_names */
     SELECT
       ns_id,
       ns_name
@@ -63,7 +63,7 @@ def namespace_names(cursor, dbname):
 
 def get_top_pages(cursor, namespace):
     cursor.execute('''
-    /* mostwatched.py top_pages */
+    /* mostwatchedperns.py top_pages */
     SELECT
       wl_title,
       COUNT(*)

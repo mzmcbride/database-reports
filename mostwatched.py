@@ -94,12 +94,12 @@ for row in cursor.fetchall():
         page_title = '[[%s]]' % (page_title)
     else:
         page_title = '[[%s:%s]]' % (nsdict[page_namespace], page_title)
-    revisions = row[2]
+    watchers = row[2]
     table_row = u'''| %d
 | %s
 | %s
 | %s
-|-''' % (i, page_namespace, page_title, revisions)
+|-''' % (i, page_namespace, page_title, watchers)
     output.append(table_row)
     i += 1
 
