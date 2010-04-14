@@ -15,11 +15,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import codecs
 import datetime
 import MySQLdb, MySQLdb.cursors
 import re
 import wikitools
 import settings
+
+skipped_pages = []
+skipped_file = codecs.open('/home/mzmcbride/scripts/predadurr/skipped_pages.txt', 'r', 'utf-8')
+for i in skipped_file.read().strip('\n').split('\n'):
+    skipped_pages.append(i)
+skipped_file.close()
 
 excluded_titles = [
 '^USS_',
@@ -46,6 +53,11 @@ excluded_titles = [
 '_transmission$',
 '_\(miniseries\)$',
 '_College$',
+'album\)$',
+'song\)$',
+'[Dd]isambiguation\)$',
+'_Awards?$',
+'_[Ss]chool',
 ]
 
 jobs = [
@@ -753,7 +765,7 @@ WHERE page_namespace = 0
 AND page_is_redirect = 0
 GROUP BY page_id
 ORDER BY page_id DESC
-LIMIT 100000;
+LIMIT 200000;
 ''')
 
 i = 1
@@ -765,6 +777,8 @@ while True:
     if row == None:
         break
     page_title = u'%s' % unicode(row[0], 'utf-8')
+    if page_title in skipped_pages:
+        continue
     if row[1] is not None:
         cl_to = u'%s' % unicode(row[1], 'utf-8')
     else:
