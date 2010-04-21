@@ -64,6 +64,28 @@ r'no free substitute can be made',
 r'does not limit the copyright owner\'s rights',
 r'within fair use guidelines',
 r'fair use rationale:',
+r'qualifies for fair use',
+r'is a low-resolution image',
+r'image is being used to illustrate',
+r'Fair Use Rationale for',
+r'for the purposes of criticism and comment',
+r'contributes to the article significantly',
+r'does not limit the copyright owner\'s ability',
+r'no free equivalent is available',
+r'does not limit the copyright holder\'s ability',
+r'enhances the article in which it\'s displayed',
+r'falls under fair use as',
+r'will not limit the .+ ability',
+r'a historically significant photo',
+r'much lower resolution than the original',
+r'image is of low size and quality',
+r'used under a claim of fair use',
+r'used for the educational purposes',
+r'only for educational purposes and is not used for profit',
+r'depicts a.+historic event',
+r'quality of the image is very low',
+r'Purpose is purely informational',
+r'considerably lower resolution than the original',
 ]
 
 find_fair_use_strings = re.compile(r"(%s)" % '|'.join(str(i) for i in fair_use_strings), re.I)
@@ -101,7 +123,7 @@ AND NOT EXISTS (SELECT
                                  WHERE page_namespace = 10
                                  AND cl_to = 'Non-free_use_rationale_templates'))
 AND pg1.page_namespace = 6
-LIMIT 5000;
+LIMIT 10000;
 ''')
 
 f = open('%s/nonfree-reviewed-page-ids.txt' % os.getcwd(), 'r')
