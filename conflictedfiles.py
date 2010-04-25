@@ -66,7 +66,7 @@ for row in cursor.fetchall():
     full_page_title = u'[[:%s:%s|%s]]' % (ns_name, page_title, page_title)
     table_row = u'''| %d
 | %s
-|-''' % (i, page_title)
+|-''' % (i, full_page_title)
     output.append(table_row)
     i += 1
 
