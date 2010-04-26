@@ -1,1 +1,16 @@
-# Wiki login detailsusername = ''password = ''apiurl = ''# Toolserver detailshost = ''dbname = ''# Report details (generic)rootpage = ''editsumm = ''# Report details (multi-page)blankcontent = ''blanksumm = ''
+# Wiki login details
+username = ''
+password = ''
+apiurl = ''
+
+# Toolserver details
+host = ''
+dbname = ''
+
+# Report details (generic)
+rootpage = ''
+editsumm = ''
+
+# Report details (multi-page)
+blankcontent = ''
+blanksumm = ''
