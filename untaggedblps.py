@@ -60,7 +60,7 @@ LIMIT 1000;
 i = 1
 output = []
 for row in cursor.fetchall():
-    page_title = u'[[%s]]' % unicode(page_title, 'utf-8')
+    page_title = u'[[%s]]' % unicode(row[0], 'utf-8')
     table_row = u'''| %d
 | %s
 |-''' % (i, page_title)
