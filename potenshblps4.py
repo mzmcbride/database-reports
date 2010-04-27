@@ -629,7 +629,6 @@ jobs = [
 'zoo veternarians[,\n]',
 'Zookeepers[,\n]',
 'Zoologists[,\n]',
-'NULL',
 ]
 
 excluded_categories = [
@@ -738,7 +737,7 @@ SELECT
 FROM page
 LEFT JOIN templatelinks
 ON tl_from = page_id
-LEFT JOIN categorylinks
+JOIN categorylinks
 ON cl_from = page_id
 WHERE page_namespace = 0
 AND page_is_redirect = 0
