@@ -23,7 +23,8 @@ import settings
 report_title = settings.rootpage + 'Most-watched pages by namespace'
 
 report_template = u'''
-Most-watched non-deleted pages by namespace (limited to the first 100 entries); \
+Most-watched non-deleted pages by namespace. Limited to the first 100 entries per \
+namespace and pages with fewer than 30 watchers have their count redacted; \
 data as of <onlyinclude>%s</onlyinclude>.
 %s
 '''
@@ -87,6 +88,8 @@ def get_top_pages(cursor, namespace):
         else:
             page_title = '[[%s:%s]]' % (nsdict[namespace], page_title)
         watchers = row[1]
+        if int(watchers) < 30:
+            watchers = '&mdash;'
         table_row = u'''| %d
 | %s
 | %s
