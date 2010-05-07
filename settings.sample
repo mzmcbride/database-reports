@@ -6,6 +6,7 @@ apiurl = ''
 # Toolserver details
 host = ''
 dbname = ''
+path = ''
 
 # Report details (generic)
 rootpage = ''
