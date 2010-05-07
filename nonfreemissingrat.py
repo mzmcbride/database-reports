@@ -17,7 +17,6 @@
 
 import datetime
 import MySQLdb
-import os
 import re
 import wikitools
 import settings
@@ -123,17 +122,17 @@ AND NOT EXISTS (SELECT
                                  WHERE page_namespace = 10
                                  AND cl_to = 'Non-free_use_rationale_templates'))
 AND pg1.page_namespace = 6
-LIMIT 10000;
+LIMIT 20000;
 ''')
 
-f = open('%s/nonfree-reviewed-page-ids.txt' % os.getcwd(), 'r')
+f = open('%snonfree-reviewed-page-ids.txt' % settings.path, 'r')
 reviewed_page_ids = f.read()
 reviewed_page_ids_list = reviewed_page_ids.split('\n')
 f.close()
 
 i = 1
 output = []
-g = open('%s/nonfree-reviewed-page-ids.txt' % os.getcwd(), 'a')
+g = open('%snonfree-reviewed-page-ids.txt' % settings.path, 'a')
 for row in cursor.fetchall():
     page_id = row[0]
     page_title = u'%s' % unicode(row[1], 'utf-8')
