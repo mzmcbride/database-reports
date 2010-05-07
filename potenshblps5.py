@@ -93,7 +93,7 @@ excluded_titles_re = re.compile(r'(%s)' % '|'.join(str(i) for i in excluded_titl
 excluded_templates_re = re.compile(r'(%s)' % '|'.join(str(i) for i in excluded_templates), re.I|re.U)
 capital_letters_re = re.compile(r'[A-Z]')
 
-report_title = settings.rootpage + 'Potential biographies of living people (4)'
+report_title = settings.rootpage + 'Potential biographies of living people (5)'
 
 report_template = u'''
 Articles that potentially need to be in [[:Category:Living people]] (limited to the first 2000 \
