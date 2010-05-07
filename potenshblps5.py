@@ -143,7 +143,7 @@ while True:
     page_title = u'%s' % unicode(row[0], 'utf-8')
     if page_title in skipped_pages:
         continue
-    if row[2] is not None:
+    if row[1] is not None:
         tl_title = u'%s' % unicode(row[1], 'utf-8')
     else:
         tl_title = ''
