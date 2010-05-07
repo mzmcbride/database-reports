@@ -23,7 +23,7 @@ import settings
 report_title = settings.rootpage + 'Templates with the most transclusions'
 
 report_template = u'''
-Templates with the most transclusions (limited to the first 1000 entries); data as of <onlyinclude>%s</onlyinclude>.
+Templates with the most transclusions (limited to the first 3000 entries); data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -49,7 +49,7 @@ FROM templatelinks
 WHERE tl_namespace = 10
 GROUP BY tl_title
 ORDER BY COUNT(*) DESC
-LIMIT 1000;
+LIMIT 3000;
 ''')
 
 i = 1
