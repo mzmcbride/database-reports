@@ -20,10 +20,10 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = settings.rootpage + 'Mistagged non-free content'
+report_title = settings.rootpage + 'Mistagged non-free files'
 
 report_template = u'''
-Mistagged non-free content; data as of <onlyinclude>%s</onlyinclude>.
+Mistagged non-free files; data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
