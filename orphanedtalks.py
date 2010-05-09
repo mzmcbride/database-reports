@@ -100,7 +100,7 @@ AND CASE WHEN p1.page_namespace = 7
                     1
                   FROM commonswiki_p.page AS p2
                   WHERE p2.page_namespace = 6
-                  AND p1.page_title = p2.page_title)
+                  AND CAST(p1.page_title AS CHAR) = p2.page_title)
   ELSE 1 END
 AND CASE WHEN p1.page_namespace = 11
   THEN NOT EXISTS (SELECT

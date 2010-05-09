@@ -55,12 +55,12 @@ WHERE NOT EXISTS (SELECT
 AND NOT EXISTS (SELECT
                   img_name
                 FROM commonswiki_p.image
-                WHERE img_name = pg1.page_title)
+                WHERE img_name = CAST(pg1.page_title AS CHAR))
 AND NOT EXISTS (SELECT
                   1
                 FROM commonswiki_p.page AS pg2
                 WHERE pg2.page_namespace = 6
-                AND pg2.page_title = pg1.page_title
+                AND pg2.page_title = CAST(pg1.page_title AS CHAR)
                 AND pg2.page_is_redirect = 1)
 AND pg1.page_namespace = 6
 AND pg1.page_is_redirect = 0;

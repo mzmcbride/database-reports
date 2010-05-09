@@ -57,7 +57,7 @@ WHERE (NOT EXISTS (SELECT
 AND (NOT EXISTS (SELECT
                    1
                  FROM commonswiki_p.page
-                 WHERE page_title = il_to
+                 WHERE page_title = CAST(il_to AS CHAR)
                  AND page_namespace = 6))
 AND (NOT EXISTS (SELECT
                    1

@@ -58,7 +58,7 @@ ON cl_from = page_id
 WHERE NOT EXISTS (SELECT
                     img_name
                   FROM commonswiki_p.image
-                  WHERE img_name = page_title)
+                  WHERE img_name = CAST(page_title AS CHAR))
 AND page_namespace = 6
 AND page_is_redirect = 0
 AND tl_from IS NULL

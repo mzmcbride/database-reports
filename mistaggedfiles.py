@@ -46,7 +46,7 @@ SELECT
   DISTINCT(page_title),
   repoimg.img_name
 FROM image AS localimg, commonswiki_p.image AS repoimg, categorylinks, page
-WHERE localimg.img_sha1 = repoimg.img_sha1
+WHERE CAST(localimg.img_sha1 AS CHAR) = repoimg.img_sha1
 AND page_title = localimg.img_name
 AND cl_from = page_id
 AND cl_to = 'All_non-free_media'
