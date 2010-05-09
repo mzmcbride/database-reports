@@ -64,7 +64,7 @@ AND il_from IS NULL
 AND cl2.cl_from IS NULL
 AND rd_from IS NULL
 AND page_is_redirect = 0;
-''')
+''' , settings.dbname)
 
 i = 1
 output = []
