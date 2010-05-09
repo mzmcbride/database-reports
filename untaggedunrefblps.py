@@ -70,7 +70,6 @@ for row in cursor.fetchall():
     page_title = u'[[%s]]' % unicode(row[0], 'utf-8')
     categories = u'%s' % unicode(row[1], 'utf-8')
     category_col = []
-    print categories
     for category in categories.split('|'):
         if not excluded_categories_re.search(category):
             category_col.append(u'[[:Category:%s|%s]]' % (category, category))
