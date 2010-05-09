@@ -17,6 +17,7 @@
 
 import datetime
 import MySQLdb
+import re
 import wikitools
 import settings
 
@@ -30,10 +31,13 @@ data as of <onlyinclude>%s</onlyinclude>.
 |- style="white-space:nowrap;"
 ! No.
 ! Biography
+! Categories
 |-
 %s
 |}
 '''
+
+excluded_categories_re = re.compile(r'(\d{1,4}_births|living_people|all_unreferenced_blps|unreferenced_blps_from)', re.I)
 
 wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
@@ -43,26 +47,38 @@ cursor = conn.cursor()
 cursor.execute('''
 /* untaggedunrefblps.py SLOW_OK */
 SELECT
-  p1.page_title
+  p1.page_title,
+  GROUP_CONCAT(cl2.cl_to SEPARATOR '|')
 FROM page AS p1
-JOIN categorylinks
-ON cl_from = p1.page_id
-WHERE cl_to = 'All_unreferenced_BLPs'
+JOIN categorylinks AS cl1
+ON cl1.cl_from = p1.page_id
+JOIN categorylinks AS cl2
+ON cl2.cl_from = p1.page_id
+WHERE cl1.cl_to = 'All_unreferenced_BLPs'
 AND p1.page_namespace = 0
 AND NOT EXISTS (SELECT
                   1
                 FROM page AS p2
                 WHERE p2.page_title = p1.page_title
-                AND p2.page_namespace = 1);
+                AND p2.page_namespace = 1)
+GROUP BY p1.page_id;
 ''')
 
 i = 1
 output = []
 for row in cursor.fetchall():
     page_title = u'[[%s]]' % unicode(row[0], 'utf-8')
+    categories = u'%s' % unicode(row[1], 'utf-8')
+    category_col = []
+    print categories
+    for category in categories.split('|'):
+        if not excluded_categories_re.search(category):
+            category_col.append(u'[[:Category:%s|%s]]' % (category, category))
+    category_links = u'%s' % ', '.join(category_col)
     table_row = u'''| %d
 | %s
-|-''' % (i, page_title)
+| %s
+|-''' % (i, page_title, category_links)
     output.append(table_row)
     i += 1
 
