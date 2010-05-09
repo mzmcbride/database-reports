@@ -24,8 +24,8 @@ import settings
 report_title = settings.rootpage + 'Non-free files missing a rationale'
 
 report_template = u'''
-Non-free files missing a [[WP:FUR|fair use rationale]] (limited results); \
-data as of <onlyinclude>%s</onlyinclude>.
+Non-free files missing a [[WP:FUR|fair use rationale]] (limited to the first \
+2000 entries); data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -134,6 +134,8 @@ i = 1
 output = []
 g = open('%snonfree-reviewed-page-ids.txt' % settings.path, 'a')
 for row in cursor.fetchall():
+    if i > 2000:
+        break
     page_id = row[0]
     page_title = u'%s' % unicode(row[1], 'utf-8')
     if str(page_id) in reviewed_page_ids_list:
