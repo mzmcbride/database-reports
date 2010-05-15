@@ -67,7 +67,7 @@ GROUP BY p1.page_id;
 i = 1
 output = []
 for row in cursor.fetchall():
-    page_title = u'[[%s]]' % unicode(row[0], 'utf-8')
+    page_title = u'{{plat|1=%s}}' % unicode(row[0], 'utf-8')
     categories = u'%s' % unicode(row[1], 'utf-8')
     category_col = []
     for category in categories.split('|'):
