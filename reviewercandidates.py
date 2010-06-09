@@ -23,7 +23,7 @@ import settings
 report_title = settings.rootpage + 'Potential reviewer candidates'
 
 report_template = u'''
-Users with more than 1,000 edits, their first edit more than a year ago, \
+Users with more than 2,500 edits, their first edit more than a year ago, \
 and their latest edit within the past month; data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
@@ -59,7 +59,7 @@ JOIN (SELECT
       FROM user
       JOIN revision
       ON rev_user = user_id
-      WHERE user_editcount > 1000
+      WHERE user_editcount > 2500
       AND user_id NOT IN (SELECT
                             ug_user
                           FROM user_groups
@@ -88,12 +88,12 @@ for row in cursor.fetchall():
     user_editcount = row[1]
     first_edit = row[2]
     last_edit = row[3]
-    table_row = u'''| %d
-| %s
-| %s
-| %s
-| %s
-|-''' % (i, user_name, user_editcount, first_edit, last_edit)
+    table_row = u'''|%d
+|[[User:%s|%s]]
+|%s
+|%s
+|%s
+|-''' % (i, user_name, user_name, user_editcount, first_edit, last_edit)
     output.append(table_row)
     i += 1
 
