@@ -68,7 +68,7 @@ AND rev_timestamp = (SELECT
 i = 1
 output = []
 for row in cursor.fetchall():
-    user_name = u'[[User:%s|]]' % unicode(row[0], 'utf-8')
+    user_name = u'{{dbr link|1=%s}}' % unicode(row[0], 'utf-8')
     user_editcount = row[1]
     rev_timestamp = row[2]
     table_row = u'''| %d
