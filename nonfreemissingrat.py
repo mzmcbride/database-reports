@@ -89,8 +89,16 @@ r'where no new free-use image is available',
 r'solely for the purpose of illustration',
 r'allow use of this image to illustrate articles',
 r'{{MTG set symbol}}',
-r'{{Standard-Rationale}}',
-r'{{Short-Rationale}}',
+r'{{\s*standard[\s-]*rationale',
+r'{{\s*short[\s-]*rationale',
+r'unable to find a suitable free replacement',
+r'for critical commentary and discussion of',
+r'no free version is available',
+r'is of lower resolution than the original',
+r'does not limit the copyright owners\' rights',
+r'does not limit the copyright holder\'s rights',
+r'no adequate free alternative available',
+r'no known free replacement is available',
 ]
 
 find_fair_use_strings = re.compile(r"(%s)" % '|'.join(str(i) for i in fair_use_strings), re.I)
