@@ -26,7 +26,7 @@ report_template = u'''
 Long pages; data as of <onlyinclude>%s</onlyinclude>.
 
 == Specified talk pages ==
-Talk pages whose page length is greater than 175,000 bytes (excluding subpages and pages in the user space).
+Talk pages whose page length is greater than 150,000 bytes (excluding subpages and pages in the user space).
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -70,7 +70,7 @@ ON page_namespace = ns_id
 AND dbname = %s
 JOIN revision
 ON rev_page = page_id
-WHERE page_len > 175000
+WHERE page_len > 150000
 AND page_title NOT LIKE "%%/%%"
 AND page_namespace != 3
 AND page_namespace mod 2 != 0
