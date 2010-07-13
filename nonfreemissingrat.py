@@ -85,6 +85,12 @@ r'depicts a.+historic event',
 r'quality of the image is very low',
 r'Purpose is purely informational',
 r'considerably lower resolution than the original',
+r'where no new free-use image is available',
+r'solely for the purpose of illustration',
+r'allow use of this image to illustrate articles',
+r'{{MTG set symbol}}',
+r'{{Standard-Rationale}}',
+r'{{Short-Rationale}}',
 ]
 
 find_fair_use_strings = re.compile(r"(%s)" % '|'.join(str(i) for i in fair_use_strings), re.I)
