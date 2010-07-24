@@ -99,6 +99,10 @@ r'does not limit the copyright owners\' rights',
 r'does not limit the copyright holder\'s rights',
 r'no adequate free alternative available',
 r'no known free replacement is available',
+r'{{\s*Non-free Wikimedia logo',
+r'{{\s*Wikimedia logo',
+r'{{\s*Copyright by Wikimedia',
+r'{{\s*Wikipedia[\s-]*screenshot',
 ]
 
 find_fair_use_strings = re.compile(r"(%s)" % '|'.join(str(i) for i in fair_use_strings), re.I)
