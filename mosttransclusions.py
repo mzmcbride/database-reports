@@ -20,7 +20,7 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = settings.rootpage + 'Templates with the most transclusions'
+report_title = settings.rootpage + 'Templates transcluded on the most pages'
 
 report_template = u'''
 Templates with the most transclusions (limited to the first 3000 entries); data as of <onlyinclude>%s</onlyinclude>.
