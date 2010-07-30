@@ -63,7 +63,8 @@ WHERE cl1.cl_to = 'All_non-free_media'
 AND il_from IS NULL
 AND cl2.cl_from IS NULL
 AND rd_from IS NULL
-AND page_is_redirect = 0;
+AND page_is_redirect = 0
+AND page_namespace = 6;
 ''' , settings.dbname)
 
 i = 1
