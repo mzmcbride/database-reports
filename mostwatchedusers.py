@@ -23,7 +23,8 @@ import settings
 report_title = settings.rootpage + 'Most-watched users'
 
 report_template = u'''
-Most-watched users; data as of <onlyinclude>%s</onlyinclude>.
+Most-watched users who currently have a non-redirect user talk page \
+(limited to the first 1000 results); data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -51,6 +52,7 @@ ON page_title = wl_title
 AND page_namespace = wl_namespace
 WHERE wl_namespace = 3
 AND wl_title NOT LIKE '%/%'
+AND page_is_redirect = 0
 GROUP BY wl_title
 ORDER BY COUNT(*) DESC
 LIMIT 1000;
