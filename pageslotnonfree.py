@@ -23,7 +23,7 @@ import settings
 report_title = settings.rootpage + 'Pages containing an unusually high number of non-free files'
 
 report_template = u'''
-Pages containing an unusually high number (ten or more) of non-free files; \
+Pages containing an unusually high number of non-free files; \
 data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
