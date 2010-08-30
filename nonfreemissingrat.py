@@ -140,7 +140,7 @@ AND NOT EXISTS (SELECT
                                  WHERE page_namespace = 10
                                  AND cl_to = 'Non-free_use_rationale_templates'))
 AND pg1.page_namespace = 6
-LIMIT 20000;
+LIMIT 50000;
 ''')
 
 f = open('%snonfree-reviewed-page-ids.txt' % settings.path, 'r')
