@@ -26,7 +26,8 @@ report_template = u'''
 Long pages; data as of <onlyinclude>%s</onlyinclude>.
 
 == Specified talk pages ==
-Talk pages whose page length is greater than 150,000 bytes (excluding subpages and pages in the user space).
+Talk pages whose page length is greater than 140,000 bytes \
+(excluding subpages and pages in the user space).
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -70,7 +71,7 @@ ON page_namespace = ns_id
 AND dbname = %s
 JOIN revision
 ON rev_page = page_id
-WHERE page_len > 150000
+WHERE page_len > 140000
 AND page_title NOT LIKE "%%/%%"
 AND page_namespace != 3
 AND page_namespace mod 2 != 0
@@ -87,9 +88,9 @@ for row in cursor.fetchall():
     ns_name = u'%s' % unicode(row[0], 'utf-8')
     page_title = u'%s' % unicode(row[1], 'utf-8')
     if ns_name:
-        page_title = '{{pler|1=%s:%s}}' % (ns_name, page_title)
+        page_title = '{{dbr link|1=%s:%s}}' % (ns_name, page_title)
     else:
-        page_title = '{{pler|1=%s}}' % (page_title)
+        page_title = '{{dbr link|1=%s}}' % (page_title)
     page_len = row[2]
     rev_timestamp = row[3]
     table_row = u'''| %d
@@ -127,9 +128,9 @@ for row in cursor.fetchall():
     ns_name = u'%s' % unicode(row[0], 'utf-8')
     page_title = u'%s' % unicode(row[1], 'utf-8')
     if ns_name:
-        page_title = '{{pler|1=%s:%s}}' % (ns_name, page_title)
+        page_title = '{{dbr link|1=%s:%s}}' % (ns_name, page_title)
     else:
-        page_title = '{{pler|1=%s}}' % (page_title)
+        page_title = '{{dbr link|1=%s}}' % (page_title)
     page_len = row[2]
     rev_timestamp = row[3]
     table_row = u'''| %d
