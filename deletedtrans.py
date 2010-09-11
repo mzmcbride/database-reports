@@ -30,7 +30,8 @@ Transclusions of deleted templates; data as of <onlyinclude>%s</onlyinclude>.
 {| class="wikitable" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
 ! No.
-! Category
+! Template
+! Transclusions
 %s
 |}
 '''
