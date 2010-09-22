@@ -17,7 +17,6 @@
 
 import datetime
 import MySQLdb
-import re
 import wikitools
 import settings
 
@@ -39,7 +38,7 @@ data as of <onlyinclude>%s</onlyinclude>.
 wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
-excluded_categories = [u'Living_people', u'\d_births']
+excluded_categories = [u'Living_people', u'\d+_births']
 
 conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
@@ -58,8 +57,6 @@ for category in ['Wikipedia_maintenance', 'Hidden_categories']:
         member_category = u'%s' % unicode(row[0], 'utf-8')
         excluded_categories.append(member_category)
 
-excluded_categories_re = re.compile(r'(%s)' % '|'.join(str(r'^%s$' % i.encode('utf-8')) for i in excluded_categories), re.U)
-
 cursor.execute('SET SESSION group_concat_max_len = 1000000;')
 cursor.execute('''
 /* uncatunrefblps.py SLOW_OK */
@@ -72,6 +69,7 @@ ON cl1.cl_from = page_id
 LEFT JOIN categorylinks AS cl2
 ON cl2.cl_from = page_id
 WHERE cl1.cl_to = 'All_unreferenced_BLPs'
+AND page_namespace = 0
 GROUP BY page_id;
 ''')
 
@@ -83,7 +81,7 @@ for row in cursor.fetchall():
     cl_to = u'%s' % unicode(row[1], 'utf-8')
     legit_categories = []
     for cat in cl_to.split('|'):
-        if not excluded_categories_re.search(cat):
+        if cat not in excluded_categories:
             legit_categories.append(cat)
     if len(legit_categories) == 0:
         table_row = u'''| %d
