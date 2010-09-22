@@ -17,6 +17,7 @@
 
 import datetime
 import MySQLdb
+import re
 import wikitools
 import settings
 
@@ -38,7 +39,9 @@ data as of <onlyinclude>%s</onlyinclude>.
 wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
-excluded_categories = [u'Living_people', u'\d+_births']
+excluded_categories_living = [u'Living_people', u'\d+_births']
+excluded_categories_living_re = re.compile(r'(%s)' % '|'.join(str(r'^%s$' % i) for i in excluded_categories_living), re.U)
+excluded_categories_maintenance = []
 
 conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
@@ -55,7 +58,7 @@ for category in ['Wikipedia_maintenance', 'Hidden_categories']:
     ''' , category)
     for row in cursor.fetchall():
         member_category = u'%s' % unicode(row[0], 'utf-8')
-        excluded_categories.append(member_category)
+        excluded_categories_maintenance.append(member_category)
 
 cursor.execute('SET SESSION group_concat_max_len = 1000000;')
 cursor.execute('''
@@ -81,7 +84,7 @@ for row in cursor.fetchall():
     cl_to = u'%s' % unicode(row[1], 'utf-8')
     legit_categories = []
     for cat in cl_to.split('|'):
-        if cat not in excluded_categories:
+        if cat not in excluded_categories_maintenance and not excluded_categories_living_re.search(cat):
             legit_categories.append(cat)
     if len(legit_categories) == 0:
         table_row = u'''| %d
