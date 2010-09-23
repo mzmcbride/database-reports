@@ -22,6 +22,8 @@ import re
 import wikitools
 import settings
 
+debug = False
+
 skipped_pages = []
 skipped_file = codecs.open('/home/mzmcbride/scripts/predadurr/skipped_pages.txt', 'r', 'utf-8')
 for i in skipped_file.read().strip('\n').split('\n'):
@@ -729,12 +731,20 @@ wiki.login(settings.username, settings.password)
 conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf', cursorclass=MySQLdb.cursors.SSCursor)
 cursor = conn.cursor()
 cursor.execute('SET SESSION group_concat_max_len = 1000000;')
-cursor.execute('''
+
+i = 1
+total_count = 1
+offset = 0
+output = []
+while True:
+    if total_count > 2000:
+        break
+    cursor.execute('''
 /* potenshblps4.py SLOW_OK */
 SELECT
   page_title,
-  GROUP_CONCAT(cl_to),
-  GROUP_CONCAT(tl_title)
+  GROUP_CONCAT(DISTINCT cl_to),
+  GROUP_CONCAT(DISTINCT tl_title)
 FROM page
 LEFT JOIN templatelinks
 ON tl_from = page_id
@@ -744,45 +754,46 @@ WHERE page_namespace = 0
 AND page_is_redirect = 0
 GROUP BY page_id
 ORDER BY page_id DESC
-LIMIT 200000;
-''')
-
-i = 1
-output = []
-while True:
-    row = cursor.fetchone()
-    if i > 2000:
-        break
-    if row == None:
-        break
-    page_title = u'%s' % unicode(row[0], 'utf-8')
-    if page_title in skipped_pages:
-        continue
-    if row[1] is not None:
-        cl_to = u'%s' % unicode(row[1], 'utf-8')
-    else:
-        cl_to = 'NULL'
-    if row[2] is not None:
-        tl_title = u'%s' % unicode(row[2], 'utf-8')
-    else:
-        tl_title = ''
-    if (
-        not excluded_categories_re.search(cl_to) and
-        not excluded_titles_re.search(page_title) and
-        page_title.find('_') != -1 and
-        jobs_re.search(cl_to) and
-        len(capital_letters_re.findall(page_title)) > 1 and
-        not excluded_templates_re.search(tl_title)
-        ):
-        table_row = u'''| %d
+LIMIT 200000 OFFSET %s;
+''' , offset)
+    while True:
+        row = cursor.fetchone()
+        if i > 2000:
+            break
+        if total_count > 2000:
+            break
+        if row == None:
+            break
+        page_title = u'%s' % unicode(row[0], 'utf-8')
+        if page_title in skipped_pages:
+            continue
+        if row[1] is not None:
+            cl_to = u'%s' % unicode(row[1], 'utf-8')
+        else:
+            cl_to = 'NULL'
+        if row[2] is not None:
+            tl_title = u'%s' % unicode(row[2], 'utf-8')
+        else:
+            tl_title = ''
+        if (
+            not excluded_categories_re.search(cl_to) and
+            not excluded_titles_re.search(page_title) and
+            page_title.find('_') != -1 and
+            jobs_re.search(cl_to) and
+            len(capital_letters_re.findall(page_title)) > 1 and
+            not excluded_templates_re.search(tl_title)
+            ):
+            table_row = u'''| %d
 | [[%s]]
 |-''' % (i, page_title)
-        output.append(table_row)
-        i += 1
+            output.append(table_row)
+            i += 1
+            total_count += 1
+    offset += 200000
 
 cursor.close()
-
 cursor = conn.cursor()
+
 cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
 rep_lag = cursor.fetchone()[0]
 current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
@@ -790,7 +801,10 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+if not debug:
+    report.edit(report_text, summary=settings.editsumm, bot=1)
+else:
+    print report_text
 
 cursor.close()
 conn.close()
