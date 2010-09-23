@@ -60,6 +60,7 @@ excluded_titles = [
 '_[Ss]chool',
 '_team$',
 '_[Hh]ighway',
+'_[Dd]iscography$',
 ]
 
 jobs = [
