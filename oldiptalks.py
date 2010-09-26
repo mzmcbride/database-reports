@@ -73,7 +73,7 @@ AND r1.rev_timestamp = (SELECT
 AND (SELECT
        MAX(rev_timestamp)
      FROM revision
-     WHERE rev_user_text = page_title) < DATE_FORMAT(DATE_SUB(NOW(),INTERVAL 1 YEAR),'%Y%m%d%H%i%s')
+     WHERE rev_user_text = page_title) < DATE_FORMAT(DATE_SUB(NOW(),INTERVAL 1 YEAR),'%%Y%%m%%d%%H%%i%%s')
 AND NOT EXISTS (SELECT
                   1
                 FROM logging_ts_alternative
@@ -87,7 +87,7 @@ AND r2.rev_timestamp = (SELECT
 AND (SELECT
        MAX(rev_timestamp)
      FROM revision
-     WHERE rev_page = page_id) < DATE_FORMAT(DATE_SUB(NOW(),INTERVAL 1 YEAR),'%Y%m%d%H%i%s')
+     WHERE rev_page = page_id) < DATE_FORMAT(DATE_SUB(NOW(),INTERVAL 1 YEAR),'%%Y%%m%%d%%H%%i%%s')
 LIMIT 1000;
 ''' , r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
 
