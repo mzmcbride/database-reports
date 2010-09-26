@@ -94,7 +94,7 @@ LIMIT 1000;
 i = 1
 output = []
 for row in cursor.fetchall():
-    page_title = row[0]
+    page_title = u'[[User talk:%s|%s]]' % (row[0], row[0])
     last_talk_page_activity = row[1]
     last_ip_activity = row[2]
     page_len = row[3]
