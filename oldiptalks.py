@@ -65,7 +65,7 @@ ON tl_from = page_id
 WHERE page_namespace = 3
 AND pl_namespace IS NULL
 AND tl_from IS NULL
-AND page_title RLIKE '^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.\[0-9]{1,3}$'
+AND page_title RLIKE %s
 AND r1.rev_timestamp = (SELECT
                           MAX(rev_timestamp)
                         FROM revision
@@ -89,7 +89,7 @@ AND (SELECT
      FROM revision
      WHERE rev_page = page_id) < DATE_FORMAT(DATE_SUB(NOW(),INTERVAL 1 YEAR),'%Y%m%d%H%i%s')
 LIMIT 1000;
-''')
+''' , r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
 
 i = 1
 output = []
