@@ -57,12 +57,18 @@ AND NOT EXISTS (SELECT
                 FROM templatelinks
                 WHERE pgtmp.page_id = tl_from
                 AND tl_namespace = 10
-                AND tl_title LIKE "%stub")
+                AND tl_title LIKE '%stub')
+AND NOT EXISTS (SELECT
+                  1
+                FROM templatelinks
+                WHERE pgtmp.page_id = tl_from
+                AND tl_namespace = 10
+                AND tl_title = 'Contributor_copyright_investigations/Darius_Dhlomo/Notice')
 AND EXISTS (SELECT
               1
             FROM categorylinks
             WHERE pgtmp.page_id = cl_from
-            AND cl_to LIKE "%stubs");
+            AND cl_to LIKE '%stubs');
 ''')
 
 i = 1
