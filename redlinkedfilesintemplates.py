@@ -80,7 +80,7 @@ AND (NOT EXISTS (SELECT
                  FROM page
                  WHERE page_title = il_to
                  AND page_namespace = 6))
-AND page_namespace = 10 limit 2;
+AND page_namespace = 10;
 ''')
 
 i = 1
