@@ -31,6 +31,8 @@ Templates containing a red-linked file; data as of <onlyinclude>%s</onlyinclude>
 ! No.
 ! Template
 ! File
+! Transclusions
+! File uses
 %s
 |}
 '''
@@ -45,9 +47,23 @@ cursor = conn.cursor()
 cursor.execute('''
 /* redlinkedfilesintemplates.py SLOW_OK */
 SELECT
+  ns_name,
   page_title,
-  il_to
+  il_to AS image_link,
+  (SELECT
+     COUNT(*)
+   FROM templatelinks
+   WHERE tl_title = page_title
+   AND tl_namespace = 10) AS transclusion_count,
+  (SELECT
+     COUNT(*)
+   FROM imagelinks
+   WHERE page_id = il_from
+   AND image_link = il_to) AS image_count
 FROM page
+JOIN toolserver.namespace
+ON dbname = 'enwiki_p'
+AND page_namespace = ns_id
 JOIN imagelinks
 ON page_id = il_from
 WHERE (NOT EXISTS (SELECT
@@ -64,18 +80,22 @@ AND (NOT EXISTS (SELECT
                  FROM page
                  WHERE page_title = il_to
                  AND page_namespace = 6))
-AND page_namespace = 10;
+AND page_namespace = 10 limit 2;
 ''')
 
 i = 1
 output = []
 for row in cursor.fetchall():
-    page_title = u'[[Template:%s|]]' % unicode(row[0], 'utf-8')
-    il_to = u'%s' % unicode(row[1], 'utf-8')
+    page_title = u'{{dbr link|1=%s:%s}}' % (unicode(row[0], 'utf-8'), unicode(row[1], 'utf-8'))
+    il_to = u'{{dbr link|1=%s}}' % unicode('File:' + row[2], 'utf-8')
+    transclusion_count = row[3]
+    image_count = row[4]
     table_row = u'''|-
 | %d
 | %s
-| %s''' % (i, page_title, il_to)
+| %s
+| %s
+| %s''' % (i, page_title, il_to, transclusion_count, image_count)
     output.append(table_row)
     i += 1
 
