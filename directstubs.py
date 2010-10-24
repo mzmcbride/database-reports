@@ -62,7 +62,7 @@ AND NOT EXISTS (SELECT
                   1
                 FROM templatelinks
                 WHERE pgtmp.page_id = tl_from
-                AND tl_namespace = 10
+                AND tl_namespace = 4
                 AND tl_title = 'Contributor_copyright_investigations/Darius_Dhlomo/Notice')
 AND EXISTS (SELECT
               1
