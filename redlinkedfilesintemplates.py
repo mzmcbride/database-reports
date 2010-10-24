@@ -58,11 +58,12 @@ SELECT
   (SELECT
      COUNT(*)
    FROM imagelinks
-   WHERE page_id = il_from
-   AND image_link = il_to) AS image_count
+   JOIN page AS p2
+   ON p2.page_id = il_from
+   WHERE image_link = il_to) AS image_count
 FROM page
 JOIN toolserver.namespace
-ON dbname = 'enwiki_p'
+ON dbname = %s
 AND page_namespace = ns_id
 JOIN imagelinks
 ON page_id = il_from
@@ -81,13 +82,13 @@ AND (NOT EXISTS (SELECT
                  WHERE page_title = il_to
                  AND page_namespace = 6))
 AND page_namespace = 10;
-''')
+''' , settings.dbname)
 
 i = 1
 output = []
 for row in cursor.fetchall():
     page_title = u'{{dbr link|1=%s:%s}}' % (unicode(row[0], 'utf-8'), unicode(row[1], 'utf-8'))
-    il_to = u'{{dbr link|1=%s}}' % unicode('File:' + row[2], 'utf-8')
+    il_to = u'{{dbr link|1=%s}}' % unicode(':File:' + row[2], 'utf-8')
     transclusion_count = row[3]
     image_count = row[4]
     table_row = u'''|-
