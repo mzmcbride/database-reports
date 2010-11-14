@@ -23,7 +23,7 @@ import settings
 report_title = settings.rootpage + 'WikiProjects by changes'
  
 report_template = u'''
-List of WikiProjects by number of changes to all its pages in the last 30 days; \
+List of WikiProjects by number of changes to all its pages in the last 365 days; \
 data as of <onlyinclude>%s</onlyinclude>.
  
 {| class="wikitable sortable plainlinks"
@@ -43,10 +43,17 @@ conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file
 cursor = conn.cursor()
 cursor.execute('''
 /* project_changes.py */
-SELECT REPLACE(SUBSTRING_INDEX(rc_title, '/', 1), '_', ' ') AS project, COUNT(*) AS count
-FROM recentchanges
-WHERE rc_title LIKE 'WikiProject\_%'
-AND rc_namespace BETWEEN 4 AND 5
+SELECT REPLACE(SUBSTRING_INDEX(page_title, '/', 1), '_', ' ') AS project,
+       SUM((
+         SELECT COUNT(*)
+         FROM revision
+         WHERE page_id = rev_page
+         AND DATEDIFF(NOW(), rev_timestamp) <= 365
+       )) AS count
+FROM page
+WHERE page_title LIKE 'WikiProject\_%'
+AND page_namespace BETWEEN 4 AND 5
+AND page_is_redirect = 0
 GROUP BY project
 ORDER BY count DESC
 ''')
