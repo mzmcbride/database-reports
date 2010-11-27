@@ -45,6 +45,12 @@ Below is a list of talk pages by their total size, including subpages; data as o
 |-
 %s
 |}
+
+==See also==
+* [[Wikipedia:Don't worry about performance|Don't worry about performance]]
+
+[[Category:Wikipedia database reports|Talk pages by size]]
+[[Category:Wikipedia statistics|Talk pages by size]]
 '''
  
 wiki = wikitools.Wiki(settings.apiurl)
