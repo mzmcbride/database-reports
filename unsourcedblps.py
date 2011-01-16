@@ -24,8 +24,8 @@ report_title = settings.rootpage + 'Biographies of living people containing unso
 
 report_template = u'''
 {{shortcut|WP:DR/BLP}}
-Pages in [[:Category:Living people]] that [[Special:WhatLinksHere/Template:Fact|transclude]] \
-[[Template:Fact]] (limited to the first 500 entries); data as of <onlyinclude>%s</onlyinclude>. \
+Pages in [[:Category:Living people]] that [[Special:WhatLinksHere/Template:Citation needed|transclude]] \
+[[Template:Citation needed]] (limited to the first 500 entries); data as of <onlyinclude>%s</onlyinclude>. \
 {{NOINDEX}}
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
@@ -51,9 +51,9 @@ JOIN templatelinks
 ON tl_from = page_id
 JOIN categorylinks
 ON cl_from = page_id
-WHERE cl_to = "Living_people"
+WHERE cl_to = 'Living_people'
 AND tl_namespace = 10
-AND tl_title = "Fact"
+AND tl_title = 'Citation_needed'
 AND page_namespace = 0
 LIMIT 500;
 ''')

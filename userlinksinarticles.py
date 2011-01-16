@@ -71,6 +71,21 @@ for row in cursor.fetchall():
     skip_title = u'%s' % unicode(row[0], 'utf-8')
     skip_pages.append(skip_title)
 
+cursor.execute('''
+/* userlinksinarticles.py SLOW_OK */
+SELECT
+  page_title
+FROM page
+JOIN templatelinks
+ON tl_from = page_id
+WHERE tl_title IN ('Taxobot/children/template')
+AND tl_namespace = 2
+AND page_namespace = 0;
+''')
+for row in cursor.fetchall():
+    skip_title = u'%s' % unicode(row[0], 'utf-8')
+    skip_pages.append(skip_title)
+
 i = 1
 output = []
 for page_title in all_pages:

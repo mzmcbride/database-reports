@@ -26,7 +26,7 @@ report_title = settings.rootpage + 'Potential biographies of living people (3)'
 report_template = u'''
 Articles whose talk pages transclude {{tl|BLP}} that are likely to be biographies \
 of living people, but are not in [[:Category:Living people]], [[:Category:Possibly \
-living people]], or [[:Category:Disappeared people]] (limited to the first 1000 \
+living people]], or [[:Category:Missing people]] (limited to the first 1000 \
 entries); data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
@@ -84,7 +84,7 @@ AND NOT EXISTS (SELECT
                 ON pg5.page_id = cl_from
                 WHERE pg1.page_title = pg5.page_title
                 AND pg5.page_namespace = 0
-                AND cl_to = 'Disappeared_people')
+                AND cl_to = 'Missing_people')
 AND NOT EXISTS (SELECT
                   1
                 FROM page AS pg6
