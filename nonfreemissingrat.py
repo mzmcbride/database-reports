@@ -103,9 +103,10 @@ r'{{\s*Non-free Wikimedia logo',
 r'{{\s*Wikimedia logo',
 r'{{\s*Copyright by Wikimedia',
 r'{{\s*Wikipedia[\s-]*screenshot',
+r'low-res(olution)? (\'\'\')?promotional(\'\'\')? (image|file)'
 ]
 
-find_fair_use_strings = re.compile(r"(%s)" % '|'.join(str(i) for i in fair_use_strings), re.I)
+find_fair_use_strings = re.compile(r'(%s)' % '|'.join(str(i) for i in fair_use_strings), re.I)
 
 wiki = wikitools.Wiki(settings.apiurl); wiki.setMaxlag(-1)
 wiki.login(settings.username, settings.password)
