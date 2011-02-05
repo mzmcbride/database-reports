@@ -23,8 +23,8 @@ import settings
 report_title = settings.rootpage + 'Long stubs'
 
 report_template = u'''
-Pages in categories that end in "stubs" and whose page length is greater than \
-20,000 bytes; data as of <onlyinclude>%s</onlyinclude>.
+Long pages in categories that end in "stubs" (limited to the first 1000 entries); \
+data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -43,15 +43,17 @@ conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file
 cursor = conn.cursor()
 cursor.execute('''
 /* longstubs.py SLOW_OK */
-SELECT DISTINCT
+SELECT
   page_title,
   page_len
 FROM page
 JOIN categorylinks
 ON cl_from = page_id
-WHERE cl_to LIKE "%stubs"
-AND page_len > 20000
-AND page_namespace = 0;
+WHERE cl_to LIKE '%stubs'
+AND page_namespace = 0
+GROUP BY page_title
+ORDER BY page_len DESC
+LIMIT 1000;
 ''')
 
 i = 1
