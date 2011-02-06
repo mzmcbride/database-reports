@@ -51,6 +51,7 @@ JOIN categorylinks
 ON cl_from = page_id
 WHERE cl_to LIKE '%stubs'
 AND page_namespace = 0
+AND page_len > 2000
 GROUP BY page_title
 ORDER BY page_len DESC
 LIMIT 1000;
