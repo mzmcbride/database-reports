@@ -30,7 +30,8 @@ Deleted red-linked categories; data as of <onlyinclude>%s</onlyinclude>.
 |- style="white-space:nowrap;"
 ! No.
 ! Category
-! Members
+! Members (stored)
+! Members (dynamic)
 ! Admin
 ! Timestamp
 ! Comment
@@ -38,29 +39,33 @@ Deleted red-linked categories; data as of <onlyinclude>%s</onlyinclude>.
 |}
 '''
 
-rows_per_page = 800
+rows_per_page = 500
 
 wiki = wikitools.Wiki(settings.apiurl); wiki.setMaxlag(-1)
 wiki.login(settings.username, settings.password)
 
-def last_log_entry(page):
-    params = {
-        'action': 'query',
-        'list': 'logevents',
-        'lelimit': '1',
-        'letitle': page,
-        'format': 'json',
-        'ledir': 'older',
-        'letype': 'delete',
-        'leprop': 'user|timestamp|comment'
-    }
-    request = wikitools.APIRequest(wiki, params)
-    response = request.query(querycontinue=False)
-    lastlog = response['query']['logevents']
-    timestamp = datetime.datetime.strptime(lastlog[0]['timestamp'], '%Y-%m-%dT%H:%M:%SZ').strftime('%Y%m%d%H%M%S')
-    user = lastlog[0]['user']
-    comment = lastlog[0]['comment']
-    return { 'timestamp': timestamp, 'user': user, 'comment': comment }
+def get_last_log_entry(cursor, cl_to):
+    cursor.execute('''
+    /* deletedredlinkedcats.py SLOW_OK */
+    SELECT
+      log_timestamp,
+      user_name,
+      log_comment
+    FROM logging_ts_alternative
+    JOIN user
+    ON log_user = user_id
+    WHERE log_type = 'delete'
+    AND log_action = 'delete'
+    AND log_namespace = 14
+    AND log_title = %s
+    ORDER BY log_timestamp DESC
+    LIMIT 1;
+    ''' , cl_to)
+    for row in cursor.fetchall():
+        log_timestamp = row[0]
+        user_name = unicode(row[1], 'utf-8')
+        log_comment = unicode(row[2], 'utf-8')
+    return { 'timestamp': log_timestamp, 'user': user_name, 'comment': log_comment }
 
 conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
@@ -86,32 +91,34 @@ AND cat_pages > 0;
 i = 1
 output = []
 for row in cursor.fetchall():
-    page = wikitools.Page(wiki, u'%s:%s' % (unicode(row[0], 'utf-8'), unicode(row[1], 'utf-8')), followRedir=False)
-    cl_to = u'[[:%s|]]' % page.title
-    cl_count = row[2]
+    ns_name = row[0]
+    cl_to = row[1]
     try:
-        log_props = last_log_entry(page.title)
+        log_props = get_last_log_entry(cursor, cl_to)
         user_name = log_props['user']
         log_timestamp = log_props['timestamp']
         log_comment = log_props['comment']
-        if log_comment != '':
+        if log_comment:
             log_comment = u'<nowiki>%s</nowiki>' % log_comment
     except:
         user_name = None
         log_timestamp = None
         log_comment = None
-    if user_name is None or log_timestamp is None:
+    if not user_name or not log_timestamp:
         continue
-    else:
-        table_row = u'''|-
+    dynamic_count = u'{{PAGESINCATEGORY:%s}}' % unicode(cl_to, 'utf-8')
+    cl_to = u'[[:%s:%s|%s]]' % (unicode(ns_name, 'utf-8'), unicode(cl_to, 'utf-8'), unicode(cl_to,'utf-8'))
+    stored_count = row[2]
+    table_row = u'''|-
 | %d
 | %s
 | %s
 | %s
 | %s
-| %s''' % (i, cl_to, cl_count, user_name, log_timestamp, log_comment)
-        output.append(table_row)
-        i += 1
+| %s
+| %s''' % (i, cl_to, stored_count, dynamic_count, user_name, log_timestamp, log_comment)
+    output.append(table_row)
+    i += 1
 
 cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
 rep_lag = cursor.fetchone()[0]
