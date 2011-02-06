@@ -23,7 +23,8 @@ import settings
 report_title = settings.rootpage + 'Polluted categories'
 
 report_template = u'''
-Categories that contain pages in the (Main) namespace and the User: namespace (limited to the first 250 entries); data as of <onlyinclude>%s</onlyinclude>.
+Categories that contain pages in the (Main) namespace and the User: namespace \
+(limited to the first 250 entries); data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -61,7 +62,7 @@ AND cl_to NOT IN (SELECT
                   ON tl_from = page_id
                   WHERE page_namespace = 14
                   AND tl_namespace = 10
-                  AND tl_title = 'Pollutedcat')
+                  AND tl_title = 'Polluted_category')
 LIMIT 250;
 ''')
 
