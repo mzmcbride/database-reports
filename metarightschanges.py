@@ -57,7 +57,7 @@ WHERE log_namespace = 2
 AND log_title LIKE %s
 AND log_type = 'rights'
 ORDER BY log_timestamp DESC;
-''' , '%'+settings.dbname.strip('_p'))
+''' , '%@'+settings.dbname.strip('_p'))
 
 i = 1
 output = []
