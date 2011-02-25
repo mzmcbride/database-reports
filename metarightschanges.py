@@ -32,6 +32,8 @@ data as of <onlyinclude>%s</onlyinclude>.
 ! User
 ! Actor
 ! Timestamp
+! Previous rights
+! Subsequent rights
 ! Comment
 |-
 %s
@@ -49,6 +51,7 @@ SELECT
   log_title,
   user_name,
   log_timestamp,
+  log_params,
   log_comment
 FROM logging_ts_alternative
 JOIN user
@@ -65,13 +68,22 @@ for row in cursor.fetchall():
     log_title = unicode(row[0], 'utf-8')
     user_name = unicode(row[1], 'utf-8')
     log_timestamp = row[2]
-    log_comment = '<nowiki>'+unicode(row[3], 'utf-8')+'</nowiki>'
+    log_params = row[3]
+    try:
+        previous_rights = log_params.split('\n', 1)[0]
+        subsequent_rights = log_params.split('\n', 1)[1]
+    except IndexError:
+        previous_rights = ''
+        subsequent_rights = ''
+    log_comment = '<nowiki>'+unicode(row[4], 'utf-8')+'</nowiki>'
     table_row = u'''| %d
 | %s
 | %s
 | %s
 | %s
-|-''' % (i, log_title, user_name, log_timestamp, log_comment)
+| %s
+| %s
+|-''' % (i, log_title, user_name, log_timestamp, previous_rights, subsequent_rights, log_comment)
     output.append(table_row)
     i += 1
 
