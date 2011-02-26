@@ -75,7 +75,7 @@ for row in cursor.fetchall():
     except IndexError:
         previous_rights = ''
         subsequent_rights = ''
-    log_comment = '<div style="width:350px;"><nowiki>'+unicode(row[4], 'utf-8')+'</nowiki></div>'
+    log_comment = '<div style="width:350px; word-wrap:break-word;"><nowiki>'+unicode(row[4], 'utf-8')+'</nowiki></div>'
     table_row = u'''| %d
 | %s
 | %s
