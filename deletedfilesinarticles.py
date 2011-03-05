@@ -31,25 +31,31 @@ Articles containing a deleted file; data as of <onlyinclude>%s</onlyinclude>.
 ! No.
 ! Article
 ! File
+! Timestamp
+! Comment
 %s
 |}
 '''
 
 rows_per_page = 1000
 
-def has_been_deleted(cursor, il_to):
+def get_deleted_props(cursor, il_to):
     cursor.execute('''
     /* deletedfilesinarticles.py SLOW_OK */
     SELECT
-      1
+      log_timestamp,
+      log_comment
     FROM logging_ts_alternative
     WHERE log_type = 'delete'
     AND log_action = 'delete'
     AND log_namespace = 6
-    AND log_title = %s;
+    AND log_title = %s
+    ORDER BY log_timestamp DESC
+    LIMIT 1;
     ''' , il_to)
-    if len(cursor.fetchall()) > 0:
-        return True
+    results = cursor.fetchone()
+    if results:
+        return results
     return False
 
 wiki = wikitools.Wiki(settings.apiurl)
@@ -85,20 +91,19 @@ i = 1
 output = []
 for row in cursor.fetchall():
     il_to = row[1]
-    if not has_been_deleted(cursor, il_to):
+    deleted_props = get_deleted_props(cursor, il_to)
+    if not deleted_props:
         continue
-    try:
-        page_title = u'[[%s|]]' % unicode(row[0], 'utf-8')
-    except UnicodeDecodeError:
-        continue
-    try:
-        il_to = u'[[:File:%s]]' % unicode(il_to, 'utf-8')
-    except UnicodeDecodeError:
-        continue
+    page_title = u'[[%s|]]' % unicode(row[0], 'utf-8')
+    il_to = u'[[:File:%s|%s]]' % (unicode(il_to, 'utf-8'), unicode(il_to, 'utf-8'))
+    log_timestamp = deleted_props[0]
+    log_comment = unicode('<nowiki>'+deleted_props[1]+'</nowiki>', 'utf-8')
     table_row = u'''|-
 | %d
 | %s
-| %s''' % (i, page_title, il_to)
+| %s
+| %s
+| %s''' % (i, page_title, il_to, log_timestamp, log_comment)
     output.append(table_row)
     i += 1
 
