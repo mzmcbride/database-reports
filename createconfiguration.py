@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.5
+#!/usr/bin/env python
  
 # Copyright 2009-2010 bjweeks, MZMcBride, svick
  
@@ -24,7 +24,7 @@ import settings
  
 report_filename = sys.argv[1]
 
-report_file = open(report_filename, 'r')
+report_file = open(report_filename + '.py', 'r')
 report_source = report_file.read()
 
 report_name = re.search('\'(.*)\'', report_source).group(1)
@@ -50,6 +50,6 @@ wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
  
 configuration = wikitools.Page(wiki, configuration_title)
-configuration_text = template % (report_filename, report_source, crontab_line)
+configuration_text = template % (report_filename + '.py', report_source, crontab_line)
 configuration_text = configuration_text.encode('utf-8')
 configuration.edit(configuration_text, summary=settings.editsumm if len(sys.argv) < 3 else sys.argv[2], bot=1)
