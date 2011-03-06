@@ -16,7 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
 import datetime
+import dateutil.relativedelta
 import MySQLdb
+import re
 import wikitools
 import settings
  
@@ -49,7 +51,18 @@ select user_name
   join user on user_id = ug_user
   where ug_group in ('sysop', 'autoreviewer', 'bot')
 ''')
-excluded = map(lambda x: unicode(x[0], 'utf-8'), cursor.fetchall())
+excluded = set([unicode(x[0], 'utf-8') for x in cursor.fetchall()])
+
+this_month = datetime.date.today()
+last_month = this_month - dateutil.relativedelta.relativedelta(months = 1)
+for month in [last_month, this_month]:
+  page_name = 'Wikipedia:Requests for permissions/Denied/' + month.strftime('%B %Y')
+  page = wikitools.Page(wiki, page_name)
+  page_text = page.getWikiText()
+  matches = re.findall('^\*{{Usercheck-short\|(.*)}} \[\[Wikipedia:Requests for permissions/Autopatrolled\]\]', page_text, re.M)
+  for match in matches:
+    user_name = match[0].capitalize() + match[1:]
+    excluded.add(user_name)
 
 cursor = conn.cursor()
 cursor.execute('''
@@ -82,6 +95,9 @@ select user_name
         from revision
         where rev_timestamp > date_format(adddate(now(), -30), '%%Y%%m%%d%%H%%i%%s'))
     and user_registration < date_format(adddate(now(), -180), '%%Y%%m%%d%%H%%i%%s')
+    and user_id not in
+      (select ipb_user from ipblocks
+        where ipb_range_end = '')
 ''', row[0])
     if not cursor.fetchone():
         continue
