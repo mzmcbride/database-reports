@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.5
 
-# Copyright 2008 bjweeks, MZMcBride, CBM
+# Copyright 2011 bjweeks, MZMcBride
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,16 +20,21 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = settings.rootpage + 'Polluted categories'
+report_title = settings.rootpage + 'Meta-Wiki rights changes'
 
 report_template = u'''
-Categories that contain pages in the (Main) namespace and the User: namespace \
-(limited to the first 250 entries); data as of <onlyinclude>%s</onlyinclude>.
+Rights changes at Meta-Wiki that applied to local accounts; \
+data as of <onlyinclude>%s</onlyinclude>.
 
-{| class="wikitable sortable" style="width:100%%; margin:auto;"
+{| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
 ! No.
-! Category
+! User
+! Actor
+! Timestamp
+! Previous rights
+! Subsequent rights
+! Comment
 |-
 %s
 |}
@@ -38,43 +43,47 @@ Categories that contain pages in the (Main) namespace and the User: namespace \
 wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
-conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host='sql-s3', db='metawiki_p', read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
-/* pollcats.py SLOW_OK */
-SELECT DISTINCT
-  cl_to
-FROM categorylinks AS cat
-JOIN page AS pg1
-ON cat.cl_from = pg1.page_id
-WHERE page_namespace = 2
-AND EXISTS (SELECT
-              1
-            FROM page AS pg2
-            JOIN categorylinks AS cl
-            ON pg2.page_id = cl.cl_from
-            WHERE pg2.page_namespace = 0
-            AND cat.cl_to = cl.cl_to)
-AND cl_to NOT IN (SELECT
-                    page_title
-                  FROM page
-                  JOIN templatelinks
-                  ON tl_from = page_id
-                  WHERE page_namespace = 14
-                  AND tl_namespace = 10
-                  AND tl_title = 'Polluted_category')
-LIMIT 250;
-''')
+/* metarightschanges.py SLOW_OK */
+SELECT
+  log_title,
+  user_name,
+  log_timestamp,
+  log_params,
+  log_comment
+FROM logging_ts_alternative
+JOIN user
+ON log_user = user_id
+WHERE log_namespace = 2
+AND log_title LIKE %s
+AND log_type = 'rights'
+ORDER BY log_timestamp DESC;
+''' , '%@'+settings.dbname.strip('_p'))
 
 i = 1
 output = []
 for row in cursor.fetchall():
-    cl_to = row[0]
-    if cl_to:
-        cl_to = u'[[:Category:%s|]]' % unicode(cl_to, 'utf-8')
+    log_title = unicode(row[0], 'utf-8')
+    user_name = unicode(row[1], 'utf-8')
+    log_timestamp = row[2]
+    log_params = row[3]
+    try:
+        previous_rights = log_params.split('\n', 1)[0]
+        subsequent_rights = log_params.split('\n', 1)[1]
+    except IndexError:
+        previous_rights = ''
+        subsequent_rights = ''
+    log_comment = '<div style="width:350px; word-wrap:break-word;"><nowiki>'+unicode(row[4], 'utf-8')+'</nowiki></div>'
     table_row = u'''| %d
 | %s
-|-''' % (i, cl_to)
+| %s
+| %s
+| %s
+| %s
+| %s
+|-''' % (i, log_title, user_name, log_timestamp, previous_rights, subsequent_rights, log_comment)
     output.append(table_row)
     i += 1
 

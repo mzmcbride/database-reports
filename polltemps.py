@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.5
 
-# Copyright 2008 bjweeks, MZMcBride, CBM
+# Copyright 2011 bjweeks, MZMcBride, WOSlinker
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,11 +20,10 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = settings.rootpage + 'Polluted categories'
+report_title = settings.rootpage + 'Template categories containing articles'
 
 report_template = u'''
-Categories that contain pages in the (Main) namespace and the User: namespace \
-(limited to the first 250 entries); data as of <onlyinclude>%s</onlyinclude>.
+Template categories containing articles; data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -41,40 +40,37 @@ wiki.login(settings.username, settings.password)
 conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
-/* pollcats.py SLOW_OK */
-SELECT DISTINCT
-  cl_to
-FROM categorylinks AS cat
-JOIN page AS pg1
-ON cat.cl_from = pg1.page_id
-WHERE page_namespace = 2
+/* polltemps.py SLOW_OK */
+SELECT
+  ns_name,
+  page_title
+FROM page AS pg1
+JOIN toolserver.namespace
+ON dbname = %s
+AND pg1.page_namespace = ns_id
+JOIN templatelinks AS tl
+ON pg1.page_id = tl.tl_from
+WHERE pg1.page_namespace = 14
+AND tl.tl_namespace = 10
+AND tl.tl_title = 'Template_category'
 AND EXISTS (SELECT
               1
             FROM page AS pg2
             JOIN categorylinks AS cl
             ON pg2.page_id = cl.cl_from
             WHERE pg2.page_namespace = 0
-            AND cat.cl_to = cl.cl_to)
-AND cl_to NOT IN (SELECT
-                    page_title
-                  FROM page
-                  JOIN templatelinks
-                  ON tl_from = page_id
-                  WHERE page_namespace = 14
-                  AND tl_namespace = 10
-                  AND tl_title = 'Polluted_category')
-LIMIT 250;
-''')
+            AND pg1.page_title = cl.cl_to);
+''' , settings.dbname)
 
 i = 1
 output = []
 for row in cursor.fetchall():
-    cl_to = row[0]
-    if cl_to:
-        cl_to = u'[[:Category:%s|]]' % unicode(cl_to, 'utf-8')
+    ns_name = unicode(row[0], 'utf-8')
+    cl_to = unicode(row[1], 'utf-8')
+    category_link = u'[[:%s:%s|%s]]' % (ns_name, cl_to, cl_to)
     table_row = u'''| %d
 | %s
-|-''' % (i, cl_to)
+|-''' % (i, category_link)
     output.append(table_row)
     i += 1
 

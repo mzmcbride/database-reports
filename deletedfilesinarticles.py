@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.5
 
-# Copyright 2008 bjweeks, MZMcBride, CBM
+# Copyright 2010 bjweeks, Multichil, MZMcBride
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,102 +21,89 @@ import MySQLdb
 import wikitools
 import settings
 
-report_title = settings.rootpage + 'Deleted red-linked categories/%i'
+report_title = settings.rootpage + 'Articles containing deleted files/%i'
 
 report_template = u'''
-Deleted red-linked categories; data as of <onlyinclude>%s</onlyinclude>.
+Articles containing a deleted file; data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
 ! No.
-! Category
-! Members (stored)
-! Members (dynamic)
-! Admin
+! Article
+! File
 ! Timestamp
 ! Comment
 %s
 |}
 '''
 
-rows_per_page = 500
+rows_per_page = 1000
 
-wiki = wikitools.Wiki(settings.apiurl); wiki.setMaxlag(-1)
-wiki.login(settings.username, settings.password)
-
-def get_last_log_entry(cursor, cl_to):
+def get_deleted_props(cursor, il_to):
     cursor.execute('''
-    /* deletedredlinkedcats.py SLOW_OK */
+    /* deletedfilesinarticles.py SLOW_OK */
     SELECT
       log_timestamp,
-      user_name,
       log_comment
     FROM logging_ts_alternative
-    JOIN user
-    ON log_user = user_id
     WHERE log_type = 'delete'
     AND log_action = 'delete'
-    AND log_namespace = 14
+    AND log_namespace = 6
     AND log_title = %s
     ORDER BY log_timestamp DESC
     LIMIT 1;
-    ''' , cl_to)
-    for row in cursor.fetchall():
-        log_timestamp = row[0]
-        user_name = unicode(row[1], 'utf-8')
-        log_comment = unicode(row[2], 'utf-8')
-    return { 'timestamp': log_timestamp, 'user': user_name, 'comment': log_comment }
+    ''' , il_to)
+    results = cursor.fetchone()
+    if results:
+        return results
+    return False
+
+wiki = wikitools.Wiki(settings.apiurl)
+wiki.login(settings.username, settings.password)
 
 conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
-/* deletedredlinkedcats.py SLOW_OK */
-SELECT DISTINCT
-  ns_name,
-  cl_to,
-  cat_pages
-FROM categorylinks
-JOIN category
-ON cl_to = cat_title
-JOIN toolserver.namespace
-ON dbname = %s
-AND ns_id = 14
-LEFT JOIN page
-ON cl_to = page_title
-AND page_namespace = 14
-WHERE page_title IS NULL
-AND cat_pages > 0;
-''' , settings.dbname)
+/* deletedfilesinarticles.py SLOW_OK */
+SELECT
+  page_title,
+  il_to
+FROM page
+JOIN imagelinks
+ON page_id = il_from
+WHERE (NOT EXISTS (SELECT
+                     1
+                   FROM image
+                   WHERE img_name = il_to))
+AND (NOT EXISTS (SELECT
+                   1
+                 FROM commonswiki_p.page
+                 WHERE page_title = CAST(il_to AS CHAR)
+                 AND page_namespace = 6))
+AND (NOT EXISTS (SELECT
+                   1
+                 FROM page
+                 WHERE page_title = il_to
+                 AND page_namespace = 6))
+AND page_namespace = 0;''')
 
 i = 1
 output = []
 for row in cursor.fetchall():
-    ns_name = row[0]
-    cl_to = row[1]
-    try:
-        log_props = get_last_log_entry(cursor, cl_to)
-        user_name = log_props['user']
-        log_timestamp = log_props['timestamp']
-        log_comment = log_props['comment']
-        if log_comment:
-            log_comment = u'<nowiki>%s</nowiki>' % log_comment
-    except:
-        user_name = None
-        log_timestamp = None
-        log_comment = None
-    if not user_name or not log_timestamp:
+    il_to = row[1]
+    deleted_props = get_deleted_props(cursor, il_to)
+    if not deleted_props:
         continue
-    dynamic_count = u'{{PAGESINCATEGORY:%s}}' % unicode(cl_to, 'utf-8')
-    cl_to = u'[[:%s:%s|%s]]' % (unicode(ns_name, 'utf-8'), unicode(cl_to, 'utf-8'), unicode(cl_to,'utf-8'))
-    stored_count = row[2]
+    page_title = u'[[%s|]]' % unicode(row[0], 'utf-8')
+    il_to = u'[[:File:%s|%s]]' % (unicode(il_to, 'utf-8'), unicode(il_to, 'utf-8'))
+    log_timestamp = deleted_props[0]
+    log_comment = unicode('<nowiki>'+deleted_props[1]+'</nowiki>', 'utf-8')
     table_row = u'''|-
 | %d
 | %s
 | %s
 | %s
-| %s
-| %s
-| %s''' % (i, cl_to, stored_count, dynamic_count, user_name, log_timestamp, log_comment)
+| %s''' % (i, page_title, il_to, log_timestamp, log_comment)
     output.append(table_row)
     i += 1
 

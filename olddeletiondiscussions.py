@@ -55,7 +55,16 @@ ON dbname = %s
 AND page_namespace = ns_id
 JOIN categorylinks
 ON cl_from = page_id
-WHERE cl_to IN ('Articles_for_deletion', 'Templates_for_deletion', 'Wikipedia_files_for_deletion', 'Categories_for_deletion', 'Categories_for_merging', 'Categories_for_renaming', 'Redirects_for_discussion', 'Miscellaneous_pages_for_deletion')
+WHERE cl_to IN ('Articles_for_deletion',
+                'Templates_for_deletion',
+                'Wikipedia_files_for_deletion',
+                'Categories_for_deletion',
+                'Categories_for_merging',
+                'Categories_for_renaming',
+                'Redirects_for_discussion',
+                'Miscellaneous_pages_for_deletion',
+                'Stub_categories_for_deletion',
+                'Stub_template_deletion_candidates')
 AND cl_timestamp < DATE_FORMAT(DATE_SUB(NOW(),INTERVAL 30 DAY),'%%Y-%%m-%%d %%H:%%i:%%s')
 ORDER BY ns_name, page_title ASC;
 ''' , settings.dbname)
