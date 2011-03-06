@@ -43,13 +43,17 @@ conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file
 cursor = conn.cursor()
 cursor.execute('''
 /* project_changes.py */
-SELECT REPLACE(SUBSTRING_INDEX(page_title, '/', 1), '_', ' ') AS project,
+SELECT SUBSTRING_INDEX(page_title, '/', 1) AS project,
        SUM((
          SELECT COUNT(*)
          FROM revision
          WHERE page_id = rev_page
          AND DATEDIFF(NOW(), rev_timestamp) <= 365
-       )) AS count
+       )) AS count,
+       (SELECT page_is_redirect
+       FROM page
+       WHERE page_namespace = 4
+       AND page_title = project) AS redirect
 FROM page
 WHERE page_title LIKE 'WikiProject\_%'
 AND page_namespace BETWEEN 4 AND 5
@@ -61,8 +65,11 @@ ORDER BY count DESC
 i = 1
 output = []
 for row in cursor.fetchall():
-    page_title = '[[Wikipedia:%s]]' % unicode(row[0], 'utf-8')
+    page_title = '[[Wikipedia:%s]]' % unicode(row[0], 'utf-8').replace('_', ' ')
     edits = row[1]
+    is_redirect = row[2]
+    if is_redirect:
+        page_title = "''" + page_title + "''"
     table_row = u'''| %d
 | %s
 | %d
