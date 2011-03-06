@@ -29,6 +29,19 @@ report_template = u'''
 
 Below is a list of talk pages by their total size, including subpages; data as of <onlyinclude>%s</onlyinclude>.
  
+== Article talk pages ==
+
+{| class="wikitable sortable plainlinks"
+|-
+! No.
+! Page
+! Size [MB]
+|-
+%s
+|}
+
+== Other talk pages ==
+
 {| class="wikitable sortable plainlinks"
 |-
 ! No.
@@ -58,16 +71,16 @@ SELECT
 	SUM(page_len) / 1024 / 1024 AS total_size
 FROM page
   JOIN toolserver.namespacename ON page_namespace = ns_id 
-WHERE page_namespace MOD 2 = 1
+WHERE page_namespace = 1
   AND dbname = 'enwiki_p'
   AND ns_type = 'primary'
 GROUP BY page_namespace, parent
 ORDER BY total_size DESC
-LIMIT 300
+LIMIT 100
 ''')
  
 i = 1
-output = []
+article_talks = []
 for row in cursor.fetchall():
     page_title = '[[%s:%s]]' % (unicode(row[0], 'utf-8'), unicode(row[1], 'utf-8'))
     size = row[2]
@@ -75,7 +88,36 @@ for row in cursor.fetchall():
 | %s
 | %.1f
 |-''' % (i, page_title, size)
-    output.append(table_row)
+    article_talks.append(table_row)
+    i += 1
+
+cursor.execute('''
+/* longest_discussions.py */
+SELECT 
+	ns_name,
+	REPLACE(SUBSTRING_INDEX(page_title, '/', 1), '_', ' ') AS parent,
+	SUM(page_len) / 1024 / 1024 AS total_size
+FROM page
+  JOIN toolserver.namespacename ON page_namespace = ns_id 
+WHERE page_namespace MOD 2 = 1
+  AND page_namespace != 1
+  AND dbname = 'enwiki_p'
+  AND ns_type = 'primary'
+GROUP BY page_namespace, parent
+ORDER BY total_size DESC
+LIMIT 200
+''')
+ 
+i = 1
+other_talks = []
+for row in cursor.fetchall():
+    page_title = '[[%s:%s]]' % (unicode(row[0], 'utf-8'), unicode(row[1], 'utf-8'))
+    size = row[2]
+    table_row = u'''| %d
+| %s
+| %.1f
+|-''' % (i, page_title, size)
+    other_talks.append(table_row)
     i += 1
  
 cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
@@ -83,7 +125,7 @@ rep_lag = cursor.fetchone()[0]
 current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
  
 report = wikitools.Page(wiki, report_title)
-report_text = report_template % (current_of, '\n'.join(output))
+report_text = report_template % (current_of, '\n'.join(article_talks), '\n'.join(other_talks))
 report_text = report_text.encode('utf-8')
 report.edit(report_text, summary=settings.editsumm, bot=1)
  
