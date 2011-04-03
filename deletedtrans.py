@@ -60,7 +60,6 @@ JOIN page AS p2
 ON tl_from = p2.page_id
 WHERE p1.page_id IS NULL
 AND tl_namespace = 10
-AND tl_title IN ('User_GMT-8', 'Rfmf')
 GROUP BY tl_title
 ORDER BY COUNT(*) DESC
 LIMIT 4000;
