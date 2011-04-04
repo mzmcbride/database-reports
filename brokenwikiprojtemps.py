@@ -63,7 +63,7 @@ GROUP BY tl_title;
 i = 1
 output = []
 for row in cursor.fetchall():
-    page_title = u'{{dbr link|1=Template:%s}}' % unicode(row[0], 'utf-8')
+    page_title = u'{{dbr link|1=%s}}' % unicode(row[0], 'utf-8')
     transclusions = row[1]
     table_row = u'''| %d
 | %s
