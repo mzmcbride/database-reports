@@ -61,7 +61,7 @@ ON tl_from = p2.page_id
 WHERE p1.page_id IS NULL
 AND tl_namespace = 10
 GROUP BY tl_title
-ORDER BY COUNT(*) DESC
+ORDER BY COUNT(DISTINCT tl_from) DESC
 LIMIT 4000;
 ''')
 
