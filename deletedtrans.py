@@ -47,7 +47,7 @@ cursor.execute('''
 /* deletedtrans.py SLOW_OK */
 SELECT
   tl_title,
-  COUNT(*)
+  COUNT(DISTINCT tl_from)
 FROM templatelinks
 LEFT JOIN page AS p1
 ON p1.page_namespace = tl_namespace
