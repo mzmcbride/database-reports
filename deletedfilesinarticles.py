@@ -85,7 +85,8 @@ AND (NOT EXISTS (SELECT
                  FROM page
                  WHERE page_title = il_to
                  AND page_namespace = 6))
-AND page_namespace = 0;''')
+AND page_namespace = 0;
+''')
 
 i = 1
 output = []
@@ -94,7 +95,7 @@ for row in cursor.fetchall():
     deleted_props = get_deleted_props(cursor, il_to)
     if not deleted_props:
         continue
-    page_title = u'[[%s|]]' % unicode(row[0], 'utf-8')
+    page_title = u'[[%s]]' % (unicode(row[0], 'utf-8'), unicode(row[0], 'utf-8'))
     il_to = u'[[:File:%s|%s]]' % (unicode(il_to, 'utf-8'), unicode(il_to, 'utf-8'))
     log_timestamp = deleted_props[0]
     log_comment = unicode('<nowiki>'+deleted_props[1]+'</nowiki>', 'utf-8')
