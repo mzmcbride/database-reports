@@ -31,6 +31,7 @@ data as of <onlyinclude>%s</onlyinclude>.
 ! No.
 ! WikiProject
 ! Edits
+! excl. bots
 |-
 %s
 |}
@@ -50,6 +51,16 @@ SELECT SUBSTRING_INDEX(page_title, '/', 1) AS project,
          WHERE page_id = rev_page
          AND DATEDIFF(NOW(), rev_timestamp) <= 365
        )) AS count,
+       SUM((
+         SELECT COUNT(*)
+         FROM revision
+         WHERE page_id = rev_page
+         AND DATEDIFF(NOW(), rev_timestamp) <= 365
+         AND rev_user NOT IN
+          (SELECT ug_user
+          FROM user_groups
+          WHERE ug_group = 'bot')
+       )) AS no_bots_count,
        (SELECT page_is_redirect
        FROM page
        WHERE page_namespace = 4
@@ -67,13 +78,15 @@ output = []
 for row in cursor.fetchall():
     page_title = '[[Wikipedia:%s]]' % unicode(row[0], 'utf-8').replace('_', ' ')
     edits = row[1]
-    is_redirect = row[2]
+    no_bots_edits = row[2]
+    is_redirect = row[3]
     if is_redirect:
         page_title = "''" + page_title + "''"
     table_row = u'''| %d
 | %s
 | %d
-|-''' % (i, page_title, edits)
+| %d
+|-''' % (i, page_title, edits, no_bots_edits)
     output.append(table_row)
     i += 1
  
