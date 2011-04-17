@@ -153,7 +153,9 @@ for template in target_templates:
             break
         if article in reviewed_page_titles:
             continue
-        article_parameters = get_template_parameters_from_article(article, target_templates, template_redirects)
+        article_parameters = get_template_parameters_from_article(article,
+                                                                  target_templates,
+                                                                  template_redirects)
         bullshit_parameters_count = 0
         for i in article_parameters-template_parameters:
             bullshit_parameters.append([article, i])
@@ -167,7 +169,7 @@ i = 1
 output = []
 for bullshit_parameter in bullshit_parameters:
     page_title = u'{{dbr link|1='+bullshit_parameter[0].replace('_', ' ')+u'}}'
-    parameter = bullshit_parameter[1]
+    parameter = unicode(bullshit_parameter[1], 'utf-8')
     table_row = u'''| %d
 | %s
 | %s
