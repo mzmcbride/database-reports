@@ -25,14 +25,14 @@ def get_template_parameters_from_template(template):
                                       r')\|(' +
                                       legal_chars + '*' +
                                       r')\}\}(' +
-                                      legal_chars + '+' +
+                                      legal_chars + '*' +
                                       r')')
     for match in dynamic_parameter_re.finditer(template_text):
         parameter_name_1 = match.group(1)+match.group(3)+match.group(5)
         parameter_name_2 = match.group(1)+match.group(4)+match.group(5)
         template_parameters.add(parameter_name_1)
         template_parameters.add(parameter_name_2)
-    parameter_re = re.compile(r'\{\{\{([ %!"$&\'()*,\-.0-9:;?@A-Z^_`a-z~\x80-\xFF]+)(\||\})', re.I|re.MULTILINE)
+    parameter_re = re.compile(r'\{\{\{('+legal_chars+r'+)(\||\})', re.I|re.MULTILINE)
     for match in parameter_re.finditer(template_text):
         template_parameters.add(match.group(1).strip())
     return template_parameters
@@ -56,13 +56,13 @@ def get_articles_list(cursor, template):
         articles_list.append(article)
     return articles_list
 
-def get_template_parameters_from_article(article, templates):
+def get_template_parameters_from_article(article, templates, template_redirects):
     article_parameters = set()
     inner_template_re = re.compile(r'\{\{[^}]+\}\}', re.I|re.MULTILINE)
     parameter_re = re.compile(r'\|\s*([ %!"$&\'()*,\-.0-9:;?@A-Z^_`a-z~\x80-\xFF]+)\s*=', re.I|re.MULTILINE)
     article_text = wikitools.Page(wiki, article).getWikiText()
     for template in templates:
-        template_re = re.compile(r'\{\{\s*%s\s*(.*?)\}\}' % template.replace('_', r'[\s_]*'), re.I|re.MULTILINE|re.DOTALL)
+        template_re = re.compile(r'\{\{\s*%s\s*(.*?)\}\}' % template_redirects, re.I|re.MULTILINE|re.DOTALL)
         if not template_re.search(article_text):
             continue
         string_start_position = template_re.search(article_text).start()
@@ -86,6 +86,25 @@ def get_template_parameters_from_article(article, templates):
             article_parameter = match.group(1).strip()
             article_parameters.add(article_parameter)
     return article_parameters
+
+def get_template_redirects(cursor, template):
+    template_redirects = [template.replace('_', r'[\s_]*')]
+    cursor.execute('''
+                   /* bullshitparams.py SLOW_OK */
+                   SELECT
+                     page_title
+                   FROM redirect
+                   JOIN page
+                   ON rd_from = page_id
+                   WHERE page_namespace = 10
+                   AND rd_title = %s
+                   AND rd_namespace = 10;
+                   ''' , template)
+    for row in cursor.fetchall():
+        template_redirect = unicode(row[0], 'utf-8')
+        template_redirects.append(template_redirect.replace('_', r'[\s_]*'))
+    template_redirects_list = r'(%s)' % '|'.join(template_redirects)
+    return template_redirects_list
 
 report_title = settings.rootpage + 'Articles containing bullshit template parameters'
 
@@ -128,12 +147,13 @@ for template in target_templates:
         break
     articles_list = get_articles_list(cursor, template)
     template_parameters = get_template_parameters_from_template(template)
+    template_redirects = get_template_redirects(cursor, template)
     for article in articles_list:
         if count > 1000:
             break
         if article in reviewed_page_titles:
             continue
-        article_parameters = get_template_parameters_from_article(article, target_templates)
+        article_parameters = get_template_parameters_from_article(article, target_templates, template_redirects)
         bullshit_parameters_count = 0
         for i in article_parameters-template_parameters:
             bullshit_parameters.append([article, i])
