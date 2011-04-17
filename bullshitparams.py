@@ -56,35 +56,46 @@ def get_articles_list(cursor, template):
         articles_list.append(article)
     return articles_list
 
+def grab_template(article_text, template_redirects):
+    template_re = re.compile(r'\{\{\s*%s\s*(.*?)\}\}' % template_redirects, re.I|re.MULTILINE|re.DOTALL)
+    if not template_re.search(article_text):
+        return False
+    string_start_position = template_re.search(article_text).start()
+    shit_re = re.compile(r'(\{\{|\{\{\{|\}\}|\}\}\})')
+    start_shit_re = re.compile(r'(\{\{|\{\{\{)')
+    end_shit_re = re.compile(r'(\}\}|\}\}\})')
+    start_matches = 0
+    end_matches = 0
+    for match in shit_re.finditer(article_text[string_start_position:]):
+        if start_shit_re.search(match.group(0)):
+            start_matches += 1
+        elif end_shit_re.search(match.group(0)):
+            string_end_position = match.end()
+            end_matches += 1
+        if start_matches == end_matches:
+            template_content = article_text[string_start_position:string_end_position+string_start_position]
+            return template_content
+    return False
+
 def get_template_parameters_from_article(article, templates, template_redirects):
     article_parameters = set()
     inner_template_re = re.compile(r'\{\{[^}]+\}\}', re.I|re.MULTILINE)
     parameter_re = re.compile(r'\|\s*([ %!"$&\'()*,\-.0-9:;?@A-Z^_`a-z~\x80-\xFF]+)\s*=', re.I|re.MULTILINE)
     article_text = wikitools.Page(wiki, article).getWikiText()
     for template in templates:
-        template_re = re.compile(r'\{\{\s*%s\s*(.*?)\}\}' % template_redirects, re.I|re.MULTILINE|re.DOTALL)
-        if not template_re.search(article_text):
+        template_content = grab_template(article_text, template_redirects)
+        if not template_content:
             continue
-        string_start_position = template_re.search(article_text).start()
-        shit_re = re.compile(r'(\{\{|\{\{\{|\}\}|\}\}\})')
-        start_shit_re = re.compile(r'(\{\{|\{\{\{)')
-        end_shit_re = re.compile(r'(\}\}|\}\}\})')
-        start_matches = 0
-        end_matches = 0
-        for match in shit_re.finditer(article_text[string_start_position:]):
-            if start_shit_re.search(match.group(0)):
-                start_matches += 1
-            elif end_shit_re.search(match.group(0)):
-                string_end_position = match.end()
-                end_matches += 1
-            if start_matches == end_matches:
-                template_content = article_text[string_start_position:string_end_position+string_start_position]
-                for match in inner_template_re.finditer(template_content[2:]):
-                    template_content = re.sub(re.escape(match.group(0)), '', template_content)
-                break
-        for match in parameter_re.finditer(template_content):
-            article_parameter = match.group(1).strip()
-            article_parameters.add(article_parameter)
+        for match in inner_template_re.finditer(template_content[2:]):
+            legal_chars = r'[ %!"$&\'()*,\-.0-9:;?@A-Z^_`a-z~\x80-\xFF]'
+            template_redirects = legal_chars + '+'
+            inner_template = grab_template(template_content[2:], template_redirects)
+            if inner_template:
+                template_content = re.sub(re.escape(inner_template), '', template_content)
+        break
+    for match in parameter_re.finditer(template_content):
+        article_parameter = match.group(1).strip()
+        article_parameters.add(article_parameter)
     return article_parameters
 
 def get_template_redirects(cursor, template):
