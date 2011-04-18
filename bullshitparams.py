@@ -32,7 +32,7 @@ def get_template_parameters_from_template(template):
         parameter_name_2 = match.group(1)+match.group(4)+match.group(5)
         template_parameters.add(parameter_name_1)
         template_parameters.add(parameter_name_2)
-    parameter_re = re.compile(r'\{\{\{('+legal_chars+r'+)(\||\})', re.I|re.MULTILINE)
+    parameter_re = re.compile(r'\{\{\{(' + legal_chars + r'+)(\||\})', re.I|re.MULTILINE)
     for match in parameter_re.finditer(template_text):
         template_parameters.add(match.group(1).strip())
     return template_parameters
@@ -82,7 +82,7 @@ def get_template_parameters_from_article(article, templates, template_redirects)
     legal_chars = r'[ %!"$&\'()*,\-.0-9:;?@A-Z^_`a-z~\x80-\xFF]'
     article_parameters = set()
     inner_template_re = re.compile(r'\{\{[^}]+\}\}', re.I|re.MULTILINE)
-    parameter_re = re.compile(r'\|\s*(' + legal_chars + r')\s*=', re.I|re.MULTILINE)
+    parameter_re = re.compile(r'\|\s*(' + legal_chars + r'+)\s*=', re.I|re.MULTILINE)
     article_text = wikitools.Page(wiki, article).getWikiText()
     for template in templates:
         template_content = grab_template(article_text, template_redirects)
