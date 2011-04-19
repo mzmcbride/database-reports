@@ -107,6 +107,7 @@ SELECT
 	SUM(page_len) / 1024 / 1024 AS total_size
 FROM page
 WHERE page_namespace MOD 2 = 1
+AND page_namespace != 1
 GROUP BY page_namespace, parent
 ORDER BY total_size DESC
 LIMIT 200
