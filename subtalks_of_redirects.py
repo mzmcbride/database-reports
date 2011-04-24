@@ -23,7 +23,7 @@ import settings
 report_title = settings.rootpage + 'Talk subpages with redirect parent'
  
 report_template = u'''
-This page lists first 1000 talk subpages (exclusing user talk subpages) whose parent talk page is a redirect. Data as of <onlyinclude>%s</onlyinclude>.
+This page lists first 1000 talk subpages (excluding user talk subpages) whose parent talk page is a redirect. Data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks"
 |-
@@ -62,7 +62,8 @@ and not exists
    and pl_from !=
     (select page_id
      from page
-     where page_title = 'Database_reports/Talk_subpages_with_redirect_parent'))
+     where page_namespace = 4
+     and page_title = 'Database_reports/Talk_subpages_with_redirect_parent'))
 order by sub.page_namespace, sub.page_title
 limit 1000
 ''')
