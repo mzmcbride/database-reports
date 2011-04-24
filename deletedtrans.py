@@ -47,19 +47,21 @@ cursor.execute('''
 /* deletedtrans.py SLOW_OK */
 SELECT
   tl_title,
-  COUNT(*)
+  COUNT(DISTINCT tl_from)
 FROM templatelinks
-LEFT JOIN page
-ON tl_namespace = page_namespace
-AND tl_title = page_title
+LEFT JOIN page AS p1
+ON p1.page_namespace = tl_namespace
+AND p1.page_title = tl_title
 JOIN logging_ts_alternative
 ON tl_namespace = log_namespace
 AND tl_title = log_title
 AND log_type = 'delete'
-WHERE page_id IS NULL
+JOIN page AS p2
+ON tl_from = p2.page_id
+WHERE p1.page_id IS NULL
 AND tl_namespace = 10
 GROUP BY tl_title
-ORDER BY COUNT(*) DESC
+ORDER BY COUNT(DISTINCT tl_from) DESC
 LIMIT 4000;
 ''')
 
