@@ -54,6 +54,15 @@ and sub.page_title like '%/%'
 and sub.page_is_redirect = 0
 and parent.page_is_redirect = 1
 and dbname = 'enwiki_p'
+and not exists
+  (select 1
+   from pagelinks
+   where pl_namespace = sub.page_namespace
+   and pl_title = sub.page_title
+   and pl_from !=
+    (select page_id
+     from page
+     where page_title = 'Database_reports/Talk_subpages_with_redirect_parent'))
 order by sub.page_namespace, sub.page_title
 limit 1000
 ''')
