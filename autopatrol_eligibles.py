@@ -46,12 +46,11 @@ conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file
 cursor = conn.cursor()
 cursor.execute('''
 /* autopatrol_eligibles.py */
-select user_name
+select ug_user
   from user_groups
-  join user on user_id = ug_user
   where ug_group in ('sysop', 'autoreviewer', 'bot')
 ''')
-excluded = set([unicode(x[0], 'utf-8') for x in cursor.fetchall()])
+excluded = set([x[0] for x in cursor.fetchall()])
 
 this_month = datetime.date.today()
 last_month = this_month - dateutil.relativedelta.relativedelta(months = 1)
@@ -67,21 +66,23 @@ for month in [last_month, this_month]:
 cursor = conn.cursor()
 cursor.execute('''
 /* autopatrol_eligibles.py */
-select page_creator as user, count(*) as count
-  from u_mzmcbride_enwiki_page_creators_p.page as pc
-  join page on pc.page_id = page.page_id
+/* SLOW_OK */
+select c_user_id as user, count(*) as count, max(c_timestamp) as last_creation
+  from u_svick_enwiki_page_creators_p.creator as pc
+  join page on c_page_id = page_id
   where page_namespace = 0 
     and page_is_redirect = 0 
-  group by page_creator
+  group by user
   having count >= 50
+  and last_creation > date_format(adddate(now(), -30), '%Y%m%d%H%i%s')
   order by count desc;
 ''')
  
 i = 1
 output = []
 for row in cursor.fetchall():
-    user_name = unicode(row[0], 'utf-8')
-    if user_name in excluded:
+    user_id = row[0]
+    if user_id in excluded:
         continue
 
     cursor = conn.cursor()
@@ -89,19 +90,17 @@ for row in cursor.fetchall():
 /* autopatrol_eligibles.py */
 select user_name
   from user
-  where user_name = %s
-    and user_id in
-      (select rev_user
-        from revision
-        where rev_timestamp > date_format(adddate(now(), -30), '%%Y%%m%%d%%H%%i%%s'))
+  where user_id = %s
     and user_registration < date_format(adddate(now(), -180), '%%Y%%m%%d%%H%%i%%s')
     and user_id not in
       (select ipb_user from ipblocks
         where ipb_range_end = '')
 ''', row[0])
-    if not cursor.fetchone():
+    name_row = cursor.fetchone()
+    if not name_row:
         continue
 
+    user_name = unicode(name_row[0], 'utf-8')
     page_title = '[[User:%s|%s]]' % (user_name, user_name)
     count = row[1]
     table_row = u'''| %d
