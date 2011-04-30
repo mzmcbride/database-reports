@@ -23,7 +23,7 @@ import settings
 report_title = settings.rootpage + 'New WikiProjects'
  
 report_template = u'''
-Lits of newly created WikiProject pages that are not subpages; \
+List of newly created WikiProject pages that are not subpages; \
 data as of <onlyinclude>%s</onlyinclude>.
  
 {| class="wikitable sortable plainlinks"
