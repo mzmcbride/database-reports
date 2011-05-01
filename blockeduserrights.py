@@ -66,7 +66,7 @@ for row in cursor.fetchall():
     user_groups = u'%s' % unicode(row[1], 'utf-8')
     ipb_by_text = u'[[User talk:%s|]]' % unicode(row[2], 'utf-8')
     ipb_expiry = u'%s' % unicode(row[3], 'utf-8')
-    ipb_reason = u'%s' % unicode(row[4], 'utf-8')
+    ipb_reason = u'<nowiki>%s</nowiki>' % unicode(row[4], 'utf-8')
     table_row = u'''| %d
 | %s
 | %s
