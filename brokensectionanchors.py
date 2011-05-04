@@ -5,39 +5,28 @@ import datetime
 import re
 import MySQLdb
 import wikitools
-from urllib import unquote
+import urllib
 import settings
 
 def get_article_section_anchors(article):
     # Returns a list of section anchors from a specified article
     article_sections = []
-    anchor_re = re.compile(r'<span id="(.+?)"></span>', re.I)
-    params = {'action' : 'parse',
-              'prop'   : 'sections|text',
-              'page'   : '%s' % article,
-              'format' : 'json'}
-    request = wikitools.APIRequest(wiki, params)
-    response = request.query(querycontinue=False)
-    page_text = response['parse']['text']['*']
-    for match in anchor_re.finditer(page_text):
+    # Set a user-agent :-)
+    class urlopener(urllib.FancyURLopener):
+        version = 'http://en.wikipedia.org/wiki/Wikipedia_talk:Database_reports'
+    id_re = re.compile(r'id="(.+?)"')
+    target_url = settings.apiurl.replace('w/api.php','wiki/%s' % article)
+    urlopener = urlopener()
+    page = urlopener.open(target_url)
+    page_text = page.read()
+    for match in id_re.finditer(page_text):
         article_sections.append(unescape_id(match.group(1).encode('utf-8')))
-    for entry in response['parse']['sections']:
-        article_sections.append(unescape_id(entry[u'anchor'].encode('utf-8')))
-    if len(article_sections) == 0:
-        params = {'action' : 'parse',
-                  'prop'   : 'sections',
-                  'text'   : '__FORCETOC__{{:%s}}' % article,
-                  'format' : 'json'}
-        request = wikitools.APIRequest(wiki, params)
-        response = request.query(querycontinue=False)
-        for entry in response['parse']['sections']:
-            article_sections.append(unescape_id(entry[u'anchor'].encode('utf-8')))
     return article_sections
 
 def unescape_id(fragment):
     fragment = fragment.replace('%', 'UNIQUE MARKER')
     fragment = fragment.replace('.', '%')
-    fragment = unquote(fragment)
+    fragment = urllib.unquote(fragment)
     fragment = fragment.replace('%', '.')
     fragment = fragment.replace('UNIQUE MARKER', '%')
     return fragment
@@ -94,6 +83,7 @@ cursor.execute('''
                ON rd.rd_from = page_id
                WHERE page_namespace = 0
                AND rd_fragment IS NOT NULL
+               AND rd.rd_title NOT LIKE '%|%'
                GROUP BY rd.rd_title
                LIMIT 2500;
                ''')
