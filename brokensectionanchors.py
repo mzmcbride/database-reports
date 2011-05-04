@@ -4,8 +4,9 @@
 import datetime
 import re
 import MySQLdb
-import wikitools
 import urllib
+import Levenshtein
+import wikitools
 import settings
 
 def get_article_section_anchors(article):
@@ -41,6 +42,19 @@ def get_top_edit_timestamp(cursor, page_id):
                    ''' , page_id)
     return cursor.fetchone()[0]
 
+def make_best_guess(fragment, anchors):
+    transformed_fragment = fragment.lower().replace('-', '').replace('_', '')
+    for anchor in anchors:
+        try:
+            decoded_anchor = anchor.decode('utf-8')
+        except UnicodeDecodeError:
+            decoded_anchor = u''
+        transformed_anchor = decoded_anchor.lower().replace('-', '').replace('_', '')
+        ratio = Levenshtein.ratio(transformed_anchor, transformed_fragment)
+        if ratio > .8:
+            return {'best_guess' : anchor, 'ratio': str(ratio)}
+    return {'best_guess' : '', 'ratio': ''}
+
 report_title = settings.rootpage + 'Broken section anchors'
 
 report_template = u'''\
@@ -51,7 +65,8 @@ data as of <onlyinclude>%s</onlyinclude>.
 |- style="white-space:nowrap;"
 ! No.
 ! Redirect
-! Target
+! Best guess
+! Ratio
 |-
 %s
 |}
@@ -123,17 +138,21 @@ for row in cursor.fetchall():
                     try:
                         fragment = unicode(fragment, 'utf-8')
                     except UnicodeDecodeError:
-                        fragment = 'some craziness going on here'
+                        fragment = u'some craziness going on here'
                 try:
                     redirect_title = unicode(fragments_dict[fragment.encode('utf-8')].split('|', 1)[1], 'utf-8')
                     redirect_id = fragments_dict[fragment.encode('utf-8')].split('|', 1)[0]
                 except KeyError:
                     redirect_title = unicode(target_title, 'utf-8')
                     redirect_id = '-1'
+                best_guess_dict = make_best_guess(fragment, real_anchors)
+                best_guess = best_guess_dict['best_guess']
+                ratio = best_guess_dict['ratio']
                 table_row = u'''| %d
 | {{dbr link|1=%s}}
-| [[%s]]
-|-''' % (i, redirect_title+u'#'+fragment, unicode(target_title, 'utf-8'))
+| %s
+| %s
+|-''' % (i, redirect_title+u'#'+fragment, unicode(best_guess, 'utf-8'), unicode(ratio, 'utf-8'))
                 if redirect_id not in recently_edited_pages:
                     output.append(table_row)
                     i += 1
