@@ -85,7 +85,7 @@ cursor.execute('''
                AND rd_fragment IS NOT NULL
                AND rd.rd_title NOT LIKE '%|%'
                GROUP BY rd.rd_title
-               LIMIT 2500;
+               LIMIT 3500;
                ''')
 
 g = open('%sbroken-anchors-reviewed-page-ids.txt' % settings.path, 'a')
@@ -122,7 +122,7 @@ for row in cursor.fetchall():
             	    fragment = unicode(fragment, 'utf-8')
                 table_row = u'''| %d
 | {{dbr link|1=%s}}
-| %s
+| [[%s]]
 |-''' % (i, unicode(fragments_dict[fragment.encode('utf-8')].split('|', 1)[1], 'utf-8')+u'#'+fragment, unicode(target_title, 'utf-8'))
                 if fragments_dict[fragment.encode('utf-8')].split('|', 1)[0] not in recently_edited_pages:
                     output.append(table_row)
