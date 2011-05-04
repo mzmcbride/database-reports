@@ -75,7 +75,7 @@ cursor.execute('''
                SELECT
                  page_id,
                  rdr.rd_title AS target_title,
-                 GROUP_CONCAT(CONCAT(page_id, '[|]', page_title, '[|]', rd.rd_fragment) SEPARATOR '\n') AS fragments
+                 GROUP_CONCAT(CONCAT(page_id, '|', page_title, '|', rd.rd_fragment) SEPARATOR '\n') AS fragments
                FROM page
                JOIN redirect AS rdr
                ON rdr.rd_from = page_id
@@ -83,6 +83,7 @@ cursor.execute('''
                ON rd.rd_from = page_id
                WHERE page_namespace = 0
                AND rd_fragment IS NOT NULL
+               AND rd_fragment NOT LIKE '%|%'
                AND rd.rd_title NOT LIKE '%|%'
                GROUP BY rd.rd_title
                LIMIT 4500;
@@ -103,11 +104,11 @@ for row in cursor.fetchall():
     target_title = row[1]
     silly_values = row[2]
     for silly_value in silly_values.split('\n'):
-        page_id_and_title = silly_value.rsplit('[|]', 1)[0]
-        anchor = silly_value.rsplit('[|]', 1)[1]
+        page_id_and_title = silly_value.rsplit('|', 1)[0]
+        anchor = silly_value.rsplit('|', 1)[1]
         fragments_dict[anchor] = page_id_and_title
         fragments.add(anchor)
-        silly_page_id = str(page_id_and_title.split('[|]', 1)[0])
+        silly_page_id = str(page_id_and_title.split('|', 1)[0])
         if int(get_top_edit_timestamp(cursor, silly_page_id)) > int(settings.dumpdate+'000000'):
             recently_edited_pages.append(silly_page_id)
     if page_id not in reviewed_page_ids_set:
@@ -124,8 +125,8 @@ for row in cursor.fetchall():
                     except UnicodeDecodeError:
                         fragment = 'some craziness going on here'
                 try:
-                    redirect_title = unicode(fragments_dict[fragment.encode('utf-8')].split('[|]', 1)[1], 'utf-8')
-                    redirect_id = fragments_dict[fragment.encode('utf-8')].split('[|]', 1)[0]
+                    redirect_title = unicode(fragments_dict[fragment.encode('utf-8')].split('|', 1)[1], 'utf-8')
+                    redirect_id = fragments_dict[fragment.encode('utf-8')].split('|', 1)[0]
                 except KeyError:
                     redirect_title = unicode(target_title, 'utf-8')
                     redirect_id = '-1'
