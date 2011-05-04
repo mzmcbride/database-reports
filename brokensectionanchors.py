@@ -85,7 +85,7 @@ cursor.execute('''
                AND rd_fragment IS NOT NULL
                AND rd.rd_title NOT LIKE '%|%'
                GROUP BY rd.rd_title
-               LIMIT 3500;
+               LIMIT 4500;
                ''')
 
 g = open('%sbroken-anchors-reviewed-page-ids.txt' % settings.path, 'a')
@@ -116,15 +116,24 @@ for row in cursor.fetchall():
             if fragment in real_anchors:
                 count += 1
             else:
-            	if not fragment:
-            	    fragment = ''
-            	else:
-            	    fragment = unicode(fragment, 'utf-8')
+                if not fragment:
+                    fragment = ''
+                else:
+                    try:
+                        fragment = unicode(fragment, 'utf-8')
+                    except UnicodeDecodeError:
+                        fragment = 'some craziness going on here'
+                try:
+                    redirect_title = unicode(fragments_dict[fragment.encode('utf-8')].split('|', 1)[1], 'utf-8')
+                    redirect_id = fragments_dict[fragment.encode('utf-8')].split('|', 1)[0]
+                except KeyError:
+                    redirect_title = unicode(target_title, 'utf-8')
+                    redirect_id = '-1'
                 table_row = u'''| %d
 | {{dbr link|1=%s}}
 | [[%s]]
-|-''' % (i, unicode(fragments_dict[fragment.encode('utf-8')].split('|', 1)[1], 'utf-8')+u'#'+fragment, unicode(target_title, 'utf-8'))
-                if fragments_dict[fragment.encode('utf-8')].split('|', 1)[0] not in recently_edited_pages:
+|-''' % (i, redirect_title+u'#'+fragment, unicode(target_title, 'utf-8'))
+                if redirect_id not in recently_edited_pages:
                     output.append(table_row)
                     i += 1
     if count == len(fragments):
