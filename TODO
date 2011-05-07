@@ -1,12 +1,7 @@
 -- General
-* Switch to wikitools (almost) completely?
-** Pretty much done except "brokenredirects.py"
-* Automate R1 / G8 scripts?
-** Automation at "good enough" point with delete variable
-** For R1 script, don't print pages that don't exist (replag safety valve)
 * Add {{/header}}-type thing
 ** Make compatible with current data as of column on main page
-
+* http://en.wikipedia.org/wiki/Wikipedia:Database_reports/Redesign
 
 -- Report adjustments
 * Change crontab for polluted cats
