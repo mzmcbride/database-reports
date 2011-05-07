@@ -24,7 +24,7 @@ import settings
 report_title = settings.rootpage + 'WikiProject watchers'
  
 report_template = u'''
-List of WikiProjects by number of watchers of its main page; \
+List of WikiProjects by number of watchers of its main page, with at least 100 of them; \
 data as of <onlyinclude>%s</onlyinclude>.
  
 {| class="wikitable sortable plainlinks"
