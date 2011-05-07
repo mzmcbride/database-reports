@@ -46,6 +46,8 @@ cursor.execute('''
 /* project_watchers.py */
 SELECT wl_title AS project, COUNT(*) AS count
 FROM watchlist
+JOIN page ON page_namespace = wl_namespace
+  AND page_title = wl_title
 WHERE wl_title LIKE 'WikiProject\_%'
 AND wl_title NOT LIKE '%/%'
 AND wl_namespace = 4
