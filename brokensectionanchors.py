@@ -58,7 +58,7 @@ def make_best_guess(fragment, anchors):
 report_title = settings.rootpage + 'Broken section anchors'
 
 report_template = u'''\
-Broken section anchors (limited to the first 1000 entries); \
+Broken section anchors (limited to the first %s entries); \
 data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
@@ -80,7 +80,7 @@ reviewed_page_ids = f.read()
 reviewed_page_ids_set = set(reviewed_page_ids.split('\n'))
 f.close()
 
-conn = MySQLdb.connect(host=settings.host,
+conn = MySQLdb.connect(host=settings.host+'-user',
                        db=settings.dbname,
                        read_default_file='~/.my.cnf')
 cursor = conn.cursor()
@@ -101,16 +101,17 @@ cursor.execute('''
                AND rd_fragment NOT LIKE '%|%'
                AND rd.rd_title NOT LIKE '%|%'
                GROUP BY rd.rd_title
-               LIMIT 4500;
+               LIMIT 10000;
                ''')
 
 g = open('%sbroken-anchors-reviewed-page-ids.txt' % settings.path, 'a')
 
 i = 1
 output = []
+output_limit = 1000
 recently_edited_pages = []
 for row in cursor.fetchall():
-    if i > 1000:
+    if i > output_limit:
         break
     fragments_dict = {}
     fragments = set()
@@ -126,9 +127,11 @@ for row in cursor.fetchall():
         silly_page_id = str(page_id_and_title.split('|', 1)[0])
         if int(get_top_edit_timestamp(cursor, silly_page_id)) > int(settings.dumpdate+'000000'):
             recently_edited_pages.append(silly_page_id)
-    if page_id not in reviewed_page_ids_set:
+    if page_id not in reviewed_page_ids_set and page_id not in recently_edited_pages:
         real_anchors = get_article_section_anchors(target_title)
         for fragment in fragments:
+            if i > output_limit:
+                break
             if fragment in real_anchors:
                 count += 1
             else:
@@ -173,7 +176,7 @@ time_diff = datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)
 current_of = time_diff.strftime('%H:%M, %d %B %Y (UTC)')
 
 report = wikitools.Page(wiki, report_title)
-report_text = report_template % (current_of, '\n'.join(output))
+report_text = report_template % (current_of, output_limit, '\n'.join(output))
 report_text = report_text.encode('utf-8')
 report.edit(report_text, summary=settings.editsumm, bot=1)
 
