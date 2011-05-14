@@ -178,7 +178,7 @@ current_of = time_diff.strftime('%H:%M, %d %B %Y (UTC)')
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, output_limit, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary=settings.editsumm, bot=1, skipmd5=True)
 
 cursor.close()
 conn.close()
