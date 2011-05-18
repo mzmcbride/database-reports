@@ -42,7 +42,7 @@ LIMIT 1000;
 i = 1
 output = []
 for row in cursor.fetchall():
-    gil_to = u'[[:File:%s|%s]]' % unicode(row[0], 'utf-8')
+    gil_to = u'[[:File:%s|%s]]' % (unicode(row[0], 'utf-8'), unicode(row[0], 'utf-8'))
     count = row[1]
     table_row = u'''| %d
 | %s
