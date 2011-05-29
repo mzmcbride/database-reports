@@ -118,10 +118,10 @@ def get_template_redirects(cursor, template):
     template_redirects_list = r'(%s)' % '|'.join(template_redirects)
     return template_redirects_list
 
-report_title = settings.rootpage + 'Articles containing bullshit template parameters'
+report_title = settings.rootpage + 'Articles containing invalid template parameters'
 
 report_template = u'''\
-Articles containing bullshit template parameters (limited to approximately \
+Articles containing invalid template parameters (limited to approximately \
 the first 1000 entries); data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
