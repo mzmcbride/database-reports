@@ -12,7 +12,7 @@ report_template = u'''\
 User preferences statistics; data as of <onlyinclude>%s</onlyinclude>.
 
 == Gender ==
-{| class="wikitable sortable plainlinks" style="width:50%%; margin:auto;"
+{| class="wikitable sortable plainlinks" style="width:80%%;"
 |- style="white-space:nowrap;"
 ! Gender
 ! Users
@@ -21,16 +21,17 @@ User preferences statistics; data as of <onlyinclude>%s</onlyinclude>.
 |}
 
 == Language ==
-{| class="wikitable sortable plainlinks" style="width:50%%; margin:auto;"
+{| class="wikitable sortable plainlinks" style="width:80%%;"
 |- style="white-space:nowrap;"
-! Language
+! Language code
+! Language name
 ! Users
 |-
 %s
 |}
 
 == Gadgets ==
-{| class="wikitable sortable plainlinks" style="width:50%%; margin:auto;"
+{| class="wikitable sortable plainlinks" style="width:80%%;"
 |- style="white-space:nowrap;"
 ! Gadget
 ! Users
@@ -77,12 +78,14 @@ WHERE up_property = 'language'
 GROUP BY up_value;
 ''')
 for row in cursor.fetchall():
-    up_value = '{{#language:%s}}' % row[0]
+    lang_code = row[0]
+    lang_name = '{{#language:%s}}' % row[0]
     count = row[1]
     table_row = u'''\
 | %s
 | %s
-|-''' % (up_value, count)
+| %s
+|-''' % (lang_code, lang_name, count)
     language_output.append(table_row)
 
 gadgets_output = []
