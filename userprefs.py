@@ -30,6 +30,15 @@ User preferences statistics; data as of <onlyinclude>%s</onlyinclude>.
 %s
 |}
 
+== Skin ==
+{| class="wikitable sortable plainlinks" style="width:80%%;"
+|- style="white-space:nowrap;"
+! Skin
+! Users
+|-
+%s
+|}
+
 == Gadgets ==
 {| class="wikitable sortable plainlinks" style="width:80%%;"
 |- style="white-space:nowrap;"
@@ -88,6 +97,25 @@ for row in cursor.fetchall():
 |-''' % (lang_code, lang_name, count)
     language_output.append(table_row)
 
+skin_output = []
+cursor.execute('''
+/* userprefs.py SLOW_OK */
+SELECT
+  up_value,
+  COUNT(*)
+FROM user_properties_anonym
+WHERE up_property = 'skin'
+GROUP BY up_value;
+''')
+for row in cursor.fetchall():
+    up_value = '{{MediaWiki:skinname-%s}}' % row[0]
+    count = row[1]
+    table_row = u'''\
+| %s
+| %s
+|-''' % (up_value, count)
+    skin_output.append(table_row)
+
 gadgets_output = []
 cursor.execute('''
 /* userprefs.py SLOW_OK */
@@ -123,6 +151,7 @@ report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of,
                                  '\n'.join(gender_output),
                                  '\n'.join(language_output),
+                                 '\n'.join(skin_output),
                                  '\n'.join(gadgets_output))
 report_text = report_text.encode('utf-8')
 report.edit(report_text, summary=settings.editsumm, bot=1)
