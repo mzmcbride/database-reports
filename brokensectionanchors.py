@@ -34,7 +34,7 @@ def unescape_id(fragment):
 
 def get_top_edit_timestamp(cursor, page_id):
     cursor.execute('''
-                   /* brokenanchoranchors */
+                   /* brokensectionanchors.py */
                    SELECT
                      MAX(rev_timestamp)
                    FROM revision
