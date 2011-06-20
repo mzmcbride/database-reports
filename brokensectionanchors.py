@@ -97,8 +97,8 @@ cursor.execute('''
                JOIN u_mzmcbride_p.enwiki_redirects AS rd
                ON rd.rd_from = page_id
                WHERE page_namespace = 0
-               AND rd_fragment IS NOT NULL
-               AND rd_fragment NOT LIKE '%|%'
+               AND rd.rd_fragment IS NOT NULL
+               AND rd.rd_fragment NOT LIKE '%|%'
                AND rd.rd_title NOT LIKE '%|%'
                GROUP BY rd.rd_title
                LIMIT 10000;
