@@ -77,7 +77,7 @@ SELECT
   COUNT(*)
 FROM %s
 GROUP BY norm_name
-HAVING COUNT(*) > 2
+HAVING COUNT(*) > 1
 LIMIT 1000;
 ''' % input_database)
 for row in cursor.fetchall():
