@@ -31,7 +31,7 @@ wiki.login(settings.username, settings.password)
 input_file = open('/mnt/user-store/mzmcbride/%s-ns-6.txt' % settings.dbname, 'r')
 input_database = settings.dbname+'_file_names'
 
-conn = MySQLdb.connect(host=settings.host,
+conn = MySQLdb.connect(host='sql-s1',
                        db='u_mzmcbride_p',
                        read_default_file='~/.my.cnf')
 
