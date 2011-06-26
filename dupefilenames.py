@@ -26,6 +26,8 @@ wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
 # This should be changed sometime to dynamically generate the input.
+# Input file currently created by running:
+# $ sql enwiki_p < ~/queries/ns/ns_6.sql > /mnt/user-store/mzmcbride/enwiki_p-ns-6.txt
 input_file = open('/mnt/user-store/mzmcbride/%s-ns-6.txt' % settings.dbname, 'r')
 input_database = settings.dbname+'_file_names'
 
@@ -91,7 +93,7 @@ for row in cursor.fetchall():
 | %s
 | %s
 | %s
-|-''' % (i, norm_name, orig_name, count)
+|-''' % (i, norm_name, count, orig_name)
     output.append(table_row)
     i += 1
 
