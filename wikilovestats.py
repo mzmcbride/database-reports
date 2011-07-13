@@ -89,7 +89,7 @@ ORDER BY COUNT(wll_sender) DESC
 LIMIT 20;
 ''')
 for row in cursor.fetchall():
-    user_name = unicode(row[0], 'utf-8')
+    user_name = u'[[User:%s|%s]]' % (unicode(row[0], 'utf-8'), unicode(row[0], 'utf-8'))
     count = row[1]
     table_row = u'''\
 | %d
@@ -113,7 +113,7 @@ ORDER BY COUNT(wlil_image) DESC
 LIMIT 20;
 ''')
 for row in cursor.fetchall():
-    wlil_image = unicode(row[0], 'utf-8')
+    wlil_image = u'[[:%s|%s]]' % (unicode(row[0], 'utf-8'), unicode(row[0], 'utf-8').strip('File:'))
     count = row[1]
     table_row = u'''\
 | %d
@@ -126,7 +126,7 @@ for row in cursor.fetchall():
 cursor.execute('''
                SELECT
                  UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp)
-               FROM enwiki_p.recentchanges
+               FROM recentchanges
                ORDER BY rc_timestamp DESC
                LIMIT 1;
                ''')
