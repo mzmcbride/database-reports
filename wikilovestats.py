@@ -108,7 +108,7 @@ SELECT
   COUNT(wlil_image)
 FROM wikilove_image_log
 GROUP BY wlil_image
-HAVING COUNT(wlil_image) > 4
+HAVING COUNT(wlil_image) > 3
 ORDER BY COUNT(wlil_image) DESC
 LIMIT 20;
 ''')
