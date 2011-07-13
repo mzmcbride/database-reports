@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
 import datetime
-import string
 import MySQLdb
 import wikitools
 import settings
@@ -59,7 +58,7 @@ ORDER BY count DESC
 i = 1
 output = []
 for row in cursor.fetchall():
-    page_title = '[[Wikipedia:%s]]' % string.replace(unicode(row[0], 'utf-8'), '_', ' ')
+    page_title = '[[Wikipedia:%s]]' % unicode(row[0], 'utf-8').replace('_', ' ')
     edits = row[1]
     table_row = u'''| %d
 | %s
