@@ -41,6 +41,18 @@ data as of <onlyinclude>%s</onlyinclude>.
 |-
 %s
 |}
+
+== Uses per day ==
+{| class="wikitable sortable plainlinks"
+|- style="white-space:nowrap;"
+! Day
+! Uses
+|-
+%s
+|- class="sortbottom"
+! Total
+! style="text-align:left;" | %s
+|}
 '''
 
 wiki = wikitools.Wiki(settings.apiurl)
@@ -123,6 +135,27 @@ for row in cursor.fetchall():
     custom_images.append(table_row)
     i += 1
 
+days = []
+total = 0
+cursor.execute('''
+/* wikilovestats.py SLOW_OK */
+SELECT
+  DATE(CONCAT(YEAR(wll_timestamp),"-",MONTH(wll_timestamp),"-",DAY(wll_timestamp))) AS day,
+  COUNT(wll_timestamp) AS uses
+FROM wikilove_log
+GROUP BY day
+ORDER BY day ASC;
+''')
+for row in cursor.fetchall():
+    day = row[0]
+    uses = row[1]
+    total += int(uses)
+    table_row = u'''\
+| %s
+| %s
+|-''' % (day, uses)
+    days.append(table_row)
+
 cursor.execute('''
                SELECT
                  UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp)
@@ -138,7 +171,9 @@ report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of,
                                  '\n'.join(types),
                                  '\n'.join(senders),
-                                 '\n'.join(custom_images))
+                                 '\n'.join(custom_images),
+                                 '\n'.join(days),
+                                 total)
 report_text = report_text.encode('utf-8')
 report.edit(report_text, summary=settings.editsumm, bot=1)
 
