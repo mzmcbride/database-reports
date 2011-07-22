@@ -35,6 +35,8 @@ data as of <onlyinclude>%s</onlyinclude>.
 |-
 %s
 |}
+
+[[en:Wikipedia:Database reports/WikiProjects by changes]]
 '''
  
 wiki = wikitools.Wiki('http://pl.wikipedia.org/w/api.php')

@@ -35,6 +35,8 @@ data as of <onlyinclude>%s</onlyinclude>.
 |-
 %s
 |}
+
+[[pl:Wikipedysta:Svick/WikiProjects by changes]]
 '''
  
 wiki = wikitools.Wiki(settings.apiurl)
