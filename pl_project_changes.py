@@ -63,7 +63,7 @@ SELECT SUBSTRING_INDEX(page_title, '/', 1) AS project,
        )) AS no_bots_count,
        (SELECT page_is_redirect
        FROM page
-       WHERE page_namespace = 4
+       WHERE page_namespace = 102
        AND page_title = project) AS redirect
 FROM page
 WHERE page_namespace BETWEEN 102 AND 103
