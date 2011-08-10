@@ -23,7 +23,7 @@ import wikitools
 import settings
 
 try:
-    report_filename = sys.argv[1].strip('.py') + '.py'
+    report_filename = sys.argv[1].split('.')[0] + '.py'
 except IndexError:
     print 'No report file name provided; exiting.'
     sys.exit()
