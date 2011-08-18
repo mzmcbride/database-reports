@@ -23,10 +23,12 @@ import wikitools
 import settings
 
 try:
-    report_filename = sys.argv[1].strip('.py') + '.py'
+    report_file_no_extension = sys.argv[1].split('.')[0]
 except IndexError:
     print 'No report file name provided; exiting.'
     sys.exit()
+
+report_filename = report_file_no_extension + '.py'
 
 try:
     report_file = open(report_filename, 'r')
@@ -41,7 +43,7 @@ report_name = re.search('\'(.*)\'', report_source).group(1)
 configuration_title = settings.rootpage + report_name + '/Configuration'
 
 crontab = subprocess.Popen('crontab -l', stdout = subprocess.PIPE, shell = True).communicate()[0]
-crontab_line = re.search('^.*' + report_filename + '.*$', crontab, re.MULTILINE).group(0)
+crontab_line = re.search('^.* ' + report_file_no_extension + '.*$', crontab, re.MULTILINE).group(0)
 
 template = u'''
 == %s ==
