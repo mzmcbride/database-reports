@@ -43,7 +43,9 @@ data as of <onlyinclude>%s</onlyinclude>.
 wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
-conn = MySQLdb.connect(host='sql-s3', db='metawiki_p', read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host='metawiki-p.rrdb.toolserver.org',
+                       db='metawiki_p',
+                       read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* metarightschanges.py SLOW_OK */
