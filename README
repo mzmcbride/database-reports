@@ -1,0 +1,9 @@
+MediaWiki database reports, primarily written for the English Wikipedia:
+<https://en.wikipedia.org/wiki/Wikipedia:Database_reports>.
+
+Dependencies:
+* Python
+** MySQLdb module
+** wikitools module (<https://code.google.com/p/python-wikitools/>)
+
+License information is available in the LICENSE file.
