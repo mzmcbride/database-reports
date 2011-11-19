@@ -65,6 +65,7 @@ conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file
 cursor = conn.cursor()
 cursor.execute('''
 /* longest_discussions.py */
+/* SLOW_OK */
 SELECT 
 	(SELECT ns_name
   FROM toolserver.namespacename

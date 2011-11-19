@@ -43,6 +43,7 @@ conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file
 cursor = conn.cursor()
 cursor.execute('''
 /* project_watchers.py */
+/* SLOW_OK */
 SELECT wl_title AS project, COUNT(*) AS count
 FROM watchlist
 JOIN page ON page_namespace = wl_namespace

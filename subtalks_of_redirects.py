@@ -41,6 +41,7 @@ conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file
 cursor = conn.cursor()
 cursor.execute('''
 /* subtalks_of_redirects.py */
+/* SLOW_OK */
 select ns_name, sub.page_title
 from page sub
 join page parent

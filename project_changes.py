@@ -46,6 +46,7 @@ conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file
 cursor = conn.cursor()
 cursor.execute('''
 /* project_changes.py */
+/* SLOW_OK */
 SELECT SUBSTRING_INDEX(page_title, '/', 1) AS project,
        SUM((
          SELECT COUNT(*)
