@@ -1,19 +1,5 @@
-#!/usr/bin/env python2.5
-
-# Copyright 2009 bjweeks, MZMcBride
-
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#! /usr/bin/env python
+# Public domain; bjweeks, MZMcBride; 2012
 
 import datetime
 import MySQLdb
@@ -22,7 +8,7 @@ import settings
 
 report_title = settings.rootpage + 'Potential biographies of living people (2)'
 
-report_template = u'''
+report_template = u'''\
 Articles that are in a "XXXX births" category (greater than 1899) that are \
 not in [[:Category:Living people]], [[:Category:Possibly living people]], \
 or a "XXXX deaths" category (limited to the first 1000 entries); \
@@ -38,11 +24,81 @@ data as of <onlyinclude>%s</onlyinclude>.
 |}
 '''
 
+excluded_categories = ['Living_people',
+                       'Possibly_living_people',
+                       'Disappeared_people',
+                       'Missing_people',
+                       'Year_of_death_unknown',
+                       'Year_of_death_missing',
+                       '20th-century_deaths',
+                       '21st-century_deaths',
+                       '1900s_deaths',
+                       '2000s_deaths']
+
 wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
-conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=settings.host,
+                       db=settings.dbname,
+                       read_default_file='~/.my.cnf')
 cursor = conn.cursor()
+
+skip_page_ids = set()
+
+for cat in excluded_categories:
+    cursor.execute('''
+    /* potenshblps2.py SLOW_OK */
+    SELECT
+      cl_from
+    FROM categorylinks
+    WHERE cl_to = %s;
+    ''' , cat)
+    results = cursor.fetchall()
+    for row in results:
+        cl_from = row[0]
+        skip_page_ids.add(cl_from)
+
+for year in range(1900, int(datetime.datetime.utcnow().strftime('%Y'))+1):
+    cursor.execute('''
+    /* potenshblps2.py SLOW_OK */
+    SELECT
+      cl_from
+    FROM categorylinks
+    WHERE cl_to = '%s_deaths';
+    ''' % year)
+    results = cursor.fetchall()
+    for row in results:
+        cl_from = row[0]
+        skip_page_ids.add(cl_from)
+
+for year in range(1900, int(datetime.datetime.utcnow().strftime('%Y'))+1, 10):
+    cursor.execute('''
+    /* potenshblps2.py SLOW_OK */
+    SELECT
+      cl_from
+    FROM categorylinks
+    WHERE cl_to = '%ss_deaths';
+    ''' % year)
+    results = cursor.fetchall()
+    for row in results:
+        cl_from = row[0]
+        skip_page_ids.add(cl_from)
+
+target_page_ids = []
+for year in range(1900, int(datetime.datetime.utcnow().strftime('%Y'))+1):
+    cursor.execute('''
+    /* potenshblps2.py SLOW_OK */
+    SELECT
+      cl_from
+    FROM categorylinks
+    WHERE cl_to = '%s_births';
+    ''' % year)
+    results = cursor.fetchall()
+    for result in results:
+        cl_from = result[0]
+        if cl_from not in skip_page_ids:
+            target_page_ids.append(str(cl_from))
+
 cursor.execute('''
 /* potenshblps2.py SLOW_OK */
 SELECT
@@ -51,27 +107,12 @@ SELECT
 FROM page
 JOIN categorylinks
 ON cl_from = page_id
-WHERE page_namespace = 0
+WHERE page_id IN (%s)
+AND cl_to LIKE '%%_births'
+AND page_namespace = 0
 AND page_is_redirect = 0
-AND cl_to RLIKE '^[0-9]{4}_births$'
-AND NOT EXISTS (SELECT
-                  1
-                FROM categorylinks
-                WHERE cl_from = page_id
-                AND cl_to LIKE '%_deaths')
-AND NOT EXISTS (SELECT
-                  1
-                FROM categorylinks
-                WHERE cl_from = page_id
-                AND cl_to IN ('Living_people',
-                              'Possibly_living_people',
-                              'Disappeared_people',
-                              'Missing_people',
-                              'Year_of_death_unknown',
-                              'Year_of_death_missing'))
-ORDER BY cl_to DESC
-LIMIT 1000;
-''')
+ORDER BY cl_to DESC;
+''' % (','.join(target_page_ids)))
 
 i = 1
 output = []
@@ -82,13 +123,19 @@ for row in cursor.fetchall():
 | %s
 | %s
 |-''' % (i, page_title, birth_year)
-    if int(birth_year) > 1899:
-        output.append(table_row)
-        i += 1
+    output.append(table_row)
+    i += 1
 
-cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
+cursor.execute('''
+               SELECT
+                 UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp)
+               FROM recentchanges
+               ORDER BY rc_timestamp DESC
+               LIMIT 1;
+               ''')
 rep_lag = cursor.fetchone()[0]
-current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
+time_diff = datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)
+current_of = time_diff.strftime('%H:%M, %d %B %Y (UTC)')
 
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
