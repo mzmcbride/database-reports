@@ -35,6 +35,8 @@ excluded_categories = ['Living_people',
                        '1900s_deaths',
                        '2000s_deaths']
 
+current_year = int(datetime.datetime.utcnow().strftime('%Y'))
+
 wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
@@ -58,7 +60,7 @@ for cat in excluded_categories:
         cl_from = row[0]
         skip_page_ids.add(cl_from)
 
-for year in range(1900, int(datetime.datetime.utcnow().strftime('%Y'))+1):
+for year in range(1900, current_year+1):
     cursor.execute('''
     /* potenshblps2.py SLOW_OK */
     SELECT
@@ -71,7 +73,7 @@ for year in range(1900, int(datetime.datetime.utcnow().strftime('%Y'))+1):
         cl_from = row[0]
         skip_page_ids.add(cl_from)
 
-for year in range(1900, int(datetime.datetime.utcnow().strftime('%Y'))+1, 10):
+for year in range(1900, current_year+1, 10):
     cursor.execute('''
     /* potenshblps2.py SLOW_OK */
     SELECT
@@ -85,7 +87,7 @@ for year in range(1900, int(datetime.datetime.utcnow().strftime('%Y'))+1, 10):
         skip_page_ids.add(cl_from)
 
 target_page_ids = []
-for year in range(1900, int(datetime.datetime.utcnow().strftime('%Y'))+1):
+for year in range(1900, current_year+1):
     cursor.execute('''
     /* potenshblps2.py SLOW_OK */
     SELECT
