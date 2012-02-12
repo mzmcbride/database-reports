@@ -45,7 +45,7 @@ wiki.login(settings.username, settings.password)
 conn = MySQLdb.connect(host='plwiki-p.rrdb.toolserver.org', db='plwiki_p', read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
-/* project_changes.py */
+/* pl_project_changes.py */
 SELECT SUBSTRING_INDEX(page_title, '/', 1) AS project,
        SUM((
          SELECT COUNT(*)
