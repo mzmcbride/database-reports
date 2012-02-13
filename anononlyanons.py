@@ -1,28 +1,15 @@
-#!/usr/bin/env python2.5
-
-# Copyright 2009 bjweeks, MZMcBride
-
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#! /usr/bin/env python
+# Public domain; bjweeks, MZMcBride; 2012
 
 import datetime
 import MySQLdb
+import re
 import wikitools
 import settings
 
 report_title = settings.rootpage + 'Short user talk pages for IPs'
 
-report_template = u'''
+report_template = u'''\
 User talk pages of anonymous users where the only contributors to the page \
 are anonymous, the page is less than 50 bytes in length, and it contains no \
 templates (limited to the first 1000 entries); data as of <onlyinclude>%s</onlyinclude>.
@@ -40,8 +27,53 @@ templates (limited to the first 1000 entries); data as of <onlyinclude>%s</onlyi
 wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
-conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=settings.host,
+                       db=settings.dbname,
+                       read_default_file='~/.my.cnf')
 cursor = conn.cursor()
+
+pages = set()
+cursor.execute('''
+/* anononlyanons.py SLOW_OK */
+SELECT
+  page_id,
+  page_title
+FROM page
+WHERE page_namespace = 3
+AND page_len < 50;
+''')
+results = cursor.fetchall()
+for result in results:
+    page_id = result[0]
+    page_title = result[1]
+    if re.search(r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$', page_title):
+        pages.add(page_id)
+
+target_page_ids = []
+for page in pages:
+    cursor.execute('''
+    /* anononlyanons.py SLOW_OK */
+    SELECT
+      COUNT(*)
+    FROM revision
+    WHERE rev_page = %s
+    AND rev_user != 0;
+    ''' , page)
+    registered_user_contribs_count = cursor.fetchone()
+    if registered_user_contribs_count:
+        if int(registered_user_contribs_count[0]) == 0:
+            cursor.execute('''
+            /* anononlyanons.py SLOW_OK */
+            SELECT
+              COUNT(*)
+            FROM templatelinks
+            WHERE tl_from = %s;
+            ''' , page)
+            template_count = cursor.fetchone()
+            if template_count:
+                if int(template_count[0]) == 0:
+                    target_page_ids.append(str(page))
+
 cursor.execute('''
 /* anononlyanons.py SLOW_OK */
 SELECT DISTINCT
@@ -50,23 +82,10 @@ SELECT DISTINCT
   page_len
 FROM page
 JOIN toolserver.namespace
-ON dbname = %s
+ON dbname = '%s'
 AND page_namespace = ns_id
-LEFT JOIN templatelinks
-ON tl_from = page_id
-JOIN revision
-ON rev_page = page_id
-WHERE page_namespace = 3
-AND page_title RLIKE %s
-AND NOT EXISTS (SELECT
-                  1
-                FROM revision
-                WHERE rev_page = page_id
-                AND rev_user != 0)
-AND page_len < 50
-AND ISNULL(tl_from)
-LIMIT 1000;
-''' , (settings.dbname, r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'))
+WHERE page_id IN (%s);
+''' % (settings.dbname, ', '.join(target_page_ids)))
 
 i = 1
 output = []
@@ -82,9 +101,16 @@ for row in cursor.fetchall():
     output.append(table_row)
     i += 1
 
-cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
+cursor.execute('''
+               SELECT
+                 UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp)
+               FROM recentchanges
+               ORDER BY rc_timestamp DESC
+               LIMIT 1;
+               ''')
 rep_lag = cursor.fetchone()[0]
-current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
+time_diff = datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)
+current_of = time_diff.strftime('%H:%M, %d %B %Y (UTC)')
 
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
