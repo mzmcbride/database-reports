@@ -55,6 +55,7 @@ and sub.page_title like '%/%'
 and sub.page_is_redirect = 0
 and parent.page_is_redirect = 1
 and dbname = 'enwiki_p'
+and ns_type = 'primary'
 and not exists
   (select 1
    from pagelinks
