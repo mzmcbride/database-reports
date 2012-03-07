@@ -1,4 +1,5 @@
 #!/usr/bin/env python2.5
+# -*- coding: utf-8 -*-
  
 # Copyright 2009-2011 bjweeks, MZMcBride, svick
  
@@ -101,7 +102,7 @@ os.environ['TZ'] = 'Europe/Warsaw'
 
 cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
 rep_lag = cursor.fetchone()[0]
-current_of = (datetime.datetime.now() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (%Z)')
+current_of = (datetime.datetime.now() - datetime.timedelta(seconds=rep_lag)).strftime('%d %B %Y, %H:%M')
  
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
