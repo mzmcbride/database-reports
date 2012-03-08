@@ -23,7 +23,7 @@ import settings
 import locale
 import os
  
-report_title = 'User:Svick/WikiProjects by changes'
+report_title = 'Wikipedia:Statystyki aktywności wikiprojektów'
  
 report_template = u'''
 Liczby zmian dokonanych na stronach i podstronach poszczególnych wikiprojektów w ciągu ostatnich 365 dni. \
