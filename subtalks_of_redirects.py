@@ -23,7 +23,7 @@ import settings
 report_title = settings.rootpage + 'Talk subpages with redirect parent'
  
 report_template = u'''
-This page lists first 1000 talk subpages (excluding user talk subpages) whose parent talk page is a redirect. Data as of <onlyinclude>%s</onlyinclude>.
+This page lists first 1000 talk subpages (excluding user talk subpages and subpages of [[Wikipedia talk:Articles for creation]]) whose parent talk page is a redirect. Data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks"
 |-
@@ -52,9 +52,12 @@ join toolserver.namespacename
 where sub.page_namespace % 2 = 1
 and sub.page_namespace != 3
 and sub.page_title like '%/%'
+and not (sub.page_namespace = 5
+     and sub.page_title like 'Articles\_for\_creation/%')
 and sub.page_is_redirect = 0
 and parent.page_is_redirect = 1
 and dbname = 'enwiki_p'
+and ns_type = 'primary'
 and not exists
   (select 1
    from pagelinks

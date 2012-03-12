@@ -1,4 +1,5 @@
 #!/usr/bin/env python2.5
+# -*- coding: utf-8 -*-
  
 # Copyright 2009-2011 bjweeks, MZMcBride, svick
  
@@ -19,22 +20,26 @@ import datetime
 import MySQLdb
 import wikitools
 import settings
+import locale
+import os
  
-report_title = 'User:Svick/WikiProjects by changes'
+report_title = 'Wikipedia:Statystyki aktywności wikiprojektów'
  
 report_template = u'''
-List of WikiProjects by number of changes to all its pages in the last 365 days; \
-data as of <onlyinclude>%s</onlyinclude>.
+Liczby zmian dokonanych na stronach i podstronach poszczególnych wikiprojektów w ciągu ostatnich 365 dni. \
+Dane na dzień <onlyinclude>%s</onlyinclude>.
  
 {| class="wikitable sortable plainlinks"
 |-
-! No.
-! WikiProject
-! Edits
-! excl. bots
+! Lp.
+! Wikiprojekt
+! Edycje
+! Edycje (bez botów)
 |-
 %s
 |}
+
+[[Kategoria:Wikiprojekty]]
 
 [[en:Wikipedia:Database reports/WikiProjects by changes]]
 '''
@@ -77,28 +82,32 @@ ORDER BY count DESC
 i = 1
 output = []
 for row in cursor.fetchall():
-    page_title = '[[Wikiprojekt:%s]]' % unicode(row[0], 'utf-8').replace('_', ' ')
+    page_title = unicode(row[0], 'utf-8').replace('_', ' ')
+    page_link = '[[Wikiprojekt:%s|%s]]' % (page_title, page_title)
     edits = row[1]
     no_bots_edits = row[2]
     is_redirect = row[3]
     if is_redirect:
-        page_title = "''" + page_title + "''"
+        page_link = "''" + page_link + "''"
     table_row = u'''| %d
 | %s
 | %d
 | %d
-|-''' % (i, page_title, edits, no_bots_edits)
+|-''' % (i, page_link, edits, no_bots_edits)
     output.append(table_row)
     i += 1
  
+locale.setlocale(locale.LC_ALL, 'pl')
+os.environ['TZ'] = 'Europe/Warsaw'
+
 cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
 rep_lag = cursor.fetchone()[0]
-current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
+current_of = (datetime.datetime.now() - datetime.timedelta(seconds=rep_lag)).strftime('%d %B %Y, %H:%M')
  
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary='Aktualizacja', bot=1)
  
 cursor.close()
 conn.close()
