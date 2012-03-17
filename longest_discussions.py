@@ -67,12 +67,7 @@ cursor.execute('''
 /* longest_discussions.py */
 /* SLOW_OK */
 SELECT 
-	(SELECT ns_name
-  FROM toolserver.namespacename
-  WHERE page_namespace = ns_id
-  AND dbname = 'enwiki_p'
-  ORDER BY ns_type
-  LIMIT 1) AS ns_name,
+	'Talk' AS ns_name,
 	REPLACE(SUBSTRING_INDEX(page_title, '/', 1), '_', ' ') AS parent,
 	SUM(page_len) / 1024 / 1024 AS total_size
 FROM page
@@ -97,18 +92,16 @@ for row in cursor.fetchall():
 cursor.execute('''
 /* longest_discussions.py */
 /* SLOW_OK */
-SELECT 
-	(SELECT ns_name
-  FROM toolserver.namespacename
-  WHERE page_namespace = ns_id
-  AND dbname = 'enwiki_p'
-  ORDER BY ns_type
-  LIMIT 1) AS ns_name,
-	REPLACE(SUBSTRING_INDEX(page_title, '/', 1), '_', ' ') AS parent,
-	SUM(page_len) / 1024 / 1024 AS total_size
+SELECT
+  ns_name,
+  REPLACE(SUBSTRING_INDEX(page_title, '/', 1), '_', ' ') AS parent,
+  SUM(page_len) / 1024 / 1024 AS total_size
 FROM page
+JOIN toolserver.namespacename ON ns_id = page_namespace
 WHERE page_namespace MOD 2 = 1
 AND page_namespace != 1
+AND dbname = 'enwiki_p'
+AND ns_is_favorite = 1
 GROUP BY page_namespace, parent
 ORDER BY total_size DESC
 LIMIT 200
