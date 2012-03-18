@@ -33,8 +33,10 @@ Dane na dzień <onlyinclude>%s</onlyinclude>.
 |-
 ! Lp.
 ! Wikiprojekt
-! Edycje
-! Edycje (bez botów)
+! Edycje (z wyłączeniem stron dyskusji)
+! Edycje (z wyłączeniem stron dyskusji, bez botów)
+! Edycje (włącznie ze stronami dyskusji)
+! Edycje (włącznie ze stronami dyskusji, bez botów)
 |-
 %s
 |}
@@ -56,18 +58,38 @@ SELECT SUBSTRING_INDEX(page_title, '/', 1) AS project,
          SELECT COUNT(*)
          FROM revision
          WHERE page_id = rev_page
+         AND page_namespace = 102
          AND DATEDIFF(NOW(), rev_timestamp) <= 365
-       )) AS count,
+       )) AS main_count,
        SUM((
          SELECT COUNT(*)
          FROM revision
          WHERE page_id = rev_page
+         AND page_namespace = 103
+         AND DATEDIFF(NOW(), rev_timestamp) <= 365
+       )) AS talk_count,
+       SUM((
+         SELECT COUNT(*)
+         FROM revision
+         WHERE page_id = rev_page
+         AND page_namespace = 102
          AND DATEDIFF(NOW(), rev_timestamp) <= 365
          AND rev_user NOT IN
           (SELECT ug_user
           FROM user_groups
           WHERE ug_group = 'bot')
-       )) AS no_bots_count,
+       )) AS no_bots_main_count,
+       SUM((
+         SELECT COUNT(*)
+         FROM revision
+         WHERE page_id = rev_page
+         AND page_namespace = 103
+         AND DATEDIFF(NOW(), rev_timestamp) <= 365
+         AND rev_user NOT IN
+          (SELECT ug_user
+          FROM user_groups
+          WHERE ug_group = 'bot')
+       )) AS no_bots_talk_count,
        (SELECT page_is_redirect
        FROM page
        WHERE page_namespace = 102
@@ -84,16 +106,20 @@ output = []
 for row in cursor.fetchall():
     page_title = unicode(row[0], 'utf-8').replace('_', ' ')
     page_link = '[[Wikiprojekt:%s|%s]]' % (page_title, page_title)
-    edits = row[1]
-    no_bots_edits = row[2]
-    is_redirect = row[3]
+    main_edits = row[1]
+    talk_edits = row[2]
+    no_bots_main_edits = row[3]
+    no_bots_talk_edits = row[4]
+    is_redirect = row[5]
     if is_redirect:
         page_link = "''" + page_link + "''"
     table_row = u'''| %d
 | %s
 | %d
 | %d
-|-''' % (i, page_link, edits, no_bots_edits)
+| %d
+| %d
+|-''' % (i, page_link, main_edits, talk_edits, no_bots_main_edits, no_bots_talk_edits)
     output.append(table_row)
     i += 1
  
