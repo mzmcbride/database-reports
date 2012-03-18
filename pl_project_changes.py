@@ -34,8 +34,8 @@ Dane na dzień <onlyinclude>%s</onlyinclude>.
 ! Lp.
 ! Wikiprojekt
 ! Edycje (z wyłączeniem stron dyskusji)
-! Edycje (z wyłączeniem stron dyskusji, bez botów)
 ! Edycje (włącznie ze stronami dyskusji)
+! Edycje (z wyłączeniem stron dyskusji, bez botów)
 ! Edycje (włącznie ze stronami dyskusji, bez botów)
 |-
 %s
@@ -98,7 +98,7 @@ FROM page
 WHERE page_namespace BETWEEN 102 AND 103
 AND page_is_redirect = 0
 GROUP BY project
-ORDER BY count DESC
+ORDER BY main_count DESC
 ''')
  
 i = 1
