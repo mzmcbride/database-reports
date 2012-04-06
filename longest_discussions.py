@@ -81,6 +81,8 @@ i = 1
 article_talks = []
 for row in cursor.fetchall():
     page_title = '[[%s:%s]]' % (unicode(row[0], 'utf-8'), unicode(row[1], 'utf-8'))
+    if row[1] == '9':
+      page_title = page_title + ' <small>(including [[Special:PrefixIndex/Talk:9/11|all pages beginning with Talk:9/11]])</small>'
     size = row[2]
     table_row = u'''| %d
 | %s
