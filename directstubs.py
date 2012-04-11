@@ -1,20 +1,7 @@
-#!/usr/bin/env python2.5
+#! /usr/bin/env python
+# Public domain; MZMcBride; 2012
 
-# Copyright 2008 bjweeks, Multichil, MZMcBride
-
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+from __future__ import generators
 import datetime
 import math
 import MySQLdb
@@ -23,7 +10,7 @@ import settings
 
 report_title = settings.rootpage + 'Stubs included directly in stub categories/%i'
 
-report_template = u'''
+report_template = u'''\
 Stubs included directly in stub categories; data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable" style="width:100%%; margin:auto;"
@@ -39,51 +26,155 @@ rows_per_page = 800
 wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
-conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
+target_cat = 'Stub_categories'
+master_dict = {}
+
+def get_subcats(cursor, cat):
+    global master_dict
+    results = []
+    cursor.execute('''
+    /* recursecat.py */
+    SELECT
+      page_title
+    FROM page
+    JOIN categorylinks
+    ON cl_from = page_id
+    WHERE cl_to = %s
+    AND page_namespace = 14;
+    ''' , cat)
+    rows = cursor.fetchall()
+    for row in rows:
+        results.append(row[0])
+    try:
+        master_dict[cat] = results
+    except KeyError:
+        return False
+    return results
+
+def walk_tree(cursor, target_cat):
+    subcats = get_subcats(cursor, target_cat)
+    for subcat in subcats:
+        if subcat not in master_dict.keys():
+            for subsubcat in walk_tree(cursor, subcat):
+                yield subsubcat, subcats
+        else:
+            yield subcat, subcats
+
+def get_stub_template_redirects(cursor, template):
+    template_redirects = []
+    cursor.execute('''
+    /* recursecat.py */
+    SELECT
+      page_title
+    FROM page
+    JOIN redirect
+    ON rd_from = page_id
+    WHERE rd_title = %s
+    AND rd_namespace = 10
+    AND page_namespace = 10;
+    ''' , template)
+    for row in cursor.fetchall():
+        template_redirects.append(row[0])
+    return template_redirects
+
+def get_stub_templates_from_category(cursor, entry):
+    templates = []
+    cursor.execute('''
+    /* recursecat.py */
+    SELECT
+      page_title
+    FROM page
+    JOIN categorylinks
+    ON cl_from = page_id
+    WHERE page_namespace = 10
+    AND cl_to = %s;
+    ''' , entry)
+    for row in cursor.fetchall():
+        template_name = row[0]
+        templates.append(template_name)
+        for template_redirect in get_stub_template_redirects(cursor, template_name):
+            templates.append(template_redirect)
+    return templates
+
+def get_articles_from_category(cursor, entry):
+    articles = []
+    cursor.execute('''
+    /* recursecat.py */
+    SELECT
+      page_title
+    FROM page
+    JOIN categorylinks
+    ON cl_from = page_id
+    WHERE page_namespace = 0
+    AND page_is_redirect = 0
+    AND cl_to = %s;
+    ''' , entry)
+    for row in cursor.fetchall():
+        articles.append(row[0])
+    if articles:
+        return articles
+    return False
+
+def get_stub_templates_from_article(cursor, article):
+    stub_templates_from_article = []
+    cursor.execute('''
+    /* recursecat.py */
+    SELECT
+      tl_title
+    FROM page
+    JOIN templatelinks
+    ON tl_from = page_id
+    WHERE page_namespace = 0
+    AND page_title = %s;
+    ''' , article)
+    for row in cursor.fetchall():
+        if row[0].endswith('-stub'):
+            stub_templates_from_article.append(row[0])
+    return stub_templates_from_article
+
+conn = MySQLdb.connect(host=settings.host,
+                       db=settings.dbname,
+                       read_default_file='~/.my.cnf')
 cursor = conn.cursor()
-cursor.execute('''
-/* directstubs.py SLOW_OK */
-SELECT DISTINCT
-  page_title
-FROM page AS pgtmp
-JOIN templatelinks
-ON pgtmp.page_id = tl_from
-JOIN categorylinks
-ON pgtmp.page_id = cl_from
-WHERE page_namespace = 0
-AND page_is_redirect = 0
-AND NOT EXISTS (SELECT
-                  1
-                FROM templatelinks
-                WHERE pgtmp.page_id = tl_from
-                AND tl_namespace = 10
-                AND tl_title LIKE '%stub')
-AND NOT EXISTS (SELECT
-                  1
-                FROM templatelinks
-                WHERE pgtmp.page_id = tl_from
-                AND tl_namespace = 4
-                AND tl_title = 'Contributor_copyright_investigations/Darius_Dhlomo/Notice')
-AND EXISTS (SELECT
-              1
-            FROM categorylinks
-            WHERE pgtmp.page_id = cl_from
-            AND cl_to LIKE '%stubs');
-''')
+
+for hello in walk_tree(cursor, target_cat):
+    # Surely there's a better way to do this
+    here = 'silliness'
+
+all_cats_from_target_cat = set()
+for k in master_dict.keys():
+    all_cats_from_target_cat.add(k)
 
 i = 1
 output = []
-for row in cursor.fetchall():
-    page_title = u'[[%s]]' % unicode(row[0], 'utf-8')
-    table_row = u'''|-
+for entry in all_cats_from_target_cat:
+    category_stub_templates = get_stub_templates_from_category(cursor, entry)
+    category_articles = get_articles_from_category(cursor, entry)
+    if category_articles:
+        for member in category_articles:
+            found = False
+            stub_templates_in_article = get_stub_templates_from_article(cursor, member)
+            for stub_template in stub_templates_in_article:
+                if stub_template in category_stub_templates:
+                    found = True
+            if not found:
+                page_title = u'[[%s]]' % unicode(member, 'utf-8')
+                table_row = u'''|-
 | %d
 | %s''' % (i, page_title)
-    output.append(table_row)
-    i += 1
+                output.append(table_row)
+                i += 1
 
-cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
+cursor.execute('''
+               SELECT
+                 UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp)
+               FROM recentchanges
+               ORDER BY rc_timestamp DESC
+               LIMIT 1;
+               ''')
 rep_lag = cursor.fetchone()[0]
-current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
+time_diff = datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)
+current_of = time_diff.strftime('%H:%M, %d %B %Y (UTC)')
 
 end = rows_per_page
 page = 1
