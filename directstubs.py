@@ -33,7 +33,7 @@ def get_subcats(cursor, cat):
     global master_dict
     results = []
     cursor.execute('''
-    /* recursecat.py */
+    /* directstubs.py */
     SELECT
       page_title
     FROM page
@@ -63,7 +63,7 @@ def walk_tree(cursor, target_cat):
 def get_stub_template_redirects(cursor, template):
     template_redirects = []
     cursor.execute('''
-    /* recursecat.py */
+    /* directstubs.py */
     SELECT
       page_title
     FROM page
@@ -80,7 +80,7 @@ def get_stub_template_redirects(cursor, template):
 def get_stub_templates_from_category(cursor, entry):
     templates = []
     cursor.execute('''
-    /* recursecat.py */
+    /* directstubs.py */
     SELECT
       page_title
     FROM page
@@ -99,7 +99,7 @@ def get_stub_templates_from_category(cursor, entry):
 def get_articles_from_category(cursor, entry):
     articles = []
     cursor.execute('''
-    /* recursecat.py */
+    /* directstubs.py */
     SELECT
       page_title
     FROM page
@@ -118,7 +118,7 @@ def get_articles_from_category(cursor, entry):
 def get_stub_templates_from_article(cursor, article):
     stub_templates_from_article = []
     cursor.execute('''
-    /* recursecat.py */
+    /* directstubs.py */
     SELECT
       tl_title
     FROM page
