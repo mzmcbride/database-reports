@@ -81,7 +81,7 @@ def get_page_title_from_id(cursor, id):
         page_title = unicode(row[2], 'utf-8')
         if page_namespace in (6, 14):
             full_page_title = u'[[:'+ns_name+u':'+page_title+u']]'
-        elif page_namespace in (0):
+        elif page_namespace == 0:
             full_page_title = u'[['+page_title+u']]'
         else:
             full_page_title = u'[['+ns_name+u':'+page_title+u']]'
