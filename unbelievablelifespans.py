@@ -14,7 +14,7 @@ Unbelievable life spans; data as of <onlyinclude>%s</onlyinclude>.
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
 ! No.
-! Biography
+! Page
 ! Birth year
 ! Death year
 ! Life span
@@ -66,13 +66,26 @@ def get_page_title_from_id(cursor, id):
     cursor.execute('''
     /* unbelievablelifespans.py SLOW_OK */
     SELECT
+      page_namespace,
+      ns_name,
       page_title
     FROM page
+    JOIN toolserver.namespace
+    ON dbname = %s
+    AND page_namespace = ns_id
     WHERE page_id = %s;
-    ''' , id)
+    ''' , (settings.dbname, id))
     for row in cursor.fetchall():
-        page_title = unicode(row[0], 'utf-8')
-    return page_title
+        page_namespace = int(row[0])
+        ns_name = unicode(row[1], 'utf-8')
+        page_title = unicode(row[2], 'utf-8')
+        if page_namespace in (6, 14):
+            full_page_title = u'[[:'+ns_name+u':'+page_title+u']]'
+        elif page_namespace in (0):
+            full_page_title = u'[['+page_title+u']]'
+        else:
+            full_page_title = u'[['+ns_name+u':'+page_title+u']]'
+    return full_page_title
     
 i = 1
 output = []
@@ -84,7 +97,7 @@ for k,v in birth_years.iteritems():
     except KeyError:
         continue
     if (birth_year > death_year) or (death_year-birth_year > 115):
-        page_title = u'[['+get_page_title_from_id(cursor, page_id)+u']]'
+        page_title = get_page_title_from_id(cursor, page_id)
         table_row = u'''\
 | %d
 | %s
