@@ -96,7 +96,7 @@ for k,v in birth_years.iteritems():
         death_year = death_years[page_id]
     except KeyError:
         continue
-    if (birth_year > death_year) or (death_year-birth_year > 115):
+    if (birth_year > death_year) or (death_year-birth_year > 122):
         page_title = get_page_title_from_id(cursor, page_id)
         table_row = u'''\
 | %d
