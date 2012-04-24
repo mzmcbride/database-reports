@@ -62,6 +62,19 @@ for year in range(1, current_year+1):
         cl_from = int(result[0])
         death_years[cl_from] = year
 
+known_oldies = []
+cursor.execute('''
+/* unbelievablelifespans.py SLOW_OK */
+SELECT
+  cl_from
+FROM categorylinks
+WHERE cl_to IN ('Longevity_traditions', 'Longevity_claims');
+''')
+results = cursor.fetchall()
+for result in results:
+    cl_from = int(result[0])
+    known_oldies.append(cl_from)
+
 def get_page_title_from_id(cursor, id):
     cursor.execute('''
     /* unbelievablelifespans.py SLOW_OK */
@@ -96,7 +109,9 @@ for k,v in birth_years.iteritems():
         death_year = death_years[page_id]
     except KeyError:
         continue
-    if (birth_year > death_year) or (death_year-birth_year > 122):
+    if (((birth_year > death_year) or 
+        (death_year-birth_year > 122)) and
+        page_id not in known_oldies):
         page_title = get_page_title_from_id(cursor, page_id)
         table_row = u'''\
 | %d
