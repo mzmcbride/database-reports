@@ -17,6 +17,7 @@ Non-free files missing a [[WP:FUR|fair use rationale]] (limited to the first \
 |- style="white-space:nowrap;"
 ! No.
 ! File
+! Length
 |-
 %s
 |}
@@ -178,23 +179,31 @@ i = 1
 output = []
 g = open('%snonfree-reviewed-page-ids.txt' % settings.path, 'a')
 for id in pages_to_check:
-    if i > 2000:
+    if i > 10:
         break
     cursor.execute('''
     /* nonfreemissingrat.py SLOW_OK */
     SELECT
-      page_title
+      page_title,
+      page_len
     FROM page
     WHERE page_id = %s;
     ''' , id)
-    page_title = cursor.fetchone()[0]
+    data = cursor.fetchall()
+    if not data:
+        continue
+    for d in data:
+        page_title = d[0]
+        page_len = d[1]
     page = wikitools.Page(wiki, 'File:%s' % page_title, followRedir=False)
     page_text = page.getWikiText()
-    if page.exists and not find_fair_use_strings.search(page_text):
+    if not find_fair_use_strings.search(page_text):
+        page_title = unicode(page_title, 'utf-8')
         table_row = u'''\
 | %d
 | [[:File:%s|%s]]
-|-''' % (i, page_title, page_title)
+| %s
+|-''' % (i, page_title, page_title, page_len)
         output.append(table_row)
         i += 1
     else:
