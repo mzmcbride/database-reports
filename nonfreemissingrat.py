@@ -179,7 +179,7 @@ i = 1
 output = []
 g = open('%snonfree-reviewed-page-ids.txt' % settings.path, 'a')
 for id in pages_to_check:
-    if i > 10:
+    if i > 2000:
         break
     cursor.execute('''
     /* nonfreemissingrat.py SLOW_OK */
