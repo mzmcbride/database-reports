@@ -17,6 +17,7 @@ Stubs included directly in stub categories; data as of <onlyinclude>%s</onlyincl
 |- style="white-space:nowrap;"
 ! No.
 ! Article
+! Category
 %s
 |}
 '''
@@ -148,6 +149,8 @@ for k in master_dict.keys():
 i = 1
 output = []
 for entry in all_cats_from_target_cat:
+    formatted_entry = u'[[:Category:%s|%s]]' % (unicode(entry, 'utf-8'),
+                                                unicode(entry, 'utf-8'))
     category_stub_templates = get_stub_templates_from_category(cursor, entry)
     category_articles = get_articles_from_category(cursor, entry)
     if category_articles:
@@ -159,9 +162,11 @@ for entry in all_cats_from_target_cat:
                     found = True
             if not found:
                 page_title = u'[[%s]]' % unicode(member, 'utf-8')
-                table_row = u'''|-
+                table_row = u'''\
+|-
 | %d
-| %s''' % (i, page_title)
+| %s
+| %s''' % (i, page_title, formatted_entry)
                 output.append(table_row)
                 i += 1
 
