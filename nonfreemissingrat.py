@@ -18,6 +18,7 @@ Non-free files missing a [[WP:FUR|fair use rationale]] (limited to the first \
 ! No.
 ! File
 ! Length
+! Uploader
 |-
 %s
 |}
@@ -192,6 +193,20 @@ for id in pages_to_check:
     data = cursor.fetchall()
     if not data:
         continue
+    cursor.execute('''
+    /* nonfreemissingrat.py SLOW_OK */
+    SELECT
+      img_user_text
+    FROM image
+    JOIN page
+    ON img_name = page_title
+    AND page_namespace = 6
+    WHERE page_id = %s
+    ORDER BY img_timestamp ASC
+    LIMIT 1;
+    ''' , id)
+    img_user_text = u'[[User:%s|%s]]' % (unicode(cursor.fetchone()[0], 'utf-8'),
+                                         unicode(cursor.fetchone()[0], 'utf-8'))
     for d in data:
         page_title = d[0]
         page_len = d[1]
@@ -203,7 +218,8 @@ for id in pages_to_check:
 | %d
 | [[:File:%s|%s]]
 | %s
-|-''' % (i, page_title, page_title, page_len)
+| %s
+|-''' % (i, page_title, page_title, page_len, img_user_text)
         output.append(table_row)
         i += 1
     else:
