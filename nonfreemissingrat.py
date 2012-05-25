@@ -205,8 +205,10 @@ for id in pages_to_check:
     ORDER BY img_timestamp ASC
     LIMIT 1;
     ''' , id)
-    img_user_text = u'[[User:%s|%s]]' % (unicode(cursor.fetchone()[0], 'utf-8'),
-                                         unicode(cursor.fetchone()[0], 'utf-8'))
+    record = cursor.fetchone()
+    if record:
+        img_user_text = u'[[User:%s|%s]]' % (unicode(record[0], 'utf-8'),
+                                             unicode(record[0], 'utf-8'))
     for d in data:
         page_title = d[0]
         page_len = d[1]
