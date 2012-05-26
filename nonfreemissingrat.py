@@ -213,7 +213,10 @@ for id in pages_to_check:
         page_title = d[0]
         page_len = d[1]
     page = wikitools.Page(wiki, 'File:%s' % page_title, followRedir=False)
-    page_text = page.getWikiText()
+    try:
+        page_text = page.getWikiText()
+    except wikitools.page.NoPage:
+        continue
     if not find_fair_use_strings.search(page_text):
         page_title = unicode(page_title, 'utf-8')
         table_row = u'''\
