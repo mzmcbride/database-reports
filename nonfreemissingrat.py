@@ -131,7 +131,7 @@ for result in copyright_templates:
     ''' , template)
     rows = cursor.fetchall()
     for row in rows:
-        page_id = row[0]
+        page_id = int(row[0])
         files_using_fair_use_copyright_templates.add(page_id)
 
 cursor.execute('''
@@ -162,14 +162,15 @@ for result in fair_use_templates:
     ''' , template)
     rows = cursor.fetchall()
     for row in rows:
-        page_id = row[0]
+        page_id = int(row[0])
         files_using_fair_use_templates.add(page_id)
 
 reviewed_page_ids = set()
 f = open('%snonfree-reviewed-page-ids.txt' % settings.path, 'r')
 file_contents = f.read()
 for line in file_contents.split('\n'):
-    reviewed_page_ids.add(line)
+    if line:
+        reviewed_page_ids.add(int(line))
 f.close()
 
 pages_to_check = (files_using_fair_use_copyright_templates -
