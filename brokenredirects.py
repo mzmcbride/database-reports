@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.5
 
-# Copyright 2008 bjweeks, MZMcBride, SQL
+# Copyright 2008-2012 bjweeks, MZMcBride, SQL, Legoktm
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,10 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
 import datetime
-import re
-import time
-import MySQLdb
+import oursql
 import wikitools
 import settings
 
@@ -38,7 +37,7 @@ Broken redirects; data as of <onlyinclude>%s</onlyinclude>.
 wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
-conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
+conn = oursql.connect(host=settings.host, db=settings.dbname, read_default_file=os.path.expanduser('~/.my.cnf'))
 cursor = conn.cursor()
 cursor.execute('''
 /* brokenredirects.py SLOW_OK */
@@ -51,14 +50,14 @@ JOIN page p1
 ON rd.rd_from = p1.page_id
 JOIN toolserver.namespace
 ON p1.page_namespace = ns_id
-AND dbname = %s
+AND dbname = ?
 LEFT JOIN page AS p2
 ON rd_namespace = p2.page_namespace
 AND rd_title = p2.page_title
 WHERE rd_namespace >= 0
 AND p2.page_namespace IS NULL
 ORDER BY p1.page_namespace ASC;
-''' , settings.dbname)
+''' , (settings.dbname,))
 
 i = 1
 output = []
