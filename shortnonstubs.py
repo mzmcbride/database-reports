@@ -32,10 +32,8 @@ conn = oursql.connect(host=settings.host, db=settings.dbname, read_default_file=
 cursor = conn.cursor()
 cursor.execute('''
 /* shortnonstubs.py SLOW_OK */
-SELECT
-  page_title,
-  page_len,
-FROM enwiki_p.page
+SELECT  page_title,  page_len
+FROM page
 LEFT OUTER JOIN enwiki_p.categorylinks cc ON cl_from = page_id AND ( cl_to LIKE '%_stubs'
   OR cl_to IN ( 'All_disambiguation_pages', 'All_set_index_articles', 'Redirects_to_Wiktionary', 'Wikipedia_soft_redirects' ) )
 WHERE page_namespace = 0
