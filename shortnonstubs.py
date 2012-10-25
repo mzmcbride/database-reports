@@ -11,9 +11,9 @@ import oursql
 import wikitools
 import settings
 
-report_title = settings.rootpage + 'Short non-stubs'
+report_title = settings.rootpage + 'Untagged stubs'
 report_template = u'''
-Short non-stubs (limited to the first 800 results); data as of <onlyinclude>%s</onlyinclude>.
+Untagged stubs (limited to the first 800 results); data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
