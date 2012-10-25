@@ -1,11 +1,8 @@
 #!/usr/bin/env python
-
-# Public Domain, 2012 Legoktm
+# Public domain; 2012; Legoktm
 # Query written by Topbanana
 
-
 import os
-import math
 import datetime
 import oursql
 import wikitools
@@ -27,11 +24,15 @@ Untagged stubs (limited to the first 800 results); data as of <onlyinclude>%s</o
 wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
-conn = oursql.connect(host=settings.host, db=settings.dbname, read_default_file=os.path.expanduser('~/.my.cnf'))
+conn = oursql.connect(host=settings.host,
+                      db=settings.dbname,
+                      read_default_file=os.path.expanduser('~/.my.cnf'))
 cursor = conn.cursor()
 cursor.execute('''
 /* shortnonstubs.py SLOW_OK */
-SELECT  page_title,  page_len
+SELECT
+  page_title,
+  page_len
 FROM page
 LEFT OUTER JOIN enwiki_p.categorylinks cc ON cl_from = page_id AND ( cl_to LIKE '%_stubs'
   OR cl_to IN ( 'All_disambiguation_pages', 'All_set_index_articles', 'Redirects_to_Wiktionary', 'Wikipedia_soft_redirects' ) )
@@ -41,22 +42,32 @@ AND page_is_redirect = 0
 AND cl_from IS NULL
 AND  page_len < 1500
 ORDER BY page_len ASC
-LIMIT 800;''' , (settings.dbname,))
+LIMIT 800;
+''')
+
 i = 1
 output = []
 for row in cursor.fetchall():
     page_title = u'%s' % unicode(row[0], 'utf-8')
     page_len = u'%s' % unicode(row[1], 'utf-8')
-    table_row = u"""|-
+    table_row = u"""\
+|-
 | %d
 | [[%s]]
 | %s""" % (i, page_title, page_len)
     output.append(table_row)
     i+=1
 
-cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
+cursor.execute('''
+               SELECT
+                 UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp)
+               FROM recentchanges
+               ORDER BY rc_timestamp DESC
+               LIMIT 1;
+               ''')
 rep_lag = cursor.fetchone()[0]
-current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
+time_diff = datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)
+current_of = time_diff.strftime('%H:%M, %d %B %Y (UTC)')
 
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
