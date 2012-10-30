@@ -1,6 +1,5 @@
-#!/usr/bin/env python
-# Public domain; 2012; Legoktm
-# Query written by Topbanana
+#! /usr/bin/env python
+# Public domain; Topbanana, Legoktm, MZMcBride; 2012
 
 import os
 import datetime
@@ -9,8 +8,9 @@ import wikitools
 import settings
 
 report_title = settings.rootpage + 'Untagged stubs'
-report_template = u'''
-Untagged stubs (limited to the first 800 results); data as of <onlyinclude>%s</onlyinclude>.
+report_template = u'''\
+Untagged stubs (limited to the first 1000 entries); \
+data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
@@ -29,34 +29,60 @@ conn = oursql.connect(host=settings.host,
                       read_default_file=os.path.expanduser('~/.my.cnf'))
 cursor = conn.cursor()
 cursor.execute('''
-/* shortnonstubs.py SLOW_OK */
+/* untaggedstubs.py SLOW_OK */
 SELECT
+  page_id,
   page_title,
   page_len
 FROM page
-LEFT OUTER JOIN enwiki_p.categorylinks cc ON cl_from = page_id AND ( cl_to LIKE '%_stubs'
-  OR cl_to IN ( 'All_disambiguation_pages', 'All_set_index_articles', 'Redirects_to_Wiktionary', 'Wikipedia_soft_redirects' ) )
+LEFT JOIN categorylinks
+ON cl_from = page_id
+AND cl_to LIKE '%_stubs'
 WHERE page_namespace = 0
-AND  page_title NOT LIKE 'List_of_%'
 AND page_is_redirect = 0
 AND cl_from IS NULL
-AND  page_len < 1500
-ORDER BY page_len ASC
-LIMIT 800;
+AND page_len < 1500;
 ''')
+
+non_stubs = cursor.fetchall()
+
+cursor.execute('''
+/* untaggedstubs.py SLOW_OK */
+SELECT
+  page_id
+FROM page
+JOIN categorylinks
+ON cl_from = page_id
+WHERE page_namespace = 0
+AND cl_to IN ('All_disambiguation_pages',
+              'All_set_index_articles',
+              'Redirects_to_Wiktionary',
+              'Wikipedia_soft_redirects');
+''')
+
+known_shorties = []
+for row in cursor.fetchall():
+    page_id = int(row[0])
+    known_shorties.append(page_id)
 
 i = 1
 output = []
-for row in cursor.fetchall():
-    page_title = u'%s' % unicode(row[0], 'utf-8')
-    page_len = u'%s' % unicode(row[1], 'utf-8')
+for row in non_stubs:
+    if i > 1000:
+        break
+    page_id = int(row[0])
+    page_title = u'%s' % unicode(row[1], 'utf-8')
+    page_len = row[2]
+    if (page_title.startswith('List_of_') or
+        page_id in known_shorties):
+        continue
     table_row = u"""\
 |-
 | %d
 | [[%s]]
 | %s""" % (i, page_title, page_len)
     output.append(table_row)
-    i+=1
+    i += 1
 
 cursor.execute('''
                SELECT
