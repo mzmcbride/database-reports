@@ -96,7 +96,7 @@ for title in all_category_titles:
             ''' , title)
             main_result = cursor.fetchone()
             if main_result:
-                cl_to = u'{{dbr link|1=Category:%s}}' % unicode(title, 'utf-8')
+                cl_to = u'{{dbr link|1=%s}}' % unicode(title, 'utf-8')
                 table_row = u'''\
 | %d
 | %s
