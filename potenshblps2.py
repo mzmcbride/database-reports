@@ -29,11 +29,14 @@ excluded_categories = ['Living_people',
                        'Disappeared_people',
                        'Missing_people',
                        'Year_of_death_unknown',
+                       'Date_of_death_unknown',
                        'Year_of_death_missing',
+                       'Date_of_death_missing',
                        '20th-century_deaths',
                        '21st-century_deaths',
                        '1900s_deaths',
-                       '2000s_deaths']
+                       '2000s_deaths',
+                       'People_declared_dead_in_absentia']
 
 current_year = int(datetime.datetime.utcnow().strftime('%Y'))
 
