@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Public domain; MZMcBride; 2012
+# Public domain; MZMcBride; 2013
 
 import datetime
 import re
