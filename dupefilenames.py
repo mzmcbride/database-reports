@@ -66,7 +66,7 @@ for row in cursor.fetchall():
 cursor.execute('''
                SELECT
                  UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp)
-               FROM enwiki_p.recentchanges
+               FROM recentchanges
                ORDER BY rc_timestamp DESC
                LIMIT 1;
                ''')
