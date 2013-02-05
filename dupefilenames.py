@@ -9,7 +9,8 @@ import settings
 report_title = settings.rootpage + 'Largely duplicative file names'
 
 report_template = u'''\
-Largely duplicative file names; data as of <onlyinclude>%s</onlyinclude>.
+Largely duplicative file names (limited to the first 1000 entries); \
+data as of <onlyinclude>%s</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:80%%;"
 |- style="white-space:nowrap;"
@@ -25,7 +26,10 @@ Largely duplicative file names; data as of <onlyinclude>%s</onlyinclude>.
 wiki = wikitools.Wiki(settings.apiurl)
 wiki.login(settings.username, settings.password)
 
-conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf', charset='utf8')
+conn = MySQLdb.connect(host=settings.host,
+                       db=settings.dbname,
+                       read_default_file='~/.my.cnf',
+                       charset='utf8')
 
 output = []
 i = 1
@@ -76,6 +80,4 @@ report_text = report_text.encode('utf-8')
 report.edit(report_text, summary=settings.editsumm, bot=1)
 
 cursor.close()
-conn.commit()
-
 conn.close()
