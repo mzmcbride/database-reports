@@ -1,0 +1,131 @@
+# INSTRUCTIONS
+# MIN HOUR DAYMONTH MONTH DAYWEEK
+
+# ARTICLES
+0 19 6 * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/deletedfilesinarticles.py > /dev/null
+50 2 * * 6 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/bullshitparams.py > /dev/null
+12 0 * * 6 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/linkedemailsinarticles.py > /dev/null
+0 12 * * 5 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/userlinksinarticles.py > /dev/null
+#0 12 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/coordoverlap.py > /dev/null
+0 12 6 * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/redlinkedfilesinarticles.py > /dev/null
+0 19 15 * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/tickersinleads.py > /dev/null
+30 21 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/linkedmisspellings.py > /dev/null
+30 19 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/unbelievablelifespans.py > /dev/null
+
+# BIOGRAPHIES OF DEAD PEOPLE
+30 0 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/potenshbdps1.py > /dev/null
+35 0 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/potenshbdps2.py > /dev/null
+40 0 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/potenshbdps3.py > /dev/null
+
+# BIOGRAPHIES OF LIVING PEOPLE
+0 2 * * 5 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/unsourcedblps.py > /dev/null
+0 3 * * 5 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/stickyprodblps.py > /dev/null
+45 0 * * 5 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/potenshblps1.py > /dev/null
+50 0 * * 5 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/potenshblps2.py > /dev/null
+55 0 * * 5 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/potenshblps3.py > /dev/null
+10 1 * * 5 PYTHONPATH=$HOME/scripts nice -n 15 python $HOME/scripts/database-reports/potenshblps4.py > /dev/null
+0 1 * * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/shortestbios.py > /dev/null
+15 8 * * 2 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/uncatunrefblps.py > /dev/null
+20 8 * * 2 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/untaggedunrefblps.py > /dev/null
+20 8 * * 2 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/untaggedblps.py > /dev/null
+
+# BLOCKS
+0 0 * * 2 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/indefips.py > /dev/null
+5 0 * * 2 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/rangeblocks.py > /dev/null
+0 12 8 * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/excessiveips.py > /dev/null
+5 12 8 * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/excessiveusers.py > /dev/null
+
+# CATEGORIES
+0 1 * * 0 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/redlinkedcatsincats.py > /dev/null
+0 12 * * 5 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/deletedredlinkedcats.py > /dev/null
+0 1 * * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/emptycats.py > /dev/null
+0 2 * * 6 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/pollcats.py > /dev/null
+0 22 * * 3 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/linkedredlinkedcats.py > /dev/null
+0 6 * * 3 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/selfcatcats.py > /dev/null
+0 2 * * 2 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/polltemps.py > /dev/null
+0 0 * * 1 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/uncatcats.py > /dev/null
+0 0 2 * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/usercats.py > /dev/null
+
+# FILES
+10 10 * * 6 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/templatelessfilepages.py > /dev/null
+40 10 * * 6 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/catandtemplessfilepages.py > /dev/null
+20 12 * * 6 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/filelessfilepages.py > /dev/null
+20 13 * * 6 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/conflictedfiles.py > /dev/null
+20 15 * * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/dupefilenames.py > /dev/null
+20 12 * * 6 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/largenonfree.py > /dev/null
+0 12 * * 6 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/mistaggedfiles.py > /dev/null
+20 18 * * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/nonfreemissingrat.py > /dev/null
+5 12 * * 6 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/templatesnonfree.py > /dev/null
+10 12 * * 6 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/pageslotnonfree.py > /dev/null
+15 12 * * 6 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/overusednonfree.py > /dev/null
+0 3 * * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/unusednonfree.py > /dev/null
+
+# PAGES
+0 18 * * 5 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/blankpages.py > /dev/null
+0 18 * * 6 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/longpages.py > /dev/null
+5 18 * * 6 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/olddeletiondiscussions.py > /dev/null
+0 17 12 * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/orphanedafds.py > /dev/null
+0 18 * * 3 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/orphanedprojs.py > /dev/null
+0 6 * * 1,5 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/orphanedtalks.py > /dev/null
+0 6 * * 1 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/orphanedsubtalks.py > /dev/null
+0 12 * * 6 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/ownerlessuserpages.py > /dev/null
+10 18 * * 5 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/shortpages.py > /dev/null
+0 12 10 * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/redlinkedfilesintemplates.py > /dev/null
+
+# PROTECTIONS
+5 12 7 * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/excessivefullarticles.py > /dev/null
+35 0 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/indeffullarticles.py > /dev/null
+45 0 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/indeffulltalks.py > /dev/null
+6 12 7 * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/protlowtemps.py > /dev/null
+30 0 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/indefsemiarticles.py > /dev/null
+40 0 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/indefsemitalks.py > /dev/null
+0 12 7 * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/excessivesemiarticles.py > /dev/null
+
+# REDIRECTS
+30 23 * * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/brokenredirects.py > /dev/null
+45 9 * * * PYTHONPATH=$HOME/scripts:$HOME/lib/python2.7/site-packages python $HOME/scripts/database-reports/brokensectionanchors.py > /dev/null
+30 0 1 * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/crossredirects.py > /dev/null
+30 12 * * 6 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/redreds.py > /dev/null
+30 18 * * 6 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/longredirects.py > /dev/null
+
+# STATISTICS
+0 12 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/mostwatched.py > /dev/null
+0 14 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/mostwatchedperns.py > /dev/null
+0 16 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/mostwatchedusers.py > /dev/null
+15 0 * * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/nscounts.py > /dev/null
+0 5 28 * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/mostrevisions.py > /dev/null
+10 5 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/reviewercandidates.py > /dev/null
+0 22 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/userprefs.py > /dev/null
+0 13 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/usersbyupload.py > /dev/null
+20 0 * * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/logactions.py > /dev/null
+25 0 * * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/wikilovestats.py > /dev/null
+
+# STUBS
+0 10 * * 5 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/dubiousstubcats.py > /dev/null
+0 15 * * 5 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/longstubs.py > /dev/null
+0 7 13 * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/directstubs.py > /dev/null
+0 13 * * 6 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/untaggedstubs.py > /dev/null
+0 16 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/unusedstubtemplates.py > /dev/null
+
+# TEMPLATES
+15 20 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/brokenwikiprojtemps.py > /dev/null
+0 12 15 * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/epontemps.py > /dev/null
+5 20 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/templatedisambigs.py > /dev/null
+0 15 8,22 * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/mosttransclusions.py > /dev/null
+25 15 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/deletedtrans.py > /dev/null
+20 15 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/transusertemps.py > /dev/null
+5 15 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/uncattemps.py > /dev/null
+35 15 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/unprotectedtemps.py > /dev/null
+0 15 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/unusedtemplates.py > /dev/null
+10 15 * * 4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/usertempreds.py > /dev/null
+
+# USERS
+0 1 * * 1,4 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/confirmedusers.py > /dev/null
+45 15 * * 3 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/blankanontalks.py > /dev/null
+0 15 6,20 * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/blockeduserrights.py > /dev/null
+0 15 6,20 * * PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/inactiveuserrights.py > /dev/null
+30 0 * * 2 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/metarightschanges.py > /dev/null
+55 15 * * 3 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/oldiptalks.py > /dev/null
+30 15 * * 3 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/anononlyanons.py > /dev/null
+0 15 * * 3 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/noactionuserpages.py > /dev/null
+0 15 * * 3 PYTHONPATH=$HOME/scripts python $HOME/scripts/database-reports/noactionusertalks.py > /dev/null
