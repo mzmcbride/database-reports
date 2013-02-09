@@ -2,130 +2,130 @@
 # MIN HOUR DAYMONTH MONTH DAYWEEK
 
 # ARTICLES
-0 19 6 * * python $HOME/bin/deletedfilesinarticles.py
-50 2 * * 6 python $HOME/bin/bullshitparams.py
-12 0 * * 6 python $HOME/bin/linkedemailsinarticles.py
-0 12 * * 5 python $HOME/bin/userlinksinarticles.py
-#0 12 * * 4 python $HOME/bin/coordoverlap.py
-0 12 6 * * python $HOME/bin/redlinkedfilesinarticles.py
-0 19 15 * * python $HOME/bin/tickersinleads.py
-30 21 * * 4 python $HOME/bin/linkedmisspellings.py
-30 19 * * 4 python $HOME/bin/unbelievablelifespans.py
+0 19 6 * * $HOME/bin/deletedfilesinarticles.py
+50 2 * * 6 $HOME/bin/bullshitparams.py
+12 0 * * 6 $HOME/bin/linkedemailsinarticles.py
+0 12 * * 5 $HOME/bin/userlinksinarticles.py
+#0 12 * * 4 $HOME/bin/coordoverlap.py
+0 12 6 * * $HOME/bin/redlinkedfilesinarticles.py
+0 19 15 * * $HOME/bin/tickersinleads.py
+30 21 * * 4 $HOME/bin/linkedmisspellings.py
+30 19 * * 4 $HOME/bin/unbelievablelifespans.py
 
 # BIOGRAPHIES OF DEAD PEOPLE
-30 0 * * 4 python $HOME/bin/potenshbdps1.py
-35 0 * * 4 python $HOME/bin/potenshbdps2.py
-40 0 * * 4 python $HOME/bin/potenshbdps3.py
+30 0 * * 4 $HOME/bin/potenshbdps1.py
+35 0 * * 4 $HOME/bin/potenshbdps2.py
+40 0 * * 4 $HOME/bin/potenshbdps3.py
 
 # BIOGRAPHIES OF LIVING PEOPLE
-0 2 * * 5 python $HOME/bin/unsourcedblps.py
-0 3 * * 5 python $HOME/bin/stickyprodblps.py
-45 0 * * 5 python $HOME/bin/potenshblps1.py
-50 0 * * 5 python $HOME/bin/potenshblps2.py
-55 0 * * 5 python $HOME/bin/potenshblps3.py
-10 1 * * 5 nice -n 15 python $HOME/bin/potenshblps4.py
-0 1 * * * python $HOME/bin/shortestbios.py
-15 8 * * 2 python $HOME/bin/uncatunrefblps.py
-20 8 * * 2 python $HOME/bin/untaggedunrefblps.py
-20 8 * * 2 python $HOME/bin/untaggedblps.py
+0 2 * * 5 $HOME/bin/unsourcedblps.py
+0 3 * * 5 $HOME/bin/stickyprodblps.py
+45 0 * * 5 $HOME/bin/potenshblps1.py
+50 0 * * 5 $HOME/bin/potenshblps2.py
+55 0 * * 5 $HOME/bin/potenshblps3.py
+10 1 * * 5 nice -n 15 $HOME/bin/potenshblps4.py
+0 1 * * * $HOME/bin/shortestbios.py
+15 8 * * 2 $HOME/bin/uncatunrefblps.py
+20 8 * * 2 $HOME/bin/untaggedunrefblps.py
+20 8 * * 2 $HOME/bin/untaggedblps.py
 
 # BLOCKS
-0 0 * * 2 python $HOME/bin/indefips.py
-5 0 * * 2 python $HOME/bin/rangeblocks.py
-0 12 8 * * python $HOME/bin/excessiveips.py
-5 12 8 * * python $HOME/bin/excessiveusers.py
+0 0 * * 2 $HOME/bin/indefips.py
+5 0 * * 2 $HOME/bin/rangeblocks.py
+0 12 8 * * $HOME/bin/excessiveips.py
+5 12 8 * * $HOME/bin/excessiveusers.py
 
 # CATEGORIES
-0 1 * * 0 python $HOME/bin/redlinkedcatsincats.py
-0 12 * * 5 python $HOME/bin/deletedredlinkedcats.py
-0 1 * * * python $HOME/bin/emptycats.py
-0 2 * * 6 python $HOME/bin/pollcats.py
-0 22 * * 3 python $HOME/bin/linkedredlinkedcats.py
-0 6 * * 3 python $HOME/bin/selfcatcats.py
-0 2 * * 2 python $HOME/bin/polltemps.py
-0 0 * * 1 python $HOME/bin/uncatcats.py
-0 0 2 * * python $HOME/bin/usercats.py
+0 1 * * 0 $HOME/bin/redlinkedcatsincats.py
+0 12 * * 5 $HOME/bin/deletedredlinkedcats.py
+0 1 * * * $HOME/bin/emptycats.py
+0 2 * * 6 $HOME/bin/pollcats.py
+0 22 * * 3 $HOME/bin/linkedredlinkedcats.py
+0 6 * * 3 $HOME/bin/selfcatcats.py
+0 2 * * 2 $HOME/bin/polltemps.py
+0 0 * * 1 $HOME/bin/uncatcats.py
+0 0 2 * * $HOME/bin/usercats.py
 
 # FILES
-10 10 * * 6 python $HOME/bin/templatelessfilepages.py
-40 10 * * 6 python $HOME/bin/catandtemplessfilepages.py
-20 12 * * 6 python $HOME/bin/filelessfilepages.py
-20 13 * * 6 python $HOME/bin/conflictedfiles.py
-20 15 * * * python $HOME/bin/dupefilenames.py
-20 12 * * 6 python $HOME/bin/largenonfree.py
-0 12 * * 6 python $HOME/bin/mistaggedfiles.py
-20 18 * * * python $HOME/bin/nonfreemissingrat.py
-5 12 * * 6 python $HOME/bin/templatesnonfree.py
-10 12 * * 6 python $HOME/bin/pageslotnonfree.py
-15 12 * * 6 python $HOME/bin/overusednonfree.py
-0 3 * * * python $HOME/bin/unusednonfree.py
+10 10 * * 6 $HOME/bin/templatelessfilepages.py
+40 10 * * 6 $HOME/bin/catandtemplessfilepages.py
+20 12 * * 6 $HOME/bin/filelessfilepages.py
+20 13 * * 6 $HOME/bin/conflictedfiles.py
+20 15 * * * $HOME/bin/dupefilenames.py
+20 12 * * 6 $HOME/bin/largenonfree.py
+0 12 * * 6 $HOME/bin/mistaggedfiles.py
+20 18 * * * $HOME/bin/nonfreemissingrat.py
+5 12 * * 6 $HOME/bin/templatesnonfree.py
+10 12 * * 6 $HOME/bin/pageslotnonfree.py
+15 12 * * 6 $HOME/bin/overusednonfree.py
+0 3 * * * $HOME/bin/unusednonfree.py
 
 # PAGES
-0 18 * * 5 python $HOME/bin/blankpages.py
-0 18 * * 6 python $HOME/bin/longpages.py
-5 18 * * 6 python $HOME/bin/olddeletiondiscussions.py
-0 17 12 * * python $HOME/bin/orphanedafds.py
-0 18 * * 3 python $HOME/bin/orphanedprojs.py
-0 6 * * 1,5 python $HOME/bin/orphanedtalks.py
-0 6 * * 1 python $HOME/bin/orphanedsubtalks.py
-0 12 * * 6 python $HOME/bin/ownerlessuserpages.py
-10 18 * * 5 python $HOME/bin/shortpages.py
-0 12 10 * * python $HOME/bin/redlinkedfilesintemplates.py
+0 18 * * 5 $HOME/bin/blankpages.py
+0 18 * * 6 $HOME/bin/longpages.py
+5 18 * * 6 $HOME/bin/olddeletiondiscussions.py
+0 17 12 * * $HOME/bin/orphanedafds.py
+0 18 * * 3 $HOME/bin/orphanedprojs.py
+0 6 * * 1,5 $HOME/bin/orphanedtalks.py
+0 6 * * 1 $HOME/bin/orphanedsubtalks.py
+0 12 * * 6 $HOME/bin/ownerlessuserpages.py
+10 18 * * 5 $HOME/bin/shortpages.py
+0 12 10 * * $HOME/bin/redlinkedfilesintemplates.py
 
 # PROTECTIONS
-5 12 7 * * python $HOME/bin/excessivefullarticles.py
-35 0 * * 4 python $HOME/bin/indeffullarticles.py
-45 0 * * 4 python $HOME/bin/indeffulltalks.py
-6 12 7 * * python $HOME/bin/protlowtemps.py
-30 0 * * 4 python $HOME/bin/indefsemiarticles.py
-40 0 * * 4 python $HOME/bin/indefsemitalks.py
-0 12 7 * * python $HOME/bin/excessivesemiarticles.py
+5 12 7 * * $HOME/bin/excessivefullarticles.py
+35 0 * * 4 $HOME/bin/indeffullarticles.py
+45 0 * * 4 $HOME/bin/indeffulltalks.py
+6 12 7 * * $HOME/bin/protlowtemps.py
+30 0 * * 4 $HOME/bin/indefsemiarticles.py
+40 0 * * 4 $HOME/bin/indefsemitalks.py
+0 12 7 * * $HOME/bin/excessivesemiarticles.py
 
 # REDIRECTS
-30 23 * * * python $HOME/bin/brokenredirects.py
-45 9 * * * PYTHONPATH=$HOME/lib/python2.7/site-packages python $HOME/bin/brokensectionanchors.py
-30 0 1 * * python $HOME/bin/crossredirects.py
-30 12 * * 6 python $HOME/bin/redreds.py
-30 18 * * 6 python $HOME/bin/longredirects.py
+30 23 * * * $HOME/bin/brokenredirects.py
+45 9 * * * PYTHONPATH=$HOME/lib/python2.7/site-packages $HOME/bin/brokensectionanchors.py
+30 0 1 * * $HOME/bin/crossredirects.py
+30 12 * * 6 $HOME/bin/redreds.py
+30 18 * * 6 $HOME/bin/longredirects.py
 
 # STATISTICS
-0 12 * * 4 python $HOME/bin/mostwatched.py
-0 14 * * 4 python $HOME/bin/mostwatchedperns.py
-0 16 * * 4 python $HOME/bin/mostwatchedusers.py
-15 0 * * * python $HOME/bin/nscounts.py
-0 5 28 * * python $HOME/bin/mostrevisions.py
-10 5 * * 4 python $HOME/bin/reviewercandidates.py
-0 22 * * 4 python $HOME/bin/userprefs.py
-0 13 * * 4 python $HOME/bin/usersbyupload.py
-20 0 * * * python $HOME/bin/logactions.py
-25 0 * * * python $HOME/bin/wikilovestats.py
+0 12 * * 4 $HOME/bin/mostwatched.py
+0 14 * * 4 $HOME/bin/mostwatchedperns.py
+0 16 * * 4 $HOME/bin/mostwatchedusers.py
+15 0 * * * $HOME/bin/nscounts.py
+0 5 28 * * $HOME/bin/mostrevisions.py
+10 5 * * 4 $HOME/bin/reviewercandidates.py
+0 22 * * 4 $HOME/bin/userprefs.py
+0 13 * * 4 $HOME/bin/usersbyupload.py
+20 0 * * * $HOME/bin/logactions.py
+25 0 * * * $HOME/bin/wikilovestats.py
 
 # STUBS
-0 10 * * 5 python $HOME/bin/dubiousstubcats.py
-0 15 * * 5 python $HOME/bin/longstubs.py
-0 7 13 * * python $HOME/bin/directstubs.py
-0 13 * * 6 python $HOME/bin/untaggedstubs.py
-0 16 * * 4 python $HOME/bin/unusedstubtemplates.py
+0 10 * * 5 $HOME/bin/dubiousstubcats.py
+0 15 * * 5 $HOME/bin/longstubs.py
+0 7 13 * * $HOME/bin/directstubs.py
+0 13 * * 6 $HOME/bin/untaggedstubs.py
+0 16 * * 4 $HOME/bin/unusedstubtemplates.py
 
 # TEMPLATES
-15 20 * * 4 python $HOME/bin/brokenwikiprojtemps.py
-0 12 15 * * python $HOME/bin/epontemps.py
-5 20 * * 4 python $HOME/bin/templatedisambigs.py
-0 15 8,22 * * python $HOME/bin/mosttransclusions.py
-25 15 * * 4 python $HOME/bin/deletedtrans.py
-20 15 * * 4 python $HOME/bin/transusertemps.py
-5 15 * * 4 python $HOME/bin/uncattemps.py
-35 15 * * 4 python $HOME/bin/unprotectedtemps.py
-0 15 * * 4 python $HOME/bin/unusedtemplates.py
-10 15 * * 4 python $HOME/bin/usertempreds.py
+15 20 * * 4 $HOME/bin/brokenwikiprojtemps.py
+0 12 15 * * $HOME/bin/epontemps.py
+5 20 * * 4 $HOME/bin/templatedisambigs.py
+0 15 8,22 * * $HOME/bin/mosttransclusions.py
+25 15 * * 4 $HOME/bin/deletedtrans.py
+20 15 * * 4 $HOME/bin/transusertemps.py
+5 15 * * 4 $HOME/bin/uncattemps.py
+35 15 * * 4 $HOME/bin/unprotectedtemps.py
+0 15 * * 4 $HOME/bin/unusedtemplates.py
+10 15 * * 4 $HOME/bin/usertempreds.py
 
 # USERS
-0 1 * * 1,4 python $HOME/bin/confirmedusers.py
-45 15 * * 3 python $HOME/bin/blankanontalks.py
-0 15 6,20 * * python $HOME/bin/blockeduserrights.py
-0 15 6,20 * * python $HOME/bin/inactiveuserrights.py
-30 0 * * 2 python $HOME/bin/metarightschanges.py
-55 15 * * 3 python $HOME/bin/oldiptalks.py
-30 15 * * 3 python $HOME/bin/anononlyanons.py
-0 15 * * 3 python $HOME/bin/noactionuserpages.py
-0 15 * * 3 python $HOME/bin/noactionusertalks.py
+0 1 * * 1,4 $HOME/bin/confirmedusers.py
+45 15 * * 3 $HOME/bin/blankanontalks.py
+0 15 6,20 * * $HOME/bin/blockeduserrights.py
+0 15 6,20 * * $HOME/bin/inactiveuserrights.py
+30 0 * * 2 $HOME/bin/metarightschanges.py
+55 15 * * 3 $HOME/bin/oldiptalks.py
+30 15 * * 3 $HOME/bin/anononlyanons.py
+0 15 * * 3 $HOME/bin/noactionuserpages.py
+0 15 * * 3 $HOME/bin/noactionusertalks.py
