@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/python
 
 # Copyright 2009-2010 bjweeks, MZMcBride, svick
 

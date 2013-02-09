@@ -2,7 +2,7 @@ MediaWiki database reports, primarily written for the English Wikipedia:
 <https://en.wikipedia.org/wiki/Wikipedia:Database_reports>.
 
 Dependencies:
-* Python
+* Python 2.5
 ** MySQLdb module
 ** wikitools module (<https://code.google.com/p/python-wikitools/>)
 

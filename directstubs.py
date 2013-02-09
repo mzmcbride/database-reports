@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/python
 # Public domain; MZMcBride; 2012
 
 from __future__ import generators

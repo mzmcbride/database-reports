@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/python
 # Public domain; bjweeks, MZMcBride; 2008
 
 import ConfigParser

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.5
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 # Copyright 2009-2011 bjweeks, MZMcBride, svick

@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/python
 # Public domain; Topbanana, Legoktm, MZMcBride; 2012
 
 import ConfigParser
