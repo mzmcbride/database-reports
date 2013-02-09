@@ -15,12 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import ConfigParser
 import datetime
 import MySQLdb
+import os
 import wikitools
-import settings
 
-report_title = settings.rootpage + 'Template categories containing articles'
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
+
+report_title = config.get('dbreps', 'rootpage') + 'Template categories containing articles'
 
 report_template = u'''
 Template categories containing articles; data as of <onlyinclude>%s</onlyinclude>.
@@ -34,10 +38,10 @@ Template categories containing articles; data as of <onlyinclude>%s</onlyinclude
 |}
 '''
 
-wiki = wikitools.Wiki(settings.apiurl)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl'))
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
-conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'), db=config.get('dbreps', 'dbname'), read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* polltemps.py SLOW_OK */
@@ -60,7 +64,7 @@ AND EXISTS (SELECT
             ON pg2.page_id = cl.cl_from
             WHERE pg2.page_namespace = 0
             AND pg1.page_title = cl.cl_to);
-''' , settings.dbname)
+''' , config.get('dbreps', 'dbname'))
 
 i = 1
 output = []
@@ -81,7 +85,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
 
 cursor.close()
 conn.close()

@@ -15,12 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import ConfigParser
 import datetime
 import MySQLdb
+import os
 import wikitools
-import settings
 
-report_title = settings.rootpage + 'Talk subpages with redirect parent'
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
+
+report_title = config.get('dbreps', 'rootpage') + 'Talk subpages with redirect parent'
 
 report_template = u'''
 This page lists first 1000 talk subpages (excluding user talk subpages and subpages of [[Wikipedia talk:Articles for creation]]) whose parent talk page is a redirect. Data as of <onlyinclude>%s</onlyinclude>.
@@ -34,10 +38,10 @@ This page lists first 1000 talk subpages (excluding user talk subpages and subpa
 |}
 '''
 
-wiki = wikitools.Wiki(settings.apiurl)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl'))
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
-conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'), db=config.get('dbreps', 'dbname'), read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* subtalks_of_redirects.py */
@@ -90,7 +94,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(pages))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
 
 cursor.close()
 conn.close()

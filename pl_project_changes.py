@@ -16,12 +16,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import ConfigParser
 import datetime
-import MySQLdb
-import wikitools
-import settings
 import locale
+import MySQLdb
 import os
+import os
+import wikitools
+
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
 
 report_title = 'Wikipedia:Statystyki aktywności wikiprojektów'
 
@@ -47,7 +51,7 @@ Dane na dzień <onlyinclude>%s</onlyinclude>.
 '''
 
 wiki = wikitools.Wiki('http://pl.wikipedia.org/w/api.php')
-wiki.login(settings.username, settings.password)
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
 conn = MySQLdb.connect(host='plwiki-p.rrdb.toolserver.org', db='plwiki_p', read_default_file='~/.my.cnf')
 cursor = conn.cursor()

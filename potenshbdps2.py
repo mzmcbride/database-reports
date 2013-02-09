@@ -15,13 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import ConfigParser
 import datetime
 import MySQLdb
+import os
 import re
 import wikitools
-import settings
 
-report_title = settings.rootpage + 'Potential biographies of dead people (2)'
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
+
+report_title = config.get('dbreps', 'rootpage') + 'Potential biographies of dead people (2)'
 
 report_template = u'''
 Articles in [[:Category:Living people]] that are not in [[:Category:Possibly \
@@ -36,10 +40,10 @@ living people]] and are in a "XXXX deaths" category; data as of <onlyinclude>%s<
 |}
 '''
 
-wiki = wikitools.Wiki(settings.apiurl)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl'))
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
-conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'), db=config.get('dbreps', 'dbname'), read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* potenshbdps2.py SLOW_OK */
@@ -82,7 +86,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
 
 cursor.close()
 conn.close()

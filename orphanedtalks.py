@@ -1,13 +1,17 @@
 #! /usr/bin/env python
 # Public domain; bjweeks, MZMcBride; 2012
 
+import ConfigParser
 import datetime
 import MySQLdb
+import os
 import re
 import wikitools
-import settings
 
-report_title = settings.rootpage + 'Orphaned talk pages'
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
+
+report_title = config.get('dbreps', 'rootpage') + 'Orphaned talk pages'
 
 report_template = u'''\
 Orphaned talk pages. Pages transcluding {{[[Template:Go away|Go away]]}} or \
@@ -22,8 +26,8 @@ Orphaned talk pages. Pages transcluding {{[[Template:Go away|Go away]]}} or \
 |}
 '''
 
-wiki = wikitools.Wiki(settings.apiurl)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl'))
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
 def check_commons(commons_cursor, file_name):
     commons_cursor.execute('''
@@ -40,8 +44,8 @@ def check_commons(commons_cursor, file_name):
             return True
     return False
 
-conn = MySQLdb.connect(host=settings.host,
-                       db=settings.dbname,
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'),
+                       db=config.get('dbreps', 'dbname'),
                        read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
@@ -62,7 +66,7 @@ WHERE p1.page_title NOT LIKE '%%/%%'
 AND p1.page_namespace mod 2 != 0
 AND p1.page_namespace NOT IN (3,9)
 AND p2.page_id IS NULL;
-''' , settings.dbname)
+''' , config.get('dbreps', 'dbname'))
 
 results = cursor.fetchall()
 
@@ -141,7 +145,7 @@ current_of = time_diff.strftime('%H:%M, %d %B %Y (UTC)')
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
 
 commons_cursor.close()
 commons_conn.close()

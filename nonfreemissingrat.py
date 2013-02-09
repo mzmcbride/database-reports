@@ -1,13 +1,17 @@
 #! /usr/bin/env python
 # Public domain; MZMcBride; 2012
 
+import ConfigParser
 import datetime
 import MySQLdb
+import os
 import re
 import wikitools
-import settings
 
-report_title = settings.rootpage + 'Non-free files missing a rationale'
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
+
+report_title = config.get('dbreps', 'rootpage') + 'Non-free files missing a rationale'
 
 report_template = u'''
 Non-free files missing a [[WP:FUR|fair use rationale]] (limited to the first \
@@ -96,11 +100,11 @@ r'low-res(olution)? (\'\'\')?promotional(\'\'\')? (image|file)'
 
 find_fair_use_strings = re.compile(r'(%s)' % '|'.join(str(i) for i in fair_use_strings), re.I)
 
-wiki = wikitools.Wiki(settings.apiurl); wiki.setMaxlag(-1)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl')); wiki.setMaxlag(-1)
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
-conn = MySQLdb.connect(host=settings.host,
-                       db=settings.dbname,
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'),
+                       db=config.get('dbreps', 'dbname'),
                        read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
@@ -166,7 +170,7 @@ for result in fair_use_templates:
         files_using_fair_use_templates.add(page_id)
 
 reviewed_page_ids = set()
-f = open('%snonfree-reviewed-page-ids.txt' % settings.path, 'r')
+f = open('%snonfree-reviewed-page-ids.txt' % config.get('dbreps', 'path'), 'r')
 file_contents = f.read()
 for line in file_contents.split('\n'):
     if line:
@@ -179,7 +183,7 @@ pages_to_check = (files_using_fair_use_copyright_templates -
 
 i = 1
 output = []
-g = open('%snonfree-reviewed-page-ids.txt' % settings.path, 'a')
+g = open('%snonfree-reviewed-page-ids.txt' % config.get('dbreps', 'path'), 'a')
 for id in pages_to_check:
     if i > 2000:
         break
@@ -246,7 +250,7 @@ current_of = time_diff.strftime('%H:%M, %d %B %Y (UTC)')
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
 
 cursor.close()
 conn.close()

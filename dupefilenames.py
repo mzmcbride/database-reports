@@ -1,12 +1,16 @@
 #! /usr/bin/env python
 # Public domain; MZMcBride; 2011
 
+import ConfigParser
 import datetime
 import MySQLdb
+import os
 import wikitools
-import settings
 
-report_title = settings.rootpage + 'Largely duplicative file names'
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
+
+report_title = config.get('dbreps', 'rootpage') + 'Largely duplicative file names'
 
 report_template = u'''\
 Largely duplicative file names (limited to the first 1000 entries); \
@@ -23,11 +27,11 @@ data as of <onlyinclude>%s</onlyinclude>.
 |}
 '''
 
-wiki = wikitools.Wiki(settings.apiurl)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl'))
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
-conn = MySQLdb.connect(host=settings.host,
-                       db=settings.dbname,
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'),
+                       db=config.get('dbreps', 'dbname'),
                        read_default_file='~/.my.cnf',
                        charset='utf8')
 
@@ -77,7 +81,7 @@ current_of = time_diff.strftime('%H:%M, %d %B %Y (UTC)')
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
 
 cursor.close()
 conn.close()

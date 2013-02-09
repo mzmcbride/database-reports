@@ -1,14 +1,16 @@
 #! /usr/bin/env python
 # Public domain; MZMcBride; 2013
 
+import ConfigParser
 import datetime
+import os
 import re
-
 import wikitools
 
-import settings
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
 
-report_title = settings.rootpage + 'Articles without images'
+report_title = config.get('dbreps', 'rootpage') + 'Articles without images'
 report_template = u'''\
 Articles without images (limited to the first 1000 entries); \
 data as of <onlyinclude>%s</onlyinclude>.
@@ -21,8 +23,8 @@ data as of <onlyinclude>%s</onlyinclude>.
 |}
 '''
 
-wiki = wikitools.Wiki(settings.apiurl); wiki.setMaxlag(-1)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl')); wiki.setMaxlag(-1)
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
 i = 1
 output = []
@@ -58,4 +60,4 @@ current_of = datetime.datetime.utcnow().strftime('%H:%M, %d %B %Y (UTC)')
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)

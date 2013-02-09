@@ -2,12 +2,16 @@
 # Public domain; MZMcBride; 2012
 
 from __future__ import generators
+import ConfigParser
 import datetime
 import MySQLdb
+import os
 import wikitools
-import settings
 
-report_title = settings.rootpage + 'Dubious stub categories'
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
+
+report_title = config.get('dbreps', 'rootpage') + 'Dubious stub categories'
 
 report_template = u'''\
 Dubious stub categories; data as of <onlyinclude>%s</onlyinclude>.
@@ -20,8 +24,8 @@ Dubious stub categories; data as of <onlyinclude>%s</onlyinclude>.
 |}
 '''
 
-wiki = wikitools.Wiki(settings.apiurl)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl'))
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
 target_cat = 'Stub_categories'
 master_dict = {}
@@ -57,8 +61,8 @@ def walk_tree(cursor, target_cat):
         else:
             yield subcat, subcats
 
-conn = MySQLdb.connect(host=settings.host,
-                       db=settings.dbname,
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'),
+                       db=config.get('dbreps', 'dbname'),
                        read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 
@@ -96,7 +100,7 @@ current_of = time_diff.strftime('%H:%M, %d %B %Y (UTC)')
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
 
 cursor.close()
 conn.close()

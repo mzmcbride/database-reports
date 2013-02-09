@@ -15,13 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import ConfigParser
 import datetime
 import math
 import MySQLdb
+import os
 import wikitools
-import settings
 
-report_title = settings.rootpage + 'Deleted red-linked categories/%i'
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
+
+report_title = config.get('dbreps', 'rootpage') + 'Deleted red-linked categories/%i'
 
 report_template = u'''
 Deleted red-linked categories; data as of <onlyinclude>%s</onlyinclude>.
@@ -41,8 +45,8 @@ Deleted red-linked categories; data as of <onlyinclude>%s</onlyinclude>.
 
 rows_per_page = 500
 
-wiki = wikitools.Wiki(settings.apiurl); wiki.setMaxlag(-1)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl')); wiki.setMaxlag(-1)
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
 def get_last_log_entry(cursor, cl_to):
     cursor.execute('''
@@ -67,7 +71,7 @@ def get_last_log_entry(cursor, cl_to):
         log_comment = unicode(row[2], 'utf-8')
     return { 'timestamp': log_timestamp, 'user': user_name, 'comment': log_comment }
 
-conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'), db=config.get('dbreps', 'dbname'), read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* deletedredlinkedcats.py SLOW_OK */
@@ -86,7 +90,7 @@ ON cl_to = page_title
 AND page_namespace = 14
 WHERE page_title IS NULL
 AND cat_pages > 0;
-''' , settings.dbname)
+''' , config.get('dbreps', 'dbname'))
 
 i = 1
 output = []
@@ -130,18 +134,18 @@ for start in range(0, len(output), rows_per_page):
     report = wikitools.Page(wiki, report_title % page)
     report_text = report_template % (current_of, '\n'.join(output[start:end]))
     report_text = report_text.encode('utf-8')
-    report.edit(report_text, summary=settings.editsumm, bot=1)
+    report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
     page += 1
     end += rows_per_page
 
 page = math.ceil(len(output) / float(rows_per_page)) + 1
 while 1:
     report = wikitools.Page(wiki, report_title % page)
-    report_text = settings.blankcontent
+    report_text = config.get('dbreps', 'blankcontent')
     report_text = report_text.encode('utf-8')
     if not report.exists:
         break
-    report.edit(report_text, summary=settings.blanksumm, bot=1)
+    report.edit(report_text, summary=config.get('dbreps', 'blanksumm'), bot=1)
     page += 1
 
 cursor.close()

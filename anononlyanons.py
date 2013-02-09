@@ -1,13 +1,17 @@
 #! /usr/bin/env python
 # Public domain; bjweeks, MZMcBride; 2012
 
+import ConfigParser
 import datetime
 import MySQLdb
+import os
 import re
 import wikitools
-import settings
 
-report_title = settings.rootpage + 'Short user talk pages for IPs'
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
+
+report_title = config.get('dbreps', 'rootpage') + 'Short user talk pages for IPs'
 
 report_template = u'''\
 User talk pages of anonymous users where the only contributors to the page \
@@ -24,11 +28,11 @@ templates (limited to the first 1000 entries); data as of <onlyinclude>%s</onlyi
 |}
 '''
 
-wiki = wikitools.Wiki(settings.apiurl)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl'))
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
-conn = MySQLdb.connect(host=settings.host,
-                       db=settings.dbname,
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'),
+                       db=config.get('dbreps', 'dbname'),
                        read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 
@@ -85,7 +89,7 @@ JOIN toolserver.namespace
 ON dbname = '%s'
 AND page_namespace = ns_id
 WHERE page_id IN (%s);
-''' % (settings.dbname, ', '.join(target_page_ids)))
+''' % (config.get('dbreps', 'dbname'), ', '.join(target_page_ids)))
 
 i = 1
 output = []
@@ -115,7 +119,7 @@ current_of = time_diff.strftime('%H:%M, %d %B %Y (UTC)')
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
 
 cursor.close()
 conn.close()

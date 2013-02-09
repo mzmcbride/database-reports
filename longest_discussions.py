@@ -15,12 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import ConfigParser
 import datetime
 import MySQLdb
+import os
 import wikitools
-import settings
 
-report_title = settings.rootpage + 'Talk pages by size'
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
+
+report_title = config.get('dbreps', 'rootpage') + 'Talk pages by size'
 
 report_template = u'''
 :''For talk pages whose page length is greater than 140,000 bytes (excluding subpages and pages in the user space), see [[Wikipedia:Database reports/Long pages|Database reports/Long pages]].''
@@ -58,10 +62,10 @@ Below is a list of talk pages by their total size, including subpages; data as o
 [[Category:Wikipedia statistics|Talk pages by size]]
 '''
 
-wiki = wikitools.Wiki(settings.apiurl)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl'))
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
-conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'), db=config.get('dbreps', 'dbname'), read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* longest_discussions.py */
@@ -128,7 +132,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(article_talks), '\n'.join(other_talks))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
 
 cursor.close()
 conn.close()

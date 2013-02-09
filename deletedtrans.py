@@ -15,14 +15,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import ConfigParser
 import datetime
 import math
-import re
 import MySQLdb
+import os
+import re
 import wikitools
-import settings
 
-report_title = settings.rootpage + 'Transclusions of deleted templates/%i'
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
+
+report_title = config.get('dbreps', 'rootpage') + 'Transclusions of deleted templates/%i'
 
 report_template = u'''
 Transclusions of deleted templates; data as of <onlyinclude>%s</onlyinclude>.
@@ -38,10 +42,10 @@ Transclusions of deleted templates; data as of <onlyinclude>%s</onlyinclude>.
 
 rows_per_page = 1000
 
-wiki = wikitools.Wiki(settings.apiurl)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl'))
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
-conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'), db=config.get('dbreps', 'dbname'), read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* deletedtrans.py SLOW_OK */
@@ -87,18 +91,18 @@ for start in range(0, len(output), rows_per_page):
     report = wikitools.Page(wiki, report_title % page)
     report_text = report_template % (current_of, '\n'.join(output[start:end]))
     report_text = report_text.encode('utf-8')
-    report.edit(report_text, summary=settings.editsumm, bot=1)
+    report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
     page += 1
     end += rows_per_page
 
 page = math.ceil(len(output) / float(rows_per_page)) + 1
 while 1:
     report = wikitools.Page(wiki, report_title % page)
-    report_text = settings.blankcontent
+    report_text = config.get('dbreps', 'blankcontent')
     report_text = report_text.encode('utf-8')
     if not report.exists:
         break
-    report.edit(report_text, summary=settings.blanksumm, bot=1)
+    report.edit(report_text, summary=config.get('dbreps', 'blanksumm'), bot=1)
     page += 1
 
 cursor.close()

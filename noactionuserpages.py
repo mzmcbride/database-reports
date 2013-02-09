@@ -15,12 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import ConfigParser
 import datetime
 import MySQLdb, MySQLdb.cursors
+import os
 import wikitools
-import settings
 
-report_title = settings.rootpage + 'User pages for inactive IPs'
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
+
+report_title = config.get('dbreps', 'rootpage') + 'User pages for inactive IPs'
 
 report_template = u'''
 User pages of anonymous users without any contributions (live or deleted), \
@@ -37,13 +41,13 @@ data as of <onlyinclude>%s</onlyinclude>.
 |}
 '''
 
-wiki = wikitools.Wiki(settings.apiurl)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl'))
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
 blocks = set()
 abuse_filter_matches = set()
 
-conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf', cursorclass=MySQLdb.cursors.SSCursor)
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'), db=config.get('dbreps', 'dbname'), read_default_file='~/.my.cnf', cursorclass=MySQLdb.cursors.SSCursor)
 cursor = conn.cursor()
 cursor.execute('''
 /* noactionuserpages.py SLOW_OK */
@@ -95,7 +99,7 @@ WHERE page_namespace = 2
 AND ISNULL(rev_user_text)
 AND ISNULL(ar_user_text)
 AND page_title RLIKE %s;
-''' , (settings.dbname, r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'))
+''' , (config.get('dbreps', 'dbname'), r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'))
 
 i = 1
 output = []
@@ -121,7 +125,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
 
 cursor.close()
 conn.close()

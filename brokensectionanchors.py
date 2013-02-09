@@ -1,13 +1,17 @@
 #! /usr/bin/env python
 # Public domain; MZMcBride; 2011
 
+import ConfigParser
 import datetime
-import re
-import MySQLdb
-import urllib
 import Levenshtein
+import MySQLdb
+import os
+import re
+import urllib
 import wikitools
-import settings
+
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
 
 def get_article_section_anchors(article):
     # Returns a list of section anchors from a specified article
@@ -16,7 +20,7 @@ def get_article_section_anchors(article):
     class urlopener(urllib.FancyURLopener):
         version = 'http://en.wikipedia.org/wiki/Wikipedia_talk:Database_reports'
     id_re = re.compile(r'id="(.+?)"')
-    target_url = settings.apiurl.replace('w/api.php','wiki/%s' % article)
+    target_url = config.get('dbreps', 'apiurl').replace('w/api.php','wiki/%s' % article)
     urlopener = urlopener()
     page = urlopener.open(target_url)
     page_text = page.read()
@@ -55,7 +59,7 @@ def make_best_guess(fragment, anchors):
             return {'best_guess' : anchor, 'ratio': str(ratio)}
     return {'best_guess' : '', 'ratio': ''}
 
-report_title = settings.rootpage + 'Broken section anchors'
+report_title = config.get('dbreps', 'rootpage') + 'Broken section anchors'
 
 report_template = u'''\
 Broken section anchors (limited to the first %s entries); \
@@ -72,16 +76,16 @@ data as of <onlyinclude>%s</onlyinclude>.
 |}
 '''
 
-wiki = wikitools.Wiki(settings.apiurl); wiki.setMaxlag(-1)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl')); wiki.setMaxlag(-1)
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
-f = open('%sbroken-anchors-reviewed-page-ids.txt' % settings.path, 'r')
+f = open('%sbroken-anchors-reviewed-page-ids.txt' % config.get('dbreps', 'path'), 'r')
 reviewed_page_ids = f.read()
 reviewed_page_ids_set = set(reviewed_page_ids.split('\n'))
 f.close()
 
-conn = MySQLdb.connect(host=settings.host+'-user',
-                       db=settings.dbname,
+conn = MySQLdb.connect(host=config.get('dbreps', 'host')+'-user',
+                       db=config.get('dbreps', 'dbname'),
                        read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('SET SESSION group_concat_max_len = 1000000;')
@@ -104,7 +108,7 @@ cursor.execute('''
                LIMIT 10000;
                ''')
 
-g = open('%sbroken-anchors-reviewed-page-ids.txt' % settings.path, 'a')
+g = open('%sbroken-anchors-reviewed-page-ids.txt' % config.get('dbreps', 'path'), 'a')
 
 i = 1
 output = []
@@ -125,7 +129,7 @@ for row in cursor.fetchall():
         fragments_dict[anchor] = page_id_and_title
         fragments.add(anchor)
         silly_page_id = str(page_id_and_title.split('|', 1)[0])
-        if int(get_top_edit_timestamp(cursor, silly_page_id)) > int(settings.dumpdate+'000000'):
+        if int(get_top_edit_timestamp(cursor, silly_page_id)) > int(config.get('dbreps', 'dumpdate')+'000000'):
             recently_edited_pages.append(silly_page_id)
     if page_id not in reviewed_page_ids_set and page_id not in recently_edited_pages:
         real_anchors = get_article_section_anchors(target_title)
@@ -178,7 +182,7 @@ current_of = time_diff.strftime('%H:%M, %d %B %Y (UTC)')
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (output_limit, current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1, skipmd5=True)
+report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1, skipmd5=True)
 
 cursor.close()
 conn.close()

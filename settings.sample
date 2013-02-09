@@ -1,18 +1,20 @@
+[dbreps]
+
 # Wiki login details
-username = ''
-password = ''
-apiurl = ''
-dumpdate = ''
+username:
+password:
+apiurl:
+dumpdate:
 
 # Toolserver details
-host = ''
-dbname = ''
-path = ''
+host:
+dbname:
+path:
 
 # Report details (generic)
-rootpage = ''
-editsumm = ''
+rootpage:
+editsumm:
 
 # Report details (multi-page)
-blankcontent = ''
-blanksumm = ''
+blankcontent:
+blanksumm:

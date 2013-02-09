@@ -15,12 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import ConfigParser
 import datetime
 import MySQLdb
+import os
 import wikitools
-import settings
 
-report_title = settings.rootpage + 'Most-watched pages by namespace'
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
+
+report_title = config.get('dbreps', 'rootpage') + 'Most-watched pages by namespace'
 
 report_template = u'''
 Most-watched non-deleted pages by namespace. Limited to the first 100 entries per \
@@ -41,8 +45,8 @@ report_section = u'''
 |}\
 '''
 
-wiki = wikitools.Wiki(settings.apiurl)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl'))
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
 def namespace_names(cursor, dbname):
     nsdict = {}
@@ -55,7 +59,7 @@ def namespace_names(cursor, dbname):
     WHERE dbname = %s
     AND ns_id >= 0
     ORDER BY ns_id ASC;
-    ''', settings.dbname)
+    ''', config.get('dbreps', 'dbname'))
     for row in cursor.fetchall():
         ns_id = row[0]
         ns_name = unicode(row[1], 'utf-8')
@@ -103,9 +107,9 @@ def get_top_pages(cursor, namespace):
     talk_namespace = nsdict[namespace+1]
     return report_section % (subject_namespace, talk_namespace, '\n'.join(top_pages))
 
-conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'), db=config.get('dbreps', 'dbname'), read_default_file='~/.my.cnf')
 cursor = conn.cursor()
-nsdict = namespace_names(cursor, settings.dbname)
+nsdict = namespace_names(cursor, config.get('dbreps', 'dbname'))
 i = 1
 output = []
 for k,v in nsdict.iteritems():
@@ -119,7 +123,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
 
 cursor.close()
 conn.close()
