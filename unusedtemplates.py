@@ -86,7 +86,7 @@ for row in cursor.fetchall():
         not page_title.startswith('Cite_pmid/') and
         not page_title.startswith('TFA_title/') and
         not page_title.startswith('POTD_protected/') and
-        not page_title.startswith('POTD_credit/') and 
+        not page_title.startswith('POTD_credit/') and
         not page_title.startswith('POTD_caption/') and
         not page_title.startswith('Did_you_know_nominations/') and
         not page_title.startswith('Child_taxa//') and

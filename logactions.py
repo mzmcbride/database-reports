@@ -157,7 +157,7 @@ for user,stats in user_stats_sorted:
     i += 1
 
 output += master_table_template % (
-    '\n'.join(['!<span title="%s">%s</span>' % (query['name'], query['short_name']) for query in query_list]), 
+    '\n'.join(['!<span title="%s">%s</span>' % (query['name'], query['short_name']) for query in query_list]),
     '\n'.join(rows),
     '\n'.join([u'!style="text-align:left;"|%d' % totals[query['name']] for query in query_list]) + u'\n!style="text-align:left;"|%d' % totals['total']
 )

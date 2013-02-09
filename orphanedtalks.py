@@ -105,7 +105,7 @@ for row in results:
         page_title = '%s:%s' % (ns_name, page_title)
     else:
         page_title = '%s' % (page_title)
-    
+
     search_strings = ['archive',
                       '^Image:',
                       '^Image_talk:',

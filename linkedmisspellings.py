@@ -69,7 +69,7 @@ output = []
 for misspelled_redirect in misspelled_redirects:
     if i > 1000:
         break
-    incoming_links = count_incoming_links(cursor, misspelled_redirect)    
+    incoming_links = count_incoming_links(cursor, misspelled_redirect)
     if incoming_links:
         table_row = u"""\
 |-

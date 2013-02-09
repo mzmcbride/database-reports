@@ -69,7 +69,7 @@ JOIN
 ON rev_page = pagetmp.page_id
 AND rev_timestamp = (SELECT
                        MAX(rev_timestamp)
-                     FROM revision AS last 
+                     FROM revision AS last
                      WHERE last.rev_page = pagetmp.page_id);
 ''')
 

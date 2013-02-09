@@ -25,7 +25,7 @@ report_title = settings.rootpage + 'Articles containing links to the user space'
 report_template = u'''
 Articles containing links to the user space; \
 data as of <onlyinclude>%s</onlyinclude>.
- 
+
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
 ! No.

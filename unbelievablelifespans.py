@@ -99,7 +99,7 @@ def get_page_title_from_id(cursor, id):
         else:
             full_page_title = u'[['+ns_name+u':'+page_title+u']]'
     return full_page_title
-    
+
 i = 1
 output = []
 for k,v in birth_years.iteritems():
@@ -109,7 +109,7 @@ for k,v in birth_years.iteritems():
         death_year = death_years[page_id]
     except KeyError:
         continue
-    if (((birth_year > death_year) or 
+    if (((birth_year > death_year) or
         (death_year-birth_year > 122)) and
         page_id not in known_oldies):
         page_title = get_page_title_from_id(cursor, page_id)
