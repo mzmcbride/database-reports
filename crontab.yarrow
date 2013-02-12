@@ -29,7 +29,6 @@ SHELL=/bin/dash
 40 10 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/catandtemplessfilepages.py
 20 13 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/conflictedfiles.py
 0 12 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/mistaggedfiles.py
-20 18 * * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/nonfreemissingrat.py
 5 12 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/templatesnonfree.py
 10 12 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/pageslotnonfree.py
 
@@ -45,7 +44,6 @@ SHELL=/bin/dash
 30 0 * * 4 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/indefsemiarticles.py
 
 # REDIRECTS
-30 23 * * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/brokenredirects.py
 45 9 * * * PYTHONPATH=$HOME/lib/python2.7/site-packages /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/brokensectionanchors.py
 30 0 1 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/crossredirects.py
 30 12 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/redreds.py
