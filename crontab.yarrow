@@ -22,7 +22,6 @@ SHELL=/bin/dash
 # CATEGORIES
 0 12 * * 5 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/deletedredlinkedcats.py
 0 22 * * 3 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/linkedredlinkedcats.py
-0 6 * * 3 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/selfcatcats.py
 
 # FILES
 10 10 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/templatelessfilepages.py
@@ -34,7 +33,6 @@ SHELL=/bin/dash
 
 # PAGES
 0 18 * * 5 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/blankpages.py
-0 18 * * 3 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/orphanedprojs.py
 0 12 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/ownerlessuserpages.py
 10 18 * * 5 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/shortpages.py
 0 12 10 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/redlinkedfilesintemplates.py
@@ -70,6 +68,4 @@ SHELL=/bin/dash
 
 # USERS
 0 15 6,20 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/inactiveuserrights.py
-55 15 * * 3 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/oldiptalks.py
-0 15 * * 3 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/noactionuserpages.py
 0 15 * * 3 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/noactionusertalks.py
