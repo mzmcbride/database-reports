@@ -1,4 +1,4 @@
-PATH=/usr/bin:/bin:/sge/GE/bin/sol-amd64
+PATH=/opt/ts/gnu/bin:/sge/GE/bin/sol-amd64:/usr/bin:/bin
 SHELL=/bin/bash
 
 # INSTRUCTIONS
