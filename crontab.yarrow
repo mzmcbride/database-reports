@@ -11,17 +11,12 @@ SHELL=/bin/dash
 #0 12 * * 4 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/coordoverlap.py
 0 12 6 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/redlinkedfilesinarticles.py
 
-# BIOGRAPHIES OF DEAD PEOPLE
-35 0 * * 4 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/potenshbdps2.py
-40 0 * * 4 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/potenshbdps3.py
-
 # BIOGRAPHIES OF LIVING PEOPLE
 55 0 * * 5 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/potenshblps3.py
 10 1 * * 5 nice -n 15 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/potenshblps4.py
 
 # CATEGORIES
 0 12 * * 5 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/deletedredlinkedcats.py
-0 22 * * 3 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/linkedredlinkedcats.py
 
 # FILES
 10 10 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/templatelessfilepages.py
@@ -38,12 +33,10 @@ SHELL=/bin/dash
 0 12 10 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/redlinkedfilesintemplates.py
 
 # PROTECTIONS
-6 12 7 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/protlowtemps.py
 30 0 * * 4 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/indefsemiarticles.py
 
 # REDIRECTS
 45 9 * * * PYTHONPATH=$HOME/lib/python2.7/site-packages /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/brokensectionanchors.py
-30 0 1 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/crossredirects.py
 30 12 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/redreds.py
 
 # STATISTICS
@@ -68,4 +61,3 @@ SHELL=/bin/dash
 
 # USERS
 0 15 6,20 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/inactiveuserrights.py
-0 15 * * 3 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/noactionusertalks.py

@@ -12,6 +12,8 @@ SHELL=/bin/bash
 
 # BIOGRAPHIES OF DEAD PEOPLE
 30 0 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/potenshbdps1.py
+35 0 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:40:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/potenshbdps2.py
+40 0 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:35:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/potenshbdps3.py
 
 # BIOGRAPHIES OF LIVING PEOPLE
 0 2 * * 5 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/unsourcedblps.py
@@ -33,6 +35,7 @@ SHELL=/bin/bash
 0 1 * * 0 qcronsub -b y -j y -l arch=lx -l h_rt=1:00:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/redlinkedcatsincats.py
 0 1 * * * qcronsub -b y -j y -l arch=lx -l h_rt=4:10:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/emptycats.py
 0 2 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=1:15:00 -l virtual_free=870M -l sql-s1-rr=1 -o ~/var/log ~/bin/pollcats.py
+0 22 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=0:50:00 -l virtual_free=120M -l sql-s1-rr=1 -o ~/var/log ~/bin/linkedredlinkedcats.py
 0 6 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=1:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/selfcatcats.py
 0 2 * * 2 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/polltemps.py
 0 0 * * 1 qcronsub -b y -j y -l arch=lx -l h_rt=1:40:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/uncatcats.py
@@ -58,11 +61,13 @@ SHELL=/bin/bash
 5 12 7 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/excessivefullarticles.py
 35 0 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:30:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/indeffullarticles.py
 45 0 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/indeffulltalks.py
+6 12 7 * * qcronsub -b y -j y -l arch=lx -l h_rt=2:30:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/protlowtemps.py
 40 0 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:20:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/indefsemitalks.py
 0 12 7 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/excessivesemiarticles.py
 
 # REDIRECTS
 30 23 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:20:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/brokenredirects.py
+30 0 1 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/crossredirects.py
 30 18 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/longredirects.py
 
 # STATISTICS
@@ -90,3 +95,4 @@ SHELL=/bin/bash
 55 15 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/oldiptalks.py
 30 15 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=0:55:00 -l virtual_free=300M -l sql-s1-rr=1 -o ~/var/log ~/bin/anononlyanons.py
 0 15 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=1170M -l sql-s1-rr=1 -o ~/var/log ~/bin/noactionuserpages.py
+0 15 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=2:30:00 -l virtual_free=1190M -l sql-s1-rr=1 -o ~/var/log ~/bin/noactionusertalks.py
