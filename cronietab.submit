@@ -88,6 +88,8 @@ SHELL=/bin/bash
 # TEMPLATES
 20 15 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/transusertemps.py
 5 15 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/uncattemps.py
+35 15 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=2:25:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/unprotectedtemps.py
+0 15 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=2:25:00 -l virtual_free=120M -l sql-s1-rr=1 -o ~/var/log ~/bin/unusedtemplates.py
 10 15 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/usertempreds.py
 
 # USERS
