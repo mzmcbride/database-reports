@@ -42,6 +42,7 @@ SELECT
   COUNT(*)
 FROM page
 WHERE page_namespace = 6
+AND page_is_redirect = 0
 GROUP BY 1
 HAVING COUNT(*) > 1
 LIMIT 1000;
