@@ -1,12 +1,16 @@
-#! /usr/bin/env python
+#!/usr/bin/python
 # Public domain; MZMcBride; 2012
 
+import ConfigParser
 import datetime
 import MySQLdb
+import os
 import wikitools
-import settings
 
-report_title = settings.rootpage + 'Unbelievable life spans'
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
+
+report_title = config.get('dbreps', 'rootpage') + 'Unbelievable life spans'
 
 report_template = u'''\
 Unbelievable life spans; data as of <onlyinclude>%s</onlyinclude>.
@@ -25,11 +29,11 @@ Unbelievable life spans; data as of <onlyinclude>%s</onlyinclude>.
 
 current_year = int(datetime.datetime.utcnow().strftime('%Y'))
 
-wiki = wikitools.Wiki(settings.apiurl)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl'))
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
-conn = MySQLdb.connect(host=settings.host,
-                       db=settings.dbname,
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'),
+                       db=config.get('dbreps', 'dbname'),
                        read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 
@@ -87,7 +91,7 @@ def get_page_title_from_id(cursor, id):
     ON dbname = %s
     AND page_namespace = ns_id
     WHERE page_id = %s;
-    ''' , (settings.dbname, id))
+    ''' , (config.get('dbreps', 'dbname'), id))
     for row in cursor.fetchall():
         page_namespace = int(row[0])
         ns_name = unicode(row[1], 'utf-8')
@@ -99,7 +103,7 @@ def get_page_title_from_id(cursor, id):
         else:
             full_page_title = u'[['+ns_name+u':'+page_title+u']]'
     return full_page_title
-    
+
 i = 1
 output = []
 for k,v in birth_years.iteritems():
@@ -109,7 +113,7 @@ for k,v in birth_years.iteritems():
         death_year = death_years[page_id]
     except KeyError:
         continue
-    if (((birth_year > death_year) or 
+    if (((birth_year > death_year) or
         (death_year-birth_year > 122)) and
         page_id not in known_oldies):
         page_title = get_page_title_from_id(cursor, page_id)
@@ -137,7 +141,7 @@ current_of = time_diff.strftime('%H:%M, %d %B %Y (UTC)')
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
 
 cursor.close()
 conn.close()

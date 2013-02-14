@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.5
+#!/usr/bin/python
 
 # Copyright 2010 bjweeks, MZMcBride
 
@@ -15,12 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import ConfigParser
 import datetime
 import MySQLdb
+import os
 import wikitools
-import settings
 
-report_title = settings.rootpage + 'Templates containing links to disambiguation pages'
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
+
+report_title = config.get('dbreps', 'rootpage') + 'Templates containing links to disambiguation pages'
 
 report_template = u'''
 Templates containing links to disambiguation pages (limited results); \
@@ -37,10 +41,10 @@ data as of <onlyinclude>%s</onlyinclude>.
 |}
 '''
 
-wiki = wikitools.Wiki(settings.apiurl)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl'))
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
-conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'), db=config.get('dbreps', 'dbname'), read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* templatedisambigs.py SLOW_OK */
@@ -75,7 +79,7 @@ ORDER BY transclusions_count DESC;
 i = 1
 output = []
 for row in cursor.fetchall():
-    full_template_title = u'[[%s:%s|%s]]' % ('Template', unicode(row[1], 'utf-8'), unicode(row[1], 'utf-8')) 
+    full_template_title = u'[[%s:%s|%s]]' % ('Template', unicode(row[1], 'utf-8'), unicode(row[1], 'utf-8'))
     full_page_title = u'[[%s]]' % (unicode(row[3], 'utf-8'))
     transclusions_count = row[4]
     table_row = u'''| %d
@@ -93,7 +97,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
 
 cursor.close()
 conn.close()

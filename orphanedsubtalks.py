@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.5
+#!/usr/bin/python
 
 # Copyright 2009 bjweeks, MZMcBride
 
@@ -15,12 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import ConfigParser
 import datetime
 import MySQLdb
+import os
 import wikitools
-import settings
 
-report_title = settings.rootpage + 'Orphaned talk subpages'
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
+
+report_title = config.get('dbreps', 'rootpage') + 'Orphaned talk subpages'
 
 report_template = u'''
 Talk pages that don't have a root page and do not have a corresponding \
@@ -35,8 +39,8 @@ subject-space page; data as of <onlyinclude>%s</onlyinclude>.
 |}
 '''
 
-wiki = wikitools.Wiki(settings.apiurl)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl'))
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
 def check_root_page_existence(cursor, page_namespace, raw_page_title):
     raw_page_title = raw_page_title.rsplit('/', 1)[0]
@@ -48,7 +52,7 @@ def check_root_page_existence(cursor, page_namespace, raw_page_title):
     except TypeError:
         return False
 
-conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'), db=config.get('dbreps', 'dbname'), read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* orphanedsubtalks.py SLOW_OK */
@@ -83,7 +87,7 @@ AND NOT EXISTS (SELECT
                 WHERE tl_from = pg1.page_id
                 AND tl_namespace = 10
                 AND tl_title = 'G8-exempt');
-''' , settings.dbname)
+''' , config.get('dbreps', 'dbname'))
 
 i = 1
 output = []
@@ -108,7 +112,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
 
 cursor.close()
 conn.close()

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.5
+#!/usr/bin/python
 
 # Copyright 2008 bjweeks, CBM, MZMcBride
 
@@ -15,13 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import ConfigParser
 import datetime
 import math
 import MySQLdb
+import os
 import wikitools
-import settings
 
-report_title = settings.rootpage + 'Indefinitely semi-protected articles/%i'
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
+
+report_title = config.get('dbreps', 'rootpage') + 'Indefinitely semi-protected articles/%i'
 
 report_template_1 = u'''
 Articles that are indefinitely semi-protected from editing; data as of <onlyinclude>%s</onlyinclude>.
@@ -69,8 +73,8 @@ Articles that are indefinitely semi-protected from editing; data as of <onlyincl
 
 rows_per_page = 800
 
-wiki = wikitools.Wiki(settings.apiurl); wiki.setMaxlag(-1)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl')); wiki.setMaxlag(-1)
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
 def last_log_entry(page):
     params = {
@@ -91,7 +95,7 @@ def last_log_entry(page):
     comment = lastlog[0]['comment']
     return { 'timestamp': timestamp, 'user': user, 'comment': comment }
 
-conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf')
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'), db=config.get('dbreps', 'dbname'), read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 cursor.execute('''
 /* indefsemiarticles.py SLOW_OK */
@@ -153,9 +157,9 @@ for start in range(0, len(output1), rows_per_page):
         report_text = report_template_1 % (current_of, '\n'.join(output1[start:end]), '\n'.join(output2[start:end]))
         end += rows_per_page
         try:
-            report.edit(report_text, summary=settings.editsumm, bot=1)
+            report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
         except UnicodeEncodeError:
-            report.edit(report_text, summary=settings.editsumm, bot=1, skipmd5=True)
+            report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1, skipmd5=True)
     else:
         continue
 
@@ -165,23 +169,23 @@ for start in range(first_end, len(output2)-first_end, rows_per_page):
     report_text = report_template_2 % (current_of, '\n'.join(output2[start:end]))
     report_text = report_text.encode('utf-8')
     try:
-        report.edit(report_text, summary=settings.editsumm, bot=1)
+        report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
     except UnicodeEncodeError:
-        report.edit(report_text, summary=settings.editsumm, bot=1, skipmd5=True)
+        report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1, skipmd5=True)
     page += 1
     end += rows_per_page
 
 page = math.ceil(len(output1 + output2) / float(rows_per_page)) + 1
 while 1:
     report = wikitools.Page(wiki, report_title % page)
-    report_text = settings.blankcontent
+    report_text = config.get('dbreps', 'blankcontent')
     report_text = report_text.encode('utf-8')
     if not report.exists:
         break
     try:
-        report.edit(report_text, summary=settings.blanksumm, bot=1)
+        report.edit(report_text, summary=config.get('dbreps', 'blanksumm'), bot=1)
     except UnicodeEncodeError:
-        report.edit(report_text, summary=settings.blanksumm, bot=1, skipmd5=True)
+        report.edit(report_text, summary=config.get('dbreps', 'blanksumm'), bot=1, skipmd5=True)
     page += 1
 
 cursor.close()

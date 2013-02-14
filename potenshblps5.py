@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.5
+#!/usr/bin/python
 
 # Copyright 2010 bjweeks, MZMcBride
 
@@ -16,11 +16,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import codecs
+import ConfigParser
 import datetime
 import MySQLdb, MySQLdb.cursors
+import os
 import re
 import wikitools
-import settings
+
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
 
 skipped_pages = []
 skipped_file = codecs.open('/home/mzmcbride/scripts/predadurr/skipped_pages.txt', 'r', 'utf-8')
@@ -93,7 +97,7 @@ excluded_titles_re = re.compile(r'(%s)' % '|'.join(str(i) for i in excluded_titl
 excluded_templates_re = re.compile(r'(%s)' % '|'.join(str(i) for i in excluded_templates), re.I|re.U)
 capital_letters_re = re.compile(r'[A-Z]')
 
-report_title = settings.rootpage + 'Potential biographies of living people (5)'
+report_title = config.get('dbreps', 'rootpage') + 'Potential biographies of living people (5)'
 
 report_template = u'''
 Articles that potentially need to be in [[:Category:Living people]] (limited to the first 2000 \
@@ -108,10 +112,10 @@ entries). List generated mostly using magic; data as of <onlyinclude>%s</onlyinc
 |}
 '''
 
-wiki = wikitools.Wiki(settings.apiurl)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl'))
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
-conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf', cursorclass=MySQLdb.cursors.SSCursor)
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'), db=config.get('dbreps', 'dbname'), read_default_file='~/.my.cnf', cursorclass=MySQLdb.cursors.SSCursor)
 cursor = conn.cursor()
 cursor.execute('SET SESSION group_concat_max_len = 1000000;')
 cursor.execute('''
@@ -169,7 +173,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
 
 cursor.close()
 conn.close()

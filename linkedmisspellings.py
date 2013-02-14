@@ -1,13 +1,17 @@
-#! /usr/bin/env python
+#!/usr/bin/python
 # Public domain; MZMcBride; 2012
 
-import os
+import ConfigParser
 import datetime
 import MySQLdb
+import os
+import os
 import wikitools
-import settings
 
-report_title = settings.rootpage + 'Linked misspellings'
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
+
+report_title = config.get('dbreps', 'rootpage') + 'Linked misspellings'
 report_template = u'''\
 Linked misspellings (limited to the first 1000 entries); \
 data as of <onlyinclude>%s</onlyinclude>.
@@ -21,11 +25,11 @@ data as of <onlyinclude>%s</onlyinclude>.
 |}
 '''
 
-wiki = wikitools.Wiki(settings.apiurl)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl'))
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
-conn = MySQLdb.connect(host=settings.host,
-                       db=settings.dbname,
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'),
+                       db=config.get('dbreps', 'dbname'),
                        read_default_file=os.path.expanduser('~/.my.cnf'))
 cursor = conn.cursor()
 cursor.execute('''
@@ -69,7 +73,7 @@ output = []
 for misspelled_redirect in misspelled_redirects:
     if i > 1000:
         break
-    incoming_links = count_incoming_links(cursor, misspelled_redirect)    
+    incoming_links = count_incoming_links(cursor, misspelled_redirect)
     if incoming_links:
         table_row = u"""\
 |-
@@ -93,7 +97,7 @@ current_of = time_diff.strftime('%H:%M, %d %B %Y (UTC)')
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
 
 cursor.close()
 conn.close()

@@ -1,13 +1,17 @@
-#! /usr/bin/env python
+#!/usr/bin/python
 # Public domain; bjweeks, MZMcBride; 2011
 
+import ConfigParser
 import datetime
 import math
 import MySQLdb
+import os
 import wikitools
-import settings
 
-report_title = settings.rootpage + 'Unused templates/%i'
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
+
+report_title = config.get('dbreps', 'rootpage') + 'Unused templates/%i'
 
 report_template = u'''\
 Unused templates; data as of <onlyinclude>%s</onlyinclude>.
@@ -23,8 +27,8 @@ Unused templates; data as of <onlyinclude>%s</onlyinclude>.
 
 rows_per_page = 1000
 
-wiki = wikitools.Wiki(settings.apiurl)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl'))
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
 def get_substituted_templates(cursor):
     templates = []
@@ -43,8 +47,8 @@ def get_substituted_templates(cursor):
         templates.append(page_title)
     return templates
 
-conn = MySQLdb.connect(host=settings.host,
-                       db=settings.dbname,
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'),
+                       db=config.get('dbreps', 'dbname'),
                        read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 substituted_templates = get_substituted_templates(cursor)
@@ -66,7 +70,7 @@ AND page_title = tl_title
 WHERE page_namespace = 10
 AND rd_from IS NULL
 AND tl_from IS NULL;
-''' , settings.dbname)
+''' , config.get('dbreps', 'dbname'))
 
 i = 1
 output = []
@@ -86,7 +90,7 @@ for row in cursor.fetchall():
         not page_title.startswith('Cite_pmid/') and
         not page_title.startswith('TFA_title/') and
         not page_title.startswith('POTD_protected/') and
-        not page_title.startswith('POTD_credit/') and 
+        not page_title.startswith('POTD_credit/') and
         not page_title.startswith('POTD_caption/') and
         not page_title.startswith('Did_you_know_nominations/') and
         not page_title.startswith('Child_taxa//') and
@@ -111,18 +115,18 @@ for start in range(0, len(output), rows_per_page):
     report = wikitools.Page(wiki, report_title % page)
     report_text = report_template % (current_of, '\n'.join(output[start:end]))
     report_text = report_text.encode('utf-8')
-    report.edit(report_text, summary=settings.editsumm, bot=1)
+    report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
     page += 1
     end += rows_per_page
 
 page = math.ceil(len(output) / float(rows_per_page)) + 1
 while 1:
     report = wikitools.Page(wiki, report_title % page)
-    report_text = settings.blankcontent
+    report_text = config.get('dbreps', 'blankcontent')
     report_text = report_text.encode('utf-8')
     if not report.exists:
         break
-    report.edit(report_text, summary=settings.blanksumm, bot=1)
+    report.edit(report_text, summary=config.get('dbreps', 'blanksumm'), bot=1)
     page += 1
 
 cursor.close()

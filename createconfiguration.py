@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/python
 
 # Copyright 2009-2010 bjweeks, MZMcBride, svick
 
@@ -15,12 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
+import ConfigParser
+import datetime
+import os
 import re
 import subprocess
-import datetime
+import sys
 import wikitools
-import settings
+
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
 
 try:
     report_file_no_extension = sys.argv[1].split('.')[0]
@@ -40,7 +44,7 @@ report_file.close()
 
 report_name = re.search('\'(.*)\'', report_source).group(1)
 
-configuration_title = settings.rootpage + report_name + '/Configuration'
+configuration_title = config.get('dbreps', 'rootpage') + report_name + '/Configuration'
 
 crontab = subprocess.Popen('crontab -l', stdout = subprocess.PIPE, shell = True).communicate()[0]
 crontab_line = re.search('^.* ' + report_file_no_extension + '.*$', crontab, re.MULTILINE).group(0)
@@ -57,10 +61,10 @@ template = u'''
 </pre>
 '''
 
-wiki = wikitools.Wiki(settings.apiurl)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl'))
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
 configuration = wikitools.Page(wiki, configuration_title)
 configuration_text = template % (report_filename, report_source, crontab_line)
 configuration_text = configuration_text.encode('utf-8')
-configuration.edit(configuration_text, summary=settings.editsumm if len(sys.argv) < 3 else sys.argv[2], bot=1)
+configuration.edit(configuration_text, summary=config.get('dbreps', 'editsumm') if len(sys.argv) < 3 else sys.argv[2], bot=1)

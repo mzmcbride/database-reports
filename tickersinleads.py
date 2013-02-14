@@ -1,14 +1,16 @@
-#! /usr/bin/env python
+#!/usr/bin/python
 # Public domain; MZMcBride; 2013
 
+import ConfigParser
 import datetime
+import os
 import re
-
 import wikitools
 
-import settings
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
 
-report_title = settings.rootpage + 'Ticker symbols in article leads'
+report_title = config.get('dbreps', 'rootpage') + 'Ticker symbols in article leads'
 report_template = u'''\
 Ticker symbols in article leads (limited to the first 1000 entries); \
 data as of <onlyinclude>%s</onlyinclude>.
@@ -30,8 +32,8 @@ as it appears in the infobox, per [[WP:TICKER]] and [[WP:RFC/TICKER]]\
 |}
 '''
 
-wiki = wikitools.Wiki(settings.apiurl); wiki.setMaxlag(-1)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl')); wiki.setMaxlag(-1)
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
 templates_in_cat = set()
 params = { 'action': 'query',
@@ -117,4 +119,4 @@ current_of = datetime.datetime.utcnow().strftime('%H:%M, %d %B %Y (UTC)')
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)

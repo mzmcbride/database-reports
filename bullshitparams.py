@@ -1,12 +1,16 @@
-#! /usr/bin/env python
+#!/usr/bin/python
 # Public domain; MZMcBride; 2011
 
-import datetime
 import codecs
-import re
+import ConfigParser
+import datetime
 import MySQLdb
+import os
+import re
 import wikitools
-import settings
+
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
 
 def get_target_templates_list():
     return ['Infobox_officeholder']
@@ -118,7 +122,7 @@ def get_template_redirects(cursor, template):
     template_redirects_list = r'(%s)' % '|'.join(template_redirects)
     return template_redirects_list
 
-report_title = settings.rootpage + 'Articles containing invalid template parameters'
+report_title = config.get('dbreps', 'rootpage') + 'Articles containing invalid template parameters'
 
 report_template = u'''\
 Articles containing invalid template parameters (limited to approximately \
@@ -134,11 +138,11 @@ the first 1000 entries); data as of <onlyinclude>%s</onlyinclude>.
 |}
 '''
 
-wiki = wikitools.Wiki(settings.apiurl); wiki.setMaxlag(-1)
-wiki.login(settings.username, settings.password)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl')); wiki.setMaxlag(-1)
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
-conn = MySQLdb.connect(host=settings.host,
-                       db=settings.dbname,
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'),
+                       db=config.get('dbreps', 'dbname'),
                        read_default_file='~/.my.cnf')
 cursor = conn.cursor()
 
@@ -146,12 +150,12 @@ target_templates = get_target_templates_list()
 
 bullshit_parameters = []
 
-f = codecs.open('%sbullshit-reviewed-page-titles.txt' % settings.path, 'r', 'utf-8')
+f = codecs.open('%sbullshit-reviewed-page-titles.txt' % config.get('dbreps', 'path'), 'r', 'utf-8')
 reviewed_page_titles = f.read()
 reviewed_page_titles_set = set(reviewed_page_titles.split('\n'))
 f.close()
 
-g = codecs.open('%sbullshit-reviewed-page-titles.txt' % settings.path, 'a', 'utf-8')
+g = codecs.open('%sbullshit-reviewed-page-titles.txt' % config.get('dbreps', 'path'), 'a', 'utf-8')
 
 count = 1
 for template in target_templates:
@@ -203,7 +207,7 @@ current_of = time_diff.strftime('%H:%M, %d %B %Y (UTC)')
 report = wikitools.Page(wiki, report_title)
 report_text = report_template % (current_of, '\n'.join(output))
 report_text = report_text.encode('utf-8')
-report.edit(report_text, summary=settings.editsumm, bot=1)
+report.edit(report_text, summary=config.get('dbreps', 'editsumm'), bot=1)
 
 cursor.close()
 conn.close()

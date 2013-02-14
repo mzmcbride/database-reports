@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.5
+#!/usr/bin/python
 
 # Copyright 2008 bjweeks, MZMcBride
 
@@ -15,18 +15,22 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import ConfigParser
 import datetime
-import operator
 import MySQLdb
+import operator
+import os
 import wikitools
-import settings
 
-report_title = settings.rootpage + 'Users by log action'
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
 
-wiki = wikitools.Wiki(settings.apiurl)
-wiki.login(settings.username, settings.password)
+report_title = config.get('dbreps', 'rootpage') + 'Users by log action'
 
-conn = MySQLdb.connect(host=settings.host, db=settings.dbname, read_default_file='~/.my.cnf', use_unicode=True)
+wiki = wikitools.Wiki(config.get('dbreps', 'apiurl'))
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
+
+conn = MySQLdb.connect(host=config.get('dbreps', 'host'), db=config.get('dbreps', 'dbname'), read_default_file='~/.my.cnf', use_unicode=True)
 cursor = conn.cursor()
 
 def get_stats(type, action):
@@ -157,7 +161,7 @@ for user,stats in user_stats_sorted:
     i += 1
 
 output += master_table_template % (
-    '\n'.join(['!<span title="%s">%s</span>' % (query['name'], query['short_name']) for query in query_list]), 
+    '\n'.join(['!<span title="%s">%s</span>' % (query['name'], query['short_name']) for query in query_list]),
     '\n'.join(rows),
     '\n'.join([u'!style="text-align:left;"|%d' % totals[query['name']] for query in query_list]) + u'\n!style="text-align:left;"|%d' % totals['total']
 )
@@ -169,7 +173,7 @@ current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).
 final_output = report_template % (current_of, output)
 final_output = final_output.encode('utf-8')
 report = wikitools.Page(wiki, report_title)
-report.edit(final_output, summary=settings.editsumm, bot=1)
+report.edit(final_output, summary=config.get('dbreps', 'editsumm'), bot=1)
 
 cursor.close()
 conn.close()

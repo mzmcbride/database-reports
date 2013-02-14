@@ -2,8 +2,10 @@ MediaWiki database reports, primarily written for the English Wikipedia:
 <https://en.wikipedia.org/wiki/Wikipedia:Database_reports>.
 
 Dependencies:
-* Python
+* Python 2.5
 ** MySQLdb module
+** oursql module (<http://pythonhosted.org/oursql/>)
+** python-Levenshtein module (<http://pypi.python.org/pypi/python-Levenshtein/>)
 ** wikitools module (<https://code.google.com/p/python-wikitools/>)
 
 License information is available in the LICENSE file.
