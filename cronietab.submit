@@ -20,6 +20,7 @@ SHELL=/bin/bash
 0 3 * * 5 qcronsub -b y -j y -l arch=lx -l h_rt=0:05:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/stickyprodblps.py
 45 0 * * 5 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/potenshblps1.py
 50 0 * * 5 qcronsub -b y -j y -l arch=lx -l h_rt=0:05:00 -l virtual_free=560M -l sql-s1-rr=1 -o ~/var/log ~/bin/potenshblps2.py
+55 0 * * 5 qcronsub -b y -j y -l arch=lx -l h_rt=1:05:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/potenshblps3.py
 0 1 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/shortestbios.py
 15 8 * * 2 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/uncatunrefblps.py
 20 8 * * 2 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/untaggedunrefblps.py
@@ -86,6 +87,8 @@ SHELL=/bin/bash
 0 16 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/unusedstubtemplates.py
 
 # TEMPLATES
+15 20 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:20:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/brokenwikiprojtemps.py
+5 20 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=1:35:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/templatedisambigs.py
 20 15 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/transusertemps.py
 5 15 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/uncattemps.py
 35 15 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=2:25:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/unprotectedtemps.py
