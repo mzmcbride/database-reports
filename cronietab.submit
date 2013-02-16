@@ -46,9 +46,12 @@ SHELL=/bin/bash
 
 # FILES
 20 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/filelessfilepages.py
+20 13 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/conflictedfiles.py
 20 15 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/dupefilenames.py
 20 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/largenonfree.py
 20 18 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/nonfreemissingrat.py
+5 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/templatesnonfree.py
+10 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=1:55:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/pageslotnonfree.py
 15 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/overusednonfree.py
 0 3 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/unusednonfree.py
 
@@ -60,6 +63,7 @@ SHELL=/bin/bash
 0 18 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=0:20:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/orphanedprojs.py
 0 6 * * 1,5 qcronsub -b y -j y -l arch=lx -l h_rt=0:05:00 -l virtual_free=140M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/orphanedtalks.py
 0 6 * * 1 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/orphanedsubtalks.py
+0 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/ownerlessuserpages.py
 10 18 * * 5 qcronsub -b y -j y -l arch=lx -l h_rt=0:45:00 -l virtual_free=150M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/shortpages.py
 
 # PROTECTIONS
@@ -88,6 +92,7 @@ SHELL=/bin/bash
 # STUBS
 0 10 * * 5 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/dubiousstubcats.py
 0 7 13 * * qcronsub -b y -j y -l arch=lx -l h_rt=6:30:00 -l virtual_free=90M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/directstubs.py
+0 13 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=1:40:00 -l virtual_free=560M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/untaggedstubs.py
 0 16 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/unusedstubtemplates.py
 
 # TEMPLATES
