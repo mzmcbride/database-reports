@@ -22,7 +22,6 @@ SHELL=/bin/dash
 30 0 * * 4 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/indefsemiarticles.py
 
 # REDIRECTS
-45 9 * * * PYTHONPATH=$HOME/lib/python2.7/site-packages /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/brokensectionanchors.py
 30 12 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/redreds.py
 
 # STATISTICS
@@ -30,10 +29,6 @@ SHELL=/bin/dash
 
 # STUBS
 0 15 * * 5 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/longstubs.py
-
-# TEMPLATES
-0 15 8,22 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/mosttransclusions.py
-25 15 * * 4 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/deletedtrans.py
 
 # USERS
 0 15 6,20 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/inactiveuserrights.py
