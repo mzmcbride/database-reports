@@ -5,23 +5,10 @@ SHELL=/bin/dash
 # MIN HOUR DAYMONTH MONTH DAYWEEK
 
 # ARTICLES
-0 19 6 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/deletedfilesinarticles.py
 0 12 * * 5 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/userlinksinarticles.py
-0 12 6 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/redlinkedfilesinarticles.py
-
-# FILES
-10 10 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/templatelessfilepages.py
-40 10 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/catandtemplessfilepages.py
-0 12 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/mistaggedfiles.py
-
-# PAGES
-0 12 10 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/redlinkedfilesintemplates.py
 
 # PROTECTIONS
 30 0 * * 4 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/indefsemiarticles.py
-
-# REDIRECTS
-30 12 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/redreds.py
 
 # STATISTICS
 0 5 28 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/mostrevisions.py

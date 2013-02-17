@@ -5,9 +5,11 @@ SHELL=/bin/bash
 # MIN HOUR DAYMONTH MONTH DAYWEEK
 
 # ARTICLES
+0 19 6 * * qcronsub -b y -j y -l arch=lx -l h_rt=2:50:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/deletedfilesinarticles.py
 50 2 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=2:40:00 -l virtual_free=110M -l sql-s1-rr=1 -N enwiki.bullshitparams -o ~/var/log ~/bin/dbreps -r enwiki.bullshitparams -s enwiki
 12 0 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -N general.linkedemailsinarticles -o ~/var/log ~/bin/dbreps -r general.linkedemailsinarticles -s enwiki
 #0 12 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=1:55:00 -l virtual_free=550M -l sql-s1-rr=1 -o ~/var/log ~/bin/coordoverlap.py
+0 12 6 * * qcronsub -b y -j y -l arch=lx -l h_rt=1:05:00 -l virtual_free=90M -l sql-s1-rr=1 -o ~/var/log ~/bin/redlinkedfilesinarticles.py
 0 19 15 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=530M -N enwiki.tickersinleads -o ~/var/log ~/bin/dbreps -r enwiki.tickersinleads -s enwiki
 30 21 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/linkedmisspellings.py
 30 19 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:20:00 -l virtual_free=530M -l sql-s1-rr=1 -o ~/var/log ~/bin/unbelievablelifespans.py
@@ -47,10 +49,13 @@ SHELL=/bin/bash
 0 0 2 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=870M -l sql-s1-rr=1 -o ~/var/log ~/bin/usercats.py
 
 # FILES
+10 10 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=3:25:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/templatelessfilepages.py
+40 10 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=2:55:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/catandtemplessfilepages.py
 20 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/filelessfilepages.py
 20 13 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=60M -l sql-s1-rr=1 -N enwiki.conflictedfiles -o ~/var/log ~/bin/dbreps -r enwiki.conflictedfiles -s enwiki
 20 15 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -N general.dupefilenames -o ~/var/log ~/bin/dbreps -r general.dupefilenames -s enwiki
 20 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/largenonfree.py
+0 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:55:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/mistaggedfiles.py
 20 18 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/nonfreemissingrat.py
 5 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/templatesnonfree.py
 10 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=1:55:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/pageslotnonfree.py
@@ -67,6 +72,7 @@ SHELL=/bin/bash
 0 6 * * 1 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/orphanedsubtalks.py
 0 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/ownerlessuserpages.py
 10 18 * * 5 qcronsub -b y -j y -l arch=lx -l h_rt=0:45:00 -l virtual_free=150M -l sql-s1-rr=1 -N general.shortpages -o ~/var/log ~/bin/dbreps -r general.shortpages -s enwiki
+0 12 10 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:40:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/redlinkedfilesintemplates.py
 
 # PROTECTIONS
 5 12 7 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -N general.excessivefullarticles -o ~/var/log ~/bin/dbreps -r general.excessivefullarticles -s enwiki
@@ -80,6 +86,7 @@ SHELL=/bin/bash
 30 23 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:20:00 -l virtual_free=60M -l sql-s1-rr=1 -N general.brokenredirects -o ~/var/log ~/bin/dbreps -r general.brokenredirects -s enwiki
 45 9 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:20:00 -l virtual_free=90M -l sql-s1-rr=1 -o ~/var/log ~/bin/brokensectionanchors.py
 30 0 1 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=80M -l sql-s1-rr=1 -N general.crossredirects -o ~/var/log ~/bin/dbreps -r general.crossredirects -s enwiki
+30 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=12:50:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/redreds.py
 30 18 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=70M -l sql-s1-rr=1 -N general.longredirects -o ~/var/log ~/bin/dbreps -r general.longredirects -s enwiki
 
 # STATISTICS
