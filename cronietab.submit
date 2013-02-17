@@ -6,6 +6,7 @@ SHELL=/bin/bash
 
 # ARTICLES
 12 0 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/linkedemailsinarticles.py
+#0 12 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=1:55:00 -l virtual_free=550M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/coordoverlap.py
 0 19 15 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=530M -o ~/var/log ~/bin/enwiki/tickersinleads.py
 30 21 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/linkedmisspellings.py
 30 19 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:20:00 -l virtual_free=530M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/unbelievablelifespans.py
@@ -84,6 +85,7 @@ SHELL=/bin/bash
 0 14 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:50:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/mostwatchedperns.py
 0 16 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=1:00:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/mostwatchedusers.py
 15 0 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/nscounts.py
+10 5 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=2:40:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/reviewercandidates.py
 0 22 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=1:45:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/userprefs.py
 0 13 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/usersbyupload.py
 20 0 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=90M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/logactions.py

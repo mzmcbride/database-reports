@@ -8,7 +8,6 @@ SHELL=/bin/dash
 0 19 6 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/general/deletedfilesinarticles.py
 50 2 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/enwiki/bullshitparams.py
 0 12 * * 5 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/general/userlinksinarticles.py
-#0 12 * * 4 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/enwiki/coordoverlap.py
 0 12 6 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/general/redlinkedfilesinarticles.py
 
 # FILES
@@ -28,7 +27,6 @@ SHELL=/bin/dash
 
 # STATISTICS
 0 5 28 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/general/mostrevisions.py
-10 5 * * 4 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/enwiki/reviewercandidates.py
 
 # STUBS
 0 15 * * 5 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/enwiki/longstubs.py
