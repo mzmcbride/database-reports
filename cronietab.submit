@@ -95,6 +95,7 @@ SHELL=/bin/bash
 
 # STUBS
 0 10 * * 5 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/dubiousstubcats.py
+0 15 * * 5 qcronsub -b y -j y -l arch=lx -l h_rt=6:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/longstubs.py
 0 7 13 * * qcronsub -b y -j y -l arch=lx -l h_rt=6:30:00 -l virtual_free=90M -l sql-s1-rr=1 -o ~/var/log ~/bin/directstubs.py
 0 13 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=1:40:00 -l virtual_free=560M -l sql-s1-rr=1 -o ~/var/log ~/bin/untaggedstubs.py
 0 16 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/unusedstubtemplates.py
@@ -115,6 +116,7 @@ SHELL=/bin/bash
 0 1 * * 1,4 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -N general.confirmedusers -o ~/var/log ~/bin/dbreps -r general.confirmedusers -s enwiki
 45 15 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=0:05:00 -l virtual_free=60M -l sql-s1-rr=1 -N general.blankanontalks -o ~/var/log ~/bin/dbreps -r general.blankanontalks -s enwiki
 0 15 6,20 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -N general.blockeduserrights -o ~/var/log ~/bin/dbreps -r general.blockeduserrights -s enwiki
+0 15 6,20 * * qcronsub -b y -j y -l arch=lx -l h_rt=2:45:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/inactiveuserrights.py
 30 0 * * 2 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/metarightschanges.py
 55 15 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/oldiptalks.py
 30 15 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=0:55:00 -l virtual_free=300M -l sql-s1-rr=1 -N general.anononlyanons -o ~/var/log ~/bin/dbreps -r general.anononlyanons -s enwiki

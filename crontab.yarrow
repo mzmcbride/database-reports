@@ -25,9 +25,3 @@ SHELL=/bin/dash
 
 # STATISTICS
 0 5 28 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/mostrevisions.py
-
-# STUBS
-0 15 * * 5 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/longstubs.py
-
-# USERS
-0 15 6,20 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/inactiveuserrights.py
