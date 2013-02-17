@@ -5,42 +5,42 @@ SHELL=/bin/dash
 # MIN HOUR DAYMONTH MONTH DAYWEEK
 
 # ARTICLES
-0 19 6 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/deletedfilesinarticles.py
-50 2 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/bullshitparams.py
-0 12 * * 5 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/userlinksinarticles.py
-#0 12 * * 4 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/coordoverlap.py
-0 12 6 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/redlinkedfilesinarticles.py
+0 19 6 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/general/deletedfilesinarticles.py
+50 2 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/enwiki/bullshitparams.py
+0 12 * * 5 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/general/userlinksinarticles.py
+#0 12 * * 4 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/enwiki/coordoverlap.py
+0 12 6 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/general/redlinkedfilesinarticles.py
 
 # FILES
-10 10 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/templatelessfilepages.py
-40 10 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/catandtemplessfilepages.py
-20 13 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/conflictedfiles.py
-0 12 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/mistaggedfiles.py
-5 12 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/templatesnonfree.py
-10 12 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/pageslotnonfree.py
+10 10 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/general/templatelessfilepages.py
+40 10 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/general/catandtemplessfilepages.py
+20 13 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/enwiki/conflictedfiles.py
+0 12 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/enwiki/mistaggedfiles.py
+5 12 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/enwiki/templatesnonfree.py
+10 12 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/enwiki/pageslotnonfree.py
 
 # PAGES
-0 12 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/ownerlessuserpages.py
-0 12 10 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/redlinkedfilesintemplates.py
+0 12 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/general/ownerlessuserpages.py
+0 12 10 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/general/redlinkedfilesintemplates.py
 
 # PROTECTIONS
-30 0 * * 4 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/indefsemiarticles.py
+30 0 * * 4 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/general/indefsemiarticles.py
 
 # REDIRECTS
-45 9 * * * PYTHONPATH=$HOME/lib/python2.7/site-packages /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/brokensectionanchors.py
-30 12 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/redreds.py
+45 9 * * * PYTHONPATH=$HOME/lib/python2.7/site-packages /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/enwiki/brokensectionanchors.py
+30 12 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/general/redreds.py
 
 # STATISTICS
-0 5 28 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/mostrevisions.py
-10 5 * * 4 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/reviewercandidates.py
+0 5 28 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/general/mostrevisions.py
+10 5 * * 4 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/enwiki/reviewercandidates.py
 
 # STUBS
-0 15 * * 5 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/longstubs.py
-0 13 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/untaggedstubs.py
+0 15 * * 5 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/enwiki/longstubs.py
+0 13 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/enwiki/untaggedstubs.py
 
 # TEMPLATES
-0 15 8,22 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/mosttransclusions.py
-25 15 * * 4 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/deletedtrans.py
+0 15 8,22 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/general/mosttransclusions.py
+25 15 * * 4 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/general/deletedtrans.py
 
 # USERS
-0 15 6,20 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/inactiveuserrights.py
+0 15 6,20 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/general/inactiveuserrights.py
