@@ -109,3 +109,6 @@ SHELL=/bin/bash
 30 15 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=0:55:00 -l virtual_free=300M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/anononlyanons.py
 0 15 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=1170M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/noactionuserpages.py
 0 15 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=2:30:00 -l virtual_free=1190M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/noactionusertalks.py
+
+# WIKIDATA
+30 0 * * * qcronsub -b y -j y -l arch=sol -l h_rt=0:10:00 -l virtual_free=60M -l sql-s3-rr=1 -o ~/var/log ~/bin/wikidatawiki/userspaceinitems.py
