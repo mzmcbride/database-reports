@@ -119,3 +119,4 @@ SHELL=/bin/bash
 
 # WIKIDATA
 30 0 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s3-rr=1 -o ~/var/log ~/bin/wikidatawiki/userspaceinitems.py
+50 0 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:20:00 -l virtual_free=60M -l sql-s3-rr=1 -o ~/var/log ~/bin/wikidatawiki/popular_properties.py
