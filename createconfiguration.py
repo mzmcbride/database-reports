@@ -35,12 +35,11 @@ except IndexError:
 report_filename = report_file_no_extension + '.py'
 
 try:
-    report_file = open(report_filename, 'r')
+    with open(report_filename, 'r') as report_file:
+        report_source = report_file.read()
 except IOError:
     print 'No such file; exiting.'
     sys.exit()
-report_source = report_file.read()
-report_file.close()
 
 report_name = re.search('\'(.*)\'', report_source).group(1)
 
