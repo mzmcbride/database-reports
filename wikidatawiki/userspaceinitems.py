@@ -81,7 +81,7 @@ def main():
         text+= get_report(db, *row)
     text = template + text + '\n|}'
     page = wikitools.Page(wiki, 'Wikidata:Database reports/User pages')
-    page.edit(text.decode('utf-8'), summary='Bot: Updating database report',bot=1)
+    page.edit(text, summary='Bot: Updating database report',bot=1)
 
 
 def get_lang(dbname):
