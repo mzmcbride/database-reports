@@ -45,7 +45,7 @@ limit 100;
 """
 
 template = """
-A list of pages with links to userspace.
+A list of pages with links to userspace. Last updated at <onlyinclude>~~~~~</onlyinclude>.
 
 {| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
