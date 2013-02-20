@@ -6,7 +6,7 @@ Licensed as CC-Zero. See https://creativecommons.org/publicdomain/zero/1.0 for m
 """
 import os
 import oursql
-import pywikibot
+import wikitools
 import datetime
 query = """
 SELECT
@@ -45,7 +45,12 @@ table_row = """|-
 | {2}
 """
 
-site=pywikibot.Site('wikidata','wikidata')
+config = ConfigParser.ConfigParser()
+config.read([os.path.expanduser('~/.dbreps.ini')])
+
+wiki = wikitools.Wiki('http://www.wikidata.org/w/api.php')
+wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
+
 
 def get_label(db, pid):
     cursor=db.cursor()
@@ -73,7 +78,7 @@ def replag(db):
 
 
 def main():
-    page=pywikibot.Page(site, 'Wikidata:Database reports/Popular properties')
+    page=wikitools.Page(wiki, 'Wikidata:Database reports/Popular properties')
     db = oursql.connect(db='wikidatawiki_p',
         host="wikidatawiki-p.rrdb.toolserver.org",
         read_default_file=os.path.expanduser("~/.my.cnf"),
@@ -85,7 +90,7 @@ def main():
     text = template.format(repl) + report + '|}'
     #print '----'
     #print text
-    page.put(text, 'Bot: Updating database report')
+    page.edit(text, summary='Bot: Updating database report',bot=1)
 
 if __name__ == "__main__":
     main()
