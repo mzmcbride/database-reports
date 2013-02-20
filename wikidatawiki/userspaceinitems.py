@@ -94,7 +94,7 @@ def get_report(db, dbname, ns):
     for row in cursor:
         print row
 
-        text += table_row.format(row[0], get_lang(dbname), row[1])
+        text += table_row.format(row[0], get_lang(dbname).replace('_','-'), row[1])
     return text
 
 if __name__ == "__main__":
