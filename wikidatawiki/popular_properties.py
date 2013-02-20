@@ -7,6 +7,7 @@ Licensed as CC-Zero. See https://creativecommons.org/publicdomain/zero/1.0 for m
 import os
 import oursql
 import wikitools
+import ConfigParser
 import datetime
 query = """
 SELECT
