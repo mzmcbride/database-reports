@@ -46,6 +46,8 @@ table_row = """|-
 | {2}
 """
 
+footer = '|}\n\n[[Category:Properties]]'
+
 config = ConfigParser.ConfigParser()
 config.read([os.path.expanduser('~/.dbreps.ini')])
 
@@ -88,7 +90,7 @@ def main():
     )
     report = mk_report(db)
     repl = replag(db)
-    text = template.format(repl) + report + '|}'
+    text = template.format(repl) + report + footer
     #print '----'
     #print text
     page.edit(text, summary='Bot: Updating database report',bot=1)
