@@ -8,7 +8,7 @@ import MySQLdb
 import wikitools
 
 # Parse arguments.
-parser = optparse.OptionParser(usage="Usage: dbreps.py [-c INIFILE] -r REPORT -s SITE [-t]")
+parser = optparse.OptionParser(usage="Usage: %prog [-c INIFILE] -r REPORT -s SITE [-t]")
 parser.add_option("-c", "--config", dest="inifile", default=os.path.expanduser('~/.dbreps.ini'),
                   help="read configuration from INIFILE instead of ~/.dbreps.ini")
 parser.add_option("-r", "--report", dest="reportname",
