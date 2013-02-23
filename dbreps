@@ -1,0 +1,103 @@
+#!/usr/bin/python
+
+import ConfigParser
+import optparse
+import os
+
+import MySQLdb
+import wikitools
+
+# Parse arguments.
+parser = optparse.OptionParser(usage="Usage: dbreps.py [-c INIFILE] -r REPORT -s SITE [-t]")
+parser.add_option("-c", "--config", dest="inifile", default=os.path.expanduser('~/.dbreps.ini'),
+                  help="read configuration from INIFILE instead of ~/.dbreps.ini")
+parser.add_option("-r", "--report", dest="reportname",
+                  help="run report REPORTNAME")
+parser.add_option("-s", "--site", dest="site",
+                  help="run report on SITE")
+parser.add_option("-t", "--test", dest="test", action="store_true",
+                  help="just print report, do not update wiki")
+(options, args) = parser.parse_args()
+if args:
+    parser.error("Only options allowed")
+if not options.inifile:
+    parser.error("No inifile specified")
+if not options.reportname:
+    parser.error("No report specified")
+if not options.site:
+    parser.error("No site specified")
+
+# Read configuration.
+config = ConfigParser.ConfigParser()
+config.read([options.inifile])
+if not config.has_section(options.site):
+    parser.error("No section for %s in %s" % (options.site, options.inifile))
+
+# Set up wiki login.
+wiki = wikitools.Wiki(config.get(options.site, 'apiurl'))
+wiki.setUserAgent('http://en.wikipedia.org/wiki/Wikipedia_talk:Database_reports')
+wiki.setMaxlag(-1)
+wiki.login(config.get(options.site, 'username'), config.get(options.site, 'password'))
+
+# Load report module and initialize report.
+try:
+    reportmodule = __import__("reports.%s" % options.reportname, globals(), locals(), ["reports"])
+except ImportError:
+    parser.error("No report %s defined" % options.reportname)
+r = reportmodule.report(wiki, options.site, config.get(options.site, 'dumpdate'), config.get(options.site, 'userdb'))
+
+# Connect to database.
+inikey = 'host'
+if r.needs_commons_db():
+    inikey += '-commons'
+if r.needs_user_db():
+    inikey += '-user'
+if not config.has_option(options.site, inikey):
+    parser.error("No option %s for %s in %s" % (inikey, options.site, options.inifile))
+conn = MySQLdb.connect(host=config.get(options.site, inikey),
+                       db=config.get(options.site, 'dbname'),
+                       read_default_file='~/.my.cnf',
+                       charset='utf8')
+
+# Format report header and footer.
+pageheader = r.get_preamble(conn) + '''
+
+{| class="wikitable sortable plainlinks" style="width:100%; margin:auto;"
+|- style="white-space:nowrap;"
+! No.
+''' + ''.join("! %s\n" % column for column in r.get_table_columns())
+pagefooter = '|}'
+
+# Format table rows.
+i = 1
+formatted_table_rows = []
+for row in r.get_table_rows(conn):
+    formatted_table_rows.append("|-\n| %d\n" % i + ''.join("| " + cell + "\n" for cell in row))
+    i = i + 1
+
+# Upload report.
+if options.test:
+    print pageheader + ''.join(formatted_table_rows) + pagefooter
+else:
+    if r.rows_per_page():
+        sub_page_nr = 1
+        while (sub_page_nr - 1) * r.rows_per_page() < len(formatted_table_rows):
+            first_row = (sub_page_nr - 1) * r.rows_per_page()
+            last_row = sub_page_nr * r.rows_per_page() - 1
+            reportpage = wikitools.Page(wiki, config.get(options.site, 'rootpage') + r.get_title() + '/' + str(sub_page_nr))
+            pagecontents = pageheader + ''.join(formatted_table_rows[first_row:last_row]) + pagefooter
+            reportpage.edit(pagecontents, summary=config.get(options.site, 'editsumm'), bot=1)
+            sub_page_nr = sub_page_nr + 1
+        while True:
+            reportpage = wikitools.Page(wiki, config.get(options.site, 'rootpage') + r.get_title() + '/' + str(sub_page_nr))
+            if not reportpage.exists:
+                break
+            reportpage.edit(config.get(options.site, 'blankcontent'), summary=config.get(options.site, 'blanksumm'), bot=1)
+            sub_page_nr = sub_page_nr + 1
+    else:
+        pagecontents = pageheader + ''.join(formatted_table_rows) + pagefooter
+        reportpage = wikitools.Page(wiki, config.get(options.site, 'rootpage') + r.get_title())
+        reportpage.edit(pagecontents, summary=config.get(options.site, 'editsumm'), bot=1)
+
+# Close connection to database.
+conn.close()
