@@ -42,18 +42,20 @@ data as of <onlyinclude>%s</onlyinclude>.' % current_of
         cursor.execute('''
 /* blankanontalks.py SLOW_OK */
 SELECT
-  CONVERT(ns_name USING utf8),
+  CONVERT(ns_name USING utf8) AS ns_name,
   page_title
 FROM page
 JOIN toolserver.namespace
 ON ns_id = page_namespace
-WHERE dbname = %s
+WHERE dbname = ?
 AND page_namespace = 3
-AND page_title RLIKE %s
+AND page_title RLIKE ?
 AND page_len = 0
 LIMIT 1000;
 ''' , (self.site + '_p', r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'))
 
-        for row in cursor.fetchall():
-            full_page_title = u'[[%s:%s|%s]]' % (row[0], row[1], row[1])
+        for ns_name, page_title in cursor:
+            full_page_title = u'[[%s:%s|%s]]' % (ns_name, page_title, page_title)
             yield (full_page_title, )
+
+        cursor.close()

@@ -4,7 +4,7 @@ import ConfigParser
 import optparse
 import os
 
-import MySQLdb
+import oursql
 import wikitools
 
 # Parse arguments.
@@ -54,10 +54,9 @@ if r.needs_user_db():
     inikey += '-user'
 if not config.has_option(options.site, inikey):
     parser.error("No option %s for %s in %s" % (inikey, options.site, options.inifile))
-conn = MySQLdb.connect(host=config.get(options.site, inikey),
-                       db=config.get(options.site, 'dbname'),
-                       read_default_file='~/.my.cnf',
-                       charset='utf8')
+conn = oursql.Connection(host=config.get(options.site, inikey),
+                         db=config.get(options.site, 'dbname'),
+                         read_default_file='~/.my.cnf')
 
 # Format report header and footer.
 pageheader = r.get_preamble(conn) + '''
@@ -100,4 +99,5 @@ else:
         reportpage.edit(pagecontents, summary=config.get(options.site, 'editsumm'), bot=1)
 
 # Close connection to database.
+conn.commit()
 conn.close()

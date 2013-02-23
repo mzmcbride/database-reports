@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(name='dbreps',
       version='0.1-alpha',
-      requires=['MySQLdb',
+      requires=['oursql',
                 'wikitools'],
       packages=['reports',
                 'reports.general',
