@@ -42,7 +42,7 @@ SHELL=/bin/bash
 0 22 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=0:50:00 -l virtual_free=120M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/linkedredlinkedcats.py
 0 6 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=1:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/selfcatcats.py
 0 2 * * 2 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/polltemps.py
-0 0 * * 1 qcronsub -b y -j y -l arch=lx -l h_rt=1:40:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/uncatcats.py
+0 0 * * 1 qcronsub -b y -j y -l arch=lx -l h_rt=1:40:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/dbreps -r general.uncatcats -s enwiki
 0 0 2 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=870M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/usercats.py
 
 # FILES
