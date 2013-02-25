@@ -13,13 +13,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""
+Report class for articles containing linked e-mail addresses
+"""
+
 import datetime
 
 import reports
-
-"""
-Report class for Articles containing linked e-mail addresses
-"""
 
 class report(reports.report):
     def get_title(self):
