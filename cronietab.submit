@@ -101,7 +101,7 @@ SHELL=/bin/bash
 15 20 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:20:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/brokenwikiprojtemps.py
 0 12 15 * * qcronsub -b y -j y -l arch=lx -l h_rt=5:50:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/epontemps.py
 5 20 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=1:35:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/templatedisambigs.py
-20 15 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/transusertemps.py
+20 15 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/dbreps -r general.transusertemps -s enwiki
 5 15 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/uncattemps.py
 35 15 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=2:25:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/unprotectedtemps.py
 0 15 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=2:25:00 -l virtual_free=120M -l sql-s1-rr=1 -o ~/var/log ~/bin/enwiki/unusedtemplates.py
