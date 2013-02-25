@@ -114,7 +114,7 @@ SHELL=/bin/bash
 30 0 * * 2 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/metarightschanges.py
 55 15 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/oldiptalks.py
 30 15 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=0:55:00 -l virtual_free=300M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/anononlyanons.py
-0 15 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=1170M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/noactionuserpages.py
+0 15 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=1170M -l sql-s1-rr=1 -o ~/var/log ~/bin/dbreps -r general.noactionuserpages -s enwiki
 0 15 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=2:30:00 -l virtual_free=1190M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/noactionusertalks.py
 
 # WIKIDATA
