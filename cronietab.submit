@@ -31,7 +31,7 @@ SHELL=/bin/bash
 # BLOCKS
 0 0 * * 2 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=90M -l sql-s1-rr=1 -o ~/var/log ~/bin/dbreps -r general.indefips -s enwiki.py
 5 0 * * 2 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/rangeblocks.py
-0 12 8 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/general/excessiveips.py
+0 12 8 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/dbreps -r general.excessiveips -s enwiki
 5 12 8 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/dbreps -r general.excessiveusers -s enwiki
 
 # CATEGORIES
