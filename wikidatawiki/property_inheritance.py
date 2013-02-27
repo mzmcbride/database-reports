@@ -76,12 +76,12 @@ def replag(db):
 
 def mk_report(db, first, second):
     cursor = db.cursor()
-    print 'running query'
+    # print 'running query'
     cursor.execute(query, (first, second))
     text = ''
     for qid in cursor:
         text+= '*[[{0}]]\n'.format(qid[0])
-    print 'done'
+    # print 'done'
     return text
 
 def run(db, first, second):

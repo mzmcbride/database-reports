@@ -62,12 +62,12 @@ def get_input():
 
 def mk_report(db, site):
     cursor = db.cursor()
-    print 'running query on '+site
+    # print 'running query on '+site
     cursor.execute(query,(site,))
     text = ''
     for qid, count in cursor:
         text+= table_row.format(qid, count)
-    print 'done'
+    # print 'done'
     return text
 
 def replag(db):
