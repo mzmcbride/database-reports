@@ -84,7 +84,7 @@ SHELL=/bin/bash
 # STATISTICS
 0 12 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=1:35:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/mostwatched.py
 0 14 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:50:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/mostwatchedperns.py
-0 16 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=1:00:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/mostwatchedusers.py
+0 16 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=1:00:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/dbreps -r general.mostwatchedusers -s enwiki
 15 0 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/nscounts.py
 10 5 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=2:40:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/reviewercandidates.py
 0 22 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=1:45:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/userprefs.py
