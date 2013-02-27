@@ -110,7 +110,7 @@ SHELL=/bin/bash
 # USERS
 0 1 * * 1,4 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/dbreps -r general.confirmedusers -s enwiki
 45 15 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=0:05:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/dbreps -r general.blankanontalks -s enwiki
-0 15 6,20 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/blockeduserrights.py
+0 15 6,20 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/dbreps -r general.blockeduserrights -s enwiki
 30 0 * * 2 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/metarightschanges.py
 55 15 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/oldiptalks.py
 30 15 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=0:55:00 -l virtual_free=300M -l sql-s1-rr=1 -o ~/var/log ~/bin/dbreps -r general.anononlyanons -s enwiki
