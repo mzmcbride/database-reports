@@ -18,3 +18,27 @@ editsumm:
 # Report details (multi-page)
 blankcontent:
 blanksumm:
+
+[enwiki]
+
+# Wiki login details
+username:
+password:
+apiurl:
+dumpdate:
+
+# Toolserver details
+host:
+host-commons:
+host-commons-user:
+host-user:
+dbname:
+userdb:
+
+# Report details (generic)
+rootpage:
+editsumm:
+
+# Report details (multi-page)
+blankcontent:
+blanksumm:
