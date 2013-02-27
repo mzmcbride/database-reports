@@ -92,7 +92,7 @@ def get_report(db, dbname, ns):
     cursor = db.cursor()
     cursor.execute(query.format(lang=get_lang(dbname), ns=ns))
     for row in cursor:
-        print row
+        # print row
 
         text += table_row.format(row[0], get_lang(dbname).replace('_','-'), row[1])
     return text

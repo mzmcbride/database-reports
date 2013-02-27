@@ -64,13 +64,13 @@ def get_label(db, pid):
 
 def mk_report(db):
     cursor = db.cursor()
-    print 'running query'
+    # print 'running query'
     cursor.execute(query)
     text = ''
     for pid, count in cursor:
         name = get_label(db, pid)
         text+= table_row.format(pid, name, count)
-    print 'done'
+    # print 'done'
     return text
 
 def replag(db):
