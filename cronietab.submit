@@ -70,7 +70,7 @@ SHELL=/bin/bash
 # PROTECTIONS
 5 12 7 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/dbreps -r general.excessivefullarticles -s enwiki
 35 0 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:30:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/indeffullarticles.py
-45 0 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/indeffulltalks.py
+45 0 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/dbreps -r general.indeffulltalks -s enwiki
 6 12 7 * * qcronsub -b y -j y -l arch=lx -l h_rt=2:30:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/protlowtemps.py
 40 0 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:20:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/indefsemitalks.py
 0 12 7 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/dbreps -r general.excessivesemiarticles -s enwiki
