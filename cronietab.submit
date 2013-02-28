@@ -98,7 +98,7 @@ SHELL=/bin/bash
 0 16 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/unusedstubtemplates.py
 
 # TEMPLATES
-15 20 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:20:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/brokenwikiprojtemps.py
+15 20 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:20:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/dbreps -r enwiki.brokenwikiprojtemps -s enwiki
 0 12 15 * * qcronsub -b y -j y -l arch=lx -l h_rt=5:50:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/epontemps.py
 5 20 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=1:35:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/templatedisambigs.py
 20 15 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/dbreps -r general.transusertemps -s enwiki
