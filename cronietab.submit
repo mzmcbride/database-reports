@@ -50,7 +50,7 @@ SHELL=/bin/bash
 # FILES
 10 10 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=3:25:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/templatelessfilepages.py
 40 10 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=2:55:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/catandtemplessfilepages.py
-20 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/filelessfilepages.py
+20 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -N general.filelessfilepages -o ~/var/log ~/bin/dbreps -r general.filelessfilepages -s enwiki
 20 13 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=60M -l sql-s1-rr=1 -N enwiki.conflictedfiles -o ~/var/log ~/bin/dbreps -r enwiki.conflictedfiles -s enwiki
 20 15 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -N general.dupefilenames -o ~/var/log ~/bin/dbreps -r general.dupefilenames -s enwiki
 20 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/largenonfree.py
