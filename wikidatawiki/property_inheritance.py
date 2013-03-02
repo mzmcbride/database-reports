@@ -13,23 +13,28 @@ import os
 import ConfigParser
 import wikitools
 import oursql
+import datetime
 
 query = """
 SELECT
-page_title
+  page_title,
+  pl_namespace,
+  pl_title
 FROM pagelinks
 JOIN page
 ON page_id=pl_from
 WHERE pl_namespace=120
 AND page_namespace=0
-AND pl_title="{0}"
-AND NOT EXISTS (
-    SELECT
-     *
-    FROM pagelinks
-    WHERE pl_from=pl_from
-    AND pl_namespace=120
-    AND pl_title="{1}"
+AND pl_title=?
+AND page_title NOT IN (
+  SELECT
+    page_title
+  FROM pagelinks
+  JOIN page
+  ON page_id=pl_from
+  WHERE pl_namespace=120
+  AND pl_title=?
+  AND page_namespace=0
 )
 LIMIT 100;
 """
@@ -73,7 +78,7 @@ def replag(db):
 def mk_report(db, first, second):
     cursor = db.cursor()
     print 'running query'
-    cursor.execute(query.format(first, second))
+    cursor.execute(query, (first, second))
     text = ''
     for qid in cursor:
         text+= '*[[{0}]]\n'.format(qid)
@@ -86,7 +91,7 @@ def run(db, first, second):
     text = mk_report(db, first, second)
     text = header.format(first, second, replag(db)) + text
     page.edit(text, summary='Bot: Updating database report',bot=1)
-    return '\n*[[title|Pages with "{0}" but not "{1}"]]'.format(get_label(db, first), get_label(db, second))
+    return '\n*[[{0}|Pages with "{1}" but not "{2}"]]'.format(title, get_label(db, first), get_label(db, second))
 
 def main():
     page = wikitools.Page(wiki, base)
@@ -96,7 +101,7 @@ def main():
                         charset=None,
                         use_unicode=False
     )
-    text = 'This report spans multiple subpages. It was last run at ~~~~.'
+    text = 'This report spans multiple subpages. It was last run at ~~~~~.'
     text += run(db, 'P17','P30')
     page.edit(text, summary='Bot: Updating database report',bot=1)
 
