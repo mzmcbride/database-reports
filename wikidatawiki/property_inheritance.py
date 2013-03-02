@@ -9,6 +9,7 @@ but don't have another (like continent).
 
 """
 
+import os
 import ConfigParser
 import wikitools
 import oursql
