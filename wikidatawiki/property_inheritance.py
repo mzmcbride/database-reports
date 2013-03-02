@@ -99,3 +99,6 @@ def main():
     text = 'This report spans multiple subpages. It was last run at ~~~~.'
     text += run(db, 'P17','P30')
     page.edit(text, summary='Bot: Updating database report',bot=1)
+
+if __name__ == "__main__":
+    main()
