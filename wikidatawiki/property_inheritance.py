@@ -17,9 +17,7 @@ import datetime
 
 query = """
 SELECT
-  page_title,
-  pl_namespace,
-  pl_title
+  page_title
 FROM pagelinks
 JOIN page
 ON page_id=pl_from
@@ -81,7 +79,7 @@ def mk_report(db, first, second):
     cursor.execute(query, (first, second))
     text = ''
     for qid in cursor:
-        text+= '*[[{0}]]\n'.format(qid)
+        text+= '*[[{0}]]\n'.format(qid[0])
     print 'done'
     return text
 
