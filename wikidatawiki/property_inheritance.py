@@ -49,7 +49,8 @@ AND term_type="label"
 base = 'Wikidata:Database reports/Property inheritance'
 
 header = "A list of pages which have [[Property:{0}|{0}]], \
-but not [[Property:{1}|{1}]] Data as of <onlyinclude>{2}</onlyinclude>.\n"
+but not [[Property:{1}|{1}]]. Limited to the first 100 results. \
+Data as of <onlyinclude>{2}</onlyinclude>.\n"
 
 
 config = ConfigParser.ConfigParser()
