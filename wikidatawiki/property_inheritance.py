@@ -101,7 +101,8 @@ def main():
                         use_unicode=False
     )
     text = 'This report spans multiple subpages. It was last run at ~~~~~.'
-    text += run(db, 'P17','P30')
+    text += run(db, 'P17','P30') #country w/o continent
+    text += run(db, 'P21', 'P107') #sex w/o entity type
     page.edit(text, summary='Bot: Updating database report',bot=1)
 
 if __name__ == "__main__":
