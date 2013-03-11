@@ -100,7 +100,7 @@ def main():
                         charset=None,
                         use_unicode=False
     )
-    text = 'This report spans multiple subpages. It was last run at ~~~~~.'
+    text = 'This report spans multiple subpages. It was last run at <onlyinclude>~~~~~</onlyinclude>.'
     text += run(db, 'P17','P30') #country w/o continent
     text += run(db, 'P21', 'P107') #sex w/o entity type
     page.edit(text, summary='Bot: Updating database report',bot=1)
