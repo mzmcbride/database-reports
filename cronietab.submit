@@ -125,4 +125,4 @@ SHELL=/bin/bash
 50 0 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:20:00 -l virtual_free=60M -l sql-s3-rr=1 -o ~/var/log ~/bin/popular_properties.py
 20 1 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:20:00 -l virtual_free=60M -l sql-s3-rr=1 -o ~/var/log ~/bin/popular_items.py
 50 1 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:20:00 -l virtual_free=60M -l sql-s3-rr=1 -o ~/var/log ~/bin/property_inheritance.py
-30 2 * * * qcronsub -b y -j y -l arch=lx -l h_rt=5:00:00 -l virtual_free=60M -l sql-s1-rr=1 -l sql-s2-rr=1 -l sql-s3-rr=1 -l sql-s4-rr=1 -l sql-s5-rr=1 -l sql-s6-rr=1 -l sql-s7-rr=1 -o ~/var/log ~/bin/missing_links.py
+30 2 * * * qcronsub -b y -j y -l arch=lx -l h_rt=8:00:00 -l virtual_free=60M -l sql-s1-rr=1 -l sql-s2-rr=1 -l sql-s3-rr=1 -l sql-s4-rr=1 -l sql-s5-rr=1 -l sql-s6-rr=1 -l sql-s7-rr=1 -o ~/var/log ~/bin/missing_links.py
