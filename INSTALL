@@ -1,0 +1,16 @@
+User databases
+==============
+
+Some reports store information about the last run in tables in user
+databases.  They can be safely purged and excluded from backup, but
+their structures must always exist.
+
+To (re-)create these, run as user dbreps:
+
+$ USERDB=p_dbreps
+$ sql -u enwiki_p <<EOF
+DROP TABLE IF EXISTS $USERDB.bullshit_reviewed_page_titles;
+CREATE TABLE $USERDB.bullshit_reviewed_page_titles
+(page_id int(8) unsigned PRIMARY KEY,
+ lastreviewed TIMESTAMP NOT NULL);
+EOF

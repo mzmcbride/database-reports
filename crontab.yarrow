@@ -6,7 +6,6 @@ SHELL=/bin/dash
 
 # ARTICLES
 0 19 6 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/deletedfilesinarticles.py
-50 2 * * 6 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/bullshitparams.py
 0 12 * * 5 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/userlinksinarticles.py
 0 12 6 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/redlinkedfilesinarticles.py
 

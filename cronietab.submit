@@ -5,6 +5,7 @@ SHELL=/bin/bash
 # MIN HOUR DAYMONTH MONTH DAYWEEK
 
 # ARTICLES
+50 2 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=2:40:00 -l virtual_free=110M -l sql-s1-rr=1 -N enwiki.bullshitparams -o ~/var/log ~/bin/dbreps -r enwiki.bullshitparams -s enwiki
 12 0 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/dbreps -r general.linkedemailsinarticles -s enwiki
 #0 12 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=1:55:00 -l virtual_free=550M -l sql-s1-rr=1 -o ~/var/log ~/bin/coordoverlap.py
 0 19 15 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=530M -o ~/var/log ~/bin/tickersinleads.py
