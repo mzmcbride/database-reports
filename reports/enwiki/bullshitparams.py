@@ -175,3 +175,5 @@ the first 1000 entries); data as of <onlyinclude>%s</onlyinclude>.''' % current_
                     bullshit_parameters_count += 1
                 if bullshit_parameters_count == 0:
                     cursor.execute(u'REPLACE INTO %s.bullshit_reviewed_page_titles (page_id) SELECT page_id FROM page WHERE page_namespace = 0 AND page_title = CONVERT(? USING utf8);' % self.userdb, (article, ))
+
+        cursor.close()
