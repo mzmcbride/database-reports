@@ -64,6 +64,6 @@ data as of <onlyinclude>%s</onlyinclude>.''' % current_of
 
         for user_name, user_editcount, rev_timestamp in cursor:
             user_name = u'{{dbr link|1=%s}}' % user_name
-            yield [user_name, user_editcount, rev_timestamp]
+            yield [user_name, str(user_editcount), rev_timestamp]
 
         cursor.close()
