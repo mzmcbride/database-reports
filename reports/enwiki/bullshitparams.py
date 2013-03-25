@@ -1,5 +1,9 @@
 # Public domain; MZMcBride, Tim Landscheidt; 2011, 2013
 
+"""
+Report class for articles containing invalid template parameters
+"""
+
 import datetime
 import re
 
