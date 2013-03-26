@@ -18,7 +18,7 @@ SHELL=/bin/bash
 40 0 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:35:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/potenshbdps3.py
 
 # BIOGRAPHIES OF LIVING PEOPLE
-0 2 * * 5 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/unsourcedblps.py
+0 2 * * 5 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -N enwiki.unsourcedblps -o ~/var/log ~/bin/dbreps -r enwiki.unsourcedblps -s enwiki
 0 3 * * 5 qcronsub -b y -j y -l arch=lx -l h_rt=0:05:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/stickyprodblps.py
 45 0 * * 5 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/potenshblps1.py
 50 0 * * 5 qcronsub -b y -j y -l arch=lx -l h_rt=0:05:00 -l virtual_free=560M -l sql-s1-rr=1 -o ~/var/log ~/bin/potenshblps2.py
