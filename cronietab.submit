@@ -13,7 +13,7 @@ SHELL=/bin/bash
 30 19 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:20:00 -l virtual_free=530M -l sql-s1-rr=1 -o ~/var/log ~/bin/unbelievablelifespans.py
 
 # BIOGRAPHIES OF DEAD PEOPLE
-30 0 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/potenshbdps1.py
+30 0 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -N enwiki.potenshbdps1 -o ~/var/log ~/bin/dbreps -r enwiki.potenshbdps1 -s enwiki
 35 0 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:40:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/potenshbdps2.py
 40 0 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:35:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/potenshbdps3.py
 
