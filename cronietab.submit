@@ -27,7 +27,7 @@ SHELL=/bin/bash
 10 1 * * 5 qcronsub -b y -j y -l arch=lx -l h_rt=3:25:00 -l virtual_free=2070M -l sql-s1-rr=1 -o ~/var/log ~/bin/potenshblps4.py
 0 1 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/shortestbios.py
 15 8 * * 2 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/uncatunrefblps.py
-20 8 * * 2 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/untaggedunrefblps.py
+20 8 * * 2 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -N enwiki.untaggedunrefblps -o ~/var/log ~/bin/dbreps -r enwiki.untaggedunrefblps -s enwiki
 20 8 * * 2 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/untaggedblps.py
 
 # BLOCKS
