@@ -55,7 +55,7 @@ template = u'''
 </source>
 
 == crontab ==
-<pre>
+<pre style="white-space:pre-wrap">
 %s
 </pre>
 '''
