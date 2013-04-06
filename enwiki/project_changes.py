@@ -73,7 +73,8 @@ SELECT SUBSTRING_INDEX(page_title, '/', 1) AS project,
        WHERE page_namespace = 4
        AND page_title = project) AS redirect
 FROM page
-WHERE page_title LIKE 'WikiProject\_%'
+WHERE (page_title LIKE 'WikiProject\_%'
+  OR page_title LIKE 'WikiAfrica')
 AND page_namespace BETWEEN 4 AND 5
 AND page_is_redirect = 0
 GROUP BY project
