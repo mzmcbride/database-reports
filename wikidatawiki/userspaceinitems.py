@@ -45,6 +45,8 @@ AND NOT ips_site_page LIKE "%Emijrp%"
 AND NOT ips_site_page LIKE "%UBX%"
 AND NOT ips_site_page LIKE "%Vorlage%"
 AND NOT ips_site_page LIKE "%Userbox%"
+AND NOT ips_site_page LIKE "%Box%"
+AND NOT ips_site_page LIKE "%Userboksy%"
 limit 100;
 """
 
