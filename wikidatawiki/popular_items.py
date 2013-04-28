@@ -60,8 +60,11 @@ def get_label(db, qid):
     cursor=db.cursor()
     id = int(qid.replace('Q',''))
     cursor.execute(label_query, (id,))
-    answer = cursor.fetchone()[0]
-    return answer
+    lbl = cursor.fetchone()
+    if lbl:
+        return lbl[0]
+    else:
+        return ''
 
 def mk_report(db):
     cursor = db.cursor()
