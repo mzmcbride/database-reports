@@ -41,12 +41,12 @@ except IOError:
     print 'No such file; exiting.'
     sys.exit()
 
-report_name = re.search('\'(.*)\'', report_source).group(1)
+report_name = re.search('report_title =.*\'(.*)\'$', report_source, re.MULTILINE).group(1)
 
 configuration_title = config.get('dbreps', 'rootpage') + report_name + '/Configuration'
 
 crontab = subprocess.Popen('crontab -l', stdout = subprocess.PIPE, shell = True).communicate()[0]
-crontab_line = re.search('^.* ' + report_file_no_extension + '.*$', crontab, re.MULTILINE).group(0)
+crontab_line = re.search('^.*' + report_file_no_extension + '.*$', crontab, re.MULTILINE).group(0)
 
 template = u'''
 == %s ==
@@ -55,7 +55,7 @@ template = u'''
 </source>
 
 == crontab ==
-<pre>
+<pre style="white-space:pre-wrap">
 %s
 </pre>
 '''

@@ -35,6 +35,7 @@ data as of <onlyinclude>%s</onlyinclude>.
 ! No.
 ! WikiProject
 ! Watchers
+! Active watchers
 |-
 %s
 |}
@@ -48,7 +49,10 @@ cursor = conn.cursor()
 cursor.execute('''
 /* project_watchers.py */
 /* SLOW_OK */
-SELECT wl_title AS project, COUNT(*) AS count
+SELECT
+  wl_title AS project,
+  COUNT(*) AS watchers,
+  IFNULL(SUM(ts_wl_user_touched_cropped>NOW()-INTERVAL 30 DAY), 0) AS active
 FROM watchlist
 JOIN page ON page_namespace = wl_namespace
   AND page_title = wl_title
@@ -56,19 +60,21 @@ WHERE wl_title LIKE 'WikiProject\_%'
 AND wl_title NOT LIKE '%/%'
 AND wl_namespace = 4
 GROUP BY project
-HAVING count >= 100
-ORDER BY count DESC
+HAVING watchers >= 100
+ORDER BY watchers DESC
 ''')
 
 i = 1
 output = []
 for row in cursor.fetchall():
     page_title = '[[Wikipedia:%s]]' % unicode(row[0], 'utf-8').replace('_', ' ')
-    edits = row[1]
+    watchers = row[1]
+    active_watchers = row[2]
     table_row = u'''| %d
 | %s
 | %d
-|-''' % (i, page_title, edits)
+| %d
+|-''' % (i, page_title, watchers, active_watchers)
     output.append(table_row)
     i += 1
 
