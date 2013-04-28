@@ -74,7 +74,7 @@ def main():
     rows = cursor.fetchall()
     db_ts.close()
     db = oursql.connect(db='wikidatawiki_p',
-        host="wikidatawiki-p.rrdb.toolserver.org",
+        host="sql-s5",
         read_default_file=os.path.expanduser("~/.my.cnf"),
         charset=None,
         use_unicode=False
