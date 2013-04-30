@@ -111,7 +111,7 @@ SHELL=/bin/bash
 0 12 15 * * qcronsub -b y -j y -l arch=lx -l h_rt=5:50:00 -l virtual_free=60M -l sql-s1-rr=1 -N general.epontemps -o ~/var/log ~/bin/dbreps -r general.epontemps -s enwiki
 5 20 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=1:35:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/templatedisambigs.py
 0 15 8,22 * * qcronsub -b y -j y -l arch=lx -l h_rt=2:20:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/mosttransclusions.py
-25 15 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/deletedtrans.py
+25 15 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=70M -l sql-s1-rr=1 -N general.deletedtrans -o ~/var/log ~/bin/dbreps -r general.deletedtrans -s enwiki
 20 15 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=70M -l sql-s1-rr=1 -N general.transusertemps -o ~/var/log ~/bin/dbreps -r general.transusertemps -s enwiki
 5 15 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -N general.uncattemps -o ~/var/log ~/bin/dbreps -r general.uncattemps -s enwiki
 35 15 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=2:25:00 -l virtual_free=80M -l sql-s1-rr=1 -N general.unprotectedtemps -o ~/var/log ~/bin/dbreps -r general.unprotectedtemps -s enwiki
