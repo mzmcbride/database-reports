@@ -1,0 +1,8 @@
+PATH=/usr/local/bin:/usr/bin:/bin
+SHELL=/bin/bash
+
+# INSTRUCTIONS
+# MIN HOUR DAYMONTH MONTH DAYWEEK
+
+# ARTICLES
+0 19 15 * * jsub -once -j y -mem 530m -N enwiki.tickersinleads -o ~/var/log ~/bin/dbreps -r enwiki.tickersinleads -s enwiki
