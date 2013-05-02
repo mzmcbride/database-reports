@@ -1,3 +1,29 @@
+Deployment
+==========
+
+To deploy the current HEAD at GitHub, run as yourself with
+ssh permissions for Toolserver and Tools:
+
+$ ssh yarrow.toolserver.org sudo -u dbreps bash <<EOF &&
+cd ~dbreps/src/database-reports &&
+git pull --rebase &&
+python setup.py install --user --install-scripts ~dbreps/bin &&
+crontab crontab.yarrow
+EOF
+ssh submit.toolserver.org sudo -u dbreps cronie \~dbreps/src/database-reports/cronietab.submit &&
+ssh tools-login.wmflabs.org sudo -iu local-dbreps bash <<EOF &&
+cd ~/src/database-reports &&
+git pull --rebase &&
+python setup.py install --user --install-scripts ~/bin &&
+crontab crontab.tools
+EOF
+echo Successfully deployed dbreps to yarrow, submit and tools-login.
+
+Caution: This does not install the required modules per
+README (MySQLdb, oursql, python-Levenshtein and wikitools),
+nor does it signal an error if they are not installed.
+
+
 User databases
 ==============
 
