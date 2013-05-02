@@ -10,7 +10,7 @@ SHELL=/bin/bash
 12 0 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -N general.linkedemailsinarticles -o ~/var/log ~/bin/dbreps -r general.linkedemailsinarticles -s enwiki
 #0 12 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=1:55:00 -l virtual_free=550M -l sql-s1-rr=1 -o ~/var/log ~/bin/coordoverlap.py
 0 12 6 * * qcronsub -b y -j y -l arch=lx -l h_rt=1:05:00 -l virtual_free=90M -l sql-s1-rr=1 -o ~/var/log ~/bin/redlinkedfilesinarticles.py
-30 21 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/linkedmisspellings.py
+30 21 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=70M -l sql-s1-rr=1 -N enwiki.linkedmisspellings -o ~/var/log ~/bin/dbreps -r enwiki.linkedmisspellings -s enwiki
 30 19 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:20:00 -l virtual_free=530M -l sql-s1-rr=1 -o ~/var/log ~/bin/unbelievablelifespans.py
 
 # BIOGRAPHIES OF DEAD PEOPLE
