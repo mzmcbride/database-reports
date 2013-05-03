@@ -87,7 +87,7 @@ class report(reports.report):
         AND pr_type = 'edit'
         AND pr_level = 'sysop'
         AND pr_expiry = 'infinity'
-        AND page_title NOT LIKE "%%/%%"
+        AND page_title NOT LIKE '%/%'
         AND page_is_redirect = 0;
         ''', (self.site, ))
 
