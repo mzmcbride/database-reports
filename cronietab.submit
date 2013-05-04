@@ -59,7 +59,7 @@ SHELL=/bin/bash
 5 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/templatesnonfree.py
 10 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=1:55:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/pageslotnonfree.py
 15 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -N enwiki.overusednonfree -o ~/var/log ~/bin/dbreps -r enwiki.overusednonfree -s enwiki
-0 3 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/unusednonfree.py
+0 3 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -N enwiki.unusednonfree -o ~/var/log ~/bin/dbreps -r enwiki.unusednonfree -s enwiki
 
 # PAGES
 0 18 * * 5 qcronsub -b y -j y -l arch=lx -l h_rt=0:45:00 -l virtual_free=120M -l sql-s1-rr=1 -N general.blankpages -o ~/var/log ~/bin/dbreps -r general.blankpages -s enwiki
