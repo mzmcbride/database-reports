@@ -45,7 +45,7 @@ SHELL=/bin/bash
 0 6 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=1:10:00 -l virtual_free=60M -l sql-s1-rr=1 -N general.selfcatcats -o ~/var/log ~/bin/dbreps -r general.selfcatcats -s enwiki
 0 2 * * 2 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -N enwiki.polltemps -o ~/var/log ~/bin/dbreps -r enwiki.polltemps -s enwiki
 0 0 * * 1 qcronsub -b y -j y -l arch=lx -l h_rt=1:40:00 -l virtual_free=60M -l sql-s1-rr=1 -N general.uncatcats -o ~/var/log ~/bin/dbreps -r general.uncatcats -s enwiki
-0 0 2 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=870M -l sql-s1-rr=1 -o ~/var/log ~/bin/usercats.py
+0 0 2 * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=870M -l sql-s1-rr=1 -N enwiki.usercats -o ~/var/log ~/bin/dbreps -r enwiki.usercats -s enwiki
 
 # FILES
 10 10 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=3:25:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/templatelessfilepages.py
