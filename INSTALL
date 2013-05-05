@@ -39,4 +39,10 @@ DROP TABLE IF EXISTS $USERDB.bullshit_reviewed_page_titles;
 CREATE TABLE $USERDB.bullshit_reviewed_page_titles
 (page_id int(8) unsigned PRIMARY KEY,
  lastreviewed TIMESTAMP NOT NULL);
+
+DROP TABLE IF EXISTS $USERDB.potenshblps4_skipped_pages;
+CREATE TABLE $USERDB.potenshblps4_skipped_pages
+(page_title VARCHAR(255) COLLATE utf8_bin PRIMARY KEY);
+LOAD DATA LOCAL INFILE 'data/enwiki/potenshblps4/skipped_pages.txt'
+INTO TABLE $USERDB.potenshblps4_skipped_pages (page_title);
 EOF
