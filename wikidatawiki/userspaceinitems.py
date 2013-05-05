@@ -51,9 +51,9 @@ limit 100;
 """
 
 template = """
-A list of pages with links to userspace. Last updated at <onlyinclude>~~~~~</onlyinclude>.
+A list of pages with links to userspace. Last updated at <onlyinclude>{0}</onlyinclude>.
 
-{| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
+{{| class="wikitable sortable plainlinks" style="width:100%%; margin:auto;"
 |- style="white-space:nowrap;"
 ! Item
 ! Link
@@ -85,7 +85,7 @@ def main():
     for row in rows:
     #    print row
         text+= get_report(db, *row)
-    text = template + text + '\n|}'
+    text = template.format(replag(db)) + text + '\n|}'
     page = wikitools.Page(wiki, 'Wikidata:Database reports/User pages')
     page.edit(text, summary='Bot: Updating database report',bot=1)
 
@@ -102,6 +102,13 @@ def get_report(db, dbname, ns):
 
         text += table_row.format(row[0], get_lang(dbname).replace('_','-'), row[1])
     return text
+
+def replag(db):
+    cursor=db.cursor()
+    cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
+    rep_lag = cursor.fetchone()[0]
+    return (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
+
 
 if __name__ == "__main__":
     main()
