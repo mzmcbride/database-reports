@@ -94,7 +94,7 @@ SHELL=/bin/bash
 0 14 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:50:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/mostwatchedperns.py
 0 16 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=1:00:00 -l virtual_free=60M -l sql-s1-rr=1 -N general.mostwatchedusers -o ~/var/log ~/bin/dbreps -r general.mostwatchedusers -s enwiki
 15 0 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/nscounts.py
-10 5 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=2:40:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/reviewercandidates.py
+10 5 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=2:40:00 -l virtual_free=80M -l sql-s1-rr=1 -N enwiki.reviewercandidates -o ~/var/log ~/bin/dbreps -r enwiki.reviewercandidates -s enwiki
 0 22 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=1:45:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/userprefs.py
 0 13 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -N general.usersbyupload -o ~/var/log ~/bin/dbreps -r general.usersbyupload -s enwiki
 20 0 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=90M -l sql-s1-rr=1 -o ~/var/log ~/bin/logactions.py
