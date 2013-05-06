@@ -39,7 +39,7 @@ SHELL=/bin/bash
 # CATEGORIES
 0 1 * * 0 qcronsub -b y -j y -l arch=lx -l h_rt=1:00:00 -l virtual_free=70M -l sql-s1-rr=1 -N general.redlinkedcatsincats -o ~/var/log ~/bin/dbreps -r general.redlinkedcatsincats -s enwiki
 0 12 * * 5 qcronsub -b y -j y -l arch=lx -l h_rt=1:00:00 -l virtual_free=120M -l sql-s1-rr=1 -N general.deletedredlinkedcats -o ~/var/log ~/bin/dbreps -r general.deletedredlinkedcats -s enwiki
-0 1 * * * qcronsub -b y -j y -l arch=lx -l h_rt=4:10:00 -l virtual_free=70M -l sql-s1-rr=1 -o ~/var/log ~/bin/emptycats.py
+0 1 * * * qcronsub -b y -j y -l arch=lx -l h_rt=4:10:00 -l virtual_free=70M -l sql-s1-rr=1 -N enwiki.emptycats -o ~/var/log ~/bin/dbreps -r enwiki.emptycats -s enwiki
 0 2 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=1:15:00 -l virtual_free=870M -l sql-s1-rr=1 -o ~/var/log ~/bin/pollcats.py
 0 22 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=0:50:00 -l virtual_free=120M -l sql-s1-rr=1 -N general.linkedredlinkedcats -o ~/var/log ~/bin/dbreps -r general.linkedredlinkedcats -s enwiki
 0 6 * * 3 qcronsub -b y -j y -l arch=lx -l h_rt=1:10:00 -l virtual_free=60M -l sql-s1-rr=1 -N general.selfcatcats -o ~/var/log ~/bin/dbreps -r general.selfcatcats -s enwiki
