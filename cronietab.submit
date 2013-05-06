@@ -28,7 +28,7 @@ SHELL=/bin/bash
 0 1 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -N enwiki.shortestbios -o ~/var/log ~/bin/dbreps -r enwiki.shortestbios -s enwiki
 15 8 * * 2 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=80M -l sql-s1-rr=1 -o ~/var/log ~/bin/uncatunrefblps.py
 20 8 * * 2 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -N enwiki.untaggedunrefblps -o ~/var/log ~/bin/dbreps -r enwiki.untaggedunrefblps -s enwiki
-20 8 * * 2 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/untaggedblps.py
+20 8 * * 2 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -N enwiki.untaggedblps -o ~/var/log ~/bin/dbreps -r enwiki.untaggedblps -s enwiki
 
 # BLOCKS
 0 0 * * 2 qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=90M -l sql-s1-rr=1 -N general.indefips -o ~/var/log ~/bin/dbreps -r general.indefips -s enwiki
