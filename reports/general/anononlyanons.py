@@ -13,22 +13,10 @@ class report(reports.report):
     def get_title(self):
         return 'Short user talk pages for IPs'
 
-    def get_preamble(self, conn):
-        cursor = conn.cursor()
-        cursor.execute('''
-                       SELECT
-                         UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp)
-                       FROM recentchanges
-                       ORDER BY rc_timestamp DESC
-                       LIMIT 1;
-                       ''')
-        rep_lag = cursor.fetchone()[0]
-        time_diff = datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)
-        current_of = time_diff.strftime('%H:%M, %d %B %Y (UTC)')
-
+    def get_preamble_template(self):
         return u'''User talk pages of anonymous users where the only contributors to the page \
         are anonymous, the page is less than 50 bytes in length, and it contains no \
-        templates (limited to the first 1000 entries); data as of <onlyinclude>%s</onlyinclude>.''' % current_of
+        templates (limited to the first 1000 entries); data as of <onlyinclude>%s</onlyinclude>.'''
 
     def get_table_columns(self):
         return ['Page', 'Length']

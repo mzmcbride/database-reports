@@ -25,16 +25,11 @@ class report(reports.report):
     def get_title(self):
         return 'Biographies of living people containing unsourced statements'
 
-    def get_preamble(self, conn):
-        cursor = conn.cursor()
-        cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
-        rep_lag = cursor.fetchone()[0]
-        current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
-
+    def get_preamble_template(self):
         return u'''{{shortcut|WP:DR/BLP}}
 Pages in [[:Category:Living people]] that [[Special:WhatLinksHere/Template:Citation needed|transclude]] \
 [[Template:Citation needed]] (limited to the first 500 entries); data as of <onlyinclude>%s</onlyinclude>. \
-{{NOINDEX}}''' % current_of
+{{NOINDEX}}'''
 
     def get_table_columns(self):
         return ['Article']

@@ -25,15 +25,10 @@ class report(reports.report):
     def get_title(self):
         return 'User pages for inactive IPs'
 
-    def get_preamble(self, conn):
-        cursor = conn.cursor()
-        cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
-        rep_lag = cursor.fetchone()[0]
-        current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
-
+    def get_preamble_template(self):
         return u'''User pages of anonymous users without any contributions (live or deleted), \
 blocks, or abuse filter matches (limited to the first 1000 entries); \
-data as of <onlyinclude>%s</onlyinclude>.''' % current_of
+data as of <onlyinclude>%s</onlyinclude>.'''
 
     def get_table_columns(self):
         return ['Page', 'Length']

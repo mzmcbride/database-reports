@@ -30,13 +30,8 @@ class report(reports.report):
     def get_title(self):
         return 'Indefinitely fully protected talk pages'
 
-    def get_preamble(self, conn):
-        cursor = conn.cursor()
-        cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
-        rep_lag = cursor.fetchone()[0]
-        current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
-
-        return 'Talk pages that are indefinitely fully protected from editing (subpages and redirects excluded); data as of <onlyinclude>%s</onlyinclude>.' % current_of
+    def get_preamble_template(self):
+        return 'Talk pages that are indefinitely fully protected from editing (subpages and redirects excluded); data as of <onlyinclude>%s</onlyinclude>.'
 
     def get_table_columns(self):
         return ['Page', 'Protector', 'Timestamp', 'Reason']

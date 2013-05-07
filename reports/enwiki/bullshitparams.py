@@ -131,21 +131,9 @@ class report(reports.report):
     def get_title(self):
         return 'Articles containing invalid template parameters'
 
-    def get_preamble(self, conn):
-        cursor = conn.cursor()
-        cursor.execute('''
-                       SELECT
-                         UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp)
-                       FROM recentchanges
-                       ORDER BY rc_timestamp DESC
-                       LIMIT 1;
-                       ''')
-        rep_lag = cursor.fetchone()[0]
-        time_diff = datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)
-        current_of = time_diff.strftime('%H:%M, %d %B %Y (UTC)')
-
+    def get_preamble_template(self):
         return u'''Articles containing invalid template parameters (limited to approximately \
-the first 1000 entries); data as of <onlyinclude>%s</onlyinclude>.''' % current_of
+the first 1000 entries); data as of <onlyinclude>%s</onlyinclude>.'''
 
     def get_table_columns(self):
         return ['Page', 'Parameter']

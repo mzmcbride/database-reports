@@ -25,17 +25,12 @@ class report(reports.report):
     def get_title(self):
         return 'Empty categories'
 
-    def get_preamble(self, conn):
-        cursor = conn.cursor()
-        cursor.execute('SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(rc_timestamp) FROM recentchanges ORDER BY rc_timestamp DESC LIMIT 1;')
-        rep_lag = cursor.fetchone()[0]
-        current_of = (datetime.datetime.utcnow() - datetime.timedelta(seconds=rep_lag)).strftime('%H:%M, %d %B %Y (UTC)')
-
+    def get_preamble_template(self):
         return u'''Empty categories not in [[:Category:Wikipedia category redirects]], not in \
 [[:Category:Disambiguation categories]], and do not contain "(-importance|\
 -class|non-article|assess|articles missing|articles in need of|articles undergoing|\
 articles to be|articles not yet|articles with|articles without|articles needing|\
-Wikipedia featured topics)"; data as of <onlyinclude>%s</onlyinclude>.''' % current_of
+Wikipedia featured topics)"; data as of <onlyinclude>%s</onlyinclude>.'''
 
     def get_table_columns(self):
         return ['Category', 'Length']
