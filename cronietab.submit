@@ -54,7 +54,7 @@ SHELL=/bin/bash
 20 13 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=60M -l sql-s1-rr=1 -N enwiki.conflictedfiles -o ~/var/log ~/bin/dbreps -r enwiki.conflictedfiles -s enwiki
 20 15 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:10:00 -l virtual_free=60M -l sql-s1-rr=1 -N general.dupefilenames -o ~/var/log ~/bin/dbreps -r general.dupefilenames -s enwiki
 20 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:15:00 -l virtual_free=60M -l sql-s1-rr=1 -N enwiki.largenonfree -o ~/var/log ~/bin/dbreps -r enwiki.largenonfree -s enwiki
-0 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:55:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/mistaggedfiles.py
+0 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:55:00 -l virtual_free=60M -l sql-s1-rr=1 -N enwiki.mistaggedfiles -o ~/var/log ~/bin/dbreps -r enwiki.mistaggedfiles -s enwiki
 20 18 * * * qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=60M -l sql-s1-rr=1 -o ~/var/log ~/bin/nonfreemissingrat.py
 5 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=0:25:00 -l virtual_free=60M -l sql-s1-rr=1 -N enwiki.templatesnonfree -o ~/var/log ~/bin/dbreps -r enwiki.templatesnonfree -s enwiki
 10 12 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=1:55:00 -l virtual_free=60M -l sql-s1-rr=1 -N enwiki.pageslotnonfree -o ~/var/log ~/bin/dbreps -r enwiki.pageslotnonfree -s enwiki
