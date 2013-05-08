@@ -8,7 +8,6 @@ SHELL=/bin/bash
 0 19 6 * * qcronsub -b y -j y -l arch=lx -l h_rt=2:50:00 -l virtual_free=70M -l sql-s1-rr=1 -N general.deletedfilesinarticles -o ~/var/log ~/bin/dbreps -r general.deletedfilesinarticles -s enwiki
 50 2 * * 6 qcronsub -b y -j y -l arch=lx -l h_rt=2:40:00 -l virtual_free=110M -l sql-s1-rr=1 -N enwiki.bullshitparams -o ~/var/log ~/bin/dbreps -r enwiki.bullshitparams -s enwiki
 #0 12 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=1:55:00 -l virtual_free=550M -l sql-s1-rr=1 -o ~/var/log ~/bin/coordoverlap.py
-0 12 6 * * qcronsub -b y -j y -l arch=lx -l h_rt=1:05:00 -l virtual_free=90M -l sql-s1-rr=1 -o ~/var/log ~/bin/redlinkedfilesinarticles.py
 30 19 * * 4 qcronsub -b y -j y -l arch=lx -l h_rt=0:20:00 -l virtual_free=530M -l sql-s1-rr=1 -N enwiki.unbelievablelifespans -o ~/var/log ~/bin/dbreps -r enwiki.unbelievablelifespans -s enwiki
 
 # BIOGRAPHIES OF DEAD PEOPLE

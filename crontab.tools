@@ -7,6 +7,7 @@ SHELL=/bin/bash
 # ARTICLES
 12 0 * * 6 jsub -once -j y -mem 280m -N general.linkedemailsinarticles -o ~/var/log -quiet ~/bin/dbreps -r general.linkedemailsinarticles -s enwiki
 0 12 * * 5 jsub -once -j y -mem 280m -N general.userlinksinarticles -o ~/var/log -quiet ~/bin/dbreps -r general.userlinksinarticles -s enwiki
+0 12 6 * * jsub -once -j y -mem 320m -N general.redlinkedfilesinarticles -o ~/var/log -quiet ~/bin/dbreps -r general.redlinkedfilesinarticles -s enwiki
 0 19 15 * * jsub -once -j y -mem 1060m -N enwiki.tickersinleads -o ~/var/log -quiet ~/bin/dbreps -r enwiki.tickersinleads -s enwiki
 30 21 * * 4 jsub -once -j y -mem 280m -N enwiki.linkedmisspellings -o ~/var/log -quiet ~/bin/dbreps -r enwiki.linkedmisspellings -s enwiki
 
