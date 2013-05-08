@@ -49,3 +49,26 @@ class report:
     def get_table_rows(self, conn):
         """Get a table row as a list."""
         raise NotImplementedError("Please implement this method")
+
+    def get_all_categories_beneath(self, cursor, cat):
+        queried_cats = {}
+
+        def process_category(cat):
+            queried_cats [cat] = True
+            cursor.execute('''
+                           SELECT
+                             CONVERT(page_title USING utf8)
+                           FROM page
+                           JOIN categorylinks
+                           ON cl_from = page_id
+                           WHERE cl_to = CONVERT(? USING utf8)
+                           AND page_namespace = 14;
+                           ''', (cat, ))
+            results = cursor.fetchall()
+            for subcatrow in results:
+                if not subcatrow[0] in queried_cats:
+                    process_category (subcatrow[0])
+
+        process_category(cat)
+
+        return queried_cats.keys()
