@@ -17,7 +17,6 @@
 Report class for indefinitely blocked IPs
 """
 
-import datetime
 import re
 
 import reports

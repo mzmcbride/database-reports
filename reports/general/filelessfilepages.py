@@ -17,8 +17,6 @@
 Report class for file description pages without an associated file
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

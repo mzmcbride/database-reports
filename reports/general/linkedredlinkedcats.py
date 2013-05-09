@@ -4,8 +4,6 @@
 Report class for red-linked categories with incoming links
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

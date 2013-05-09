@@ -17,8 +17,6 @@
 Report class for self-categorized categories
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

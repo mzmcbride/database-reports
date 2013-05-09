@@ -17,8 +17,6 @@
 Report class for blank user talk pages for IPs
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

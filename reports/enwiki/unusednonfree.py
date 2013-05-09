@@ -17,8 +17,6 @@
 Report class for unused non-free files
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

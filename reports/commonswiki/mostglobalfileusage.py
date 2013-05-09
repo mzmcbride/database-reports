@@ -4,8 +4,6 @@
 Report class for files with the most uses globally
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

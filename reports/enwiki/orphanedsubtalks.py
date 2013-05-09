@@ -17,8 +17,6 @@
 Report class for orphaned talk subpages
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

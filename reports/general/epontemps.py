@@ -17,8 +17,6 @@
 Report class for eponymous templates
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

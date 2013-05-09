@@ -17,8 +17,6 @@
 Report class for orphaned article deletion discussions
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

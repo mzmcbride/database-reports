@@ -4,7 +4,6 @@
 Report class for short user talk pages for IPs
 """
 
-import datetime
 import re
 
 import reports

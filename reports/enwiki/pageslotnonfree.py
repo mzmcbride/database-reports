@@ -17,8 +17,6 @@
 Report class for pages containing an unusually high number of non-free files
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

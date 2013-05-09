@@ -17,8 +17,6 @@
 Report class for large non-free files
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

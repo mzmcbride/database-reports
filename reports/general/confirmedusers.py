@@ -17,8 +17,6 @@
 Report class for autoconfirmed users in the confirmed user group
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

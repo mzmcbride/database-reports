@@ -17,8 +17,6 @@
 Report class for deleted red-linked categories
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

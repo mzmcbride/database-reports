@@ -17,8 +17,6 @@
 Report class for transclusions of deleted templates
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

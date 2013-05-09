@@ -17,8 +17,6 @@
 Report class for orphaned single-author project pages
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

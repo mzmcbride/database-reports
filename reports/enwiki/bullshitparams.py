@@ -4,7 +4,6 @@
 Report class for articles containing invalid template parameters
 """
 
-import datetime
 import re
 
 import wikitools

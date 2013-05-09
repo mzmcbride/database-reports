@@ -17,8 +17,6 @@
 Report class for unprotected templates with many transclusions
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

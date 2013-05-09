@@ -17,8 +17,6 @@
 Report class for template categories containing articles
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

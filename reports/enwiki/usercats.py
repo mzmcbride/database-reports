@@ -17,7 +17,6 @@
 Report class for user categories
 """
 
-import datetime
 import re
 
 import reports

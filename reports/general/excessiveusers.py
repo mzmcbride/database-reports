@@ -17,8 +17,6 @@
 Report class for unusually long user blocks
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

@@ -4,8 +4,6 @@
 Report class for largely duplicative file names
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

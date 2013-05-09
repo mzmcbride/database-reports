@@ -17,8 +17,6 @@
 Report class for redirects obscuring page content
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

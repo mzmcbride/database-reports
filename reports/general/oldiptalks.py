@@ -17,8 +17,6 @@
 Report class for old IP talk pages
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

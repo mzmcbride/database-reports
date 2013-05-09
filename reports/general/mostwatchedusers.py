@@ -17,8 +17,6 @@
 Report class for most-watched users
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

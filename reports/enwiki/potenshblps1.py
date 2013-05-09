@@ -17,8 +17,6 @@
 Report class for potential biographies of living people (1)
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

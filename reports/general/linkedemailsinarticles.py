@@ -17,8 +17,6 @@
 Report class for articles containing linked e-mail addresses
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

@@ -17,8 +17,6 @@
 Report class for biographies of living people possibly eligible for deletion
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

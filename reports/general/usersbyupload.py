@@ -17,8 +17,6 @@
 Report class for users by bytes uploaded
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

@@ -17,8 +17,6 @@
 Report class for templates containing red-linked files
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

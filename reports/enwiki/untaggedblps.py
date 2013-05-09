@@ -17,8 +17,6 @@
 Report class for untagged biographies of living people
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

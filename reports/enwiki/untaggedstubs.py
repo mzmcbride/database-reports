@@ -4,8 +4,6 @@
 Report class for untagged stubs
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

@@ -17,8 +17,6 @@
 Report class for uncategorized categories
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

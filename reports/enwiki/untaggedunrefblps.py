@@ -17,7 +17,6 @@
 Report class for untagged and unreferenced biographies of living people
 """
 
-import datetime
 import re
 
 import reports

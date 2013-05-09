@@ -17,8 +17,6 @@
 Report class for broken WikiProject templates
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

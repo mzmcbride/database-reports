@@ -4,8 +4,6 @@
 Report class for unused templates
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

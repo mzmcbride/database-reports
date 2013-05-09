@@ -17,8 +17,6 @@
 Report class for categories categorized in red-linked categories
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

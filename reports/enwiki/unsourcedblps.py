@@ -17,8 +17,6 @@
 Report class for biographies of living people containing unsourced statements
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

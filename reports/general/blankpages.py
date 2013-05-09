@@ -17,8 +17,6 @@
 Report class for blank single-author pages
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

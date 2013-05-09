@@ -17,8 +17,6 @@
 Report class for user pages for inactive IPs
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

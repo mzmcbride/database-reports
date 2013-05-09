@@ -17,8 +17,6 @@
 Report class for blocked users in user groups
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

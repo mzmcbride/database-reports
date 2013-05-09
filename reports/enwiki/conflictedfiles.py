@@ -17,8 +17,6 @@
 Report class for files with conflicting categorization
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

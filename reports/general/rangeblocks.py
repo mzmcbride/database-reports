@@ -17,8 +17,6 @@
 Report class for range blocks
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

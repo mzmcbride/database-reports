@@ -17,8 +17,6 @@
 Report class for transplanted user templates
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

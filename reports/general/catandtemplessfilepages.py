@@ -17,8 +17,6 @@
 Report class for file description pages containing no templates or categories
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

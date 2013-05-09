@@ -17,7 +17,6 @@
 Report class for potential biographies of living people (4)
 """
 
-import datetime
 import re
 
 import reports

@@ -4,8 +4,6 @@
 Report class for linked misspellings
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

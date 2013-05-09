@@ -17,8 +17,6 @@
 Report class for user template redirects
 """
 
-import datetime
-
 import reports
 
 class report(reports.report):

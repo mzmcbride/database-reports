@@ -17,9 +17,6 @@
 Report class for broken redirects
 """
 
-import datetime
-import oursql
-
 import reports
 
 class report(reports.report):
