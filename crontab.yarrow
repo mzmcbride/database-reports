@@ -4,9 +4,6 @@ SHELL=/bin/dash
 # INSTRUCTIONS
 # MIN HOUR DAYMONTH MONTH DAYWEEK
 
-# ARTICLES
-0 12 * * 5 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/userlinksinarticles.py
-
 # PROTECTIONS
 30 0 * * 4 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/indefsemiarticles.py
 
