@@ -43,7 +43,7 @@ A list of the most linked to items. Data as of <onlyinclude>{0}</onlyinclude>.
 ! Usage
 """
 table_row = """|-
-| [[{0}|{1}]]
+| [[{0}|{{{{label|{0}}}}}]]
 | {2}
 """
 
@@ -55,25 +55,13 @@ config.read([os.path.expanduser('~/.dbreps.ini')])
 wiki = wikitools.Wiki('http://www.wikidata.org/w/api.php')
 wiki.login(config.get('dbreps', 'username'), config.get('dbreps', 'password'))
 
-
-def get_label(db, qid):
-    cursor=db.cursor()
-    id = int(qid.replace('Q',''))
-    cursor.execute(label_query, (id,))
-    lbl = cursor.fetchone()
-    if lbl:
-        return lbl[0]
-    else:
-        return ''
-
 def mk_report(db):
     cursor = db.cursor()
     # print 'running query'
     cursor.execute(query)
     text = ''
     for qid, count in cursor:
-        name = get_label(db, qid)
-        text+= table_row.format(qid, name, count)
+        text+= table_row.format(qid, count)
     # print 'done'
     return text
 
