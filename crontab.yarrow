@@ -4,8 +4,5 @@ SHELL=/bin/dash
 # INSTRUCTIONS
 # MIN HOUR DAYMONTH MONTH DAYWEEK
 
-# PROTECTIONS
-30 0 * * 4 /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/indefsemiarticles.py
-
 # STATISTICS
 0 5 28 * * /usr/bin/time -f 'Command: \%C\nMemory: \%M\nTime: \%E' $HOME/bin/mostrevisions.py
