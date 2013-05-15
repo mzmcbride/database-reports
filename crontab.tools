@@ -57,6 +57,7 @@ SHELL=/bin/bash
 
 # STUBS
 0 10 * * 5 jsub -once -j y -mem 150m -N enwiki.dubiousstubcats -o ~/var/log ~/bin/dbreps -r enwiki.dubiousstubcats -s enwiki
+0 15 * * 5 jsub -once -j y -mem 140m -N enwiki.longstubs -o ~/var/log ~/bin/dbreps -r enwiki.longstubs -s enwiki
 0 7 13 * * jsub -once -j y -mem 150m -N enwiki.directstubs -o ~/var/log ~/bin/dbreps -r enwiki.directstubs -s enwiki
 0 13 * * 6 jsub -once -j y -mem 140m -N enwiki.untaggedstubs -o ~/var/log ~/bin/dbreps -r enwiki.untaggedstubs -s enwiki
 
