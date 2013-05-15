@@ -68,14 +68,18 @@ pageheader = r.get_preamble(conn) + '''
 |- style="white-space:nowrap;"
 ! No.
 ''' + ''.join("! %s\n" % column for column in r.get_table_columns())
-pagefooter = '|}'
+footer = r.get_footer()
+if footer != None:
+    pagefooter = '|}\n' + footer
+else:
+    pagefooter = '|}'
 
 # Format table rows.
 i = 1
 formatted_table_rows = []
 for row in r.get_table_rows(conn):
     formatted_table_rows.append("|-\n| %d\n" % i + ''.join("| " + cell + "\n" for cell in row))
-    i = i + 1
+    i += 1
 
 # Upload report.
 if options.test:

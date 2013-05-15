@@ -2,6 +2,8 @@
 report: Base class for all reports
 """
 
+import locale
+import os
 import time
 
 class report:
@@ -31,9 +33,22 @@ class report:
 
     def get_preamble(self, conn):
         """Get preamble."""
+
         cursor = conn.cursor()
         cursor.execute('SELECT UNIX_TIMESTAMP(MAX(rc_timestamp)) FROM recentchanges;')
-        current_of = time.strftime('%H:%M, %d %B %Y (UTC)', time.gmtime(cursor.fetchone() [0]))
+        timestamp = cursor.fetchone() [0]
+        if self.site == 'plwiki':
+            old_TZ = os.environ.get('TZ')
+            locale.setlocale(locale.LC_ALL, 'pl_PL.utf8')
+            os.environ['TZ'] = ':Europe/Warsaw'
+            current_of = time.strftime('%d %B %Y, %H:%M', time.localtime(timestamp))
+            locale.setlocale(locale.LC_ALL, 'C')
+            if old_TZ == None:
+                del os.environ['TZ']
+            else:
+                os.environ['TZ'] = old_TZ
+        else:
+            current_of = time.strftime('%H:%M, %d %B %Y (UTC)', time.gmtime(timestamp))
         cursor.close()
 
         return self.get_preamble_template() % current_of
@@ -49,6 +64,10 @@ class report:
     def get_table_rows(self, conn):
         """Get a table row as a list."""
         raise NotImplementedError("Please implement this method")
+
+    def get_footer(self):
+        """Get footer."""
+        return None
 
     def get_all_categories_beneath(self, cursor, cat):
         queried_cats = {}
