@@ -5,4 +5,14 @@ SHELL=/bin/bash
 # MIN HOUR DAYMONTH MONTH DAYWEEK
 
 # ARTICLES
+12 0 * * 6 jsub -once -j y -mem 140m -N general.linkedemailsinarticles -o ~/var/log ~/bin/dbreps -r general.linkedemailsinarticles -s enwiki
 0 19 15 * * jsub -once -j y -mem 530m -N enwiki.tickersinleads -o ~/var/log ~/bin/dbreps -r enwiki.tickersinleads -s enwiki
+
+# BIOGRAPHIES OF DEAD PEOPLE
+30 0 * * 4 jsub -once -j y -mem 140m -N enwiki.potenshbdps1 -o ~/var/log ~/bin/dbreps -r enwiki.potenshbdps1 -s enwiki
+
+# BIOGRAPHIES OF LIVING PEOPLE
+45 0 * * 5 jsub -once -j y -mem 140m -N enwiki.potenshblps1 -o ~/var/log ~/bin/dbreps -r enwiki.potenshblps1 -s enwiki
+
+# BLOCKS
+0 0 * * 2 jsub -once -j y -mem 150m -N general.indefips -o ~/var/log ~/bin/dbreps -r general.indefips -s enwiki
