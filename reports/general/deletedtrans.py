@@ -43,7 +43,7 @@ class report(reports.report):
         LEFT JOIN page AS p1
         ON p1.page_namespace = tl_namespace
         AND p1.page_title = tl_title
-        JOIN logging_ts_alternative
+        JOIN logging
         ON tl_namespace = log_namespace
         AND tl_title = log_title
         AND log_type = 'delete'

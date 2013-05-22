@@ -44,7 +44,7 @@ class report(reports.report):
         FROM page_restrictions
         JOIN page
         ON page_id = pr_page
-        JOIN logging_ts_alternative
+        JOIN logging_userindex
         ON page_namespace = log_namespace
         AND page_title = log_title
         AND log_type = 'protect'
