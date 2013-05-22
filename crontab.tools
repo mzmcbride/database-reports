@@ -7,12 +7,19 @@ SHELL=/bin/bash
 # ARTICLES
 12 0 * * 6 jsub -once -j y -mem 140m -N general.linkedemailsinarticles -o ~/var/log ~/bin/dbreps -r general.linkedemailsinarticles -s enwiki
 0 19 15 * * jsub -once -j y -mem 530m -N enwiki.tickersinleads -o ~/var/log ~/bin/dbreps -r enwiki.tickersinleads -s enwiki
+30 21 * * 4 jsub -once -j y -mem 140m -N enwiki.linkedmisspellings -o ~/var/log ~/bin/dbreps -r enwiki.linkedmisspellings -s enwiki
 
 # BIOGRAPHIES OF DEAD PEOPLE
 30 0 * * 4 jsub -once -j y -mem 140m -N enwiki.potenshbdps1 -o ~/var/log ~/bin/dbreps -r enwiki.potenshbdps1 -s enwiki
 
 # BIOGRAPHIES OF LIVING PEOPLE
+0 2 * * 5 jsub -once -j y -mem 140m -N enwiki.unsourcedblps -o ~/var/log ~/bin/dbreps -r enwiki.unsourcedblps -s enwiki
+0 3 * * 5 jsub -once -j y -mem 140m -N enwiki.stickyprodblps -o ~/var/log ~/bin/dbreps -r enwiki.stickyprodblps -s enwiki
 45 0 * * 5 jsub -once -j y -mem 140m -N enwiki.potenshblps1 -o ~/var/log ~/bin/dbreps -r enwiki.potenshblps1 -s enwiki
+50 0 * * 5 jsub -once -j y -mem 140m -N enwiki.potenshblps2 -o ~/var/log ~/bin/dbreps -r enwiki.potenshblps2 -s enwiki
+0 1 * * * jsub -once -j y -mem 140m -N enwiki.shortestbios -o ~/var/log ~/bin/dbreps -r enwiki.shortestbios -s enwiki
+15 8 * * 2 jsub -once -j y -mem 140m -N enwiki.uncatunrefblps -o ~/var/log ~/bin/dbreps -r enwiki.uncatunrefblps -s enwiki
+20 8 * * 2 jsub -once -j y -mem 140m -N enwiki.untaggedunrefblps -o ~/var/log ~/bin/dbreps -r enwiki.untaggedunrefblps -s enwiki
 
 # BLOCKS
 0 0 * * 2 jsub -once -j y -mem 150m -N general.indefips -o ~/var/log ~/bin/dbreps -r general.indefips -s enwiki
