@@ -5,69 +5,69 @@ SHELL=/bin/bash
 # MIN HOUR DAYMONTH MONTH DAYWEEK
 
 # ARTICLES
-12 0 * * 6 jsub -once -j y -mem 280m -N general.linkedemailsinarticles -o ~/var/log ~/bin/dbreps -r general.linkedemailsinarticles -s enwiki
-0 12 * * 5 jsub -once -j y -mem 280m -N general.userlinksinarticles -o ~/var/log ~/bin/dbreps -r general.userlinksinarticles -s enwiki
-0 19 15 * * jsub -once -j y -mem 1060m -N enwiki.tickersinleads -o ~/var/log ~/bin/dbreps -r enwiki.tickersinleads -s enwiki
-30 21 * * 4 jsub -once -j y -mem 280m -N enwiki.linkedmisspellings -o ~/var/log ~/bin/dbreps -r enwiki.linkedmisspellings -s enwiki
+12 0 * * 6 jsub -once -j y -mem 280m -N general.linkedemailsinarticles -o ~/var/log -quiet ~/bin/dbreps -r general.linkedemailsinarticles -s enwiki
+0 12 * * 5 jsub -once -j y -mem 280m -N general.userlinksinarticles -o ~/var/log -quiet ~/bin/dbreps -r general.userlinksinarticles -s enwiki
+0 19 15 * * jsub -once -j y -mem 1060m -N enwiki.tickersinleads -o ~/var/log -quiet ~/bin/dbreps -r enwiki.tickersinleads -s enwiki
+30 21 * * 4 jsub -once -j y -mem 280m -N enwiki.linkedmisspellings -o ~/var/log -quiet ~/bin/dbreps -r enwiki.linkedmisspellings -s enwiki
 
 # BIOGRAPHIES OF DEAD PEOPLE
-30 0 * * 4 jsub -once -j y -mem 280m -N enwiki.potenshbdps1 -o ~/var/log ~/bin/dbreps -r enwiki.potenshbdps1 -s enwiki
-40 0 * * 4 jsub -once -j y -mem 280m -N enwiki.potenshbdps3 -o ~/var/log ~/bin/dbreps -r enwiki.potenshbdps3 -s enwiki
+30 0 * * 4 jsub -once -j y -mem 280m -N enwiki.potenshbdps1 -o ~/var/log -quiet ~/bin/dbreps -r enwiki.potenshbdps1 -s enwiki
+40 0 * * 4 jsub -once -j y -mem 280m -N enwiki.potenshbdps3 -o ~/var/log -quiet ~/bin/dbreps -r enwiki.potenshbdps3 -s enwiki
 
 # BIOGRAPHIES OF LIVING PEOPLE
-0 2 * * 5 jsub -once -j y -mem 280m -N enwiki.unsourcedblps -o ~/var/log ~/bin/dbreps -r enwiki.unsourcedblps -s enwiki
-0 3 * * 5 jsub -once -j y -mem 280m -N enwiki.stickyprodblps -o ~/var/log ~/bin/dbreps -r enwiki.stickyprodblps -s enwiki
-45 0 * * 5 jsub -once -j y -mem 280m -N enwiki.potenshblps1 -o ~/var/log ~/bin/dbreps -r enwiki.potenshblps1 -s enwiki
-50 0 * * 5 jsub -once -j y -mem 280m -N enwiki.potenshblps2 -o ~/var/log ~/bin/dbreps -r enwiki.potenshblps2 -s enwiki
-55 0 * * 5 jsub -once -j y -mem 280m -N enwiki.potenshblps3 -o ~/var/log ~/bin/dbreps -r enwiki.potenshblps3 -s enwiki
-0 1 * * * jsub -once -j y -mem 280m -N enwiki.shortestbios -o ~/var/log ~/bin/dbreps -r enwiki.shortestbios -s enwiki
-15 8 * * 2 jsub -once -j y -mem 280m -N enwiki.uncatunrefblps -o ~/var/log ~/bin/dbreps -r enwiki.uncatunrefblps -s enwiki
-20 8 * * 2 jsub -once -j y -mem 280m -N enwiki.untaggedunrefblps -o ~/var/log ~/bin/dbreps -r enwiki.untaggedunrefblps -s enwiki
-20 8 * * 2 jsub -once -j y -mem 280m -N enwiki.untaggedblps -o ~/var/log ~/bin/dbreps -r enwiki.untaggedblps -s enwiki
+0 2 * * 5 jsub -once -j y -mem 280m -N enwiki.unsourcedblps -o ~/var/log -quiet ~/bin/dbreps -r enwiki.unsourcedblps -s enwiki
+0 3 * * 5 jsub -once -j y -mem 280m -N enwiki.stickyprodblps -o ~/var/log -quiet ~/bin/dbreps -r enwiki.stickyprodblps -s enwiki
+45 0 * * 5 jsub -once -j y -mem 280m -N enwiki.potenshblps1 -o ~/var/log -quiet ~/bin/dbreps -r enwiki.potenshblps1 -s enwiki
+50 0 * * 5 jsub -once -j y -mem 280m -N enwiki.potenshblps2 -o ~/var/log -quiet ~/bin/dbreps -r enwiki.potenshblps2 -s enwiki
+55 0 * * 5 jsub -once -j y -mem 280m -N enwiki.potenshblps3 -o ~/var/log -quiet ~/bin/dbreps -r enwiki.potenshblps3 -s enwiki
+0 1 * * * jsub -once -j y -mem 280m -N enwiki.shortestbios -o ~/var/log -quiet ~/bin/dbreps -r enwiki.shortestbios -s enwiki
+15 8 * * 2 jsub -once -j y -mem 280m -N enwiki.uncatunrefblps -o ~/var/log -quiet ~/bin/dbreps -r enwiki.uncatunrefblps -s enwiki
+20 8 * * 2 jsub -once -j y -mem 280m -N enwiki.untaggedunrefblps -o ~/var/log -quiet ~/bin/dbreps -r enwiki.untaggedunrefblps -s enwiki
+20 8 * * 2 jsub -once -j y -mem 280m -N enwiki.untaggedblps -o ~/var/log -quiet ~/bin/dbreps -r enwiki.untaggedblps -s enwiki
 
 # BLOCKS
-0 0 * * 2 jsub -once -j y -mem 300m -N general.indefips -o ~/var/log ~/bin/dbreps -r general.indefips -s enwiki
-5 0 * * 2 jsub -once -j y -mem 300m -N general.rangeblocks -o ~/var/log ~/bin/dbreps -r general.rangeblocks -s enwiki
-0 12 8 * * jsub -once -j y -mem 280m -N general.excessiveips -o ~/var/log ~/bin/dbreps -r general.excessiveips -s enwiki
-5 12 8 * * jsub -once -j y -mem 280m -N general.excessiveusers -o ~/var/log ~/bin/dbreps -r general.excessiveusers -s enwiki
+0 0 * * 2 jsub -once -j y -mem 300m -N general.indefips -o ~/var/log -quiet ~/bin/dbreps -r general.indefips -s enwiki
+5 0 * * 2 jsub -once -j y -mem 300m -N general.rangeblocks -o ~/var/log -quiet ~/bin/dbreps -r general.rangeblocks -s enwiki
+0 12 8 * * jsub -once -j y -mem 280m -N general.excessiveips -o ~/var/log -quiet ~/bin/dbreps -r general.excessiveips -s enwiki
+5 12 8 * * jsub -once -j y -mem 280m -N general.excessiveusers -o ~/var/log -quiet ~/bin/dbreps -r general.excessiveusers -s enwiki
 
 # CATEGORIES
-0 1 * * 0 jsub -once -j y -mem 280m -N general.redlinkedcatsincats -o ~/var/log ~/bin/dbreps -r general.redlinkedcatsincats -s enwiki
-0 1 * * * jsub -once -j y -mem 280m -N enwiki.emptycats -o ~/var/log ~/bin/dbreps -r enwiki.emptycats -s enwiki
-0 2 * * 6 jsub -once -j y -mem 280m -N enwiki.pollcats -o ~/var/log ~/bin/dbreps -r enwiki.pollcats -s enwiki
-0 22 * * 3 jsub -once -j y -mem 280m -N general.linkedredlinkedcats -o ~/var/log ~/bin/dbreps -r general.linkedredlinkedcats -s enwiki
-0 6 * * 3 jsub -once -j y -mem 280m -N general.selfcatcats -o ~/var/log ~/bin/dbreps -r general.selfcatcats -s enwiki
-0 0 * * 1 jsub -once -j y -mem 280m -N general.uncatcats -o ~/var/log ~/bin/dbreps -r general.uncatcats -s enwiki
-0 0 2 * * jsub -once -j y -mem 300m -N enwiki.usercats -o ~/var/log ~/bin/dbreps -r enwiki.usercats -s enwiki
+0 1 * * 0 jsub -once -j y -mem 280m -N general.redlinkedcatsincats -o ~/var/log -quiet ~/bin/dbreps -r general.redlinkedcatsincats -s enwiki
+0 1 * * * jsub -once -j y -mem 280m -N enwiki.emptycats -o ~/var/log -quiet ~/bin/dbreps -r enwiki.emptycats -s enwiki
+0 2 * * 6 jsub -once -j y -mem 280m -N enwiki.pollcats -o ~/var/log -quiet ~/bin/dbreps -r enwiki.pollcats -s enwiki
+0 22 * * 3 jsub -once -j y -mem 280m -N general.linkedredlinkedcats -o ~/var/log -quiet ~/bin/dbreps -r general.linkedredlinkedcats -s enwiki
+0 6 * * 3 jsub -once -j y -mem 280m -N general.selfcatcats -o ~/var/log -quiet ~/bin/dbreps -r general.selfcatcats -s enwiki
+0 0 * * 1 jsub -once -j y -mem 280m -N general.uncatcats -o ~/var/log -quiet ~/bin/dbreps -r general.uncatcats -s enwiki
+0 0 2 * * jsub -once -j y -mem 300m -N enwiki.usercats -o ~/var/log -quiet ~/bin/dbreps -r enwiki.usercats -s enwiki
 
 # FILES
-20 15 * * * jsub -once -j y -mem 280m -N general.dupefilenames -o ~/var/log ~/bin/dbreps -r general.dupefilenames -s enwiki
+20 15 * * * jsub -once -j y -mem 280m -N general.dupefilenames -o ~/var/log -quiet ~/bin/dbreps -r general.dupefilenames -s enwiki
 
 # PAGES
-0 17 12 * * jsub -once -j y -mem 280m -N enwiki.orphanedafds -o ~/var/log ~/bin/dbreps -r enwiki.orphanedafds -s enwiki
+0 17 12 * * jsub -once -j y -mem 280m -N enwiki.orphanedafds -o ~/var/log -quiet ~/bin/dbreps -r enwiki.orphanedafds -s enwiki
 
 # PROTECTIONS
-5 12 7 * * jsub -once -j y -mem 280m -N general.excessivefullarticles -o ~/var/log ~/bin/dbreps -r general.excessivefullarticles -s enwiki
-30 0 * * 4 jsub -once -j y -mem 300m -N general.indefsemiarticles -o ~/var/log ~/bin/dbreps -r general.indefsemiarticles -s enwiki
-30 0 * * 4 jsub -once -j y -mem 280m -N general.indefsemiredirects -o ~/var/log ~/bin/dbreps -r general.indefsemiredirects -s enwiki
-0 12 7 * * jsub -once -j y -mem 280m -N general.excessivesemiarticles -o ~/var/log ~/bin/dbreps -r general.excessivesemiarticles -s enwiki
+5 12 7 * * jsub -once -j y -mem 280m -N general.excessivefullarticles -o ~/var/log -quiet ~/bin/dbreps -r general.excessivefullarticles -s enwiki
+30 0 * * 4 jsub -once -j y -mem 300m -N general.indefsemiarticles -o ~/var/log -quiet ~/bin/dbreps -r general.indefsemiarticles -s enwiki
+30 0 * * 4 jsub -once -j y -mem 280m -N general.indefsemiredirects -o ~/var/log -quiet ~/bin/dbreps -r general.indefsemiredirects -s enwiki
+0 12 7 * * jsub -once -j y -mem 280m -N general.excessivesemiarticles -o ~/var/log -quiet ~/bin/dbreps -r general.excessivesemiarticles -s enwiki
 
 # STATISTICS
-0 13 * * 4 jsub -once -j y -mem 280m -N general.usersbyupload -o ~/var/log ~/bin/dbreps -r general.usersbyupload -s enwiki
+0 13 * * 4 jsub -once -j y -mem 280m -N general.usersbyupload -o ~/var/log -quiet ~/bin/dbreps -r general.usersbyupload -s enwiki
 
 # STUBS
-0 10 * * 5 jsub -once -j y -mem 300m -N enwiki.dubiousstubcats -o ~/var/log ~/bin/dbreps -r enwiki.dubiousstubcats -s enwiki
-0 15 * * 5 jsub -once -j y -mem 280m -N enwiki.longstubs -o ~/var/log ~/bin/dbreps -r enwiki.longstubs -s enwiki
-0 7 13 * * jsub -once -j y -mem 300m -N enwiki.directstubs -o ~/var/log ~/bin/dbreps -r enwiki.directstubs -s enwiki
-0 13 * * 6 jsub -once -j y -mem 280m -N enwiki.untaggedstubs -o ~/var/log ~/bin/dbreps -r enwiki.untaggedstubs -s enwiki
+0 10 * * 5 jsub -once -j y -mem 300m -N enwiki.dubiousstubcats -o ~/var/log -quiet ~/bin/dbreps -r enwiki.dubiousstubcats -s enwiki
+0 15 * * 5 jsub -once -j y -mem 280m -N enwiki.longstubs -o ~/var/log -quiet ~/bin/dbreps -r enwiki.longstubs -s enwiki
+0 7 13 * * jsub -once -j y -mem 300m -N enwiki.directstubs -o ~/var/log -quiet ~/bin/dbreps -r enwiki.directstubs -s enwiki
+0 13 * * 6 jsub -once -j y -mem 280m -N enwiki.untaggedstubs -o ~/var/log -quiet ~/bin/dbreps -r enwiki.untaggedstubs -s enwiki
 
 # TEMPLATES
-15 20 * * 4 jsub -once -j y -mem 280m -N enwiki.brokenwikiprojtemps -o ~/var/log ~/bin/dbreps -r enwiki.brokenwikiprojtemps -s enwiki
-0 12 15 * * jsub -once -j y -mem 280m -N general.epontemps -o ~/var/log ~/bin/dbreps -r general.epontemps -s enwiki
-5 20 * * 4 jsub -once -j y -mem 280m -N enwiki.templatedisambigs -o ~/var/log ~/bin/dbreps -r enwiki.templatedisambigs -s enwiki
-25 15 * * 4 jsub -once -j y -mem 280m -N general.deletedtrans -o ~/var/log ~/bin/dbreps -r general.deletedtrans -s enwiki
-35 15 * * 4 jsub -once -j y -mem 300m -N general.unprotectedtemps -o ~/var/log ~/bin/dbreps -r general.unprotectedtemps -s enwiki
+15 20 * * 4 jsub -once -j y -mem 280m -N enwiki.brokenwikiprojtemps -o ~/var/log -quiet ~/bin/dbreps -r enwiki.brokenwikiprojtemps -s enwiki
+0 12 15 * * jsub -once -j y -mem 280m -N general.epontemps -o ~/var/log -quiet ~/bin/dbreps -r general.epontemps -s enwiki
+5 20 * * 4 jsub -once -j y -mem 280m -N enwiki.templatedisambigs -o ~/var/log -quiet ~/bin/dbreps -r enwiki.templatedisambigs -s enwiki
+25 15 * * 4 jsub -once -j y -mem 280m -N general.deletedtrans -o ~/var/log -quiet ~/bin/dbreps -r general.deletedtrans -s enwiki
+35 15 * * 4 jsub -once -j y -mem 300m -N general.unprotectedtemps -o ~/var/log -quiet ~/bin/dbreps -r general.unprotectedtemps -s enwiki
 
 # USERS
-0 1 * * 1,4 jsub -once -j y -mem 280m -N general.confirmedusers -o ~/var/log ~/bin/dbreps -r general.confirmedusers -s enwiki
-0 15 6,20 * * jsub -once -j y -mem 280m -N general.blockeduserrights -o ~/var/log ~/bin/dbreps -r general.blockeduserrights -s enwiki
+0 1 * * 1,4 jsub -once -j y -mem 280m -N general.confirmedusers -o ~/var/log -quiet ~/bin/dbreps -r general.confirmedusers -s enwiki
+0 15 6,20 * * jsub -once -j y -mem 280m -N general.blockeduserrights -o ~/var/log -quiet ~/bin/dbreps -r general.blockeduserrights -s enwiki
