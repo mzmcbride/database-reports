@@ -1,0 +1,204 @@
+#!/usr/bin/python
+
+"""
+test-crontab-sorting.py FILE [FILE ...]
+
+Test whether the given files are parsable as dbreps crontabs and are
+sorted in the same way as the master.
+"""
+
+import optparse
+import re
+
+# Define regular expressions and tokens.
+grammar = ((r"^PATH=.*\n", (lambda m: '<PATH>')),
+           (r"^SHELL=.*\n", (lambda m: '<SHELL>')),
+           (r"^\n?# INSTRUCTIONS\n", (lambda m: '<INSTRUCTIONS>')),
+           (r"^# MIN HOUR DAYMONTH MONTH DAYWEEK\n", (lambda m: '<MINHOUR>')),
+           (r"^\n# (WIKIDATA|ARTICLES|BIOGRAPHIES OF (?:DEAD|LIVING) PEOPLE|BLOCKS|CATEGORIES|FILES|PAGES|PROTECTIONS|REDIRECTS|STATISTICS|STUBS|TEMPLATES|USERS)\n", (lambda m: 'SECTION ' + m.group(1))),
+           (r"^#?\d+ \d+ (?:\*|\d+(?:,\d+)?) \* (?:\*|\d+(?:,\d+)?) (?:PYTHONPATH=\$HOME/scripts(?::\$HOME/lib/python2.7/site-packages)? )?(?:nice -n 15 )?python \$HOME/scripts/database-reports/(?P<report>[a-z0-9_]+)\.py > /dev/null\n", (lambda m: 'REPORT ' + m.group('report'))),
+           (r"^#?\d+ \d+ (?:\*|\d+(?:,\d+)?) \* (?:\*|\d+(?:,\d+)?) /usr/bin/time -f \'Command: \\%C\\nMemory: \\%M\\nTime: \\%E\' \$HOME/bin/(?P<report>[a-z0-9_]+)\.py\n", (lambda m: 'REPORT ' + m.group('report'))),
+           (r"^#?\d+ \d+ (?:\*|\d+(?:,\d+)?) \* (?:\*|\d+(?:,\d+)?) qcronsub -b y -j y -l arch=lx -l h_rt=\d+:[0-5][0-9]:[0-5][0-9] -l virtual_free=\d+M -l sql-s1-rr=1 -N (?P<fqrn>(?P<site>enwiki|general)\.(?P<report>[a-z0-9_]+)) -o ~/var/log ~/bin/dbreps -r (?P=fqrn) -s (?:enwiki)\n", (lambda m: 'REPORT ' + m.group('report'))),
+           (r"^#?\d+ \d+ (?:\*|\d+(?:,\d+)?) \* (?:\*|\d+(?:,\d+)?) qcronsub -b y -j y -l arch=lx -l h_rt=\d+:[0-5][0-9]:[0-5][0-9] -l virtual_free=\d+M (?:-l sql-s[1-7]-rr=1 )+-o ~/var/log ~/bin/(?P<report>[a-z0-9_]+)\.py\n", (lambda m: 'REPORT ' + m.group('report'))),
+           (r"^#?\d+ \d+ (?:\*|\d+(?:,\d+)?) \* (?:\*|\d+(?:,\d+)?) jsub -once -j y -mem \d+m -N (?P<fqrn>(?:enwiki|general)\.(?P<report>[a-z0-9_]+)) -o ~/var/log -quiet ~/bin/dbreps -r (?P=fqrn) -s enwiki\n", (lambda m: 'REPORT ' + m.group('report'))))
+
+# Define sort order.
+
+# Leading by example is 90eb333:crontab, the Wikidata section is
+# defined by 157aa61:cronietab.submit.
+sort_order = ['<PATH>',
+              '<SHELL>',
+              '<INSTRUCTIONS>',
+              '<MINHOUR>',
+              'SECTION ARTICLES',
+              'REPORT deletedfilesinarticles',
+              'REPORT bullshitparams',
+              'REPORT linkedemailsinarticles',
+              'REPORT userlinksinarticles',
+              'REPORT coordoverlap',
+              'REPORT redlinkedfilesinarticles',
+              'REPORT tickersinleads',
+              'REPORT linkedmisspellings',
+              'REPORT unbelievablelifespans',
+              'SECTION BIOGRAPHIES OF DEAD PEOPLE',
+              'REPORT potenshbdps1',
+              'REPORT potenshbdps2',
+              'REPORT potenshbdps3',
+              'SECTION BIOGRAPHIES OF LIVING PEOPLE',
+              'REPORT unsourcedblps',
+              'REPORT stickyprodblps',
+              'REPORT potenshblps1',
+              'REPORT potenshblps2',
+              'REPORT potenshblps3',
+              'REPORT potenshblps4',
+              'REPORT shortestbios',
+              'REPORT uncatunrefblps',
+              'REPORT untaggedunrefblps',
+              'REPORT untaggedblps',
+              'SECTION BLOCKS',
+              'REPORT indefips',
+              'REPORT rangeblocks',
+              'REPORT excessiveips',
+              'REPORT excessiveusers',
+              'SECTION CATEGORIES',
+              'REPORT redlinkedcatsincats',
+              'REPORT deletedredlinkedcats',
+              'REPORT emptycats',
+              'REPORT pollcats',
+              'REPORT linkedredlinkedcats',
+              'REPORT selfcatcats',
+              'REPORT polltemps',
+              'REPORT uncatcats',
+              'REPORT usercats',
+              'SECTION FILES',
+              'REPORT templatelessfilepages',
+              'REPORT catandtemplessfilepages',
+              'REPORT filelessfilepages',
+              'REPORT conflictedfiles',
+              'REPORT dupefilenames',
+              'REPORT largenonfree',
+              'REPORT mistaggedfiles',
+              'REPORT nonfreemissingrat',
+              'REPORT templatesnonfree',
+              'REPORT pageslotnonfree',
+              'REPORT overusednonfree',
+              'REPORT unusednonfree',
+              'SECTION PAGES',
+              'REPORT blankpages',
+              'REPORT longpages',
+              'REPORT olddeletiondiscussions',
+              'REPORT orphanedafds',
+              'REPORT orphanedprojs',
+              'REPORT orphanedtalks',
+              'REPORT orphanedsubtalks',
+              'REPORT ownerlessuserpages',
+              'REPORT shortpages',
+              'REPORT redlinkedfilesintemplates',
+              'SECTION PROTECTIONS',
+              'REPORT excessivefullarticles',
+              'REPORT indeffullarticles',
+              'REPORT indeffulltalks',
+              'REPORT protlowtemps',
+              'REPORT indefsemiarticles',
+              'REPORT indefsemiredirects',
+              'REPORT indefsemitalks',
+              'REPORT excessivesemiarticles',
+              'SECTION REDIRECTS',
+              'REPORT brokenredirects',
+              'REPORT brokensectionanchors',
+              'REPORT crossredirects',
+              'REPORT redreds',
+              'REPORT longredirects',
+              'SECTION STATISTICS',
+              'REPORT mostwatched',
+              'REPORT mostwatchedperns',
+              'REPORT mostwatchedusers',
+              'REPORT nscounts',
+              'REPORT mostrevisions',
+              'REPORT reviewercandidates',
+              'REPORT userprefs',
+              'REPORT usersbyupload',
+              'REPORT logactions',
+              'REPORT wikilovestats',
+              'SECTION STUBS',
+              'REPORT dubiousstubcats',
+              'REPORT longstubs',
+              'REPORT directstubs',
+              'REPORT untaggedstubs',
+              'REPORT unusedstubtemplates',
+              'SECTION TEMPLATES',
+              'REPORT brokenwikiprojtemps',
+              'REPORT epontemps',
+              'REPORT templatedisambigs',
+              'REPORT mosttransclusions',
+              'REPORT deletedtrans',
+              'REPORT transusertemps',
+              'REPORT uncattemps',
+              'REPORT unprotectedtemps',
+              'REPORT unusedtemplates',
+              'REPORT usertempreds',
+              'SECTION USERS',
+              'REPORT confirmedusers',
+              'REPORT blankanontalks',
+              'REPORT blockeduserrights',
+              'REPORT inactiveuserrights',
+              'REPORT metarightschanges',
+              'REPORT oldiptalks',
+              'REPORT anononlyanons',
+              'REPORT noactionuserpages',
+              'REPORT noactionusertalks',
+              'SECTION WIKIDATA',
+              'REPORT userspaceinitems',
+              'REPORT popular_properties',
+              'REPORT popular_items',
+              'REPORT property_inheritance',
+              'REPORT missing_links']
+
+class SortOrderError(Exception):
+    def __init__(self, last_index, curr_index):
+        self.last_index = last_index
+        self.curr_index = curr_index
+
+    def __str__(self):
+        return "Found %s after %s" % (repr(sort_order[self.curr_index]), repr(sort_order[self.last_index]))
+
+class SortParseError(Exception):
+    def __init__(self, s):
+        self.s = s
+
+    def __str__(self):
+        return "Cannot parse " % repr(self.s)
+
+def getsortkeys(filename):
+    r = []
+    s = open(filename).read()
+    while s:
+        for regex, f in grammar:
+            m = re.match(regex, s)
+            if m:
+                r.append([f(m), m.group(0)])
+                s = s[len(m.group(0)):]
+                break
+        else:
+            raise SortParseError(s)
+
+    return r
+
+def testsorting(filename):
+    last_index = None
+    for token, s in getsortkeys(filename):
+        curr_index = sort_order.index(token)
+        if last_index:
+            if not last_index < curr_index:
+                raise SortOrderError(last_index, curr_index)
+        last_index = curr_index
+
+# Parse arguments.
+parser = optparse.OptionParser(usage=__doc__)
+(options, args) = parser.parse_args()
+if not args:
+    parser.error("No filenames given")
+
+# Test all files.
+for filename in args:
+    testsorting(filename)
