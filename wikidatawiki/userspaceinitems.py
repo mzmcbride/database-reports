@@ -47,6 +47,8 @@ AND NOT ips_site_page LIKE "%Vorlage%"
 AND NOT ips_site_page LIKE "%Userbox%"
 AND NOT ips_site_page LIKE "%Box%"
 AND NOT ips_site_page LIKE "%Userboksy%"
+AND NOT ips_site_page LIKE "%:%/%"
+AND NOT ips_item_id = 8497800
 limit 100;
 """
 
