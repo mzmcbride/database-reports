@@ -52,6 +52,9 @@ AND NOT ips_item_id = 8497800
 limit 100;
 """
 
+# Q8497800 is excluded due to bug 48112
+
+
 template = """
 A list of pages with links to userspace. Last updated at <onlyinclude>{0}</onlyinclude>.
 
