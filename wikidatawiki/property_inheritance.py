@@ -101,7 +101,8 @@ def main():
                         use_unicode=False
     )
     text = 'This report spans multiple subpages. It was last run at <onlyinclude>~~~~~</onlyinclude>.'
-    text += run(db, 'P17','P30') #country w/o continent
+    #text += run(db, 'P17','P30') #country w/o continent
+    # Disabled per [[Wikidata talk:Database reports/Property inheritance/P17 not in P30]]
     text += run(db, 'P21', 'P107') #sex w/o entity type
     page.edit(text, summary='Bot: Updating database report',bot=1)
 
