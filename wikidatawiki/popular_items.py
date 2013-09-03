@@ -21,7 +21,7 @@ WHERE pl_namespace=0
 AND page_namespace=0
 GROUP BY pl_title
 ORDER BY COUNT(*) DESC
-LIMIT 200;
+LIMIT 300;
 """
 
 label_query = """
