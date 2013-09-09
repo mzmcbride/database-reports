@@ -44,7 +44,7 @@ A list of the most linked to items. Data as of <onlyinclude>{0}</onlyinclude>.
 """
 table_row = """|-
 | [[{0}|{{{{label|{0}}}}}]]
-| {2}
+| {1}
 """
 
 footer = '|}\n\n[[Category:Properties]]'
