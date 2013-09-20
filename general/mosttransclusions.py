@@ -46,11 +46,12 @@ conn = MySQLdb.connect(host=config.get('dbreps', 'host'), db=config.get('dbreps'
 cursor = conn.cursor()
 cursor.execute('''
 /* mosttransclusions.py SLOW_OK */
-SELECT
+SELECT,
+  tl_namespace,
   tl_title,
   COUNT(*)
 FROM templatelinks
-WHERE tl_namespace = 10
+WHERE (tl_namespace = 10 OR tl_namespace = 828)
 GROUP BY tl_title
 ORDER BY COUNT(*) DESC
 LIMIT 3000;
@@ -59,9 +60,10 @@ LIMIT 3000;
 i = 1
 output = []
 for row in cursor.fetchall():
-    tl_title = u'%s' % unicode(row[0], 'utf-8')
-    tl_title = u'[[Template:%s|%s]]' % (tl_title, tl_title)
-    uses = row[1]
+    tl_namespace = u'%s' % row[0]
+    tl_title = u'%s' % unicode(row[1], 'utf-8')
+    tl_title = u'[[{{ns:%s}}:%s|%s]]' % (tl_namespace, tl_title, tl_title)
+    uses = row[2]
     table_row = u'''| %d
 | %s
 | %s
