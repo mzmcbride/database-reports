@@ -46,12 +46,12 @@ conn = MySQLdb.connect(host=config.get('dbreps', 'host'), db=config.get('dbreps'
 cursor = conn.cursor()
 cursor.execute('''
 /* mosttransclusions.py SLOW_OK */
-SELECT,
+SELECT
   tl_namespace,
   tl_title,
   COUNT(*)
 FROM templatelinks
-WHERE (tl_namespace = 10 OR tl_namespace = 828)
+WHERE tl_namespace IN (10, 828)
 GROUP BY tl_title
 ORDER BY COUNT(*) DESC
 LIMIT 3000;
