@@ -45,7 +45,7 @@ class report(reports.report):
         AND page_namespace = tl_namespace
         LEFT JOIN page_restrictions
         ON pr_page = page_id
-        AND pr_level = 'sysop'
+        AND (pr_level = 'templateeditor' OR pr_level = 'sysop')
         AND pr_type = 'edit'
         WHERE tl_namespace = 10
         AND pr_page IS NULL
