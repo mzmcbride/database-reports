@@ -27,22 +27,30 @@ SHELL=/bin/bash
 20 8 * * 2 jsub -once -j y -mem 280m -N enwiki.untaggedblps -o ~/var/log -quiet ~/bin/dbreps -r enwiki.untaggedblps -s enwiki
 
 # BLOCKS
-0 0 * * 2 jsub -once -j y -mem 300m -N general.indefips -o ~/var/log -quiet ~/bin/dbreps -r general.indefips -s enwiki
-5 0 * * 2 jsub -once -j y -mem 300m -N general.rangeblocks -o ~/var/log -quiet ~/bin/dbreps -r general.rangeblocks -s enwiki
-0 12 8 * * jsub -once -j y -mem 280m -N general.excessiveips -o ~/var/log -quiet ~/bin/dbreps -r general.excessiveips -s enwiki
-5 12 8 * * jsub -once -j y -mem 280m -N general.excessiveusers -o ~/var/log -quiet ~/bin/dbreps -r general.excessiveusers -s enwiki
+0 0 * * 2 jsub -once -j y -mem 300m -N general.indefips.enwiki -o ~/var/log -quiet ~/bin/dbreps -r general.indefips -s enwiki
+0 0 * * 2 jsub -once -j y -mem 300m -N general.indefips.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.indefips -s commonswiki
+5 0 * * 2 jsub -once -j y -mem 300m -N general.rangeblocks.enwiki -o ~/var/log -quiet ~/bin/dbreps -r general.rangeblocks -s enwiki
+5 0 * * 2 jsub -once -j y -mem 300m -N general.rangeblocks.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.rangeblocks -s commonswiki
+0 12 8 * * jsub -once -j y -mem 280m -N general.excessiveips.enwiki -o ~/var/log -quiet ~/bin/dbreps -r general.excessiveips -s enwiki
+0 12 8 * * jsub -once -j y -mem 280m -N general.excessiveips.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.excessiveips -s commonswiki
+5 12 8 * * jsub -once -j y -mem 280m -N general.excessiveusers.enwiki -o ~/var/log -quiet ~/bin/dbreps -r general.excessiveusers -s enwiki
+5 12 8 * * jsub -once -j y -mem 280m -N general.excessiveusers.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.excessiveusers -s commonswiki
+
 
 # CATEGORIES
 0 1 * * 0 jsub -once -j y -mem 280m -N general.redlinkedcatsincats -o ~/var/log -quiet ~/bin/dbreps -r general.redlinkedcatsincats -s enwiki
 0 1 * * * jsub -once -j y -mem 280m -N enwiki.emptycats -o ~/var/log -quiet ~/bin/dbreps -r enwiki.emptycats -s enwiki
 0 2 * * 6 jsub -once -j y -mem 280m -N enwiki.pollcats -o ~/var/log -quiet ~/bin/dbreps -r enwiki.pollcats -s enwiki
 0 22 * * 3 jsub -once -j y -mem 280m -N general.linkedredlinkedcats -o ~/var/log -quiet ~/bin/dbreps -r general.linkedredlinkedcats -s enwiki
-0 6 * * 3 jsub -once -j y -mem 280m -N general.selfcatcats -o ~/var/log -quiet ~/bin/dbreps -r general.selfcatcats -s enwiki
+0 6 * * 3 jsub -once -j y -mem 280m -N general.selfcatcats.enwiki -o ~/var/log -quiet ~/bin/dbreps -r general.selfcatcats -s enwiki
+0 6 * * 3 jsub -once -j y -mem 280m -N general.selfcatcats.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.selfcatcats -s commonswiki
 0 0 * * 1 jsub -once -j y -mem 280m -N general.uncatcats -o ~/var/log -quiet ~/bin/dbreps -r general.uncatcats -s enwiki
 0 0 2 * * jsub -once -j y -mem 300m -N enwiki.usercats -o ~/var/log -quiet ~/bin/dbreps -r enwiki.usercats -s enwiki
 
 # FILES
-20 15 * * * jsub -once -j y -mem 280m -N general.dupefilenames -o ~/var/log -quiet ~/bin/dbreps -r general.dupefilenames -s enwiki
+20 15 * * * jsub -once -j y -mem 280m -N general.dupefilenames.enwiki -o ~/var/log -quiet ~/bin/dbreps -r general.dupefilenames -s enwiki
+20 15 * * * jsub -once -j y -mem 280m -N general.dupefilenames.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.dupefilenames -s commonswiki
+
 
 # PAGES
 0 17 12 * * jsub -once -j y -mem 280m -N enwiki.orphanedafds -o ~/var/log -quiet ~/bin/dbreps -r enwiki.orphanedafds -s enwiki
@@ -71,4 +79,9 @@ SHELL=/bin/bash
 
 # USERS
 0 1 * * 1,4 jsub -once -j y -mem 280m -N general.confirmedusers -o ~/var/log -quiet ~/bin/dbreps -r general.confirmedusers -s enwiki
-0 15 6,20 * * jsub -once -j y -mem 280m -N general.blockeduserrights -o ~/var/log -quiet ~/bin/dbreps -r general.blockeduserrights -s enwiki
+0 15 6,20 * * jsub -once -j y -mem 280m -N general.blockeduserrights.enwiki -o ~/var/log -quiet ~/bin/dbreps -r general.blockeduserrights -s enwiki
+0 15 6,20 * * jsub -once -j y -mem 280m -N general.blockeduserrights.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.blockeduserrights -s commonswiki
+
+# BAD DATA
+# disabled, needs namespace table
+#0 13 * * 4 jsub -once -j -y -mem 300m -N enwiki.unbelievablelifespans.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r enwiki.unbelievablelifespans -s commonswiki
