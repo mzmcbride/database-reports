@@ -36,12 +36,8 @@ class report(reports.report):
         /* blankpages.py SLOW_OK */
         SELECT
           page_namespace,
-          CONVERT(ns_name USING utf8),
           CONVERT(page_title USING utf8)
         FROM page
-        JOIN toolserverdb_p.namespace
-        ON page_namespace = ns_id
-        AND dbname = CONCAT(?, '_p')
         WHERE page_len = 0
         AND page_namespace <> 8
         AND (page_namespace NOT IN (2, 3) OR page_title RLIKE '^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
@@ -49,15 +45,15 @@ class report(reports.report):
                COUNT(DISTINCT rev_user_text)
              FROM revision
              WHERE rev_page = page_id) = 1;
-        ''', (self.site, ))
+        ''')
 
-        for page_namespace, ns_name, page_title in cursor:
+        for page_namespace, page_title in cursor:
             if page_namespace in (6, 14):
-                page_title = u'{{plh|1=:%s:%s}}' % (ns_name, page_title)
+                page_title = u'{{plh|1={{subst:ns:%s}}:%s}}' % (page_namespace, page_title)
             elif page_namespace == 0:
                 page_title = u'{{plh|1=%s}}' % (page_title)
             else:
-                page_title = u'{{plh|1=%s:%s}}' % (ns_name, page_title)
+                page_title = u'{{plh|1={{subst:ns:%s}}:%s}}' % (page_namespace, page_title)
             yield [page_title]
 
         cursor.close()
