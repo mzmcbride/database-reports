@@ -30,6 +30,7 @@ class report(reports.report):
         return ['Page']
 
     def get_table_rows(self, conn):
+        print 'getting'
         cursor = conn.cursor()
         cursor.execute('''
         /* blankpages.py SLOW_OK */
@@ -38,7 +39,7 @@ class report(reports.report):
           CONVERT(ns_name USING utf8),
           CONVERT(page_title USING utf8)
         FROM page
-        JOIN toolserver.namespace
+        JOIN toolserverdb_p.namespace
         ON page_namespace = ns_id
         AND dbname = CONCAT(?, '_p')
         WHERE page_len = 0

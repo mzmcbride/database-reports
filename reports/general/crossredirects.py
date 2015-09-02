@@ -39,7 +39,6 @@ class report(reports.report):
         SELECT
           CONVERT(pt.page_namespace USING utf8),
           CONVERT(pf.page_title USING utf8),
-          CONVERT(ns_name USING utf8),
           CONVERT(rd_title USING utf8),
           IF(EXISTS(SELECT TRUE FROM categorylinks
                       WHERE cl_from = pf.page_id
@@ -48,20 +47,17 @@ class report(reports.report):
              'No')
             AS categorized
         FROM redirect, page AS pf, page AS pt
-        JOIN toolserver.namespace
-        ON pt.page_namespace = ns_id
-        AND dbname = CONCAT(?, '_p')
         WHERE pf.page_namespace = 0
         AND rd_title = pt.page_title
         AND rd_namespace = pt.page_namespace
         AND pt.page_namespace != 0
         AND rd_from = pf.page_id
         AND pf.page_namespace = 0;
-        ''', (self.site, ))
+        ''')
 
-        for page_namespace, page_title, ns_name, rd_title, categorized in cursor:
+        for page_namespace, page_title, rd_title, categorized in cursor:
             page_title = u'{{rlw|1=%s}}' % page_title
-            rd_title = '{{plnr|1=%s:%s}}' % (ns_name, rd_title)
+            rd_title = '{{plnr|1={{subst:ns:%s}}:%s}}' % (page_namespace, rd_title)
             yield [page_title, rd_title, categorized]
 
         cursor.close()
