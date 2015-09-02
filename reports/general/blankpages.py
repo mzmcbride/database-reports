@@ -43,7 +43,8 @@ class report(reports.report):
         AND (SELECT
                COUNT(DISTINCT rev_user_text)
              FROM revision
-             WHERE rev_page = page_id) = 1;
+             WHERE rev_page = page_id) = 1
+        LIMIT 1000;
         ''')
 
         for page_namespace, page_title in cursor:
