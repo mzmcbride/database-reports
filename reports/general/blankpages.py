@@ -30,7 +30,6 @@ class report(reports.report):
         return ['Page']
 
     def get_table_rows(self, conn):
-        print 'getting'
         cursor = conn.cursor()
         cursor.execute('''
         /* blankpages.py SLOW_OK */
