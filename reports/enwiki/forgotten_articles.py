@@ -27,7 +27,7 @@ class report(reports.report):
         return 'Forgotten articles'
 
     def get_preamble_template(self):
-        return 'List of oldest 1000 edited articles.'
+        return 'List of oldest 1000 edited articles. Data as of %s.'
 
     def get_table_columns(self):
         return ['Article', 'Timestamp of last edit', 'Number of edits yet']

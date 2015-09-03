@@ -24,7 +24,7 @@ class report(reports.report):
         return 'Page count by namespace'
 
     def get_preamble_template(self):
-        return 'The number of pages in each [[Wikipedia:Namespace | namespace]]'
+        return 'The number of pages in each [[Wikipedia:Namespace | namespace]]. Data as of %s'
 
     def get_table_columns(self):
         return ['ID', 'Name', 'Non-redirects', 'Redirects', 'Total']
