@@ -54,6 +54,7 @@ SHELL=/bin/bash
 
 # PAGES
 0 17 12 * * jsub -once -j y -mem 280m -N enwiki.orphanedafds -o ~/var/log -quiet ~/bin/dbreps -r enwiki.orphanedafds -s enwiki
+0 10 * * 4 jsub -once -j y -mem 280m -N general.blankpages -o ~/var/log -quiet ~/bin/dbreps -r general.blankpages -s enwiki
 
 # PROTECTIONS
 5 12 7 * * jsub -once -j y -mem 280m -N general.excessivefullarticles -o ~/var/log -quiet ~/bin/dbreps -r general.excessivefullarticles -s enwiki
