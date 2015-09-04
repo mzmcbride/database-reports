@@ -27,7 +27,7 @@ class report(reports.report):
         return 'Forgotten articles'
 
     def get_preamble_template(self):
-        return 'List of oldest 1000 edited articles. Data as of %s.'
+        return 'List of oldest 1000 edited articles. Data as of: %s.'
 
     def get_table_columns(self):
         return ['Article', 'Timestamp of last edit', 'Number of edits yet']
@@ -46,7 +46,7 @@ class report(reports.report):
         LIMIT 1000
         ''')
 
-        for page_title, page_touched, editcount in cursor:
+        for page_title, page_touched, editcount, page_namespace, page_is_redirect in cursor:
             page_title = u'[[%s]]' % page_title
             page_touched = page_touched.strftime('%Y%m%d%H%M%S (UTC)')
             yield [page_title, page_touched, editcount]
