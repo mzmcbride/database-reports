@@ -39,6 +39,6 @@ class report(reports.report):
 
         for page_namespace, redirect, total in cursor:
             namespace_name = '{{subst:ns:%s}}' % (page_namespace)
-            yield [page_namespace, namespace_name, str(int(total)-int(redirect)), redirect, total]
+            yield [str(page_namespace), namespace_name, str(int(total)-int(redirect)), str(redirect), str(total)]
 
         cursor.close()

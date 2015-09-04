@@ -48,7 +48,7 @@ class report(reports.report):
 
         for page_title, page_touched, editcount, page_namespace, page_is_redirect in cursor:
             page_title = u'[[%s]]' % page_title
-            page_touched = page_touched.strftime('%Y%m%d%H%M%S (UTC)')
-            yield [page_title, page_touched, editcount]
+            page_touched = datetime.datetime.strptime( page_touched, '%Y%m%d%H%M%S (UTC)')
+            yield [page_title, page_touched, str(editcount)]
 
         cursor.close()
