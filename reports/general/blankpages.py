@@ -49,7 +49,7 @@ class report(reports.report):
 
         for page_namespace, page_title in cursor:
             if page_namespace in (6, 14):
-                page_title = u'{{plh|1={{subst:ns:%s}}:%s}}' % (page_namespace, page_title)
+                page_title = u'{{plh|1=:{{subst:ns:%s}}:%s}}' % (page_namespace, page_title)
             elif page_namespace == 0:
                 page_title = u'{{plh|1=%s}}' % (page_title)
             else:
