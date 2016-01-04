@@ -38,7 +38,7 @@ SELECT
   CONVERT(ns_name USING utf8) AS ns_name,
   page_title
 FROM page
-JOIN toolserver.namespace
+JOIN s51892_toolserverdb_p.namespace
 ON ns_id = page_namespace
 WHERE dbname = ?
 AND page_namespace = 3
