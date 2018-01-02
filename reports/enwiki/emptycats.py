@@ -26,7 +26,7 @@ class report(reports.report):
     def get_preamble_template(self):
         return u'''Empty categories not in [[:Category:Wikipedia category redirects]], not in \
 [[:Category:Disambiguation categories]], and do not contain "(-importance|\
--class|non-article|assess|articles missing|articles in need of|articles undergoing|\
+-class|assess|articles missing|articles in need of|articles undergoing|\
 articles to be|articles not yet|articles with|articles without|articles needing|\
 Wikipedia featured topics)"; data as of <onlyinclude>%s</onlyinclude>.'''
 
@@ -45,7 +45,7 @@ Wikipedia featured topics)"; data as of <onlyinclude>%s</onlyinclude>.'''
         WHERE page_namespace = 14
         AND page_is_redirect = 0
         AND cl_to IS NULL
-        AND NOT(CONVERT(page_title USING utf8) REGEXP '(-importance|-class|non-article|assess|_articles_missing_|_articles_in_need_of_|_articles_undergoing_|_articles_to_be_|_articles_not_yet_|_articles_with_|_articles_without_|_articles_needing_|Wikipedia_featured_topics)')
+        AND NOT(CONVERT(page_title USING utf8) REGEXP '(-importance|-class|assess|_articles_missing_|_articles_in_need_of_|_articles_undergoing_|_articles_to_be_|_articles_not_yet_|_articles_with_|_articles_without_|_articles_needing_|Wikipedia_featured_topics)')
         AND NOT EXISTS (SELECT
                           1
                         FROM categorylinks
@@ -58,7 +58,8 @@ Wikipedia featured topics)"; data as of <onlyinclude>%s</onlyinclude>.'''
                         FROM templatelinks
                         WHERE tl_from = page_id
                         AND tl_namespace = 10
-                        AND tl_title = 'Empty_category');
+                        AND (tl_title = 'Empty_category' OR
+                             tl_title = 'Possibly_empty_category'));
         ''')
 
         for page_title, page_len in cursor:
