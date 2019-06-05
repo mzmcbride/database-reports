@@ -35,22 +35,26 @@ class report(reports.report):
         /* excessiveusers.py SLOW_OK */
         SELECT
           CONVERT(ipb_address USING utf8),
-          CONVERT(ipb_by_text USING utf8),
+          CONVERT(actor_user USING utf8),
           ipb_timestamp,
           ipb_expiry,
-          CONVERT(ipb_reason USING utf8)
+          CONVERT(comment_text USING utf8)
         FROM ipblocks
+        INNER JOIN actor
+          ON ipb_by_actor = actor_id
+        INNER JOIN comment
+          ON ipb_reason_id = comment_id
         WHERE ipb_expiry > DATE_FORMAT(DATE_ADD(NOW(),INTERVAL 2 YEAR),'%Y%m%d%H%i%s')
         AND ipb_expiry != "infinity"
         AND ipb_user != 0;
         ''')
 
-        for ipb_address, ipb_by_text, ipb_timestamp, ipb_expiry, ipb_reason in cursor:
+        for ipb_address, actor_user, ipb_timestamp, ipb_expiry, comment_text in cursor:
             ipb_address = u'[[User talk:%s|]]' % ipb_address
-            if ipb_reason:
-                ipb_reason = u'<nowiki>%s</nowiki>' % ipb_reason
+            if comment_text:
+                comment_text = u'<nowiki>%s</nowiki>' % comment_text
             else:
-                ipb_reason = ''
-            yield [ipb_address, ipb_by_text, ipb_timestamp, ipb_expiry, ipb_reason]
+                comment_text = ''
+            yield [ipb_address, actor_user, ipb_timestamp, ipb_expiry, comment_text]
 
         cursor.close()
