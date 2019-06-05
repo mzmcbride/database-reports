@@ -38,8 +38,7 @@ SELECT
   page_namespace,
   page_title
 FROM page
-AND page_namespace = 3
-AND page_title RLIKE ?
+WHERE page_namespace = 3
 AND page_len = 0
 LIMIT 1000;
 ''' , (r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'))
