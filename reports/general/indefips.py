@@ -37,22 +37,26 @@ class report(reports.report):
 /* indefips.py SLOW_OK */
 SELECT
   CONVERT(ipb_address USING utf8),
-  CONVERT(ipb_by_text USING utf8),
+  CONVERT(actor_user USING utf8),
   ipb_timestamp,
-  CONVERT(ipb_reason USING utf8)
+  CONVERT(comment_text USING utf8)
 FROM ipblocks
+INNER JOIN actor
+   ON ipb_by_actor = actor_id
+INNER JOIN comment
+   ON ipb_reason_id = comment_id
 WHERE ipb_expiry = "infinity"
 AND ipb_user = 0;
 ''')
 
-        for ipb_address, ipb_by_text, ipb_timestamp, ipb_reason in cursor:
-            if not re.search(r'(proxies|proxy|checkuser)', ipb_reason, re.I|re.U):
+        for ipb_address, actor_user, ipb_timestamp, comment_text in cursor:
+            if not re.search(r'(proxies|proxy|checkuser)', comment_text, re.I|re.U):
                 if not re.search(r'(^[^0-9])', ipb_address, re.I|re.U):
                     ipb_address = u'[[User talk:%s|]]' % ipb_address
-                    if ipb_reason:
-                        ipb_reason = u'<nowiki>%s</nowiki>' % ipb_reason
+                    if comment_text:
+                        comment_text = u'<nowiki>%s</nowiki>' % comment_text
                     else:
-                        ipb_reason = ''
-                    yield [ipb_address, ipb_by_text, ipb_timestamp, ipb_reason]
+                        comment_text = ''
+                    yield [ipb_address, actor_user, ipb_timestamp, comment_text]
 
         cursor.close()
