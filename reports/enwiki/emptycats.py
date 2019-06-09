@@ -24,9 +24,9 @@ class report(reports.report):
         return 'Empty categories'
 
     def get_preamble_template(self):
-        return u'''Empty categories not in [[:Category:Wikipedia category redirects]], not in \
-[[:Category:Disambiguation categories]], and do not contain "(-importance|\
--class|assess|articles missing|articles in need of|articles undergoing|\
+        return u'''Empty categories not in [[:Category:Wikipedia soft redirected categories]], not in \
+[[:Category:Disambiguation categories]], not in [[:Category:Monthly clean-up category counter]], \
+and do not contain "(-importance|\-class|assess|articles missing|articles in need of|articles undergoing|\
 articles to be|articles not yet|articles with|articles without|articles needing|\
 Wikipedia featured topics)"; data as of <onlyinclude>%s</onlyinclude>.'''
 
@@ -52,6 +52,7 @@ Wikipedia featured topics)"; data as of <onlyinclude>%s</onlyinclude>.'''
                         WHERE cl_from = page_id
                         AND (cl_to = 'Wikipedia_soft_redirected_categories' OR
                              cl_to = 'Disambiguation_categories' OR
+                             cl_to = 'Monthly_clean-up_category_counter' OR
                              cl_to LIKE 'Empty_categories%'))
         AND NOT EXISTS (SELECT
                           1
@@ -59,7 +60,8 @@ Wikipedia featured topics)"; data as of <onlyinclude>%s</onlyinclude>.'''
                         WHERE tl_from = page_id
                         AND tl_namespace = 10
                         AND (tl_title = 'Empty_category' OR
-                             tl_title = 'Possibly_empty_category'));
+                             tl_title = 'Possibly_empty_category' OR
+                             tl_title = 'Monthly_clean-up_category'));
         ''')
 
         for page_title, page_len in cursor:
