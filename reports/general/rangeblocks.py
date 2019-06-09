@@ -35,22 +35,26 @@ class report(reports.report):
         /* rangeblocks.py SLOW_OK */
         SELECT
           ipb_address,
-          CONVERT(ipb_by_text USING utf8),
+          CONVERT(actor_user USING utf8),
           ipb_timestamp,
           ipb_expiry,
-          CONVERT(ipb_reason USING utf8)
+          CONVERT(comment_text USING utf8)
         FROM ipblocks
+        INNER JOIN actor
+          ON ipb_by_actor = actor_id
+        INNER JOIN comment
+          ON ipb_reason_id = comment_id
         WHERE ipb_address LIKE '%/%';
         ''')
 
-        for ipb_address, ipb_by_text, ipb_timestamp, ipb_expiry, ipb_reason in cursor:
+        for ipb_address, actor_user, ipb_timestamp, ipb_expiry, comment_text in cursor:
             range_size = ipb_address.split('/')[1]
             ipb_address = u'{{ipr|1=%s}}' % ipb_address
-            ipb_by_text = u'[[User talk:%s|]]' % ipb_by_text
-            if ipb_reason:
-                ipb_reason = u'<nowiki>%s</nowiki>' % ipb_reason
+            actor_user = u'[[User talk:%s|]]' % actor_user
+            if comment_text:
+                comment_text = u'<nowiki>%s</nowiki>' % comment_text
             else:
-                ipb_reason = ''
-            yield [ipb_address, range_size, ipb_by_text, ipb_timestamp, ipb_expiry, ipb_reason]
+                comment_text = ''
+            yield [ipb_address, range_size, actor_user, ipb_timestamp, ipb_expiry, comment_text]
 
         cursor.close()
