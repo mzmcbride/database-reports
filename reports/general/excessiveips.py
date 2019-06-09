@@ -39,7 +39,7 @@ class report(reports.report):
           ipb_timestamp,
           ipb_expiry,
           CONVERT(ipb_reason USING utf8)
-        FROM ipblocks
+        FROM ipblocks_compat
         WHERE ipb_expiry > DATE_FORMAT(DATE_ADD(NOW(),INTERVAL 2 YEAR),'%Y%m%d%H%i%s')
         AND ipb_expiry != "infinity"
         AND ipb_user = 0
