@@ -41,7 +41,7 @@ class report(reports.report):
           CONVERT(ipb_expiry USING utf8),
           CONVERT(ipb_reason USING utf8)
         FROM user
-        JOIN ipblocks
+        JOIN ipblocks_compat
         ON user_id = ipb_user
         JOIN user_groups
         ON user_id = ug_user;
