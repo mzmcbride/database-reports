@@ -1,5 +1,6 @@
 PATH=/usr/local/bin:/usr/bin:/bin
 SHELL=/bin/bash
+PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:$PYTHONPATH
 
 # INSTRUCTIONS
 # MIN HOUR DAYMONTH MONTH DAYWEEK
@@ -9,11 +10,12 @@ SHELL=/bin/bash
 0 12 * * 5 jsub -once -j y -mem 280m -N general.userlinksinarticles -o ~/var/log -quiet ~/bin/dbreps -r general.userlinksinarticles -s enwiki
 0 12 6 * * jsub -once -j y -mem 320m -N general.redlinkedfilesinarticles -o ~/var/log -quiet ~/bin/dbreps -r general.redlinkedfilesinarticles -s enwiki
 0 19 15 * * jsub -once -j y -mem 1060m -N enwiki.tickersinleads -o ~/var/log -quiet ~/bin/dbreps -r enwiki.tickersinleads -s enwiki
-30 21 * * 4 jsub -once -j y -mem 280m -N enwiki.linkedmisspellings -o ~/var/log -quiet ~/bin/dbreps -r enwiki.linkedmisspellings -s enwiki
+30 21 * * * jsub -once -j y -mem 280m -N enwiki.linkedmisspellings -o ~/var/log -quiet ~/bin/dbreps -r enwiki.linkedmisspellings -s enwiki
+40 21 * * * jsub -once -j y -mem 280m -N enwiki.linkedmiscapitalizations -o ~/var/log -quiet ~/bin/dbreps -r enwiki.linkedmiscapitalizations -s enwiki
 
 # BIOGRAPHIES OF DEAD PEOPLE
 30 0 * * 4 jsub -once -j y -mem 280m -N enwiki.potenshbdps1 -o ~/var/log -quiet ~/bin/dbreps -r enwiki.potenshbdps1 -s enwiki
-40 0 * * 4 jsub -once -j y -mem 280m -N enwiki.potenshbdps3 -o ~/var/log -quiet ~/bin/dbreps -r enwiki.potenshbdps3 -s enwiki
+0 0 * * 4 jsub -once -j y -mem 280m -N enwiki.potenshbdps3 -o ~/var/log -quiet ~/bin/dbreps -r enwiki.potenshbdps3 -s enwiki
 
 # BIOGRAPHIES OF LIVING PEOPLE
 0 2 * * 5 jsub -once -j y -mem 280m -N enwiki.unsourcedblps -o ~/var/log -quiet ~/bin/dbreps -r enwiki.unsourcedblps -s enwiki
@@ -35,12 +37,12 @@ SHELL=/bin/bash
 0 12 8 * * jsub -once -j y -mem 280m -N general.excessiveips.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.excessiveips -s commonswiki
 5 12 8 * * jsub -once -j y -mem 280m -N general.excessiveusers.enwiki -o ~/var/log -quiet ~/bin/dbreps -r general.excessiveusers -s enwiki
 5 12 8 * * jsub -once -j y -mem 280m -N general.excessiveusers.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.excessiveusers -s commonswiki
-
+0 12 8 * * jsub -once -j y -mem 280m -N general.excessiveips.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.excessiveips -s commonswiki
 
 # CATEGORIES
 0 1 * * 0 jsub -once -j y -mem 280m -N general.redlinkedcatsincats -o ~/var/log -quiet ~/bin/dbreps -r general.redlinkedcatsincats -s enwiki
 0 1 * * * jsub -once -j y -mem 280m -N enwiki.emptycats -o ~/var/log -quiet ~/bin/dbreps -r enwiki.emptycats -s enwiki
-0 2 * * 6 jsub -once -j y -mem 280m -N enwiki.pollcats -o ~/var/log -quiet ~/bin/dbreps -r enwiki.pollcats -s enwiki
+0 2 * * * jsub -once -j y -mem 280m -N enwiki.pollcats -o ~/var/log -quiet ~/bin/dbreps -r enwiki.pollcats -s enwiki
 0 22 * * 3 jsub -once -j y -mem 280m -N general.linkedredlinkedcats -o ~/var/log -quiet ~/bin/dbreps -r general.linkedredlinkedcats -s enwiki
 0 6 * * 3 jsub -once -j y -mem 280m -N general.selfcatcats.enwiki -o ~/var/log -quiet ~/bin/dbreps -r general.selfcatcats -s enwiki
 0 6 * * 3 jsub -once -j y -mem 280m -N general.selfcatcats.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.selfcatcats -s commonswiki
@@ -51,10 +53,10 @@ SHELL=/bin/bash
 20 15 * * * jsub -once -j y -mem 280m -N general.dupefilenames.enwiki -o ~/var/log -quiet ~/bin/dbreps -r general.dupefilenames -s enwiki
 20 15 * * * jsub -once -j y -mem 280m -N general.dupefilenames.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.dupefilenames -s commonswiki
 
-
 # PAGES
 0 17 12 * * jsub -once -j y -mem 280m -N enwiki.orphanedafds -o ~/var/log -quiet ~/bin/dbreps -r enwiki.orphanedafds -s enwiki
 0 10 * * 4 jsub -once -j y -mem 280m -N general.blankpages -o ~/var/log -quiet ~/bin/dbreps -r general.blankpages -s enwiki
+
 
 # PROTECTIONS
 5 12 7 * * jsub -once -j y -mem 280m -N general.excessivefullarticles -o ~/var/log -quiet ~/bin/dbreps -r general.excessivefullarticles -s enwiki
@@ -79,7 +81,8 @@ SHELL=/bin/bash
 35 15 * * 4 jsub -once -j y -mem 300m -N general.unprotectedtemps -o ~/var/log -quiet ~/bin/dbreps -r general.unprotectedtemps -s enwiki
 
 # USERS
-0 1 * * 1,4 jsub -once -j y -mem 280m -N general.confirmedusers -o ~/var/log -quiet ~/bin/dbreps -r general.confirmedusers -s enwiki
+# Disabled for using too much Db Resource - YuviPanda (T131956)
+# 0 1 * * 1,4 jsub -once -j y -mem 280m -N general.confirmedusers -o ~/var/log -quiet ~/bin/dbreps -r general.confirmedusers -s enwiki
 0 15 6,20 * * jsub -once -j y -mem 280m -N general.blockeduserrights.enwiki -o ~/var/log -quiet ~/bin/dbreps -r general.blockeduserrights -s enwiki
 0 15 6,20 * * jsub -once -j y -mem 280m -N general.blockeduserrights.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.blockeduserrights -s commonswiki
 
