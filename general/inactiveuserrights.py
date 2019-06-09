@@ -55,7 +55,7 @@ SELECT DISTINCT
 FROM user
 JOIN user_groups
 ON ug_user = user_id
-JOIN revision
+JOIN revision_compat
 ON rev_user = user_id
 WHERE user_name NOT IN (SELECT
                           user_name
@@ -65,7 +65,7 @@ WHERE user_name NOT IN (SELECT
                         WHERE ug_group IN ('sysop','bureaucrat'))
 AND (SELECT
        MAX(rev_timestamp)
-     FROM revision
+     FROM revision_compat
      WHERE rev_user = user_id) < DATE_FORMAT(DATE_SUB(NOW(),INTERVAL 6 MONTH),'%Y%m%d%H%i%s')
 AND rev_timestamp = (SELECT
                        MAX(rev_timestamp)
