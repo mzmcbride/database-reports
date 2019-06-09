@@ -35,7 +35,7 @@ class report(reports.report):
         /* rangeblocks.py SLOW_OK */
         SELECT
           ipb_address,
-          CONVERT(actor_user USING utf8),
+          CONVERT(actor_name USING utf8),
           ipb_timestamp,
           ipb_expiry,
           CONVERT(comment_text USING utf8)
@@ -47,14 +47,14 @@ class report(reports.report):
         WHERE ipb_address LIKE '%/%';
         ''')
 
-        for ipb_address, actor_user, ipb_timestamp, ipb_expiry, comment_text in cursor:
+        for ipb_address, actor_name, ipb_timestamp, ipb_expiry, comment_text in cursor:
             range_size = ipb_address.split('/')[1]
             ipb_address = u'{{ipr|1=%s}}' % ipb_address
-            actor_user = u'[[User talk:%s|]]' % actor_user
+            actor_name = u'[[User talk:%s|]]' % actor_name
             if comment_text:
                 comment_text = u'<nowiki>%s</nowiki>' % comment_text
             else:
                 comment_text = ''
-            yield [ipb_address, range_size, actor_user, ipb_timestamp, ipb_expiry, comment_text]
+            yield [ipb_address, range_size, actor_name, ipb_timestamp, ipb_expiry, comment_text]
 
         cursor.close()
