@@ -105,14 +105,11 @@ for row in cursor.fetchall():
 cursor.execute('''
 /* longpages.py SLOW_OK */
 SELECT
-  ns_name,
+  page_namespace,
   page_title,
   page_len,
   rev_timestamp
 FROM page
-JOIN toolserver.namespace
-ON page_namespace = ns_id
-AND dbname = %s
 JOIN revision
 ON rev_page = page_id
 WHERE page_len > 500000
@@ -121,15 +118,15 @@ AND rev_timestamp = (SELECT
                      FROM revision
                      WHERE rev_page = page_id)
 ORDER BY page_len, page_namespace ASC;
-''' , config.get('dbreps', 'dbname'))
+''')
 
 i = 1
 output2 = []
 for row in cursor.fetchall():
-    ns_name = u'%s' % unicode(row[0], 'utf-8')
+    page_namespac = u'%s' % unicode(row[0], 'utf-8')
     page_title = u'%s' % unicode(row[1], 'utf-8')
-    if ns_name:
-        page_title = '{{dbr link|1=%s:%s}}' % (ns_name, page_title)
+    if page_namespac:
+        page_title = '{{dbr link|1={{subst:ns:%s}}:%s}}' % (page_namespac, page_title)
     else:
         page_title = '{{dbr link|1=%s}}' % (page_title)
     page_len = row[2]
