@@ -37,7 +37,7 @@ class report(reports.report):
 /* indefips.py SLOW_OK */
 SELECT
   CONVERT(ipb_address USING utf8),
-  CONVERT(actor_user USING utf8),
+  CONVERT(actor_name USING utf8),
   ipb_timestamp,
   CONVERT(comment_text USING utf8)
 FROM ipblocks
@@ -49,7 +49,7 @@ WHERE ipb_expiry = "infinity"
 AND ipb_user = 0;
 ''')
 
-        for ipb_address, actor_user, ipb_timestamp, comment_text in cursor:
+        for ipb_address, actor_name, ipb_timestamp, comment_text in cursor:
             if not re.search(r'(proxies|proxy|checkuser)', comment_text, re.I|re.U):
                 if not re.search(r'(^[^0-9])', ipb_address, re.I|re.U):
                     ipb_address = u'[[User talk:%s|]]' % ipb_address
@@ -57,6 +57,6 @@ AND ipb_user = 0;
                         comment_text = u'<nowiki>%s</nowiki>' % comment_text
                     else:
                         comment_text = ''
-                    yield [ipb_address, actor_user, ipb_timestamp, comment_text]
+                    yield [ipb_address, actor_name, ipb_timestamp, comment_text]
 
         cursor.close()
