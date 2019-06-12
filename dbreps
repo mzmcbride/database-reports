@@ -61,6 +61,7 @@ conn = pymysql.connect(
     host=config.get(options.site, inikey),
     db=config.get(options.site, 'dbname'),
     read_default_file='~/.my.cnf',
+    charset='utf8mb4',
 )
 
 # Format report header and footer.
