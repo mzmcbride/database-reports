@@ -25,9 +25,9 @@ class report(reports.report):
 
     def get_preamble_template(self):
         return u'''Empty categories not in [[:Category:Wikipedia soft redirected categories]], not in \
-[[:Category:Disambiguation categories]], not in [[:Category:Monthly clean-up category counter]], \
-and do not contain "(-importance|\-class|assess|articles missing|articles in need of|articles undergoing|\
-articles to be|articles not yet|articles with|articles without|articles needing|\
+[[:Category:Disambiguation categories]], not in [[:Category:Monthly clean-up category counter]], not tagged \
+with {{tl|SpeedyMaintanceCat}}, and not containing "(-importance|\-class|assess|articles missing|articles in need of|\
+articles undergoing|articles to be|articles not yet|articles with|articles without|articles needing|\
 Wikipedia featured topics)"; data as of <onlyinclude>%s</onlyinclude>.'''
 
     def get_table_columns(self):
@@ -61,7 +61,8 @@ Wikipedia featured topics)"; data as of <onlyinclude>%s</onlyinclude>.'''
                         AND tl_namespace = 10
                         AND (tl_title = 'Empty_category' OR
                              tl_title = 'Possibly_empty_category' OR
-                             tl_title = 'Monthly_clean-up_category'));
+                             tl_title = 'Monthly_clean-up_category' OR
+                             tl_title = 'SpeedyMaintanceCat'));
         ''')
 
         for page_title, page_len in cursor:
