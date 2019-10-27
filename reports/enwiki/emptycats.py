@@ -62,7 +62,7 @@ Wikipedia featured topics)"; data as of <onlyinclude>%s</onlyinclude>.'''
                         AND (tl_title = 'Empty_category' OR
                              tl_title = 'Possibly_empty_category' OR
                              tl_title = 'Monthly_clean-up_category' OR
-                             tl_title = 'SpeedyMaintanceCat'));
+                             tl_title = 'Maintenance_category_autotag'));
         ''')
 
         for page_title, page_len in cursor:
