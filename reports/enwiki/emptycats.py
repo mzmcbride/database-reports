@@ -26,7 +26,7 @@ class report(reports.report):
     def get_preamble_template(self):
         return u'''Empty categories not in [[:Category:Wikipedia soft redirected categories]], not in \
 [[:Category:Disambiguation categories]], not in [[:Category:Monthly clean-up category counter]], not tagged \
-with {{tl|SpeedyMaintanceCat}}, and not containing "(-importance|\-class|assess|articles missing|articles in need of|\
+with {{tl|Maintenance category autotag}}, and not containing "(-importance|\-class|assess|articles missing|articles in need of|\
 articles undergoing|articles to be|articles not yet|articles with|articles without|articles needing|\
 Wikipedia featured topics)"; data as of <onlyinclude>%s</onlyinclude>.'''
 
