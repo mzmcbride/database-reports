@@ -38,7 +38,7 @@ class report(reports.report):
         /* indefsemiredirects.py SLOW_OK */
         SELECT
           CONVERT(page_title USING utf8),
-          CONVERT(user_name USING utf8),
+          CONVERT(actor_name USING utf8),
           log_timestamp,
           CONVERT(comment_text USING utf8)
         FROM page_restrictions
@@ -48,8 +48,8 @@ class report(reports.report):
         ON page_namespace = log_namespace
         AND page_title = log_title
         AND log_type = 'protect'
-        JOIN user
-        ON log_user = user_id
+        JOIN actor_user
+        ON log_actor = actor_id
         JOIN comment
         ON log_comment_id = comment_id
         WHERE page_namespace = 0
