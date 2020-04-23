@@ -40,7 +40,7 @@ class report(reports.report):
           CONVERT(page_title USING utf8),
           CONVERT(user_name USING utf8),
           log_timestamp,
-          CONVERT(log_comment USING utf8)
+          CONVERT(comment_text USING utf8)
         FROM page_restrictions
         JOIN page
         ON page_id = pr_page
@@ -50,6 +50,8 @@ class report(reports.report):
         AND log_type = 'protect'
         JOIN user
         ON log_user = user_id
+        JOIN comment
+        ON log_comment_id = comment_id
         WHERE page_namespace = 0
         AND pr_type = 'edit'
         AND pr_level = 'autoconfirmed'
@@ -59,10 +61,10 @@ class report(reports.report):
         ''')
 
         last_page_title = None
-        for page_title, user_name, log_timestamp, log_comment in cursor:
+        for page_title, user_name, log_timestamp, comment_text in cursor:
             if page_title == last_page_title:
                 continue
             last_page_title = page_title
-            yield [u'{{plthnr|1=%s}}' % page_title, u'[[User talk:%s|]]' % user_name, log_timestamp, u'<nowiki>%s</nowiki>' % log_comment]
+            yield [u'{{plthnr|1=%s}}' % page_title, u'[[User talk:%s|]]' % user_name, log_timestamp, u'<nowiki>%s</nowiki>' % comment_text]
 
         cursor.close()
