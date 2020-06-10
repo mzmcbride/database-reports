@@ -24,7 +24,7 @@ class report(reports.report):
         return 'Unusually long IP blocks'
 
     def get_preamble_template(self):
-        return 'Unusually long (more than two years) blocks of IPs whose block reasons do not contain "proxy"; data as of <onlyinclude>%s</onlyinclude>.'
+        return 'Unusually long (more than two years) blocks of IPs whose block reasons do not contain "proxy" or "webhost"; data as of <onlyinclude>%s</onlyinclude>.'
 
     def get_table_columns(self):
         return ['IP', 'Admin', 'Timestamp', 'Expiry', 'Reason']
@@ -43,7 +43,8 @@ class report(reports.report):
         WHERE ipb_expiry > DATE_FORMAT(DATE_ADD(NOW(),INTERVAL 2 YEAR),'%Y%m%d%H%i%s')
         AND ipb_expiry != "infinity"
         AND ipb_user = 0
-        AND INSTR(LOWER(CONVERT(ipb_reason USING utf8)), 'proxy') = 0;
+        AND INSTR(LOWER(CONVERT(ipb_reason USING utf8)), 'proxy') = 0
+        AND INSTR(LOWER(CONVERT(ipb_reason USING utf8)), 'webhost') = 0;
         ''')
 
         for ipb_address, ipb_by_text, ipb_timestamp, ipb_expiry, ipb_reason in cursor:
