@@ -1,5 +1,7 @@
 use anyhow::Result;
 use dbreps2::Report;
+use log::info;
+use mysql_async::Pool;
 
 mod general;
 
@@ -15,10 +17,16 @@ async fn main() -> Result<()> {
             .set_botpassword(&cfg.auth.username, &cfg.auth.password)
             .build()
             .await?;
+    info!("Setting up MySQL connection pool...");
+    let db_url = toolforge::connection_info!("enwiki", ANALYTICS)?;
+    let pool = Pool::new(db_url.to_string());
     // Reports to run
     let report = general::uncatcats::UncatCats {};
-    report.run(&client).await?;
+    report.run(&client, &pool).await?;
     let report = general::indeffullredirects::IndefFullRedirects {};
-    report.run(&client).await?;
+    report.run(&client, &pool).await?;
+
+    // Cleanup
+    pool.disconnect().await?;
     Ok(())
 }

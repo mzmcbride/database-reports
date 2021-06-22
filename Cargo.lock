@@ -742,9 +742,9 @@ dependencies = [
 
 [[package]]
 name = "mwapi"
-version = "0.2.1"
+version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8668a0537118ce9245d593ee9c2e8bcc3f3a840aa50f383efc743ac365afc8ee"
+checksum = "03137a1768491adbd8ac5f5551fa3667543976a7077e77142e3ab67a697e2a33"
 dependencies = [
  "log",
  "reqwest",

@@ -96,7 +96,7 @@ pub trait Report<T: Send> {
         }
     }
 
-    async fn run(&self, client: &mwapi::Client) -> Result<()> {
+    async fn run(&self, client: &mwapi::Client, pool: &Pool) -> Result<()> {
         info!(
             "{}: Checking when last results were published...",
             self.title()
@@ -109,9 +109,6 @@ pub trait Report<T: Send> {
             );
             return Ok(());
         }
-        info!("Connecting to MySQL...");
-        let db_url = toolforge::connection_info!("enwiki", ANALYTICS)?;
-        let pool = Pool::new(db_url.to_string());
         let mut conn = pool.get_conn().await?;
         info!("{}: Starting query...", self.title());
         let rows = self.run_query(&mut conn).await?;
