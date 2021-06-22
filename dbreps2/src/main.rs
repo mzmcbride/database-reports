@@ -18,5 +18,7 @@ async fn main() -> Result<()> {
     // Reports to run
     let report = general::uncatcats::UncatCats {};
     report.run(&client).await?;
+    let report = general::indeffullredirects::IndefFullRedirects {};
+    report.run(&client).await?;
     Ok(())
 }
