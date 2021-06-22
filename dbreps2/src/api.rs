@@ -16,7 +16,17 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 use anyhow::Result;
+use log::info;
 use mwapi::Client;
+
+pub async fn exists(client: &Client, title: &str) -> Result<bool> {
+    let resp = client
+        .get(&[("action", "query"), ("titles", title)])
+        .await?;
+    Ok(!resp["query"]["pages"][0]["missing"]
+        .as_bool()
+        .unwrap_or_default())
+}
 
 pub async fn get_wikitext(client: &Client, title: &str) -> Result<String> {
     let resp = client
@@ -37,6 +47,8 @@ pub async fn get_wikitext(client: &Client, title: &str) -> Result<String> {
 }
 
 pub async fn save_page(client: &Client, title: &str, text: &str) -> Result<()> {
+    info!("Updating [[{}]]", &title);
+    info!("{}", &text);
     client
         .post_with_token(
             "csrf",
@@ -69,5 +81,14 @@ mod tests {
                 .await
                 .unwrap();
         assert!(wikitext2.is_empty());
+    }
+
+    #[tokio::test]
+    async fn test_exists() {
+        let client = Client::new("https://en.wikipedia.org/w/api.php")
+            .await
+            .unwrap();
+        assert!(exists(&client, "Taylor Swift").await.unwrap());
+        assert!(!exists(&client, "This page does not exist").await.unwrap());
     }
 }

@@ -25,6 +25,11 @@ use tokio::fs;
 mod api;
 mod config;
 
+const INDEX_WIKITEXT: &str = r#"{{DBR index}}
+
+[[Category:Active Wikipedia database reports]]
+"#;
+
 pub async fn load_config() -> Result<config::Config> {
     let path = dirs_next::home_dir().unwrap().join(".dbreps.toml");
     let contents = fs::read_to_string(path).await?;
@@ -48,11 +53,15 @@ impl Frequency {
 }
 
 #[async_trait::async_trait]
-pub trait Report<T: Send> {
+pub trait Report<T: Send + Sync> {
     // TODO: Make this per-wiki/language
     fn title(&self) -> &'static str;
 
     fn frequency(&self) -> Frequency;
+
+    fn rows_per_page(&self) -> Option<usize> {
+        None
+    }
 
     fn query(&self) -> &'static str;
 
@@ -66,15 +75,24 @@ pub trait Report<T: Send> {
 
     fn get_intro(&self) -> String {
         // TODO: is replag something we still need to care about? meh
-        self.intro()
-            .replace("{asof}", "data as of <onlyinclude>~~~~~</onlyinclude>")
+        let mut intro = vec![
+            self.intro().replace(
+                "{asof}",
+                "data as of <onlyinclude>~~~~~</onlyinclude>",
+            ),
+            r#"{| class="wikitable sortable"
+|- style="white-space:nowrap;"
+"#
+            .to_string(),
+        ];
+        for heading in self.headings() {
+            intro.push(format!("! {}", heading));
+        }
+        intro.join("\n")
     }
 
-    async fn publish(&self, client: &mwapi::Client, text: &str) -> Result<()> {
-        info!("Updating [[{}]]", self.title());
-        info!("{}", &text);
-        api::save_page(client, self.title(), text).await?;
-        Ok(())
+    fn get_footer(&self) -> String {
+        "|-\n|}\n[[Category:Active Wikipedia database reports]]\n".to_string()
     }
 
     fn needs_update(&self, old_text: &str) -> Result<bool> {
@@ -96,45 +114,79 @@ pub trait Report<T: Send> {
         }
     }
 
-    async fn run(&self, client: &mwapi::Client, pool: &Pool) -> Result<()> {
-        info!(
-            "{}: Checking when last results were published...",
-            self.title()
-        );
-        let old_text = api::get_wikitext(client, self.title()).await?;
-        if !self.needs_update(&old_text)? {
-            info!(
-                "{}: Report is still up to date, skipping update.",
-                self.title()
-            );
-            return Ok(());
-        }
-        let mut conn = pool.get_conn().await?;
-        info!("{}: Starting query...", self.title());
-        let rows = self.run_query(&mut conn).await?;
-        info!("{}: Query finished", self.title());
-        let mut text = vec![
-            self.get_intro(),
-            r#"{| class="wikitable sortable"
-|- style="white-space:nowrap;"
-"#
-            .to_string(),
-        ];
-        for heading in self.headings() {
-            text.push(format!("! {}", heading));
-        }
+    fn build_page(&self, rows: &[T]) -> String {
+        let mut text = vec![self.get_intro()];
         for row in rows {
             text.push("|-".to_string());
             for item in self.format_row(&row) {
                 text.push(format!("| {}", item));
             }
         }
-        text.push("|-".to_string());
-        text.push("|}".to_string());
-        text.push("".to_string());
-        text.push("[[Category:Active Wikipedia database reports]]".to_string());
+        text.push(self.get_footer());
+        text.join("\n")
+    }
 
-        self.publish(client, &text.join("\n")).await?;
+    async fn run(&self, client: &mwapi::Client, pool: &Pool) -> Result<()> {
+        info!(
+            "{}: Checking when last results were published...",
+            self.title()
+        );
+        let title_for_update_check = match self.rows_per_page() {
+            Some(_) => format!("{}/1", self.title()),
+            None => self.title().to_string(),
+        };
+        if api::exists(client, &title_for_update_check).await? {
+            let old_text =
+                api::get_wikitext(client, &title_for_update_check).await?;
+            if !self.needs_update(&old_text)? {
+                info!(
+                    "{}: Report is still up to date, skipping update.",
+                    self.title()
+                );
+                return Ok(());
+            }
+        }
+        let mut conn = pool.get_conn().await?;
+        info!("{}: Starting query...", self.title());
+        let rows = self.run_query(&mut conn).await?;
+        info!(
+            "{}: Query finished, found {} rows",
+            self.title(),
+            &rows.len()
+        );
+        match self.rows_per_page() {
+            Some(rows_per_page) => {
+                let iter = rows.chunks(rows_per_page);
+                let mut index = 0;
+                for chunk in iter {
+                    index += 1;
+                    let text = self.build_page(chunk);
+                    api::save_page(
+                        client,
+                        &format!("{}/{}", self.title(), index),
+                        &text,
+                    )
+                    .await?;
+                }
+                // Now "Blank" any other subpages
+                loop {
+                    index += 1;
+                    let title = format!("{}/{}", self.title(), index);
+                    if !api::exists(client, &title).await? {
+                        break;
+                    }
+                    api::save_page(client, &title, "{{intentionally blank}}")
+                        .await?;
+                }
+                // Finally make sure the index page is up to date
+                api::save_page(client, self.title(), INDEX_WIKITEXT).await?;
+            }
+            None => {
+                // Just dump it all into one page
+                let text = self.build_page(&rows);
+                api::save_page(client, self.title(), &text).await?;
+            }
+        }
 
         Ok(())
     }

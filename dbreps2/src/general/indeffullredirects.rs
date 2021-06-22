@@ -40,6 +40,10 @@ impl Report<Row> for IndefFullRedirects {
         Frequency::Monthly
     }
 
+    fn rows_per_page(&self) -> Option<usize> {
+        Some(800)
+    }
+
     fn query(&self) -> &'static str {
         r#"
 /* indeffullredirects.rs SLOW_OK */
