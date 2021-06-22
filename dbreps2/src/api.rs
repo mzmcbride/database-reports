@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-use anyhow::{anyhow, Result};
+use anyhow::Result;
 use mwapi::Client;
 
 pub async fn get_wikitext(client: &Client, title: &str) -> Result<String> {
@@ -28,10 +28,12 @@ pub async fn get_wikitext(client: &Client, title: &str) -> Result<String> {
             ("rvslots", "main"),
         ])
         .await?;
-    resp["query"]["pages"][0]["revisions"][0]["slots"]["main"]["content"]
-        .as_str()
-        .map(|t| t.to_string())
-        .ok_or_else(|| anyhow!("Cannot get wikitext"))
+    Ok(
+        resp["query"]["pages"][0]["revisions"][0]["slots"]["main"]["content"]
+            .as_str()
+            .map(|t| t.to_string())
+            .unwrap_or_default(),
+    )
 }
 
 pub async fn save_page(client: &Client, title: &str, text: &str) -> Result<()> {
@@ -62,5 +64,10 @@ mod tests {
             .await
             .unwrap();
         assert!(wikitext.contains("'''Database reports''' query"));
+        let wikitext2 =
+            get_wikitext(&client, "This page does not exist at all")
+                .await
+                .unwrap();
+        assert!(wikitext2.is_empty());
     }
 }
