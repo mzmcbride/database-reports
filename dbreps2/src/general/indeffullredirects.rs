@@ -72,12 +72,7 @@ ORDER BY
         let rows = conn
             .query_map(
                 self.query(),
-                |(
-                    page_title,
-                    actor_name,
-                    log_timestamp,
-                    comment_text,
-                )| Row {
+                |(page_title, actor_name, log_timestamp, comment_text)| Row {
                     page_title,
                     actor_name,
                     log_timestamp,
