@@ -105,4 +105,8 @@ ORDER BY
 
         fmt
     }
+
+    fn code(&self) -> &'static str {
+        include_str!("indeffullredirects.rs")
+    }
 }

@@ -73,6 +73,8 @@ pub trait Report<T: Send + Sync> {
 
     fn format_row(&self, row: &T) -> Vec<String>;
 
+    fn code(&self) -> &'static str;
+
     fn get_intro(&self) -> String {
         // TODO: is replag something we still need to care about? meh
         let mut intro = vec![
@@ -187,6 +189,23 @@ pub trait Report<T: Send + Sync> {
                 api::save_page(client, self.title(), &text).await?;
             }
         }
+        // Finally, publish the /Configuration subpage
+        let config = format!(
+            r#"This report is updated every {} days.
+== Source code ==
+<syntaxhighlight lang="rust">
+{}
+</syntaxhighlight>
+"#,
+            self.frequency().to_duration().num_days(),
+            self.code()
+        );
+        api::save_page(
+            client,
+            &format!("{}/Configuration", self.title()),
+            &config,
+        )
+        .await?;
 
         Ok(())
     }
