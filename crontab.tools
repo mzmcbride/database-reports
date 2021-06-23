@@ -4,6 +4,7 @@ PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:$PYTHONPATH
 
 # INSTRUCTIONS
 # MIN HOUR DAYMONTH MONTH DAYWEEK
+@hourly jsub -once -mem 2G -N rusty /data/project/dbreps/src/database-reports/target/release/dbreps2
 
 # ARTICLES
 12 0 * * 6 jsub -once -j y -mem 280m -N general.linkedemailsinarticles -o ~/var/log -quiet ~/bin/dbreps -r general.linkedemailsinarticles -s enwiki
