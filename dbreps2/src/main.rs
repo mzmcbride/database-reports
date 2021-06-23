@@ -21,9 +21,11 @@ async fn main() -> Result<()> {
     let db_url = toolforge::connection_info!("enwiki", ANALYTICS)?;
     let pool = Pool::new(db_url.to_string());
     // Reports to run
-    let report = general::uncatcats::UncatCats {};
+    let report = general::UncatCats {};
     report.run(&client, &pool).await?;
-    let report = general::indeffullredirects::IndefFullRedirects {};
+    let report = general::IndefFullRedirects {};
+    report.run(&client, &pool).await?;
+    let report = general::ExcessiveIps {};
     report.run(&client, &pool).await?;
 
     // Cleanup
