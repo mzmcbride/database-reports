@@ -80,7 +80,7 @@ class report:
                            FROM page
                            JOIN categorylinks
                            ON cl_from = page_id
-                           WHERE cl_to = CONVERT(? USING utf8)
+                           WHERE cl_to = CONVERT(%s USING utf8)
                            AND page_namespace = 14;
                            ''', (cat, ))
             results = cursor.fetchall()

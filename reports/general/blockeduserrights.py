@@ -44,7 +44,8 @@ class report(reports.report):
         JOIN ipblocks_compat
         ON user_id = ipb_user
         JOIN user_groups
-        ON user_id = ug_user;
+        ON user_id = ug_user
+        WHERE ug_group NOT IN ('extendedconfirmed');
         ''')
 
         for user_name, user_groups, ipb_by_text, ipb_expiry, ipb_reason in cursor:

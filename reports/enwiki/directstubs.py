@@ -36,16 +36,16 @@ class report(reports.report):
                            ON c1.cl_from = p1.page_id
                            WHERE p1.page_namespace = 0
                            AND p1.page_is_redirect = 0
-                           AND c1.cl_to = CONVERT(? USING utf8)
+                           AND c1.cl_to = CONVERT(%s USING utf8)
                            AND NOT EXISTS(SELECT 1 FROM templatelinks
                                           JOIN page AS p2
                                           ON tl_namespace = p2.page_namespace
                                           AND tl_title = p2.page_title
                                           JOIN categorylinks AS c2
                                           ON p2.page_id = c2.cl_from
-                                          AND c2.cl_to = CONVERT(? USING utf8)
+                                          AND c2.cl_to = CONVERT(%s USING utf8)
                                           WHERE tl_from = p1.page_id
-                                          AND tl_title LIKE '%-stub')
+                                          AND tl_title LIKE '%%-stub')
                            AND NOT EXISTS(SELECT 1 FROM templatelinks
                                           JOIN page AS p2
                                           ON tl_namespace = p2.page_namespace
@@ -57,9 +57,9 @@ class report(reports.report):
                                           AND rd_title = p3.page_title
                                           JOIN categorylinks AS c2
                                           ON p3.page_id = c2.cl_from
-                                          AND c2.cl_to = CONVERT(? USING utf8)
+                                          AND c2.cl_to = CONVERT(%s USING utf8)
                                           WHERE tl_from = p1.page_id
-                                          AND tl_title LIKE '%-stub');
+                                          AND tl_title LIKE '%%-stub');
                            ''', (category, category, category))
             for (page_title, ) in cursor:
                 yield [u'[[%s]]' % page_title, u'[[:Category:%s|%s]]' % (category, category)]

@@ -41,8 +41,8 @@ class report(reports.report):
         AND page_namespace <> 8
         AND (page_namespace NOT IN (2, 3) OR page_title RLIKE '^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
         AND (SELECT
-               COUNT(DISTINCT rev_user_text)
-             FROM revision
+               COUNT(DISTINCT rev_actor)
+             FROM revision_userindex
              WHERE rev_page = page_id) = 1
         LIMIT 1000;
         ''')
