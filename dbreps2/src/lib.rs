@@ -63,6 +63,10 @@ pub trait Report<T: Send + Sync> {
         None
     }
 
+    fn enumerate(&self) -> bool {
+        true
+    }
+
     fn query(&self) -> &'static str;
 
     async fn run_query(&self, conn: &mut Conn) -> Result<Vec<T>>;
@@ -87,6 +91,9 @@ pub trait Report<T: Send + Sync> {
 "#
             .to_string(),
         ];
+        if self.enumerate() {
+            intro.push("! No.".to_string());
+        }
         for heading in self.headings() {
             intro.push(format!("! {}", heading));
         }
@@ -116,10 +123,16 @@ pub trait Report<T: Send + Sync> {
         }
     }
 
-    fn build_page(&self, rows: &[T]) -> String {
+    fn build_page(&self, rows: &[T], index: usize) -> String {
+        // The first row starts at the # of previous pages times rows per page
+        let mut row_num = (index - 1) * self.rows_per_page().unwrap_or(0);
         let mut text = vec![self.get_intro()];
         for row in rows {
+            row_num += 1;
             text.push("|-".to_string());
+            if self.enumerate() {
+                text.push(format!("| {}", row_num));
+            }
             for item in self.format_row(&row) {
                 text.push(format!("| {}", item));
             }
@@ -162,7 +175,7 @@ pub trait Report<T: Send + Sync> {
                 let mut index = 0;
                 for chunk in iter {
                     index += 1;
-                    let text = self.build_page(chunk);
+                    let text = self.build_page(chunk, index);
                     api::save_page(
                         client,
                         &format!("{}/{}", self.title(), index),
@@ -185,7 +198,7 @@ pub trait Report<T: Send + Sync> {
             }
             None => {
                 // Just dump it all into one page
-                let text = self.build_page(&rows);
+                let text = self.build_page(&rows, 1);
                 api::save_page(client, self.title(), &text).await?;
             }
         }
