@@ -33,7 +33,7 @@ pub struct IndefFullRedirects {}
 #[async_trait::async_trait]
 impl Report<Row> for IndefFullRedirects {
     fn title(&self) -> &'static str {
-        "Project:Database reports/Indefinitely fully protected redirects"
+        "Indefinitely fully protected redirects"
     }
 
     fn frequency(&self) -> Frequency {

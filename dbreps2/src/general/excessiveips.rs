@@ -34,7 +34,7 @@ pub struct ExcessiveIps {}
 #[async_trait::async_trait]
 impl Report<Row> for ExcessiveIps {
     fn title(&self) -> &'static str {
-        "Project:Database reports/Unusually long IP blocks"
+        "Unusually long IP blocks"
     }
 
     fn frequency(&self) -> Frequency {

@@ -57,6 +57,10 @@ pub trait Report<T: Send + Sync> {
     // TODO: Make this per-wiki/language
     fn title(&self) -> &'static str;
 
+    fn get_title(&self) -> String {
+        format!("Project:Database reports/{}", self.title())
+    }
+
     fn frequency(&self) -> Frequency;
 
     fn rows_per_page(&self) -> Option<usize> {
@@ -144,11 +148,11 @@ pub trait Report<T: Send + Sync> {
     async fn run(&self, client: &mwapi::Client, pool: &Pool) -> Result<()> {
         info!(
             "{}: Checking when last results were published...",
-            self.title()
+            self.get_title()
         );
         let title_for_update_check = match self.rows_per_page() {
-            Some(_) => format!("{}/1", self.title()),
-            None => self.title().to_string(),
+            Some(_) => format!("{}/1", self.get_title()),
+            None => self.get_title(),
         };
         if api::exists(client, &title_for_update_check).await? {
             let old_text =
@@ -156,17 +160,17 @@ pub trait Report<T: Send + Sync> {
             if !self.needs_update(&old_text)? {
                 info!(
                     "{}: Report is still up to date, skipping update.",
-                    self.title()
+                    self.get_title()
                 );
                 return Ok(());
             }
         }
         let mut conn = pool.get_conn().await?;
-        info!("{}: Starting query...", self.title());
+        info!("{}: Starting query...", self.get_title());
         let rows = self.run_query(&mut conn).await?;
         info!(
             "{}: Query finished, found {} rows",
-            self.title(),
+            self.get_title(),
             &rows.len()
         );
         match self.rows_per_page() {
@@ -178,7 +182,7 @@ pub trait Report<T: Send + Sync> {
                     let text = self.build_page(chunk, index);
                     api::save_page(
                         client,
-                        &format!("{}/{}", self.title(), index),
+                        &format!("{}/{}", self.get_title(), index),
                         &text,
                     )
                     .await?;
@@ -186,7 +190,7 @@ pub trait Report<T: Send + Sync> {
                 // Now "Blank" any other subpages
                 loop {
                     index += 1;
-                    let title = format!("{}/{}", self.title(), index);
+                    let title = format!("{}/{}", self.get_title(), index);
                     if !api::exists(client, &title).await? {
                         break;
                     }
@@ -194,12 +198,13 @@ pub trait Report<T: Send + Sync> {
                         .await?;
                 }
                 // Finally make sure the index page is up to date
-                api::save_page(client, self.title(), INDEX_WIKITEXT).await?;
+                api::save_page(client, &self.get_title(), INDEX_WIKITEXT)
+                    .await?;
             }
             None => {
                 // Just dump it all into one page
                 let text = self.build_page(&rows, 1);
-                api::save_page(client, self.title(), &text).await?;
+                api::save_page(client, &self.get_title(), &text).await?;
             }
         }
         // Finally, publish the /Configuration subpage
@@ -215,7 +220,7 @@ pub trait Report<T: Send + Sync> {
         );
         api::save_page(
             client,
-            &format!("{}/Configuration", self.title()),
+            &format!("{}/Configuration", self.get_title()),
             &config,
         )
         .await?;
