@@ -36,6 +36,7 @@ async fn main() -> Result<()> {
         &enwiki_db,
         ExcessiveIps,
         IndefFullRedirects,
+        Pollcats,
         UncatCats
     );
     // Cleanup
