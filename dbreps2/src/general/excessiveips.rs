@@ -42,7 +42,7 @@ impl Report<Row> for ExcessiveIps {
     }
 
     fn rows_per_page(&self) -> Option<usize> {
-        Some(5000)
+        Some(2500)
     }
 
     fn query(&self) -> &'static str {
