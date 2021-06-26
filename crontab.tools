@@ -43,7 +43,6 @@ PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:$PYTHONPATH
 0 22 * * 3 jsub -once -j y -mem 280m -N general.linkedredlinkedcats -o ~/var/log -quiet ~/bin/dbreps -r general.linkedredlinkedcats -s enwiki
 0 6 * * 3 jsub -once -j y -mem 280m -N general.selfcatcats.enwiki -o ~/var/log -quiet ~/bin/dbreps -r general.selfcatcats -s enwiki
 0 6 * * 3 jsub -once -j y -mem 280m -N general.selfcatcats.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.selfcatcats -s commonswiki
-0 0 2 * * jsub -once -j y -mem 300m -N enwiki.usercats -o ~/var/log -quiet ~/bin/dbreps -r enwiki.usercats -s enwiki
 
 # FILES
 20 15 * * * jsub -once -j y -mem 280m -N general.dupefilenames.enwiki -o ~/var/log -quiet ~/bin/dbreps -r general.dupefilenames -s enwiki

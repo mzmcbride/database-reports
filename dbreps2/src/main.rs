@@ -3,12 +3,13 @@ use dbreps2::Report;
 use log::info;
 use mysql_async::Pool;
 
+mod enwiki;
 mod general;
 
-macro_rules! run_general {
-    ( $client:expr, $pool:expr, $( $x:ident ),* ) => {
+macro_rules! run {
+    ( $client:expr, $pool:expr, $( $x:expr ),* ) => {
         $(
-            let report = general::$x {};
+            let report = $x;
             report.run($client, $pool).await?;
         )*
     }
@@ -31,13 +32,14 @@ async fn main() -> Result<()> {
     let enwiki_db = Pool::new(
         toolforge::connection_info!("enwiki", ANALYTICS)?.to_string(),
     );
-    run_general!(
+    run!(
         &enwiki_api,
         &enwiki_db,
-        ExcessiveIps,
-        IndefFullRedirects,
-        Pollcats,
-        UncatCats
+        general::ExcessiveIps {},
+        general::IndefFullRedirects {},
+        general::Pollcats {},
+        general::UncatCats {},
+        enwiki::UserCats {}
     );
     // Cleanup
     enwiki_db.disconnect().await?;
@@ -52,7 +54,7 @@ async fn main() -> Result<()> {
     let commonswiki_db = Pool::new(
         toolforge::connection_info!("commonswiki", ANALYTICS)?.to_string(),
     );
-    run_general!(&commonswiki_api, &commonswiki_db, ExcessiveIps);
+    run!(&commonswiki_api, &commonswiki_db, general::ExcessiveIps {});
     // Cleanup
     commonswiki_db.disconnect().await?;
 
