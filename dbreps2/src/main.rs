@@ -39,7 +39,8 @@ async fn main() -> Result<()> {
         general::IndefFullRedirects {},
         general::Pollcats {},
         general::UncatCats {},
-        enwiki::UserCats {}
+        enwiki::UserCats {},
+        general::OldEditors {}
     );
     // Cleanup
     enwiki_db.disconnect().await?;
