@@ -40,7 +40,8 @@ async fn main() -> Result<()> {
         general::Pollcats {},
         general::UncatCats {},
         enwiki::UserCats {},
-        general::OldEditors {}
+        general::OldEditors {},
+        enwiki::NewProjects {}
     );
     // Cleanup
     enwiki_db.disconnect().await?;
