@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 use anyhow::Result;
-use dbreps2::{Frequency, Report};
+use dbreps2::{str_vec, Frequency, Report};
 use mysql_async::prelude::*;
 use mysql_async::Conn;
 
@@ -99,13 +99,11 @@ LIMIT
     }
 
     fn format_row(&self, row: &Row) -> Vec<String> {
-        // TODO: Improve this interface
-        let mut fmt = vec![];
-        fmt.push(format!("[[User:{}|]]", &row.user_name));
-        fmt.push(row.user_registration.to_string());
-        fmt.push(row.user_editcount.to_string());
-
-        fmt
+        str_vec![
+            format!("[[User:{}|]]", &row.user_name),
+            row.user_registration,
+            row.user_editcount
+        ]
     }
 
     fn code(&self) -> &'static str {

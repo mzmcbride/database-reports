@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 use anyhow::Result;
-use dbreps2::{Frequency, Report};
+use dbreps2::{str_vec, Frequency, Report};
 use mysql_async::prelude::*;
 use mysql_async::Conn;
 
@@ -110,15 +110,13 @@ FROM
     }
 
     fn format_row(&self, row: &Row) -> Vec<String> {
-        // TODO: Improve this interface
-        let mut fmt = vec![];
-        fmt.push(format!("{{{{clh|1={}}}}}", &row.page_title));
-        fmt.push(row.page_len.to_string());
-        fmt.push(row.cat_pages.to_string());
-        fmt.push(row.rev_timestamp.to_string());
-        fmt.push(row.actor_name.to_string());
-
-        fmt
+        str_vec![
+            format!("{{{{clh|1={}}}}}", &row.page_title),
+            row.page_len,
+            row.cat_pages,
+            row.rev_timestamp,
+            row.actor_name
+        ]
     }
 
     fn code(&self) -> &'static str {

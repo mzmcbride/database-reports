@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 use anyhow::Result;
-use dbreps2::{Frequency, Report};
+use dbreps2::{str_vec, Frequency, Report};
 use mysql_async::prelude::*;
 use mysql_async::Conn;
 
@@ -96,15 +96,13 @@ WHERE
     }
 
     fn format_row(&self, row: &Row) -> Vec<String> {
-        // TODO: Improve this interface
-        let mut fmt = vec![];
-        fmt.push(format!("[[User talk:{}|]]", &row.ipb_address));
-        fmt.push(row.ipb_by_text.to_string());
-        fmt.push(row.ipb_timestamp.to_string());
-        fmt.push(row.ipb_expiry.to_string());
-        fmt.push(format!("<nowiki>{}</nowiki>", &row.ipb_reason));
-
-        fmt
+        str_vec![
+            format!("[[User talk:{}|]]", &row.ipb_address),
+            row.ipb_by_text,
+            row.ipb_timestamp,
+            row.ipb_expiry,
+            format!("<nowiki>{}</nowiki>", &row.ipb_reason)
+        ]
     }
 
     fn code(&self) -> &'static str {

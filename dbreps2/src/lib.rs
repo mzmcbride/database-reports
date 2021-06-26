@@ -25,6 +25,19 @@ use tokio::fs;
 mod api;
 mod config;
 
+#[macro_export]
+macro_rules! str_vec {
+    ( $( $item:expr ),* ) => {
+        {
+            let mut temp_vec = Vec::new();
+            $(
+                temp_vec.push($item.to_string());
+            )*
+            temp_vec
+        }
+    };
+}
+
 const INDEX_WIKITEXT: &str = r#"{{DBR index}}
 
 [[Category:Active Wikipedia database reports]]

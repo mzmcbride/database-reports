@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 use anyhow::Result;
-use dbreps2::{Frequency, Report};
+use dbreps2::{str_vec, Frequency, Report};
 use mysql_async::prelude::*;
 use mysql_async::Conn;
 
@@ -96,14 +96,12 @@ ORDER BY
     }
 
     fn format_row(&self, row: &Row) -> Vec<String> {
-        // TODO: Improve this interface
-        let mut fmt = vec![];
-        fmt.push(format!("{{{{plthnr|1={}}}}}", &row.page_title));
-        fmt.push(format!("[[User talk:{}|]]", &row.actor_name));
-        fmt.push(row.log_timestamp.to_string());
-        fmt.push(format!("<nowiki>{}</nowiki>", &row.comment_text));
-
-        fmt
+        str_vec![
+            format!("{{{{plthnr|1={}}}}}", &row.page_title),
+            format!("[[User talk:{}|]]", &row.actor_name),
+            row.log_timestamp,
+            format!("<nowiki>{}</nowiki>", &row.comment_text)
+        ]
     }
 
     fn code(&self) -> &'static str {

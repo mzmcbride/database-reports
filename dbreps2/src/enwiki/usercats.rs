@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 use anyhow::Result;
-use dbreps2::{Frequency, Report};
+use dbreps2::{str_vec, Frequency, Report};
 use mysql_async::prelude::*;
 use mysql_async::Conn;
 
@@ -70,7 +70,7 @@ WHERE
     }
 
     fn format_row(&self, row: &Row) -> Vec<String> {
-        vec![format!(
+        str_vec![format!(
             "[[:Category:{}|{}]]",
             &row.page_title, &row.page_title
         )]

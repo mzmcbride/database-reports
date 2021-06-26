@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 use anyhow::Result;
-use dbreps2::{Frequency, Report};
+use dbreps2::{str_vec, Frequency, Report};
 use mysql_async::prelude::*;
 use mysql_async::Conn;
 
@@ -87,7 +87,7 @@ ORDER BY
         } else {
             format!("[[Project:{}|]]", &row.rc_title)
         };
-        vec![row.rc_timestamp.to_string(), page]
+        str_vec![row.rc_timestamp, page]
     }
 
     fn code(&self) -> &'static str {
