@@ -62,7 +62,7 @@ WHERE
     }
 
     fn intro(&self) -> &'static str {
-        "Categories that contain \"(wikipedian|\\buser)\", \"wikiproject\" and \"participants\", or \"wikiproject\" and \"members\"; {asof}."
+        "Categories that contain \"(wikipedian|\\buser)\", \"wikiproject\" and \"participants\", or \"wikiproject\" and \"members\""
     }
 
     fn headings(&self) -> Vec<&'static str> {

@@ -88,7 +88,7 @@ ORDER BY
     }
 
     fn intro(&self) -> &'static str {
-        "Redirects that are indefinitely fully protected from editing; {asof}."
+        "Redirects that are indefinitely fully protected from editing"
     }
 
     fn headings(&self) -> Vec<&'static str> {

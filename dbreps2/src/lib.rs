@@ -86,9 +86,9 @@ pub trait Report<T: Send + Sync> {
     fn get_intro(&self) -> String {
         // TODO: is replag something we still need to care about? meh
         let mut intro = vec![
-            self.intro().replace(
-                "{asof}",
-                "data as of <onlyinclude>~~~~~</onlyinclude>",
+            format!(
+                "{}; data as of <onlyinclude>~~~~~</onlyinclude>.",
+                self.intro()
             ),
             r#"{| class="wikitable sortable"
 |- style="white-space:nowrap;"

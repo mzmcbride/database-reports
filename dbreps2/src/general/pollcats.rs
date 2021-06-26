@@ -89,7 +89,7 @@ LIMIT
     }
 
     fn intro(&self) -> &'static str {
-        "Categories that contain pages in the (Main) namespace and the user namespaces (limited to the first 1000 entries); {asof}."
+        "Categories that contain pages in the (Main) namespace and the user namespaces (limited to the first 1000 entries)"
     }
 
     fn headings(&self) -> Vec<&'static str> {

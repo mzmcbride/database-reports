@@ -88,7 +88,7 @@ WHERE
     }
 
     fn intro(&self) -> &'static str {
-        "Unusually long (more than two years) blocks of IPs whose block reasons do not contain \"proxy\" or \"webhost\"; {asof}."
+        "Unusually long (more than two years) blocks of IPs whose block reasons do not contain \"proxy\" or \"webhost\""
     }
 
     fn headings(&self) -> Vec<&'static str> {

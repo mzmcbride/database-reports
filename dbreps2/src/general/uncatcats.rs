@@ -102,7 +102,7 @@ FROM
     }
 
     fn intro(&self) -> &'static str {
-        "Uncategorized categories; {asof}."
+        "Uncategorized categories"
     }
 
     fn headings(&self) -> Vec<&'static str> {
