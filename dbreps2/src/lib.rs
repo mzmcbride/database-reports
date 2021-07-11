@@ -50,6 +50,7 @@ pub async fn load_config() -> Result<config::Config> {
 }
 
 pub enum Frequency {
+    Daily,
     Weekly,
     Fortnightly,
     Monthly,
@@ -58,6 +59,7 @@ pub enum Frequency {
 impl Frequency {
     fn to_duration(&self) -> Duration {
         match &self {
+            Frequency::Daily => Duration::days(1),
             Frequency::Weekly => Duration::weeks(1),
             Frequency::Fortnightly => Duration::weeks(2),
             Frequency::Monthly => Duration::weeks(4),

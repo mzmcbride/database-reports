@@ -41,7 +41,8 @@ async fn main() -> Result<()> {
         general::UncatCats {},
         enwiki::UserCats {},
         general::OldEditors {},
-        enwiki::NewProjects {}
+        enwiki::NewProjects {},
+        enwiki::ShortestBios {}
     );
     // Cleanup
     enwiki_db.disconnect().await?;

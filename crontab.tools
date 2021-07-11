@@ -24,7 +24,6 @@ PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:$PYTHONPATH
 45 0 * * 5 jsub -once -j y -mem 280m -N enwiki.potenshblps1 -o ~/var/log -quiet ~/bin/dbreps -r enwiki.potenshblps1 -s enwiki
 50 0 * * 5 jsub -once -j y -mem 280m -N enwiki.potenshblps2 -o ~/var/log -quiet ~/bin/dbreps -r enwiki.potenshblps2 -s enwiki
 55 0 * * 5 jsub -once -j y -mem 280m -N enwiki.potenshblps3 -o ~/var/log -quiet ~/bin/dbreps -r enwiki.potenshblps3 -s enwiki
-0 1 * * * jsub -once -j y -mem 280m -N enwiki.shortestbios -o ~/var/log -quiet ~/bin/dbreps -r enwiki.shortestbios -s enwiki
 15 8 * * 2 jsub -once -j y -mem 280m -N enwiki.uncatunrefblps -o ~/var/log -quiet ~/bin/dbreps -r enwiki.uncatunrefblps -s enwiki
 20 8 * * 2 jsub -once -j y -mem 280m -N enwiki.untaggedunrefblps -o ~/var/log -quiet ~/bin/dbreps -r enwiki.untaggedunrefblps -s enwiki
 20 8 * * 2 jsub -once -j y -mem 280m -N enwiki.untaggedblps -o ~/var/log -quiet ~/bin/dbreps -r enwiki.untaggedblps -s enwiki
