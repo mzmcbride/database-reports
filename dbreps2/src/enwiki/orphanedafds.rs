@@ -71,7 +71,7 @@ WHERE
                 rev_timestamp,
             })
             .await?;
-        rows.sort_by(|a, b| a.rev_timestamp.cmp(&b.rev_timestamp));
+        rows.sort_by(|a, b| b.rev_timestamp.cmp(&a.rev_timestamp));
         Ok(rows)
     }
 
@@ -85,7 +85,7 @@ WHERE
 
     fn format_row(&self, row: &Row) -> Vec<String> {
         str_vec![
-            format!("{{{{pllh|1=Project:{}}}}}", &row.page_title),
+            format!("{{{{pllh|1=Wikipedia:{}}}}}", &row.page_title),
             &row.rev_timestamp
         ]
     }
