@@ -42,7 +42,8 @@ async fn main() -> Result<()> {
         enwiki::UserCats {},
         general::OldEditors {},
         enwiki::NewProjects {},
-        enwiki::ShortestBios {}
+        enwiki::ShortestBios {},
+        enwiki::OrphanedAfds {}
     );
     // Cleanup
     enwiki_db.disconnect().await?;

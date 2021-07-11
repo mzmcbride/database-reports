@@ -15,9 +15,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 mod newprojects;
+mod orphanedafds;
 mod shortestbios;
 mod usercats;
 
 pub use {
-    newprojects::NewProjects, shortestbios::ShortestBios, usercats::UserCats,
+    newprojects::NewProjects, orphanedafds::OrphanedAfds,
+    shortestbios::ShortestBios, usercats::UserCats,
 };
