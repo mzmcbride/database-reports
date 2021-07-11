@@ -1,5 +1,5 @@
 /*
-Copyright 2008, 2013 bjweeks, MZMcBride, Tim Landscheidt
+Copyright 2010, 2013 bjweeks, MZMcBride, Tim Landscheidt
 Copyright 2021 Kunal Mehta <legoktm@debian.org>
 
 This program is free software: you can redistribute it and/or modify
