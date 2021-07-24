@@ -50,7 +50,7 @@ SELECT
   rev_timestamp
 FROM
   page
-  JOIN revision ON page_latest = rev_id
+  JOIN revision ON page_id = rev_page
   LEFT JOIN pagelinks ON pl_title = page_title
   AND pl_namespace = page_namespace
   LEFT JOIN templatelinks ON tl_title = page_title
@@ -59,6 +59,7 @@ WHERE
   page_namespace = 4
   AND page_is_redirect = 0
   AND page_title LIKE "Articles_for_deletion/%"
+  AND rev_parent_id = 0
   AND ISNULL(pl_namespace)
   AND ISNULL(tl_namespace);
 "#
@@ -80,7 +81,7 @@ WHERE
     }
 
     fn headings(&self) -> Vec<&'static str> {
-        vec!["Page", "Last edit"]
+        vec!["Page", "Creation time"]
     }
 
     fn format_row(&self, row: &Row) -> Vec<String> {
