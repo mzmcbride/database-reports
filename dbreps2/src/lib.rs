@@ -40,7 +40,7 @@ macro_rules! str_vec {
 
 const INDEX_WIKITEXT: &str = r#"{{DBR index}}
 
-[[Category:Active Wikipedia database reports]]
+{{DBR footer}}
 "#;
 
 pub async fn load_config() -> Result<config::Config> {
@@ -120,7 +120,7 @@ pub trait Report<T: Send + Sync> {
     }
 
     fn get_footer(&self) -> String {
-        "|-\n|}\n[[Category:Active Wikipedia database reports]]\n".to_string()
+        "|-\n|}\n{{DBR footer}}\n".to_string()
     }
 
     fn needs_update(&self, old_text: &str) -> Result<bool> {
