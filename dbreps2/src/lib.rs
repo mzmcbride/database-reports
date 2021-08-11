@@ -152,7 +152,7 @@ pub trait Report<T: Send + Sync> {
             if self.enumerate() {
                 text.push(format!("| {}", row_num));
             }
-            for item in self.format_row(&row) {
+            for item in self.format_row(row) {
                 text.push(format!("| {}", item));
             }
         }
