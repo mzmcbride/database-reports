@@ -19,11 +19,13 @@ mod linkedmiscapitalizations;
 mod linkedmisspellings;
 mod newprojects;
 mod orphanedafds;
+mod projectchanges;
 mod shortestbios;
 mod usercats;
 
 pub use {
     emptycats::EmptyCats, linkedmiscapitalizations::LinkedMiscapitalizations,
     linkedmisspellings::LinkedMisspellings, newprojects::NewProjects,
-    orphanedafds::OrphanedAfds, shortestbios::ShortestBios, usercats::UserCats,
+    orphanedafds::OrphanedAfds, projectchanges::ProjectChanges,
+    shortestbios::ShortestBios, usercats::UserCats,
 };

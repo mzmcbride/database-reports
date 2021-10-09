@@ -45,6 +45,7 @@ async fn main() -> Result<()> {
         enwiki::LinkedMiscapitalizations {},
         enwiki::LinkedMisspellings {},
         enwiki::NewProjects {},
+        enwiki::ProjectChanges {},
         enwiki::ShortestBios {},
         enwiki::OrphanedAfds {}
     );
