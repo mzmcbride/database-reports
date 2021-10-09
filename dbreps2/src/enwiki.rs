@@ -16,6 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 mod conflictedfiles;
 mod emptycats;
+mod largenonfree;
 mod linkedmiscapitalizations;
 mod linkedmisspellings;
 mod newprojects;
@@ -28,6 +29,7 @@ mod usercats;
 
 pub use {
     conflictedfiles::ConflictedFiles, emptycats::EmptyCats,
+    largenonfree::LargeNonFree,
     linkedmiscapitalizations::LinkedMiscapitalizations,
     linkedmisspellings::LinkedMisspellings, newprojects::NewProjects,
     orphanedafds::OrphanedAfds, polltemps::PollTemps,

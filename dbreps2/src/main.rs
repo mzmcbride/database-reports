@@ -43,6 +43,7 @@ async fn main() -> Result<()> {
         general::OldEditors {},
         enwiki::ConflictedFiles {},
         enwiki::EmptyCats {},
+        enwiki::LargeNonFree {},
         enwiki::LinkedMiscapitalizations {},
         enwiki::LinkedMisspellings {},
         enwiki::NewProjects {},
