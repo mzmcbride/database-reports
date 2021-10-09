@@ -14,6 +14,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+mod emptycats;
 mod linkedmiscapitalizations;
 mod linkedmisspellings;
 mod newprojects;
@@ -22,7 +23,7 @@ mod shortestbios;
 mod usercats;
 
 pub use {
-    linkedmiscapitalizations::LinkedMiscapitalizations,
+    emptycats::EmptyCats, linkedmiscapitalizations::LinkedMiscapitalizations,
     linkedmisspellings::LinkedMisspellings, newprojects::NewProjects,
     orphanedafds::OrphanedAfds, shortestbios::ShortestBios, usercats::UserCats,
 };

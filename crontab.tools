@@ -36,7 +36,6 @@ PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:$PYTHONPATH
 
 # CATEGORIES
 0 1 * * 0 jsub -once -j y -mem 280m -N general.redlinkedcatsincats -o ~/var/log -quiet ~/bin/dbreps -r general.redlinkedcatsincats -s enwiki
-0 1 * * * jsub -once -j y -mem 280m -N enwiki.emptycats -o ~/var/log -quiet ~/bin/dbreps -r enwiki.emptycats -s enwiki
 0 22 * * 3 jsub -once -j y -mem 280m -N general.linkedredlinkedcats -o ~/var/log -quiet ~/bin/dbreps -r general.linkedredlinkedcats -s enwiki
 0 6 * * 3 jsub -once -j y -mem 280m -N general.selfcatcats.enwiki -o ~/var/log -quiet ~/bin/dbreps -r general.selfcatcats -s enwiki
 0 6 * * 3 jsub -once -j y -mem 280m -N general.selfcatcats.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.selfcatcats -s commonswiki
