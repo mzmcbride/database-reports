@@ -69,7 +69,7 @@ WHERE
     }
 
     fn format_row(&self, row: &Row) -> Vec<String> {
-        str_vec![format!("[[:File:{}:{}]]", row.page_title, row.page_title)]
+        str_vec![format!("[[:File:{}|{}]]", row.page_title, row.page_title)]
     }
 
     fn code(&self) -> &'static str {
