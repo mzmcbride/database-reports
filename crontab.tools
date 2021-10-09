@@ -4,14 +4,13 @@ PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:$PYTHONPATH
 
 # INSTRUCTIONS
 # MIN HOUR DAYMONTH MONTH DAYWEEK
+@hourly jsub -once -mem 2G -N rusty /data/project/dbreps/src/database-reports/target/release/dbreps2
 
 # ARTICLES
 12 0 * * 6 jsub -once -j y -mem 280m -N general.linkedemailsinarticles -o ~/var/log -quiet ~/bin/dbreps -r general.linkedemailsinarticles -s enwiki
 0 12 * * 5 jsub -once -j y -mem 280m -N general.userlinksinarticles -o ~/var/log -quiet ~/bin/dbreps -r general.userlinksinarticles -s enwiki
 0 12 6 * * jsub -once -j y -mem 320m -N general.redlinkedfilesinarticles -o ~/var/log -quiet ~/bin/dbreps -r general.redlinkedfilesinarticles -s enwiki
 0 19 15 * * jsub -once -j y -mem 1060m -N enwiki.tickersinleads -o ~/var/log -quiet ~/bin/dbreps -r enwiki.tickersinleads -s enwiki
-30 21 * * * jsub -once -j y -mem 280m -N enwiki.linkedmisspellings -o ~/var/log -quiet ~/bin/dbreps -r enwiki.linkedmisspellings -s enwiki
-40 21 * * * jsub -once -j y -mem 280m -N enwiki.linkedmiscapitalizations -o ~/var/log -quiet ~/bin/dbreps -r enwiki.linkedmiscapitalizations -s enwiki
 
 # BIOGRAPHIES OF DEAD PEOPLE
 30 0 * * 4 jsub -once -j y -mem 280m -N enwiki.potenshbdps1 -o ~/var/log -quiet ~/bin/dbreps -r enwiki.potenshbdps1 -s enwiki
@@ -23,7 +22,6 @@ PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:$PYTHONPATH
 45 0 * * 5 jsub -once -j y -mem 280m -N enwiki.potenshblps1 -o ~/var/log -quiet ~/bin/dbreps -r enwiki.potenshblps1 -s enwiki
 50 0 * * 5 jsub -once -j y -mem 280m -N enwiki.potenshblps2 -o ~/var/log -quiet ~/bin/dbreps -r enwiki.potenshblps2 -s enwiki
 55 0 * * 5 jsub -once -j y -mem 280m -N enwiki.potenshblps3 -o ~/var/log -quiet ~/bin/dbreps -r enwiki.potenshblps3 -s enwiki
-0 1 * * * jsub -once -j y -mem 280m -N enwiki.shortestbios -o ~/var/log -quiet ~/bin/dbreps -r enwiki.shortestbios -s enwiki
 15 8 * * 2 jsub -once -j y -mem 280m -N enwiki.uncatunrefblps -o ~/var/log -quiet ~/bin/dbreps -r enwiki.uncatunrefblps -s enwiki
 20 8 * * 2 jsub -once -j y -mem 280m -N enwiki.untaggedunrefblps -o ~/var/log -quiet ~/bin/dbreps -r enwiki.untaggedunrefblps -s enwiki
 20 8 * * 2 jsub -once -j y -mem 280m -N enwiki.untaggedblps -o ~/var/log -quiet ~/bin/dbreps -r enwiki.untaggedblps -s enwiki
@@ -33,28 +31,20 @@ PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:$PYTHONPATH
 0 0 * * 2 jsub -once -j y -mem 300m -N general.indefips.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.indefips -s commonswiki
 5 0 * * 2 jsub -once -j y -mem 300m -N general.rangeblocks.enwiki -o ~/var/log -quiet ~/bin/dbreps -r general.rangeblocks -s enwiki
 5 0 * * 2 jsub -once -j y -mem 300m -N general.rangeblocks.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.rangeblocks -s commonswiki
-0 12 8 * * jsub -once -j y -mem 280m -N general.excessiveips.enwiki -o ~/var/log -quiet ~/bin/dbreps -r general.excessiveips -s enwiki
-0 12 8 * * jsub -once -j y -mem 280m -N general.excessiveips.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.excessiveips -s commonswiki
 5 12 8 * * jsub -once -j y -mem 280m -N general.excessiveusers.enwiki -o ~/var/log -quiet ~/bin/dbreps -r general.excessiveusers -s enwiki
 5 12 8 * * jsub -once -j y -mem 280m -N general.excessiveusers.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.excessiveusers -s commonswiki
-0 12 8 * * jsub -once -j y -mem 280m -N general.excessiveips.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.excessiveips -s commonswiki
 
 # CATEGORIES
 0 1 * * 0 jsub -once -j y -mem 280m -N general.redlinkedcatsincats -o ~/var/log -quiet ~/bin/dbreps -r general.redlinkedcatsincats -s enwiki
-0 1 * * * jsub -once -j y -mem 280m -N enwiki.emptycats -o ~/var/log -quiet ~/bin/dbreps -r enwiki.emptycats -s enwiki
-#0 2 * * * jsub -once -j y -mem 280m -N enwiki.pollcats -o ~/var/log -quiet ~/bin/dbreps -r enwiki.pollcats -s enwiki
 0 22 * * 3 jsub -once -j y -mem 280m -N general.linkedredlinkedcats -o ~/var/log -quiet ~/bin/dbreps -r general.linkedredlinkedcats -s enwiki
 0 6 * * 3 jsub -once -j y -mem 280m -N general.selfcatcats.enwiki -o ~/var/log -quiet ~/bin/dbreps -r general.selfcatcats -s enwiki
 0 6 * * 3 jsub -once -j y -mem 280m -N general.selfcatcats.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.selfcatcats -s commonswiki
-0 0 * * 1 jsub -once -j y -mem 280m -N general.uncatcats -o ~/var/log -quiet ~/bin/dbreps -r general.uncatcats -s enwiki
-0 0 2 * * jsub -once -j y -mem 300m -N enwiki.usercats -o ~/var/log -quiet ~/bin/dbreps -r enwiki.usercats -s enwiki
 
 # FILES
 20 15 * * * jsub -once -j y -mem 280m -N general.dupefilenames.enwiki -o ~/var/log -quiet ~/bin/dbreps -r general.dupefilenames -s enwiki
 20 15 * * * jsub -once -j y -mem 280m -N general.dupefilenames.commonswiki -o ~/var/log -quiet ~/bin/dbreps -r general.dupefilenames -s commonswiki
 
 # PAGES
-0 17 12 * * jsub -once -j y -mem 280m -N enwiki.orphanedafds -o ~/var/log -quiet ~/bin/dbreps -r enwiki.orphanedafds -s enwiki
 0 10 * * 4 jsub -once -j y -mem 280m -N general.blankpages -o ~/var/log -quiet ~/bin/dbreps -r general.blankpages -s enwiki
 0 12 8 * * jsub -once -j y -mem 280m -N general.mostrevisions -o ~/var/log -quiet ~/bin/dbreps -r general.mostrevisions -s commonswiki
 2 5 * * 0 jsub -once -j y -mem 280m -N general.blankanontalks -o ~/var/log -quiet ~/bin/dbreps -r general.blankanontalks -s commonswiki
