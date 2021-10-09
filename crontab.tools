@@ -11,7 +11,6 @@ PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:$PYTHONPATH
 0 12 * * 5 jsub -once -j y -mem 280m -N general.userlinksinarticles -o ~/var/log -quiet ~/bin/dbreps -r general.userlinksinarticles -s enwiki
 0 12 6 * * jsub -once -j y -mem 320m -N general.redlinkedfilesinarticles -o ~/var/log -quiet ~/bin/dbreps -r general.redlinkedfilesinarticles -s enwiki
 0 19 15 * * jsub -once -j y -mem 1060m -N enwiki.tickersinleads -o ~/var/log -quiet ~/bin/dbreps -r enwiki.tickersinleads -s enwiki
-40 21 * * * jsub -once -j y -mem 280m -N enwiki.linkedmiscapitalizations -o ~/var/log -quiet ~/bin/dbreps -r enwiki.linkedmiscapitalizations -s enwiki
 
 # BIOGRAPHIES OF DEAD PEOPLE
 30 0 * * 4 jsub -once -j y -mem 280m -N enwiki.potenshbdps1 -o ~/var/log -quiet ~/bin/dbreps -r enwiki.potenshbdps1 -s enwiki
