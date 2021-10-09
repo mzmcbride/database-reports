@@ -44,7 +44,7 @@ const INDEX_WIKITEXT: &str = r#"{{DBR index}}
 "#;
 
 pub async fn load_config() -> Result<config::Config> {
-    let path = dirs_next::home_dir().unwrap().join(".dbreps.toml");
+    let path = dirs::home_dir().unwrap().join(".dbreps.toml");
     let contents = fs::read_to_string(path).await?;
     Ok(toml::from_str(&contents)?)
 }
