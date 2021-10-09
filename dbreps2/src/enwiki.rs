@@ -20,6 +20,7 @@ mod linkedmiscapitalizations;
 mod linkedmisspellings;
 mod newprojects;
 mod orphanedafds;
+mod polltemps;
 mod potenshbdps1;
 mod projectchanges;
 mod shortestbios;
@@ -29,7 +30,7 @@ pub use {
     conflictedfiles::ConflictedFiles, emptycats::EmptyCats,
     linkedmiscapitalizations::LinkedMiscapitalizations,
     linkedmisspellings::LinkedMisspellings, newprojects::NewProjects,
-    orphanedafds::OrphanedAfds, potenshbdps1::Potenshbdps1,
-    projectchanges::ProjectChanges, shortestbios::ShortestBios,
-    usercats::UserCats,
+    orphanedafds::OrphanedAfds, polltemps::PollTemps,
+    potenshbdps1::Potenshbdps1, projectchanges::ProjectChanges,
+    shortestbios::ShortestBios, usercats::UserCats,
 };
