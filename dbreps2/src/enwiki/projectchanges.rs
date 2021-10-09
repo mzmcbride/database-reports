@@ -25,7 +25,8 @@ pub struct Row {
     project: String,
     count: u32,
     no_bots_count: u32,
-    page_is_redirect: u32,
+    // For some reason this subquery is NULL sometimes
+    page_is_redirect: Option<u32>,
 }
 
 pub struct ProjectChanges {}
@@ -127,7 +128,7 @@ ORDER BY
     }
 
     fn format_row(&self, row: &Row) -> Vec<String> {
-        let page = if row.page_is_redirect == 1 {
+        let page = if row.page_is_redirect.unwrap_or(0) == 1 {
             format!("''[[Project:{}|]]''", &row.project)
         } else {
             format!("[[Project:{}|]]", &row.project)
