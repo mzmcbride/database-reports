@@ -245,7 +245,6 @@ dependencies = [
  "mwapi",
  "mysql_async",
  "regex",
- "rust-ini 0.17.0",
  "serde",
  "tokio",
  "toml",
@@ -1237,16 +1236,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rust-ini"
-version = "0.17.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "63471c4aa97a1cf8332a5f97709a79a4234698de6a1f5087faf66f2dae810e22"
-dependencies = [
- "cfg-if 1.0.0",
- "ordered-multimap",
-]
-
-[[package]]
 name = "rust_decimal"
 version = "1.14.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1671,7 +1660,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6ed518223d49ae2947025bc372d0fc02286bdbee69016d1756bf8d214330105e"
 dependencies = [
  "dirs-next",
- "rust-ini 0.16.1",
+ "rust-ini",
  "thiserror",
 ]
 
