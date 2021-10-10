@@ -265,6 +265,21 @@ impl fmt::Display for DbrLink {
     }
 }
 
+pub struct Linker(u32, String);
+
+impl Linker {
+    pub fn new(ns: u32, target: &str) -> Self {
+        Self(ns, target.to_string())
+    }
+}
+
+impl fmt::Display for Linker {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        // TODO: be smarter about ns 0, and leading colons for files/cats
+        write!(f, "[[:{{{{ns:{}}}}}:{}]]", self.0, self.1)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -275,5 +290,13 @@ mod tests {
             DbrLink::new("Taylor Swift").to_string(),
             "{{dbr link|1=Taylor Swift}}".to_string()
         );
+    }
+
+    #[test]
+    fn test_linker() {
+        assert_eq!(
+            Linker::new(0, "Foo bar").to_string(),
+            "[[:{{ns:0}}:Foo bar]]".to_string()
+        )
     }
 }

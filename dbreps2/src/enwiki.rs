@@ -20,6 +20,7 @@ mod emptycats;
 mod linkedmiscapitalizations;
 mod linkedmisspellings;
 mod longstubs;
+mod lotnonfree;
 mod newprojects;
 mod olddeletiondiscussions;
 mod orphanedafds;
@@ -36,10 +37,10 @@ pub use {
     brokenwikiprojtemps::BrokenWikiProjTemps, conflictedfiles::ConflictedFiles,
     emptycats::EmptyCats, linkedmiscapitalizations::LinkedMiscapitalizations,
     linkedmisspellings::LinkedMisspellings, longstubs::LongStubs,
-    newprojects::NewProjects, olddeletiondiscussions::OldDeletionDiscussions,
-    orphanedafds::OrphanedAfds, orphanedsubtalks::OrphanedSubTalks,
-    overusednonfree::OverusedNonFree, polltemps::PollTemps,
-    potenshbdps1::Potenshbdps1, projectchanges::ProjectChanges,
-    shortestbios::ShortestBios, stickyprodblps::StickyProdBLPs,
-    usercats::UserCats,
+    lotnonfree::LotNonFree, newprojects::NewProjects,
+    olddeletiondiscussions::OldDeletionDiscussions, orphanedafds::OrphanedAfds,
+    orphanedsubtalks::OrphanedSubTalks, overusednonfree::OverusedNonFree,
+    polltemps::PollTemps, potenshbdps1::Potenshbdps1,
+    projectchanges::ProjectChanges, shortestbios::ShortestBios,
+    stickyprodblps::StickyProdBLPs, usercats::UserCats,
 };
