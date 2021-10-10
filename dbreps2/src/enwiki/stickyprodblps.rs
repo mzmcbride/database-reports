@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 use anyhow::Result;
-use dbreps2::{str_vec, Frequency, Report};
+use dbreps2::{str_vec, DbrLink, Frequency, Report};
 use mysql_async::prelude::*;
 use mysql_async::Conn;
 
@@ -102,7 +102,7 @@ WHERE
     }
 
     fn format_row(&self, row: &Row) -> Vec<String> {
-        let mut link = format!("{{{{dbr link|1={}}}}}", row.page_title);
+        let mut link = DbrLink::new(&row.page_title).to_string();
         if row.is_categorized == 1 {
             link = format!("<b>{}</b>", &link);
         }
