@@ -57,6 +57,7 @@ async fn main() -> Result<()> {
         enwiki::Potenshbdps3 {},
         enwiki::Potenshblps1 {},
         enwiki::Potenshblps2 {},
+        enwiki::Potenshblps3 {},
         enwiki::ProjectChanges {},
         enwiki::ShortestBios {},
         enwiki::StickyProdBLPs {},

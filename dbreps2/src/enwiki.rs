@@ -31,6 +31,7 @@ mod potenshbdps1;
 mod potenshbdps3;
 mod potenshblps1;
 mod potenshblps2;
+mod potenshblps3;
 mod projectchanges;
 mod shortestbios;
 mod stickyprodblps;
@@ -45,7 +46,7 @@ pub use {
     orphanedsubtalks::OrphanedSubTalks, overusednonfree::OverusedNonFree,
     polltemps::PollTemps, potenshbdps1::Potenshbdps1,
     potenshbdps3::Potenshbdps3, potenshblps1::Potenshblps1,
-    potenshblps2::Potenshblps2, projectchanges::ProjectChanges,
-    shortestbios::ShortestBios, stickyprodblps::StickyProdBLPs,
-    usercats::UserCats,
+    potenshblps2::Potenshblps2, potenshblps3::Potenshblps3,
+    projectchanges::ProjectChanges, shortestbios::ShortestBios,
+    stickyprodblps::StickyProdBLPs, usercats::UserCats,
 };
