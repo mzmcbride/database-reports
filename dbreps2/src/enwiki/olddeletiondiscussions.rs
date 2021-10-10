@@ -25,7 +25,7 @@ pub struct Row {
     page_namespace: u32,
     page_title: String,
     cl_timestamp: String,
-    cl_to: u64,
+    cl_to: String,
 }
 
 pub struct OldDeletionDiscussions {}
