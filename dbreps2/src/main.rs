@@ -37,10 +37,9 @@ async fn main() -> Result<()> {
         &enwiki_db,
         general::ExcessiveIps {},
         general::IndefFullRedirects {},
+        general::OldEditors {},
         general::Pollcats {},
         general::UncatCats {},
-        enwiki::UserCats {},
-        general::OldEditors {},
         enwiki::BrokenWikiProjTemps {},
         enwiki::ConflictedFiles {},
         enwiki::EmptyCats {},
@@ -49,14 +48,15 @@ async fn main() -> Result<()> {
         enwiki::LongStubs {},
         enwiki::NewProjects {},
         enwiki::OldDeletionDiscussions {},
+        enwiki::OrphanedAfds {},
         enwiki::OrphanedSubTalks {},
+        enwiki::OverusedNonFree {},
         enwiki::PollTemps {},
         enwiki::Potenshbdps1 {},
         enwiki::ProjectChanges {},
         enwiki::ShortestBios {},
         enwiki::StickyProdBLPs {},
-        enwiki::OrphanedAfds {},
-        enwiki::OverusedNonFree {}
+        enwiki::UserCats {}
     );
     // Cleanup
     enwiki_db.disconnect().await?;
