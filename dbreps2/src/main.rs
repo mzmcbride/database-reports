@@ -54,6 +54,7 @@ async fn main() -> Result<()> {
         enwiki::OverusedNonFree {},
         enwiki::PollTemps {},
         enwiki::Potenshbdps1 {},
+        enwiki::Potenshbdps3 {},
         enwiki::ProjectChanges {},
         enwiki::ShortestBios {},
         enwiki::StickyProdBLPs {},
