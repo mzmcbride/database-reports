@@ -35,7 +35,7 @@ the first 1000 entries); data as of <onlyinclude>%s</onlyinclude>.'''
         cursor.execute('''
         /* untaggedblps.py SLOW_OK */
         SELECT
-          CONVERT(p1.page_title USING utf8)
+          p1.page_title
         FROM page AS p1
         JOIN categorylinks
         ON cl_from = p1.page_id
