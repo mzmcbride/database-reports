@@ -18,6 +18,7 @@ mod conflictedfiles;
 mod emptycats;
 mod linkedmiscapitalizations;
 mod linkedmisspellings;
+mod longstubs;
 mod newprojects;
 mod orphanedafds;
 mod overusednonfree;
@@ -31,9 +32,10 @@ mod usercats;
 pub use {
     conflictedfiles::ConflictedFiles, emptycats::EmptyCats,
     linkedmiscapitalizations::LinkedMiscapitalizations,
-    linkedmisspellings::LinkedMisspellings, newprojects::NewProjects,
-    orphanedafds::OrphanedAfds, overusednonfree::OverusedNonFree,
-    polltemps::PollTemps, potenshbdps1::Potenshbdps1,
-    projectchanges::ProjectChanges, shortestbios::ShortestBios,
-    stickyprodblps::StickyProdBLPs, usercats::UserCats,
+    linkedmisspellings::LinkedMisspellings, longstubs::LongStubs,
+    newprojects::NewProjects, orphanedafds::OrphanedAfds,
+    overusednonfree::OverusedNonFree, polltemps::PollTemps,
+    potenshbdps1::Potenshbdps1, projectchanges::ProjectChanges,
+    shortestbios::ShortestBios, stickyprodblps::StickyProdBLPs,
+    usercats::UserCats,
 };

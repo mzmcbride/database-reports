@@ -45,6 +45,7 @@ async fn main() -> Result<()> {
         enwiki::EmptyCats {},
         enwiki::LinkedMiscapitalizations {},
         enwiki::LinkedMisspellings {},
+        enwiki::LongStubs {},
         enwiki::NewProjects {},
         enwiki::PollTemps {},
         enwiki::Potenshbdps1 {},
