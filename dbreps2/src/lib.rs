@@ -20,6 +20,7 @@ use chrono::Duration;
 use log::info;
 use mysql_async::{Conn, Pool};
 use regex::Regex;
+use std::fmt;
 use tokio::fs;
 
 mod api;
@@ -247,5 +248,32 @@ pub trait Report<T: Send + Sync> {
         .await?;
 
         Ok(())
+    }
+}
+
+pub struct DbrLink(String);
+
+impl DbrLink {
+    pub fn new(target: &str) -> Self {
+        Self(target.to_string())
+    }
+}
+
+impl fmt::Display for DbrLink {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{{{{dbr link|1={}}}}}", self.0)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_dbrlink() {
+        assert_eq!(
+            DbrLink::new("Taylor Swift").to_string(),
+            "{{dbr link|1=Taylor Swift}}".to_string()
+        );
     }
 }

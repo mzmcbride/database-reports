@@ -14,6 +14,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+mod brokenwikiprojtemps;
 mod conflictedfiles;
 mod emptycats;
 mod linkedmiscapitalizations;
@@ -30,8 +31,8 @@ mod stickyprodblps;
 mod usercats;
 
 pub use {
-    conflictedfiles::ConflictedFiles, emptycats::EmptyCats,
-    linkedmiscapitalizations::LinkedMiscapitalizations,
+    brokenwikiprojtemps::BrokenWikiProjTemps, conflictedfiles::ConflictedFiles,
+    emptycats::EmptyCats, linkedmiscapitalizations::LinkedMiscapitalizations,
     linkedmisspellings::LinkedMisspellings, longstubs::LongStubs,
     newprojects::NewProjects, orphanedafds::OrphanedAfds,
     overusednonfree::OverusedNonFree, polltemps::PollTemps,

@@ -41,6 +41,7 @@ async fn main() -> Result<()> {
         general::UncatCats {},
         enwiki::UserCats {},
         general::OldEditors {},
+        enwiki::BrokenWikiProjTemps {},
         enwiki::ConflictedFiles {},
         enwiki::EmptyCats {},
         enwiki::LinkedMiscapitalizations {},
