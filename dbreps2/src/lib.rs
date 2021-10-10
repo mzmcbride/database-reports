@@ -223,14 +223,20 @@ pub trait Report<T: Send + Sync> {
             }
         }
         // Finally, publish the /Configuration subpage
+        let days = match self.frequency().to_duration().num_days() {
+            // every day
+            1 => "day".to_string(),
+            // every X days
+            num => format!("{} days", num),
+        };
         let config = format!(
-            r#"This report is updated every {} days.
+            r#"This report is updated every {}.
 == Source code ==
 <syntaxhighlight lang="rust">
 {}
 </syntaxhighlight>
 "#,
-            self.frequency().to_duration().num_days(),
+            days,
             self.code()
         );
         api::save_page(
