@@ -84,10 +84,6 @@ ORDER BY
         Ok(rows)
     }
 
-    fn intro(&self) -> &'static str {
-        "Pages containing an unusually high number of non-free files"
-    }
-
     fn headings(&self) -> Vec<&'static str> {
         vec!["Page", "Non-free files"]
     }

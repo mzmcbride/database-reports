@@ -91,7 +91,9 @@ pub trait Report<T: Send + Sync> {
 
     async fn run_query(&self, conn: &mut Conn) -> Result<Vec<T>>;
 
-    fn intro(&self) -> &'static str;
+    fn intro(&self) -> &'static str {
+        self.title()
+    }
 
     fn headings(&self) -> Vec<&'static str>;
 

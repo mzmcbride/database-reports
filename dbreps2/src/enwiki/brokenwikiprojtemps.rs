@@ -71,10 +71,6 @@ GROUP BY
         Ok(rows)
     }
 
-    fn intro(&self) -> &'static str {
-        "Broken WikiProject templates"
-    }
-
     fn headings(&self) -> Vec<&'static str> {
         vec!["Template", "Transclusions"]
     }

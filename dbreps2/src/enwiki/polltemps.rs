@@ -69,10 +69,6 @@ WHERE
         Ok(rows)
     }
 
-    fn intro(&self) -> &'static str {
-        "Template categories containing articles"
-    }
-
     fn headings(&self) -> Vec<&'static str> {
         vec!["Category"]
     }

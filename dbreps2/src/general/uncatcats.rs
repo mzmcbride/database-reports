@@ -101,10 +101,6 @@ FROM
         Ok(rows)
     }
 
-    fn intro(&self) -> &'static str {
-        "Uncategorized categories"
-    }
-
     fn headings(&self) -> Vec<&'static str> {
         vec!["Category", "Length", "Members", "Last edit", "Last user"]
     }

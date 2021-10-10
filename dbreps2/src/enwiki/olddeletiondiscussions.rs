@@ -90,10 +90,6 @@ ORDER BY
         Ok(rows)
     }
 
-    fn intro(&self) -> &'static str {
-        "Old deletion discussions"
-    }
-
     fn headings(&self) -> Vec<&'static str> {
         vec!["Page", "Timestamp", "Category"]
     }
