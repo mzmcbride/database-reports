@@ -50,6 +50,7 @@ async fn main() -> Result<()> {
         enwiki::Potenshbdps1 {},
         enwiki::ProjectChanges {},
         enwiki::ShortestBios {},
+        enwiki::StickyProdBLPs {},
         enwiki::OrphanedAfds {}
     );
     // Cleanup

@@ -24,6 +24,7 @@ mod polltemps;
 mod potenshbdps1;
 mod projectchanges;
 mod shortestbios;
+mod stickyprodblps;
 mod usercats;
 
 pub use {
@@ -32,5 +33,6 @@ pub use {
     linkedmisspellings::LinkedMisspellings, newprojects::NewProjects,
     orphanedafds::OrphanedAfds, polltemps::PollTemps,
     potenshbdps1::Potenshbdps1, projectchanges::ProjectChanges,
-    shortestbios::ShortestBios, usercats::UserCats,
+    shortestbios::ShortestBios, stickyprodblps::StickyProdBLPs,
+    usercats::UserCats,
 };
