@@ -277,8 +277,17 @@ impl Linker {
 
 impl fmt::Display for Linker {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        // TODO: be smarter about ns 0, and leading colons for files/cats
-        write!(f, "[[:{{{{ns:{}}}}}:{}]]", self.0, self.1)
+        let colon = match self.0 {
+            // File | Category
+            6 | 14 => ":",
+            _ => "",
+        };
+        let ns_prefix = match self.0 {
+            0 => "".to_string(),
+            num => format!("{{{{subst:ns:{}}}}}:", num),
+        };
+
+        write!(f, "[[{}{}{}]]", colon, ns_prefix, self.1)
     }
 }
 
@@ -298,7 +307,15 @@ mod tests {
     fn test_linker() {
         assert_eq!(
             Linker::new(0, "Foo bar").to_string(),
-            "[[:{{ns:0}}:Foo bar]]".to_string()
-        )
+            "[[Foo bar]]".to_string()
+        );
+        assert_eq!(
+            Linker::new(1, "Foo bar").to_string(),
+            "[[{{subst:ns:1}}:Foo bar]]".to_string()
+        );
+        assert_eq!(
+            Linker::new(6, "Foo bar").to_string(),
+            "[[:{{subst:ns:6}}:Foo bar]]".to_string()
+        );
     }
 }
