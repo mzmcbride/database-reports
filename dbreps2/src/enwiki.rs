@@ -21,6 +21,7 @@ mod linkedmiscapitalizations;
 mod linkedmisspellings;
 mod longstubs;
 mod newprojects;
+mod olddeletiondiscussions;
 mod orphanedafds;
 mod overusednonfree;
 mod polltemps;
@@ -34,9 +35,9 @@ pub use {
     brokenwikiprojtemps::BrokenWikiProjTemps, conflictedfiles::ConflictedFiles,
     emptycats::EmptyCats, linkedmiscapitalizations::LinkedMiscapitalizations,
     linkedmisspellings::LinkedMisspellings, longstubs::LongStubs,
-    newprojects::NewProjects, orphanedafds::OrphanedAfds,
-    overusednonfree::OverusedNonFree, polltemps::PollTemps,
-    potenshbdps1::Potenshbdps1, projectchanges::ProjectChanges,
-    shortestbios::ShortestBios, stickyprodblps::StickyProdBLPs,
-    usercats::UserCats,
+    newprojects::NewProjects, olddeletiondiscussions::OldDeletionDiscussions,
+    orphanedafds::OrphanedAfds, overusednonfree::OverusedNonFree,
+    polltemps::PollTemps, potenshbdps1::Potenshbdps1,
+    projectchanges::ProjectChanges, shortestbios::ShortestBios,
+    stickyprodblps::StickyProdBLPs, usercats::UserCats,
 };

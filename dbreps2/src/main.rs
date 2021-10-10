@@ -48,6 +48,7 @@ async fn main() -> Result<()> {
         enwiki::LinkedMisspellings {},
         enwiki::LongStubs {},
         enwiki::NewProjects {},
+        enwiki::OldDeletionDiscussions {},
         enwiki::PollTemps {},
         enwiki::Potenshbdps1 {},
         enwiki::ProjectChanges {},
