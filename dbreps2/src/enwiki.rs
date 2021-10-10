@@ -39,6 +39,7 @@ mod templatedisambigs;
 mod templatesnonfree;
 mod unbelievablelifespans;
 mod uncatunrefblps;
+mod unsourcedblps;
 mod usercats;
 
 pub use {
@@ -55,5 +56,6 @@ pub use {
     stickyprodblps::StickyProdBLPs, templatedisambigs::TemplateDisambigs,
     templatesnonfree::TemplatesNonFree,
     unbelievablelifespans::UnbelievableLifeSpans,
-    uncatunrefblps::UncatUnrefBLPs, usercats::UserCats,
+    uncatunrefblps::UncatUnrefBLPs, unsourcedblps::UnsourcedBLPs,
+    usercats::UserCats,
 };
