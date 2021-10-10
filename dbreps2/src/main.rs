@@ -49,6 +49,7 @@ async fn main() -> Result<()> {
         enwiki::LongStubs {},
         enwiki::NewProjects {},
         enwiki::OldDeletionDiscussions {},
+        enwiki::OrphanedSubTalks {},
         enwiki::PollTemps {},
         enwiki::Potenshbdps1 {},
         enwiki::ProjectChanges {},

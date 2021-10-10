@@ -23,6 +23,7 @@ mod longstubs;
 mod newprojects;
 mod olddeletiondiscussions;
 mod orphanedafds;
+mod orphanedsubtalks;
 mod overusednonfree;
 mod polltemps;
 mod potenshbdps1;
@@ -36,8 +37,9 @@ pub use {
     emptycats::EmptyCats, linkedmiscapitalizations::LinkedMiscapitalizations,
     linkedmisspellings::LinkedMisspellings, longstubs::LongStubs,
     newprojects::NewProjects, olddeletiondiscussions::OldDeletionDiscussions,
-    orphanedafds::OrphanedAfds, overusednonfree::OverusedNonFree,
-    polltemps::PollTemps, potenshbdps1::Potenshbdps1,
-    projectchanges::ProjectChanges, shortestbios::ShortestBios,
-    stickyprodblps::StickyProdBLPs, usercats::UserCats,
+    orphanedafds::OrphanedAfds, orphanedsubtalks::OrphanedSubTalks,
+    overusednonfree::OverusedNonFree, polltemps::PollTemps,
+    potenshbdps1::Potenshbdps1, projectchanges::ProjectChanges,
+    shortestbios::ShortestBios, stickyprodblps::StickyProdBLPs,
+    usercats::UserCats,
 };
