@@ -37,6 +37,7 @@ mod shortestbios;
 mod stickyprodblps;
 mod templatedisambigs;
 mod templatesnonfree;
+mod unbelievablelifespans;
 mod usercats;
 
 pub use {
@@ -51,5 +52,6 @@ pub use {
     potenshblps2::Potenshblps2, potenshblps3::Potenshblps3,
     projectchanges::ProjectChanges, shortestbios::ShortestBios,
     stickyprodblps::StickyProdBLPs, templatedisambigs::TemplateDisambigs,
-    templatesnonfree::TemplatesNonFree, usercats::UserCats,
+    templatesnonfree::TemplatesNonFree,
+    unbelievablelifespans::UnbelievableLifeSpans, usercats::UserCats,
 };

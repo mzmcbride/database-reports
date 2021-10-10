@@ -63,6 +63,7 @@ async fn main() -> Result<()> {
         enwiki::StickyProdBLPs {},
         enwiki::TemplateDisambigs {},
         enwiki::TemplatesNonFree {},
+        enwiki::UnbelievableLifeSpans {},
         enwiki::UserCats {}
     );
     // Cleanup
