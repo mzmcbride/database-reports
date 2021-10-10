@@ -74,7 +74,7 @@ LIMIT
     }
 
     fn headings(&self) -> Vec<&'static str> {
-        vec!["Category"]
+        vec!["Category", "Length"]
     }
 
     fn format_row(&self, row: &Row) -> Vec<String> {
