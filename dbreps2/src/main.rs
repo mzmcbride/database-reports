@@ -51,7 +51,8 @@ async fn main() -> Result<()> {
         enwiki::ProjectChanges {},
         enwiki::ShortestBios {},
         enwiki::StickyProdBLPs {},
-        enwiki::OrphanedAfds {}
+        enwiki::OrphanedAfds {},
+        enwiki::OverusedNonFree {}
     );
     // Cleanup
     enwiki_db.disconnect().await?;
