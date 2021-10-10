@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 use anyhow::Result;
-use dbreps2::{str_vec, Frequency, Report};
+use dbreps2::{str_vec, Frequency, Linker, Report};
 use mysql_async::prelude::*;
 use mysql_async::Conn;
 
@@ -96,10 +96,7 @@ ORDER BY
 
     fn format_row(&self, row: &Row) -> Vec<String> {
         str_vec![
-            format!(
-                "[[:{{{{ns:{}}}}}|{}]]",
-                row.page_namespace, row.page_title
-            ),
+            Linker::new(row.page_namespace, &row.page_title),
             row.cl_timestamp,
             row.cl_to
         ]
