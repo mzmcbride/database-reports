@@ -61,6 +61,7 @@ async fn main() -> Result<()> {
         enwiki::ProjectChanges {},
         enwiki::ShortestBios {},
         enwiki::StickyProdBLPs {},
+        enwiki::TemplateDisambigs {},
         enwiki::UserCats {}
     );
     // Cleanup

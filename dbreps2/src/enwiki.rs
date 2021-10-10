@@ -35,6 +35,7 @@ mod potenshblps3;
 mod projectchanges;
 mod shortestbios;
 mod stickyprodblps;
+mod templatedisambigs;
 mod usercats;
 
 pub use {
@@ -48,5 +49,6 @@ pub use {
     potenshbdps3::Potenshbdps3, potenshblps1::Potenshblps1,
     potenshblps2::Potenshblps2, potenshblps3::Potenshblps3,
     projectchanges::ProjectChanges, shortestbios::ShortestBios,
-    stickyprodblps::StickyProdBLPs, usercats::UserCats,
+    stickyprodblps::StickyProdBLPs, templatedisambigs::TemplateDisambigs,
+    usercats::UserCats,
 };
