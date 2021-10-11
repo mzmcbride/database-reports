@@ -66,6 +66,7 @@ async fn main() -> Result<()> {
         enwiki::UnbelievableLifeSpans {},
         enwiki::UncatUnrefBLPs {},
         enwiki::UntaggedBLPs {},
+        enwiki::UntaggedStubs {},
         enwiki::UnsourcedBLPs {},
         enwiki::UserCats {}
     );

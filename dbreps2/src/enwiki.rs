@@ -41,6 +41,7 @@ mod unbelievablelifespans;
 mod uncatunrefblps;
 mod unsourcedblps;
 mod untaggedblps;
+mod untaggedstubs;
 mod usercats;
 
 pub use {
@@ -58,5 +59,6 @@ pub use {
     templatesnonfree::TemplatesNonFree,
     unbelievablelifespans::UnbelievableLifeSpans,
     uncatunrefblps::UncatUnrefBLPs, unsourcedblps::UnsourcedBLPs,
-    untaggedblps::UntaggedBLPs, usercats::UserCats,
+    untaggedblps::UntaggedBLPs, untaggedstubs::UntaggedStubs,
+    usercats::UserCats,
 };
