@@ -43,6 +43,7 @@ mod unsourcedblps;
 mod untaggedblps;
 mod untaggedstubs;
 mod untaggedunrefblps;
+mod unusednonfree;
 mod usercats;
 
 pub use {
@@ -61,5 +62,6 @@ pub use {
     unbelievablelifespans::UnbelievableLifeSpans,
     uncatunrefblps::UncatUnrefBLPs, unsourcedblps::UnsourcedBLPs,
     untaggedblps::UntaggedBLPs, untaggedstubs::UntaggedStubs,
-    untaggedunrefblps::UntaggedUnrefBLPs, usercats::UserCats,
+    untaggedunrefblps::UntaggedUnrefBLPs, unusednonfree::UnusedNonFree,
+    usercats::UserCats,
 };

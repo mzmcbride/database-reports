@@ -69,6 +69,7 @@ async fn main() -> Result<()> {
         enwiki::UntaggedBLPs {},
         enwiki::UntaggedStubs {},
         enwiki::UntaggedUnrefBLPs {},
+        enwiki::UnusedNonFree {},
         enwiki::UserCats {}
     );
     // Cleanup
