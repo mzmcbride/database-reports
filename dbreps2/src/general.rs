@@ -16,11 +16,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 mod excessiveips;
 mod indeffullredirects;
+mod linkedemailsinarticles;
 mod oldeditors;
 mod pollcats;
 mod uncatcats;
 
 pub use {
     excessiveips::ExcessiveIps, indeffullredirects::IndefFullRedirects,
-    oldeditors::OldEditors, pollcats::Pollcats, uncatcats::UncatCats,
+    linkedemailsinarticles::LinkedEmailsInArticles, oldeditors::OldEditors,
+    pollcats::Pollcats, uncatcats::UncatCats,
 };
