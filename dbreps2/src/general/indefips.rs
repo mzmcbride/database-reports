@@ -94,6 +94,6 @@ WHERE
     }
 
     fn code(&self) -> &'static str {
-        include_str!("oldeditors.rs")
+        include_str!("indefips.rs")
     }
 }
