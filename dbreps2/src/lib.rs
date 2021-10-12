@@ -291,6 +291,16 @@ impl fmt::Display for Linker {
     }
 }
 
+/// "Escape" a block reason so it's safe for display
+/// in a table context
+pub fn escape_reason(text: &str) -> String {
+    text
+        // Escape templates
+        .replace("{{", "{{tl|")
+        // And HTML comments
+        .replace("<!--", "<nowiki><!--</nowiki>")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -317,5 +327,13 @@ mod tests {
             Linker::new(6, "Foo bar").to_string(),
             "[[:{{subst:ns:6}}:Foo bar]]".to_string()
         );
+    }
+
+    #[test]
+    fn test_escape_reason() {
+        assert_eq!(
+            escape_reason("{{foo}} [[bar]] <!-- baz -->"),
+            "{{tl|foo}} [[bar]] <nowiki><!--</nowiki> baz -->".to_string()
+        )
     }
 }

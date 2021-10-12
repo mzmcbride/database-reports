@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 use anyhow::Result;
-use dbreps2::{str_vec, Frequency, Report};
+use dbreps2::{escape_reason, str_vec, Frequency, Report};
 use mysql_async::prelude::*;
 use mysql_async::Conn;
 
@@ -85,17 +85,11 @@ WHERE
     }
 
     fn format_row(&self, row: &Row) -> Vec<String> {
-        let reason = row
-            .comment_text
-            // Escape templates
-            .replace("{{", "{{tl|")
-            // And HTML comments
-            .replace("<!--", "<nowiki><!--</nowiki>");
         str_vec![
             format!("{{{{IPvandal|1={}}}}}", &row.ipb_address),
             format!("[[User talk:{}|]]", &row.actor_name),
             row.ipb_timestamp,
-            reason
+            escape_reason(&row.comment_text)
         ]
     }
 
