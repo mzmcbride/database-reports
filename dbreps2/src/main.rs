@@ -36,6 +36,7 @@ async fn main() -> Result<()> {
         &enwiki_api,
         &enwiki_db,
         general::ExcessiveIps {},
+        general::ExcessiveUsers {},
         general::IndefFullRedirects {},
         general::IndefIPs {},
         general::LinkedEmailsInArticles {},
