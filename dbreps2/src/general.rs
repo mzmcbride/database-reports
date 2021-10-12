@@ -20,9 +20,11 @@ mod linkedemailsinarticles;
 mod oldeditors;
 mod pollcats;
 mod uncatcats;
+mod userlinksinarticles;
 
 pub use {
     excessiveips::ExcessiveIps, indeffullredirects::IndefFullRedirects,
     linkedemailsinarticles::LinkedEmailsInArticles, oldeditors::OldEditors,
     pollcats::Pollcats, uncatcats::UncatCats,
+    userlinksinarticles::UserLinksInArticles,
 };
