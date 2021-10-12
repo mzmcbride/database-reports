@@ -67,7 +67,7 @@ WHERE
         let mut rows = conn
             .query_map(self.query(), |page_title| Row { page_title })
             .await?;
-        rows.sort_by(|a, b| b.page_title.cmp(&a.page_title));
+        rows.sort_by(|a, b| a.page_title.cmp(&b.page_title));
         Ok(rows)
     }
 
