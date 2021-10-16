@@ -40,7 +40,8 @@ async fn main() -> Result<()> {
         general::IndefFullRedirects {},
         general::IndefIPs {},
         general::LinkedEmailsInArticles {},
-        general::LinkedRedlinkedCats {},
+        // Too slow, timing out
+        // general::LinkedRedlinkedCats {},
         general::OldEditors {},
         general::Pollcats {},
         general::UncatCats {},
