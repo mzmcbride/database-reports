@@ -49,7 +49,8 @@ async fn main() -> Result<()> {
         // Too slow, timing out
         // general::LinkedRedlinkedCats {},
         general::OldEditors {},
-        general::Pollcats {},
+        // Too slow, timing out
+        // general::Pollcats {},
         general::UncatCats {},
         general::UserLinksInArticles {},
         enwiki::BrokenWikiProjTemps {},
