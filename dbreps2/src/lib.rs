@@ -138,7 +138,8 @@ pub trait Report<T: Send + Sync> {
         };
         let dt = Utc.datetime_from_str(&ts, "%H:%M, %d %B %Y (UTC)")?;
         let now = Utc::now();
-        if (dt + self.frequency().to_duration()) < now {
+        let skew = Duration::minutes(20);
+        if (dt + self.frequency().to_duration() + skew) < now {
             Ok(true)
         } else {
             Ok(false)
