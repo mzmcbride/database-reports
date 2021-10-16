@@ -1,6 +1,6 @@
 use anyhow::Result;
 use dbreps2::Report;
-use log::info;
+use log::{error, info};
 use mysql_async::Pool;
 
 mod enwiki;
@@ -10,6 +10,12 @@ macro_rules! run {
     ( $client:expr, $pool:expr, $( $x:expr ),* ) => {
         $(
             let report = $x;
+            match report.run($client, $pool).await {
+                Ok(_) => {},
+                Err(err) => {
+                    error!("{}", err.to_string());
+                }
+            }
             report.run($client, $pool).await?;
         )*
     }
