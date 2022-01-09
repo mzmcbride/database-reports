@@ -1669,9 +1669,9 @@ dependencies = [
 
 [[package]]
 name = "toolforge"
-version = "0.3.1"
+version = "5.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1f4faa50d5d009f479d2b6857dbe1d689eb2002a5ba41f5d6a173c2130e89e31"
+checksum = "036b57d8b565339b86e472425551efd5e6a690b52d588ec06c6e66f6cbd1a534"
 dependencies = [
  "dirs",
  "rust-ini",
