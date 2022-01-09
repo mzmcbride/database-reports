@@ -16,11 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 use anyhow::Result;
-use chrono::Duration;
 use log::info;
 use mysql_async::{Conn, Pool};
 use regex::Regex;
 use std::fmt;
+use time::format_description::FormatItem;
+use time::macros::format_description;
+use time::{Duration, OffsetDateTime, PrimitiveDateTime};
 use tokio::fs;
 
 mod api;
@@ -38,6 +40,10 @@ macro_rules! str_vec {
         }
     };
 }
+
+const SIG_TIMESTAMP: &[FormatItem] = format_description!(
+    "[hour]:[minute], [day padding:none] [month repr:long] [year] (UTC)"
+);
 
 const INDEX_WIKITEXT: &str = r#"{{DBR index}}
 
@@ -127,7 +133,6 @@ pub trait Report<T: Send + Sync> {
     }
 
     fn needs_update(&self, old_text: &str) -> Result<bool> {
-        use chrono::prelude::*;
         let re = Regex::new("<onlyinclude>(.*?)</onlyinclude>").unwrap();
         let ts = match re.captures(old_text) {
             Some(cap) => cap[1].to_string(),
@@ -136,8 +141,8 @@ pub trait Report<T: Send + Sync> {
                 return Ok(true);
             }
         };
-        let dt = Utc.datetime_from_str(&ts, "%H:%M, %d %B %Y (UTC)")?;
-        let now = Utc::now();
+        let dt = PrimitiveDateTime::parse(&ts, &SIG_TIMESTAMP)?.assume_utc();
+        let now = OffsetDateTime::now_utc();
         let skew = Duration::minutes(20);
         if (dt + self.frequency().to_duration() - skew) < now {
             Ok(true)
@@ -227,7 +232,7 @@ pub trait Report<T: Send + Sync> {
             }
         }
         // Finally, publish the /Configuration subpage
-        let days = match self.frequency().to_duration().num_days() {
+        let days = match self.frequency().to_duration().whole_days() {
             // every day
             1 => "day".to_string(),
             // every X days
@@ -305,6 +310,7 @@ pub fn escape_reason(text: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use time::macros::{date, time};
 
     #[test]
     fn test_dbrlink() {
@@ -336,5 +342,15 @@ mod tests {
             escape_reason("{{foo}} [[bar]] <!-- baz -->"),
             "{{tl|foo}} [[bar]] <nowiki><!--</nowiki> baz -->".to_string()
         )
+    }
+
+    #[test]
+    fn test_timestamp() {
+        let ts = "14:31, 3 January 2022 (UTC)";
+        let dt = PrimitiveDateTime::parse(&ts, &SIG_TIMESTAMP)
+            .unwrap()
+            .assume_utc();
+        assert_eq!(dt.date(), date!(2022 - 01 - 03));
+        assert_eq!(dt.time(), time!(14:31:00));
     }
 }

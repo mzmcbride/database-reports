@@ -20,6 +20,7 @@ use anyhow::Result;
 use dbreps2::{str_vec, Frequency, Report};
 use mysql_async::prelude::*;
 use mysql_async::Conn;
+use time::OffsetDateTime;
 
 pub struct Row {
     page_title: String,
@@ -78,10 +79,7 @@ ORDER BY
     }
 
     async fn run_query(&self, conn: &mut Conn) -> Result<Vec<Row>> {
-        let current_year = {
-            use chrono::prelude::*;
-            Utc::now().year()
-        };
+        let current_year = OffsetDateTime::now_utc().year();
         let mut rows = vec![];
         for year in 1900..=current_year {
             let year_rows = conn
