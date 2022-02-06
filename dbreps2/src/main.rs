@@ -59,12 +59,11 @@ async fn main() -> Result<()> {
     let enwiki_db = Pool::new(
         toolforge::connection_info!("enwiki", ANALYTICS)?.to_string(),
     );
-
     run!(
         &args,
         &enwiki_api,
         &enwiki_db,
-        /*general::ExcessiveIps {},
+        general::ExcessiveIps {},
         general::ExcessiveUsers {},
         general::IndefFullRedirects {},
         general::IndefIPs {},
@@ -104,10 +103,9 @@ async fn main() -> Result<()> {
         enwiki::UntaggedBLPs {},
         enwiki::UntaggedStubs {},
         enwiki::UntaggedUnrefBLPs {},
-        enwiki::UnusedNonFree {},*/
+        enwiki::UnusedNonFree {},
         enwiki::UserCats {}
     );
-
     // Cleanup
     enwiki_db.disconnect().await?;
 

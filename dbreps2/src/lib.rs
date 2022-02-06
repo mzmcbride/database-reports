@@ -180,7 +180,7 @@ pub trait Report<T: Send + Sync> {
         if api::exists(client, &title_for_update_check).await? {
             let old_text =
                 api::get_wikitext(client, &title_for_update_check).await?;
-            if self.needs_update(&old_text)? {
+            if !self.needs_update(&old_text)? {
                 info!(
                     "{}: Report is still up to date, skipping update.",
                     self.get_title()
