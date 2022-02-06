@@ -203,13 +203,12 @@ pub trait Report<T: Send + Sync> {
                 for chunk in iter {
                     index += 1;
                     let text = self.build_page(chunk, index);
-                    info!("Hello there");
-                    /*api::save_page(
+                    api::save_page(
                         client,
                         &format!("{}/{}", self.get_title(), index),
                         &text,
                     )
-                    .await?;*/
+                    .await?;
                 }
                 // Now "Blank" any other subpages
                 loop {

@@ -11,7 +11,7 @@ mod general;
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
-    /// Report name such as "enwiki::UserCats"
+    /// Report name such as "User categories"
     #[clap(short, long)]
     report: Option<String>,
 }
@@ -39,9 +39,9 @@ macro_rules! run {
 #[tokio::main]
 async fn main() -> Result<()> {
     let args = Args::parse();
-    match args.report {
-        Some(report) => println!("Hello {}!", report),
-        None => println!("Hello, report arg not set..."),
+    match &args.report {
+        Some(report) => println!("Only running the \"{}\" report", report),
+        None => println!("Running all reports"),
     }
 
     env_logger::Builder::from_env(
