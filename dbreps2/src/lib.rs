@@ -46,7 +46,6 @@ const SIG_TIMESTAMP: &[FormatItem] = format_description!(
 );
 
 const INDEX_WIKITEXT: &str = r#"{{DBR index}}
-
 {{DBR footer}}
 "#;
 
