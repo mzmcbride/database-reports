@@ -1,10 +1,20 @@
 use anyhow::Result;
+use clap::Parser;
 use dbreps2::Report;
 use log::{error, info};
 use mysql_async::Pool;
 
 mod enwiki;
 mod general;
+
+/// Parsing args, yo
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Args {
+    /// Report name such as "enwiki:UserCats"
+    #[clap(short, long)]
+    report: String,
+}
 
 macro_rules! run {
     ( $client:expr, $pool:expr, $( $x:expr ),* ) => {
@@ -22,6 +32,13 @@ macro_rules! run {
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    let args = Args::parse();
+    if args.report == "" {
+        println!("Hello, report arg not set...")
+    } else {
+        println!("Hello {}!", args.report);
+    }
+
     env_logger::Builder::from_env(
         env_logger::Env::default().default_filter_or("info"),
     )
@@ -40,7 +57,7 @@ async fn main() -> Result<()> {
     run!(
         &enwiki_api,
         &enwiki_db,
-        general::ExcessiveIps {},
+        /*general::ExcessiveIps {},
         general::ExcessiveUsers {},
         general::IndefFullRedirects {},
         general::IndefIPs {},
@@ -80,7 +97,7 @@ async fn main() -> Result<()> {
         enwiki::UntaggedBLPs {},
         enwiki::UntaggedStubs {},
         enwiki::UntaggedUnrefBLPs {},
-        enwiki::UnusedNonFree {},
+        enwiki::UnusedNonFree {},*/
         enwiki::UserCats {}
     );
     // Cleanup
