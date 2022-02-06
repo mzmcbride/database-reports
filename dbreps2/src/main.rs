@@ -16,7 +16,6 @@ macro_rules! run {
                     error!("{}", err.to_string());
                 }
             }
-            report.run($client, $pool).await?;
         )*
     }
 }
