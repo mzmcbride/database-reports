@@ -24,8 +24,12 @@ macro_rules! run {
                 Some(wanted) => wanted == report.title(),
                 None => true,
             };
+            let debug_mode = match &$args.report {
+                Some(_) => true,
+                None => false,
+            };
             if should_run {
-                match report.run($client, $pool).await {
+                match report.run(debug_mode, $client, $pool).await {
                     Ok(_) => {},
                     Err(err) => {
                         error!("{}", err.to_string());
