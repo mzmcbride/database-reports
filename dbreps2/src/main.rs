@@ -123,7 +123,12 @@ async fn main() -> Result<()> {
     let commonswiki_db = Pool::new(
         toolforge::connection_info!("commonswiki", ANALYTICS)?.to_string(),
     );
-    run!(&args, &commonswiki_api, &commonswiki_db, general::ExcessiveIps {});
+    run!(
+        &args,
+        &commonswiki_api,
+        &commonswiki_db,
+        general::ExcessiveIps {}
+    );
     // Cleanup
     commonswiki_db.disconnect().await?;
 

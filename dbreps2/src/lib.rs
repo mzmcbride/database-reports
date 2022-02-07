@@ -117,7 +117,7 @@ pub trait Report<T: Send + Sync> {
             ),
             r#"{| class="wikitable sortable"
 |- style="white-space: nowrap;""#
-            .to_string(),
+                .to_string(),
         ];
         if self.enumerate() {
             intro.push("! No.".to_string());
@@ -169,7 +169,12 @@ pub trait Report<T: Send + Sync> {
         text.join("\n")
     }
 
-    async fn run(&self, debug_mode: bool, client: &mwapi::Client, pool: &Pool) -> Result<()> {
+    async fn run(
+        &self,
+        debug_mode: bool,
+        client: &mwapi::Client,
+        pool: &Pool,
+    ) -> Result<()> {
         // Bypass needs update check when --report is passed
         if debug_mode {
             info!("Passed --report, we're in debug mode");
@@ -230,8 +235,7 @@ pub trait Report<T: Send + Sync> {
                     if debug_mode {
                         info!("{}", BLANK_WIKITEXT);
                     } else {
-                        api::save_page(client, &title, BLANK_WIKITEXT)
-                            .await?;
+                        api::save_page(client, &title, BLANK_WIKITEXT).await?;
                     }
                 }
                 // Finally make sure the index page is up to date
