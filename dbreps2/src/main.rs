@@ -40,6 +40,7 @@ async fn main() -> Result<()> {
     run!(
         &enwiki_api,
         &enwiki_db,
+        general::ArticlesMostRedirects {},
         general::ExcessiveIps {},
         general::ExcessiveUsers {},
         general::IndefFullRedirects {},

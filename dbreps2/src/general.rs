@@ -14,6 +14,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+mod articlesmostredirects;
 mod excessiveips;
 mod excessiveusers;
 mod indeffullredirects;
@@ -26,9 +27,9 @@ mod uncatcats;
 mod userlinksinarticles;
 
 pub use {
-    excessiveips::ExcessiveIps, excessiveusers::ExcessiveUsers,
-    indeffullredirects::IndefFullRedirects, indefips::IndefIPs,
-    linkedemailsinarticles::LinkedEmailsInArticles,
+    articlesmostredirects::ArticlesMostRedirects, excessiveips::ExcessiveIps,
+    excessiveusers::ExcessiveUsers, indeffullredirects::IndefFullRedirects,
+    indefips::IndefIPs, linkedemailsinarticles::LinkedEmailsInArticles,
     linkedredlinkedcats::LinkedRedlinkedCats, oldeditors::OldEditors,
     pollcats::Pollcats, uncatcats::UncatCats,
     userlinksinarticles::UserLinksInArticles,
