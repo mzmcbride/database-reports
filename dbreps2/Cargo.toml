@@ -8,6 +8,7 @@ edition = "2018"
 [dependencies]
 anyhow = "1.0"
 async-trait = "0.1.50"
+clap = { version = "3.0.14", features = ["derive"] }
 dirs = "4.0"
 env_logger = "0.8"
 log = "0.4"

@@ -1,4 +1,5 @@
 use anyhow::Result;
+use clap::Parser;
 use dbreps2::Report;
 use log::{error, info};
 use mysql_async::Pool;
@@ -6,14 +7,33 @@ use mysql_async::Pool;
 mod enwiki;
 mod general;
 
+/// Parsing args, yo
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Args {
+    /// Report name such as "User categories"
+    #[clap(short, long)]
+    report: Option<String>,
+}
+
 macro_rules! run {
-    ( $client:expr, $pool:expr, $( $x:expr ),* ) => {
+    ( $args:expr, $client:expr, $pool:expr, $( $x:expr ),* ) => {
         $(
             let report = $x;
-            match report.run($client, $pool).await {
-                Ok(_) => {},
-                Err(err) => {
-                    error!("{}", err.to_string());
+            let should_run = match &$args.report {
+                Some(wanted) => wanted == report.title(),
+                None => true,
+            };
+            let debug_mode = match &$args.report {
+                Some(_) => true,
+                None => false,
+            };
+            if should_run {
+                match report.run(debug_mode, $client, $pool).await {
+                    Ok(_) => {},
+                    Err(err) => {
+                        error!("{}", err.to_string());
+                    }
                 }
             }
         )*
@@ -22,6 +42,12 @@ macro_rules! run {
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    let args = Args::parse();
+    match &args.report {
+        Some(report) => println!("Only running the \"{}\" report", report),
+        None => println!("Running all reports"),
+    }
+
     env_logger::Builder::from_env(
         env_logger::Env::default().default_filter_or("info"),
     )
@@ -38,6 +64,7 @@ async fn main() -> Result<()> {
         toolforge::connection_info!("enwiki", ANALYTICS)?.to_string(),
     );
     run!(
+        &args,
         &enwiki_api,
         &enwiki_db,
         general::ExcessiveIps {},
@@ -96,7 +123,12 @@ async fn main() -> Result<()> {
     let commonswiki_db = Pool::new(
         toolforge::connection_info!("commonswiki", ANALYTICS)?.to_string(),
     );
-    run!(&commonswiki_api, &commonswiki_db, general::ExcessiveIps {});
+    run!(
+        &args,
+        &commonswiki_api,
+        &commonswiki_db,
+        general::ExcessiveIps {}
+    );
     // Cleanup
     commonswiki_db.disconnect().await?;
 

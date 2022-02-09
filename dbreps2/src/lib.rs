@@ -49,6 +49,8 @@ const INDEX_WIKITEXT: &str = r#"{{DBR index}}
 {{DBR footer}}
 "#;
 
+const BLANK_WIKITEXT: &str = r#"{{intentionally blank}}"#;
+
 pub async fn load_config() -> Result<config::Config> {
     let path = dirs::home_dir().unwrap().join(".dbreps.toml");
     let contents = fs::read_to_string(path).await?;
@@ -110,13 +112,12 @@ pub trait Report<T: Send + Sync> {
         // TODO: is replag something we still need to care about? meh
         let mut intro = vec![
             format!(
-                "{}; data as of <onlyinclude>~~~~~</onlyinclude>.",
+                "{}; data as of <onlyinclude>~~~~~</onlyinclude>.\n",
                 self.intro()
             ),
             r#"{| class="wikitable sortable"
-|- style="white-space:nowrap;"
-"#
-            .to_string(),
+|- style="white-space: nowrap;""#
+                .to_string(),
         ];
         if self.enumerate() {
             intro.push("! No.".to_string());
@@ -168,24 +169,34 @@ pub trait Report<T: Send + Sync> {
         text.join("\n")
     }
 
-    async fn run(&self, client: &mwapi::Client, pool: &Pool) -> Result<()> {
-        info!(
-            "{}: Checking when last results were published...",
-            self.get_title()
-        );
-        let title_for_update_check = match self.rows_per_page() {
-            Some(_) => format!("{}/1", self.get_title()),
-            None => self.get_title(),
-        };
-        if api::exists(client, &title_for_update_check).await? {
-            let old_text =
-                api::get_wikitext(client, &title_for_update_check).await?;
-            if !self.needs_update(&old_text)? {
-                info!(
-                    "{}: Report is still up to date, skipping update.",
-                    self.get_title()
-                );
-                return Ok(());
+    async fn run(
+        &self,
+        debug_mode: bool,
+        client: &mwapi::Client,
+        pool: &Pool,
+    ) -> Result<()> {
+        // Bypass needs update check when --report is passed
+        if debug_mode {
+            info!("Passed --report, we're in debug mode");
+        } else {
+            info!(
+                "{}: Checking when last results were published...",
+                self.get_title()
+            );
+            let title_for_update_check = match self.rows_per_page() {
+                Some(_) => format!("{}/1", self.get_title()),
+                None => self.get_title(),
+            };
+            if api::exists(client, &title_for_update_check).await? {
+                let old_text =
+                    api::get_wikitext(client, &title_for_update_check).await?;
+                if !self.needs_update(&old_text)? {
+                    info!(
+                        "{}: Report is still up to date, skipping update.",
+                        self.get_title()
+                    );
+                    return Ok(());
+                }
             }
         }
         let mut conn = pool.get_conn().await?;
@@ -203,12 +214,16 @@ pub trait Report<T: Send + Sync> {
                 for chunk in iter {
                     index += 1;
                     let text = self.build_page(chunk, index);
-                    api::save_page(
-                        client,
-                        &format!("{}/{}", self.get_title(), index),
-                        &text,
-                    )
-                    .await?;
+                    if debug_mode {
+                        info!("{}", &text);
+                    } else {
+                        api::save_page(
+                            client,
+                            &format!("{}/{}", self.get_title(), index),
+                            &text,
+                        )
+                        .await?;
+                    }
                 }
                 // Now "Blank" any other subpages
                 loop {
@@ -217,17 +232,28 @@ pub trait Report<T: Send + Sync> {
                     if !api::exists(client, &title).await? {
                         break;
                     }
-                    api::save_page(client, &title, "{{intentionally blank}}")
-                        .await?;
+                    if debug_mode {
+                        info!("{}", BLANK_WIKITEXT);
+                    } else {
+                        api::save_page(client, &title, BLANK_WIKITEXT).await?;
+                    }
                 }
                 // Finally make sure the index page is up to date
-                api::save_page(client, &self.get_title(), INDEX_WIKITEXT)
-                    .await?;
+                if debug_mode {
+                    info!("{}", INDEX_WIKITEXT);
+                } else {
+                    api::save_page(client, &self.get_title(), INDEX_WIKITEXT)
+                        .await?;
+                }
             }
             None => {
                 // Just dump it all into one page
                 let text = self.build_page(&rows, 1);
-                api::save_page(client, &self.get_title(), &text).await?;
+                if debug_mode {
+                    info!("{}", &text);
+                } else {
+                    api::save_page(client, &self.get_title(), &text).await?;
+                }
             }
         }
         // Finally, publish the /Configuration subpage
@@ -239,21 +265,24 @@ pub trait Report<T: Send + Sync> {
         };
         let config = format!(
             r#"This report is updated every {}.
+
 == Source code ==
 <syntaxhighlight lang="rust">
-{}
-</syntaxhighlight>
+{}</syntaxhighlight>
 "#,
             days,
             self.code()
         );
-        api::save_page(
-            client,
-            &format!("{}/Configuration", self.get_title()),
-            &config,
-        )
-        .await?;
-
+        if debug_mode {
+            info!("{}", &config);
+        } else {
+            api::save_page(
+                client,
+                &format!("{}/Configuration", self.get_title()),
+                &config,
+            )
+            .await?;
+        }
         Ok(())
     }
 }

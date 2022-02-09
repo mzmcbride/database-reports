@@ -38,6 +38,8 @@ ssh -N shellusernamehere@tools-login.wmflabs.org -L 3306:enwiki.analytics.db.svc
 $ cargo fmt
 # Run the database reports (in debug mode)
 $ cargo run
+# Run a single report
+$ cargo run -- --report="User categories"
 # Run the clippy linter
 $ cargo clippy -- -D warnings
 ```
