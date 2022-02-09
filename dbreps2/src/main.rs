@@ -67,6 +67,7 @@ async fn main() -> Result<()> {
         &args,
         &enwiki_api,
         &enwiki_db,
+        general::ArticlesMostRedirects {},
         general::ExcessiveIps {},
         general::ExcessiveUsers {},
         general::IndefFullRedirects {},
