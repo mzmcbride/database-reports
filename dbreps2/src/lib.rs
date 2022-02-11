@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 use anyhow::Result;
-use log::info;
+use log::{error, info};
+use mwapi::Client;
 use mysql_async::{Conn, Pool};
 use regex::Regex;
 use std::fmt;
@@ -169,6 +170,22 @@ pub trait Report<T: Send + Sync> {
         text.join("\n")
     }
 
+    async fn really_run(&self, runner: &Runner) {
+        let should_run = match &runner.report {
+            Some(wanted) => wanted == self.title(),
+            None => true,
+        };
+        let debug_mode = runner.report.is_some();
+        if should_run {
+            match self.run(debug_mode, &runner.client, &runner.pool).await {
+                Ok(_) => {}
+                Err(err) => {
+                    error!("{}", err.to_string());
+                }
+            }
+        }
+    }
+
     async fn run(
         &self,
         debug_mode: bool,
@@ -284,6 +301,36 @@ pub trait Report<T: Send + Sync> {
             .await?;
         }
         Ok(())
+    }
+}
+
+pub struct Runner {
+    client: Client,
+    pub pool: Pool,
+    /// Requested report with --report
+    report: Option<String>,
+}
+
+impl Runner {
+    pub async fn new(
+        api_url: &str,
+        dbname: &str,
+        report: Option<String>,
+    ) -> Result<Self> {
+        let cfg = load_config().await?;
+        let client = Client::bot_builder(api_url)
+            .set_botpassword(&cfg.auth.username, &cfg.auth.password)
+            .build()
+            .await?;
+        info!("Setting up MySQL connection pool for {}...", dbname);
+        let pool = Pool::new(
+            toolforge::connection_info!(dbname, ANALYTICS)?.to_string(),
+        );
+        Ok(Self {
+            client,
+            pool,
+            report,
+        })
     }
 }
 

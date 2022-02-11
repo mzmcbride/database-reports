@@ -1,8 +1,6 @@
 use anyhow::Result;
 use clap::Parser;
 use dbreps2::Report;
-use log::{error, info};
-use mysql_async::Pool;
 
 mod enwiki;
 mod general;
@@ -14,30 +12,6 @@ struct Args {
     /// Report name such as "User categories"
     #[clap(short, long)]
     report: Option<String>,
-}
-
-macro_rules! run {
-    ( $args:expr, $client:expr, $pool:expr, $( $x:expr ),* ) => {
-        $(
-            let report = $x;
-            let should_run = match &$args.report {
-                Some(wanted) => wanted == report.title(),
-                None => true,
-            };
-            let debug_mode = match &$args.report {
-                Some(_) => true,
-                None => false,
-            };
-            if should_run {
-                match report.run(debug_mode, $client, $pool).await {
-                    Ok(_) => {},
-                    Err(err) => {
-                        error!("{}", err.to_string());
-                    }
-                }
-            }
-        )*
-    }
 }
 
 #[tokio::main]
@@ -52,86 +26,105 @@ async fn main() -> Result<()> {
         env_logger::Env::default().default_filter_or("info"),
     )
     .init();
-    let cfg = dbreps2::load_config().await?;
     /* enwiki reports */
-    let enwiki_api =
-        mwapi::Client::bot_builder("https://en.wikipedia.org/w/api.php")
-            .set_botpassword(&cfg.auth.username, &cfg.auth.password)
-            .build()
-            .await?;
-    info!("Setting up MySQL connection pool for enwiki...");
-    let enwiki_db = Pool::new(
-        toolforge::connection_info!("enwiki", ANALYTICS)?.to_string(),
-    );
-    run!(
-        &args,
-        &enwiki_api,
-        &enwiki_db,
-        general::ArticlesMostRedirects {},
-        general::ExcessiveIps {},
-        general::ExcessiveUsers {},
-        general::IndefFullRedirects {},
-        general::IndefIPs {},
-        general::LinkedEmailsInArticles {},
-        // Too slow, timing out
-        // general::LinkedRedlinkedCats {},
-        general::OldEditors {},
-        general::Pollcats {},
-        general::UncatCats {},
-        general::UserLinksInArticles {},
-        enwiki::BrokenWikiProjTemps {},
-        enwiki::ConflictedFiles {},
-        enwiki::EmptyCats {},
-        enwiki::LinkedMiscapitalizations {},
-        enwiki::LinkedMisspellings {},
-        enwiki::LongStubs {},
-        enwiki::LotNonFree {},
-        enwiki::NewProjects {},
-        enwiki::OldDeletionDiscussions {},
-        enwiki::OrphanedAfds {},
-        enwiki::OrphanedSubTalks {},
-        enwiki::OverusedNonFree {},
-        enwiki::PollTemps {},
-        enwiki::Potenshbdps1 {},
-        enwiki::Potenshbdps3 {},
-        enwiki::Potenshblps1 {},
-        enwiki::Potenshblps2 {},
-        enwiki::Potenshblps3 {},
-        enwiki::ProjectChanges {},
-        enwiki::ShortestBios {},
-        enwiki::StickyProdBLPs {},
-        enwiki::TemplateDisambigs {},
-        enwiki::TemplatesNonFree {},
-        enwiki::UnbelievableLifeSpans {},
-        enwiki::UncatUnrefBLPs {},
-        enwiki::UnsourcedBLPs {},
-        enwiki::UntaggedBLPs {},
-        enwiki::UntaggedStubs {},
-        enwiki::UntaggedUnrefBLPs {},
-        enwiki::UnusedNonFree {},
-        enwiki::UserCats {}
-    );
+    let enwiki_runner = dbreps2::Runner::new(
+        "https://en.wikipedia.org/w/api.php",
+        "enwiki",
+        args.report.clone(),
+    )
+    .await?;
+    (general::ArticlesMostRedirects {})
+        .really_run(&enwiki_runner)
+        .await;
+    (general::ExcessiveIps {}).really_run(&enwiki_runner).await;
+    (general::ExcessiveUsers {})
+        .really_run(&enwiki_runner)
+        .await;
+    (general::IndefFullRedirects {})
+        .really_run(&enwiki_runner)
+        .await;
+    (general::IndefIPs {}).really_run(&enwiki_runner).await;
+    (general::LinkedEmailsInArticles {})
+        .really_run(&enwiki_runner)
+        .await;
+    // Too slow, timing out
+    // (general::LinkedRedlinkedCats {}).really_run(&enwiki_runner).await;
+    (general::OldEditors {}).really_run(&enwiki_runner).await;
+    (general::Pollcats {}).really_run(&enwiki_runner).await;
+    (general::UncatCats {}).really_run(&enwiki_runner).await;
+    (general::UserLinksInArticles {})
+        .really_run(&enwiki_runner)
+        .await;
+    (enwiki::BrokenWikiProjTemps {})
+        .really_run(&enwiki_runner)
+        .await;
+    (enwiki::ConflictedFiles {})
+        .really_run(&enwiki_runner)
+        .await;
+    (enwiki::EmptyCats {}).really_run(&enwiki_runner).await;
+    (enwiki::LinkedMiscapitalizations {})
+        .really_run(&enwiki_runner)
+        .await;
+    (enwiki::LinkedMisspellings {})
+        .really_run(&enwiki_runner)
+        .await;
+    (enwiki::LongStubs {}).really_run(&enwiki_runner).await;
+    (enwiki::LotNonFree {}).really_run(&enwiki_runner).await;
+    (enwiki::NewProjects {}).really_run(&enwiki_runner).await;
+    (enwiki::OldDeletionDiscussions {})
+        .really_run(&enwiki_runner)
+        .await;
+    (enwiki::OrphanedAfds {}).really_run(&enwiki_runner).await;
+    (enwiki::OrphanedSubTalks {})
+        .really_run(&enwiki_runner)
+        .await;
+    (enwiki::OverusedNonFree {})
+        .really_run(&enwiki_runner)
+        .await;
+    (enwiki::PollTemps {}).really_run(&enwiki_runner).await;
+    (enwiki::Potenshbdps1 {}).really_run(&enwiki_runner).await;
+    (enwiki::Potenshbdps3 {}).really_run(&enwiki_runner).await;
+    (enwiki::Potenshblps1 {}).really_run(&enwiki_runner).await;
+    (enwiki::Potenshblps2 {}).really_run(&enwiki_runner).await;
+    (enwiki::Potenshblps3 {}).really_run(&enwiki_runner).await;
+    (enwiki::ProjectChanges {}).really_run(&enwiki_runner).await;
+    (enwiki::ShortestBios {}).really_run(&enwiki_runner).await;
+    (enwiki::StickyProdBLPs {}).really_run(&enwiki_runner).await;
+    (enwiki::TemplateDisambigs {})
+        .really_run(&enwiki_runner)
+        .await;
+    (enwiki::TemplatesNonFree {})
+        .really_run(&enwiki_runner)
+        .await;
+    (enwiki::UnbelievableLifeSpans {})
+        .really_run(&enwiki_runner)
+        .await;
+    (enwiki::UncatUnrefBLPs {}).really_run(&enwiki_runner).await;
+    (enwiki::UnsourcedBLPs {}).really_run(&enwiki_runner).await;
+    (enwiki::UntaggedBLPs {}).really_run(&enwiki_runner).await;
+    (enwiki::UntaggedStubs {}).really_run(&enwiki_runner).await;
+    (enwiki::UntaggedUnrefBLPs {})
+        .really_run(&enwiki_runner)
+        .await;
+    (enwiki::UnusedNonFree {}).really_run(&enwiki_runner).await;
+    (enwiki::UserCats {}).really_run(&enwiki_runner).await;
+
     // Cleanup
-    enwiki_db.disconnect().await?;
+    enwiki_runner.pool.disconnect().await?;
 
     /* commonswiki reports */
-    let commonswiki_api =
-        mwapi::Client::bot_builder("https://commons.wikimedia.org/w/api.php")
-            .set_botpassword(&cfg.auth.username, &cfg.auth.password)
-            .build()
-            .await?;
-    info!("Setting up MySQL connection pool for commonswiki...");
-    let commonswiki_db = Pool::new(
-        toolforge::connection_info!("commonswiki", ANALYTICS)?.to_string(),
-    );
-    run!(
-        &args,
-        &commonswiki_api,
-        &commonswiki_db,
-        general::ExcessiveIps {}
-    );
+    let commonswiki_runner = dbreps2::Runner::new(
+        "https://commons.wikimedia.org/w/api.php",
+        "commonswiki",
+        args.report.clone(),
+    )
+    .await?;
+    (general::ExcessiveIps {})
+        .really_run(&commonswiki_runner)
+        .await;
+
     // Cleanup
-    commonswiki_db.disconnect().await?;
+    commonswiki_runner.pool.disconnect().await?;
 
     Ok(())
 }
