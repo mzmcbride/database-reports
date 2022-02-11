@@ -21,6 +21,7 @@ use mwapi::Client;
 use mysql_async::{Conn, Pool};
 use regex::Regex;
 use std::fmt;
+use std::marker::PhantomData;
 use time::format_description::FormatItem;
 use time::macros::format_description;
 use time::{Duration, OffsetDateTime, PrimitiveDateTime};
@@ -76,6 +77,72 @@ impl Frequency {
     }
 }
 
+struct SectionedReport<
+    P: Report<T> + SectionHeading + Send + Sync,
+    T: Send + Sync,
+> {
+    reports: Vec<P>,
+    phantom: PhantomData<T>,
+}
+
+#[async_trait::async_trait]
+impl<P: Report<T> + SectionHeading + Send + Sync, T: Send + Sync> Report<T>
+    for SectionedReport<P, T>
+{
+    fn title(&self) -> &'static str {
+        self.reports[0].title()
+    }
+
+    fn frequency(&self) -> Frequency {
+        self.reports[0].frequency()
+    }
+
+    fn query(&self) -> &'static str {
+        todo!()
+    }
+
+    async fn run_query(&self, conn: &mut Conn) -> Result<Vec<T>> {
+        todo!()
+    }
+
+    fn headings(&self) -> Vec<&'static str> {
+        self.reports[0].headings()
+    }
+
+    fn format_row(&self, row: &T) -> Vec<String> {
+        self.reports[0].format_row(row)
+    }
+
+    fn code(&self) -> &'static str {
+        self.reports[0].code()
+    }
+
+    async fn build_page(&self, rows: &[T], index: usize) -> String {
+        let mut text = vec![self.get_intro()];
+        // The first row starts at the # of previous pages times rows per page
+        for report in self.reports {
+            let mut row_num = (index - 1) * self.rows_per_page().unwrap_or(0);
+            text.push(format!("== {} ==", report.section_heading()));
+            text.push(self.open_table());
+            // FIXME: need conn here
+            let rows = report.run_query(&mut conn).await?;
+            for row in rows {
+                row_num += 1;
+                text.push("|-".to_string());
+                if self.enumerate() {
+                    text.push(format!("| {}", row_num));
+                }
+                for item in self.format_row(row) {
+                    text.push(format!("| {}", item));
+                }
+            }
+            text.push(self.close_table());
+        }
+        text.push(self.get_footer());
+        text.join("\n")
+    }
+}
+
 #[async_trait::async_trait]
 pub trait Report<T: Send + Sync> {
     // TODO: Make this per-wiki/language
@@ -111,26 +178,31 @@ pub trait Report<T: Send + Sync> {
 
     fn get_intro(&self) -> String {
         // TODO: is replag something we still need to care about? meh
-        let mut intro = vec![
-            format!(
-                "{}; data as of <onlyinclude>~~~~~</onlyinclude>.\n",
-                self.intro()
-            ),
-            r#"{| class="wikitable sortable"
+        format!(
+            "{}; data as of <onlyinclude>~~~~~</onlyinclude>.\n",
+            self.intro()
+        )
+    }
+
+    fn open_table(&self) -> String {
+        let mut opening = vec![r#"{| class="wikitable sortable"
 |- style="white-space: nowrap;""#
-                .to_string(),
-        ];
+            .to_string()];
         if self.enumerate() {
-            intro.push("! No.".to_string());
+            opening.push("! No.".to_string());
         }
         for heading in self.headings() {
-            intro.push(format!("! {}", heading));
+            opening.push(format!("! {}", heading));
         }
-        intro.join("\n")
+        opening.join("\n")
+    }
+
+    fn close_table(&self) -> String {
+        "|-\n|}\n".to_string()
     }
 
     fn get_footer(&self) -> String {
-        "|-\n|}\n{{DBR footer}}\n".to_string()
+        "{{DBR footer}}\n".to_string()
     }
 
     fn needs_update(&self, old_text: &str) -> Result<bool> {
@@ -152,10 +224,10 @@ pub trait Report<T: Send + Sync> {
         }
     }
 
-    fn build_page(&self, rows: &[T], index: usize) -> String {
+    async fn build_page(&self, rows: &[T], index: usize) -> String {
         // The first row starts at the # of previous pages times rows per page
         let mut row_num = (index - 1) * self.rows_per_page().unwrap_or(0);
-        let mut text = vec![self.get_intro()];
+        let mut text = vec![self.get_intro(), self.open_table()];
         for row in rows {
             row_num += 1;
             text.push("|-".to_string());
@@ -166,6 +238,7 @@ pub trait Report<T: Send + Sync> {
                 text.push(format!("| {}", item));
             }
         }
+        text.push(self.close_table());
         text.push(self.get_footer());
         text.join("\n")
     }
@@ -230,7 +303,7 @@ pub trait Report<T: Send + Sync> {
                 let mut index = 0;
                 for chunk in iter {
                     index += 1;
-                    let text = self.build_page(chunk, index);
+                    let text = self.build_page(chunk, index).await;
                     if debug_mode {
                         info!("{}", &text);
                     } else {
@@ -265,7 +338,7 @@ pub trait Report<T: Send + Sync> {
             }
             None => {
                 // Just dump it all into one page
-                let text = self.build_page(&rows, 1);
+                let text = self.build_page(&rows, 1).await;
                 if debug_mode {
                     info!("{}", &text);
                 } else {
@@ -302,6 +375,10 @@ pub trait Report<T: Send + Sync> {
         }
         Ok(())
     }
+}
+
+pub trait SectionHeading {
+    fn section_heading(&self) -> String;
 }
 
 pub struct Runner {
