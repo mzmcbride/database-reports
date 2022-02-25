@@ -344,7 +344,7 @@ impl DbrLink {
 
 impl fmt::Display for DbrLink {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{{{{dbr link|1={}}}}}", self.0)
+        write!(f, "{{{{dbr link|1={}}}}}", self.0.replace('_', " "))
     }
 }
 
