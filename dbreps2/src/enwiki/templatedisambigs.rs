@@ -45,28 +45,47 @@ impl Report<Row> for TemplateDisambigs {
 SELECT
   pltmp.page_title AS template_title,
   pltmp.pl_title AS disambiguation_title,
-  (SELECT COUNT(*) FROM templatelinks WHERE tl_namespace = 10 AND tl_title = pltmp.page_title) AS transclusions_count
-FROM (SELECT
-        page_namespace,
-        page_title,
-        pl_namespace,
-        pl_title
-      FROM page
-      JOIN pagelinks
-      ON pl_from = page_id
-      WHERE page_namespace = 10
+  (
+    SELECT
+      COUNT(*)
+    FROM
+      templatelinks
+    WHERE
+      tl_namespace = 10
+      AND tl_title = pltmp.page_title
+  ) AS transclusions_count
+FROM
+  (
+    SELECT
+      page_namespace,
+      page_title,
+      pl_namespace,
+      pl_title
+    FROM
+      page
+      JOIN pagelinks ON pl_from = page_id
+    WHERE
+      page_namespace = 10
       AND pl_namespace = 0
-      LIMIT 1000000) AS pltmp
-JOIN page AS pg2 /* removes red links */
-ON pltmp.pl_namespace = pg2.page_namespace
-AND pltmp.pl_title = pg2.page_title
-WHERE EXISTS (SELECT
-                1
-              FROM categorylinks
-              WHERE pg2.page_id = cl_from
-              AND cl_to = 'All_disambiguation_pages')
-ORDER BY transclusions_count DESC;
-"#
+    LIMIT
+      1000000
+  ) AS pltmp
+  JOIN page AS pg2
+  /* removes red links */
+  ON pltmp.pl_namespace = pg2.page_namespace
+  AND pltmp.pl_title = pg2.page_title
+WHERE
+  EXISTS (
+    SELECT
+      1
+    FROM
+      categorylinks
+    WHERE
+      pg2.page_id = cl_from
+      AND cl_to = 'All_disambiguation_pages'
+  )
+ORDER BY
+  transclusions_count DESC;"#
     }
 
     async fn run_query(&self, conn: &mut Conn) -> Result<Vec<Row>> {
