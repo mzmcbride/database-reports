@@ -45,9 +45,10 @@ SELECT
 FROM
   page AS pg1
   JOIN templatelinks ON pg1.page_id = tl_from
+  JOIN linktarget ON tl_target_id = lt_id
 WHERE
-  tl_namespace = 10
-  AND tl_title = 'BLP'
+  lt_namespace = 10
+  AND lt_title = 'BLP'
   AND pg1.page_namespace = 1
   AND NOT EXISTS(
     SELECT
@@ -96,9 +97,10 @@ WHERE
     FROM
       page AS pg8
       JOIN templatelinks ON pg8.page_id = tl_from
+      JOIN linktarget ON tl_target_id = lt_id
     WHERE
-      tl_namespace = 10
-      AND tl_title = 'WikiProject_Biography'
+      lt_namespace = 10
+      AND lt_title = 'WikiProject_Biography'
       AND pg1.page_title = pg8.page_title
       AND pg8.page_namespace = 1
   )

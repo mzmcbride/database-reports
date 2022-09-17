@@ -45,9 +45,10 @@ SELECT
 FROM
   page AS pg1
   JOIN templatelinks ON pg1.page_id = tl_from
+  JOIN linktarget ON tl_target_id = lt_id
 WHERE
-  tl_namespace = 10
-  AND tl_title = 'BLP'
+  lt_namespace = 10
+  AND lt_title = 'BLP'
   AND pg1.page_namespace = 1
   AND EXISTS(
     SELECT

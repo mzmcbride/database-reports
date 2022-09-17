@@ -73,14 +73,15 @@ WHERE
       1
     FROM
       templatelinks
+    JOIN linktarget ON tl_target_id = lt_id
     WHERE
       tl_from = page_id
-      AND tl_namespace = 10
+      AND lt_namespace = 10
       AND (
-        tl_title = 'Empty_category'
-        OR tl_title = 'Possibly_empty_category'
-        OR tl_title = 'Monthly_clean-up_category'
-        OR tl_title = 'Maintenance_category_autotag'
+        lt_title = 'Empty_category'
+        OR lt_title = 'Possibly_empty_category'
+        OR lt_title = 'Monthly_clean-up_category'
+        OR lt_title = 'Maintenance_category_autotag'
       )
   );
 "#

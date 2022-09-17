@@ -45,11 +45,12 @@ SELECT
 FROM
   page
   JOIN templatelinks ON tl_from = page_id
+  JOIN linktarget ON tl_target_id = lt_id
   JOIN categorylinks ON cl_from = page_id
 WHERE
   cl_to = 'Living_people'
-  AND tl_namespace = 10
-  AND tl_title = 'Citation_needed'
+  AND lt_namespace = 10
+  AND lt_title = 'Citation_needed'
   AND page_namespace = 0
 LIMIT
   500;

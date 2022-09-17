@@ -53,6 +53,7 @@ FROM
   JOIN revision ON page_id = rev_page
   LEFT JOIN pagelinks ON pl_title = page_title
   AND pl_namespace = page_namespace
+  /* FIXME JOIN linktarget */
   LEFT JOIN templatelinks ON tl_title = page_title
   AND tl_namespace = page_namespace
 WHERE

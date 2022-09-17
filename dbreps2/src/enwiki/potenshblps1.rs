@@ -45,10 +45,11 @@ SELECT
 FROM
   page AS pg1
   JOIN templatelinks ON pg1.page_id = tl_from
+  JOIN linktarget ON tl_target_id = lt_id
 WHERE
   pg1.page_namespace = 0
-  AND tl_namespace = 10
-  AND tl_title = 'BLP_unsourced'
+  AND lt_namespace = 10
+  AND lt_title = 'BLP_unsourced'
   AND NOT EXISTS (
     SELECT
       1

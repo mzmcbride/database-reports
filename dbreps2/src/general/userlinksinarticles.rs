@@ -46,9 +46,10 @@ FROM
   page
   JOIN pagelinks ON pl_from = page_id
   LEFT JOIN templatelinks ON tl_from = page_id
+  JOIN linktarget ON tl_target_id = lt_id
   AND (
-    tl_namespace = 10
-    AND tl_title IN (
+    lt_namespace = 10
+    AND lt_title IN (
       'Db-meta',
       'Under_construction',
       'GOCEinuse',

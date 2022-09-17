@@ -46,18 +46,19 @@ SELECT
   COUNT(*)
 FROM
   templatelinks
+  JOIN linktarget ON tl_target_id = lt_id
   JOIN page AS p1 ON tl_from = p1.page_id
-  LEFT JOIN page AS p2 ON tl_namespace = p2.page_namespace
-  AND tl_title = p2.page_title
+  LEFT JOIN page AS p2 ON lt_namespace = p2.page_namespace
+  AND lt_title = p2.page_title
 WHERE
-  tl_namespace = 10
-  AND tl_title LIKE 'Wiki%'
-  AND tl_title RLIKE 'Wiki[_]?[Pp]roject.*'
-  AND tl_title NOT LIKE '%/importance'
-  AND tl_title NOT LIKE '%/class'
+  lt_namespace = 10
+  AND lt_title LIKE 'Wiki%'
+  AND lt_title RLIKE 'Wiki[_]?[Pp]roject.*'
+  AND lt_title NOT LIKE '%/importance'
+  AND lt_title NOT LIKE '%/class'
   AND p2.page_id IS NULL
 GROUP BY
-  tl_title;
+  lt_title;
 "#
     }
 

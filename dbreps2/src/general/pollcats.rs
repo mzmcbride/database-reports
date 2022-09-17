@@ -51,10 +51,12 @@ WHERE
       1
     FROM
       templatelinks
+    JOIN linktarget
+    ON tl_target_id = lt_id
     WHERE
       tl_from = p1.page_id
-      AND tl_namespace = 10
-      AND tl_title = 'Polluted_category'
+      AND lt_namespace = 10
+      AND lt_title = 'Polluted_category'
   )
   AND EXISTS(
     SELECT

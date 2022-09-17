@@ -45,10 +45,11 @@ SELECT
 FROM
   page AS pg1
   JOIN templatelinks AS tl ON pg1.page_id = tl.tl_from
+  JOIN linktarget AS lt ON tl.tl_target_id = lt.lt_id
 WHERE
   pg1.page_namespace = 14
-  AND tl.tl_namespace = 10
-  AND tl.tl_title = 'Template_category'
+  AND lt.lt_namespace = 10
+  AND lt.lt_title = 'Template_category'
   AND EXISTS (
     SELECT
       1

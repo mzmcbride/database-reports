@@ -50,9 +50,10 @@ SELECT
       COUNT(*)
     FROM
       templatelinks
+    JOIN linktarget ON tl_target_id = lt_id
     WHERE
-      tl_namespace = 10
-      AND tl_title = pltmp.page_title
+      lt_namespace = 10
+      AND lt_title = pltmp.page_title
   ) AS transclusions_count
 FROM
   (

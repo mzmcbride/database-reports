@@ -81,10 +81,11 @@ WHERE
       1
     FROM
       templatelinks
+    JOIN linktarget ON tl_target_id = lt_id
     WHERE
       tl_from = pg1.page_id
-      AND tl_namespace = 10
-      AND tl_title = 'G8-exempt'
+      AND lt_namespace = 10
+      AND lt_title = 'G8-exempt'
   )
   AND NOT EXISTS (
     SELECT
