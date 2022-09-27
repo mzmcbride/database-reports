@@ -22,7 +22,7 @@ use mysql_async::prelude::*;
 use mysql_async::Conn;
 
 pub struct Row {
-    tl_title: String,
+    lt_title: String,
     count: u64,
 }
 
@@ -42,7 +42,7 @@ impl Report<Row> for BrokenWikiProjTemps {
         r#"
 /* brokenwikiprojtemps.rs SLOW_OK */
 SELECT
-  tl_title,
+  lt_title,
   COUNT(*)
 FROM
   templatelinks
@@ -64,8 +64,8 @@ GROUP BY
 
     async fn run_query(&self, conn: &mut Conn) -> Result<Vec<Row>> {
         let rows = conn
-            .query_map(self.query(), |(tl_title, count)| Row {
-                tl_title,
+            .query_map(self.query(), |(lt_title, count)| Row {
+                lt_title,
                 count,
             })
             .await?;
@@ -77,7 +77,7 @@ GROUP BY
     }
 
     fn format_row(&self, row: &Row) -> Vec<String> {
-        str_vec![DbrLink::new(&row.tl_title), row.count]
+        str_vec![DbrLink::new(&row.lt_title), row.count]
     }
 
     fn code(&self) -> &'static str {
