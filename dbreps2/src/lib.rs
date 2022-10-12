@@ -318,8 +318,8 @@ impl Runner {
         report: Option<String>,
     ) -> Result<Self> {
         let cfg = load_config().await?;
-        let client = Client::bot_builder(api_url)
-            .set_botpassword(&cfg.auth.username, &cfg.auth.password)
+        let client = Client::builder(api_url)
+            .set_oauth2_token(&cfg.auth.oauth2_token)
             .build()
             .await?;
         info!("Setting up MySQL connection pool for {}...", dbname);

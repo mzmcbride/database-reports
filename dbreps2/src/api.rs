@@ -21,7 +21,7 @@ use mwapi::Client;
 
 pub async fn exists(client: &Client, title: &str) -> Result<bool> {
     let resp = client
-        .get(&[("action", "query"), ("titles", title)])
+        .get_value(&[("action", "query"), ("titles", title)])
         .await?;
     Ok(!resp["query"]["pages"][0]["missing"]
         .as_bool()
@@ -30,7 +30,7 @@ pub async fn exists(client: &Client, title: &str) -> Result<bool> {
 
 pub async fn get_wikitext(client: &Client, title: &str) -> Result<String> {
     let resp = client
-        .get(&[
+        .get_value(&[
             ("action", "query"),
             ("titles", title),
             ("prop", "revisions"),

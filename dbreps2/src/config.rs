@@ -19,11 +19,11 @@ use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct Config {
-    pub auth: BotPassword,
+    pub auth: Auth,
 }
 
 #[derive(Deserialize)]
-pub struct BotPassword {
+pub struct Auth {
     pub username: String,
-    pub password: String,
+    pub oauth2_token: String,
 }
