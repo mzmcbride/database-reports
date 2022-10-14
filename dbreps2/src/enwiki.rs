@@ -44,6 +44,7 @@ mod untaggedblps;
 mod untaggedstubs;
 mod untaggedunrefblps;
 mod unusednonfree;
+mod unusedtemplates;
 mod usercats;
 
 pub use {
@@ -63,5 +64,5 @@ pub use {
     uncatunrefblps::UncatUnrefBLPs, unsourcedblps::UnsourcedBLPs,
     untaggedblps::UntaggedBLPs, untaggedstubs::UntaggedStubs,
     untaggedunrefblps::UntaggedUnrefBLPs, unusednonfree::UnusedNonFree,
-    usercats::UserCats,
+    unusedtemplates::UnusedTemplates, usercats::UserCats,
 };

@@ -108,6 +108,9 @@ async fn main() -> Result<()> {
         .really_run(&enwiki_runner)
         .await;
     (enwiki::UnusedNonFree {}).really_run(&enwiki_runner).await;
+    (enwiki::UnusedTemplates {})
+        .really_run(&enwiki_runner)
+        .await;
     (enwiki::UserCats {}).really_run(&enwiki_runner).await;
 
     // Cleanup

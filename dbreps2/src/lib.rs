@@ -382,6 +382,10 @@ pub fn escape_reason(text: &str) -> String {
         .replace("<!--", "<nowiki><!--</nowiki>")
 }
 
+pub fn y_m_d(input: &str) -> String {
+    format!("{{{{subst:#time: Y-m-d|{} }}}}", input)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
