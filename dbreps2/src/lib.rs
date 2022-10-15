@@ -46,6 +46,12 @@ const SIG_TIMESTAMP: &[FormatItem] = format_description!(
     "[hour]:[minute], [day padding:none] [month repr:long] [year] (UTC)"
 );
 
+const DB_TIMESTAMP: &[FormatItem] =
+    format_description!("[year][month][day][hour][minute][second]");
+
+const Y_M_D_TIMESTAMP: &[FormatItem] =
+    format_description!("[year]-[month]-[day]");
+
 const INDEX_WIKITEXT: &str = r#"{{DBR index}}
 {{DBR footer}}
 "#;
@@ -383,7 +389,12 @@ pub fn escape_reason(text: &str) -> String {
 }
 
 pub fn y_m_d(input: &str) -> String {
-    format!("{{{{subst:#time: Y-m-d|{} }}}}", input)
+    let dt = match PrimitiveDateTime::parse(input, &DB_TIMESTAMP) {
+        Ok(dt) => dt.assume_utc(),
+        Err(_) => return input.to_string(),
+    };
+    dt.format(Y_M_D_TIMESTAMP)
+        .unwrap_or_else(|_| input.to_string())
 }
 
 #[cfg(test)]
@@ -431,5 +442,11 @@ mod tests {
             .assume_utc();
         assert_eq!(dt.date(), date!(2022 - 01 - 03));
         assert_eq!(dt.time(), time!(14:31:00));
+    }
+
+    #[test]
+    fn test_y_m_d() {
+        assert_eq!(y_m_d("20010115192713"), "2001-01-15".to_string());
+        assert_eq!(y_m_d("20221015001541"), "2022-10-15".to_string());
     }
 }
