@@ -182,7 +182,11 @@ ORDER BY
 
     fn format_row(&self, row: &Row) -> Vec<String> {
         str_vec![
-            format!("[[:Template:{}|]]", row.template),
+            format!(
+                "[[:Template:{}|{}]]",
+                row.template,
+                row.template.replace('_', " ")
+            ),
             y_m_d(&row.first_edit),
             y_m_d(&row.latest_edit),
             row.unique_authors,
