@@ -28,7 +28,7 @@ async fn main() -> Result<()> {
     .init();
     /* enwiki reports */
     let enwiki_runner = dbreps2::Runner::new(
-        "https://en.wikipedia.org/w/api.php",
+        "en.wikipedia.org",
         "enwiki",
         args.report.clone(),
     )
@@ -118,7 +118,7 @@ async fn main() -> Result<()> {
 
     /* commonswiki reports */
     let commonswiki_runner = dbreps2::Runner::new(
-        "https://commons.wikimedia.org/w/api.php",
+        "commons.wikimedia.org",
         "commonswiki",
         args.report.clone(),
     )

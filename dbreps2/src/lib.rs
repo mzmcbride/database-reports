@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 use anyhow::Result;
 use log::{error, info};
-use mwapi::Client;
+use mwbot::{Bot, Page, SaveOptions};
 use mysql_async::{Conn, Pool};
 use regex::Regex;
 use std::fmt;
@@ -26,7 +26,6 @@ use time::macros::format_description;
 use time::{Duration, OffsetDateTime, PrimitiveDateTime};
 use tokio::fs;
 
-mod api;
 mod config;
 
 #[macro_export]
@@ -62,6 +61,14 @@ pub async fn load_config() -> Result<config::Config> {
     let path = dirs::home_dir().unwrap().join(".dbreps.toml");
     let contents = fs::read_to_string(path).await?;
     Ok(toml::from_str(&contents)?)
+}
+
+async fn save_page(page: Page, text: String) -> Result<()> {
+    info!("Updating [[{}]]", page.title());
+    info!("{}", &text);
+    page.save(text, &SaveOptions::summary("Bot: updating database report"))
+        .await?;
+    Ok(())
 }
 
 pub enum Frequency {
@@ -183,7 +190,7 @@ pub trait Report<T: Send + Sync> {
         };
         let debug_mode = runner.report.is_some();
         if should_run {
-            match self.run(debug_mode, &runner.client, &runner.pool).await {
+            match self.run(debug_mode, &runner.bot, &runner.pool).await {
                 Ok(_) => {}
                 Err(err) => {
                     error!("{}", err.to_string());
@@ -195,7 +202,7 @@ pub trait Report<T: Send + Sync> {
     async fn run(
         &self,
         debug_mode: bool,
-        client: &mwapi::Client,
+        bot: &Bot,
         pool: &Pool,
     ) -> Result<()> {
         // Bypass needs update check when --report is passed
@@ -210,9 +217,9 @@ pub trait Report<T: Send + Sync> {
                 Some(_) => format!("{}/1", self.get_title()),
                 None => self.get_title(),
             };
-            if api::exists(client, &title_for_update_check).await? {
-                let old_text =
-                    api::get_wikitext(client, &title_for_update_check).await?;
+            let page = bot.page(&title_for_update_check)?;
+            if page.exists().await? {
+                let old_text = page.wikitext().await?;
                 if !self.needs_update(&old_text)? {
                     info!(
                         "{}: Report is still up to date, skipping update.",
@@ -240,33 +247,38 @@ pub trait Report<T: Send + Sync> {
                     if debug_mode {
                         info!("{}", &text);
                     } else {
-                        api::save_page(
-                            client,
-                            &format!("{}/{}", self.get_title(), index),
-                            &text,
-                        )
-                        .await?;
+                        let page = bot.page(&format!(
+                            "{}/{}",
+                            self.get_title(),
+                            index
+                        ))?;
+                        save_page(page, text).await?;
                     }
                 }
                 // Now "Blank" any other subpages
                 loop {
                     index += 1;
-                    let title = format!("{}/{}", self.get_title(), index);
-                    if !api::exists(client, &title).await? {
+                    let page =
+                        bot.page(&format!("{}/{}", self.get_title(), index))?;
+                    if !page.exists().await? {
                         break;
                     }
                     if debug_mode {
                         info!("{}", BLANK_WIKITEXT);
                     } else {
-                        api::save_page(client, &title, BLANK_WIKITEXT).await?;
+                        save_page(page, BLANK_WIKITEXT.to_string())
+                            .await?;
                     }
                 }
                 // Finally make sure the index page is up to date
                 if debug_mode {
                     info!("{}", INDEX_WIKITEXT);
                 } else {
-                    api::save_page(client, &self.get_title(), INDEX_WIKITEXT)
-                        .await?;
+                    save_page(
+                        bot.page(&self.get_title())?,
+                        INDEX_WIKITEXT.to_string(),
+                    )
+                    .await?;
                 }
             }
             None => {
@@ -275,7 +287,7 @@ pub trait Report<T: Send + Sync> {
                 if debug_mode {
                     info!("{}", &text);
                 } else {
-                    api::save_page(client, &self.get_title(), &text).await?;
+                    save_page(bot.page(&self.get_title())?, text).await?;
                 }
             }
         }
@@ -299,10 +311,9 @@ pub trait Report<T: Send + Sync> {
         if debug_mode {
             info!("{}", &config);
         } else {
-            api::save_page(
-                client,
-                &format!("{}/Configuration", self.get_title()),
-                &config,
+            save_page(
+                bot.page(&format!("{}/Configuration", self.get_title()))?,
+                config,
             )
             .await?;
         }
@@ -311,7 +322,7 @@ pub trait Report<T: Send + Sync> {
 }
 
 pub struct Runner {
-    client: Client,
+    bot: Bot,
     pub pool: Pool,
     /// Requested report with --report
     report: Option<String>,
@@ -319,24 +330,23 @@ pub struct Runner {
 
 impl Runner {
     pub async fn new(
-        api_url: &str,
+        domain: &str,
         dbname: &str,
         report: Option<String>,
     ) -> Result<Self> {
         let cfg = load_config().await?;
-        let client = Client::builder(api_url)
-            .set_oauth2_token(&cfg.auth.oauth2_token)
-            .build()
-            .await?;
+        let bot = Bot::builder(
+            format!("https://{}/w/api.php", domain),
+            format!("https://{}/api/rest_v1", domain),
+        )
+        .set_oauth2_token(cfg.auth.username, cfg.auth.oauth2_token)
+        .build()
+        .await?;
         info!("Setting up MySQL connection pool for {}...", dbname);
         let pool = Pool::new(
             toolforge::connection_info!(dbname, ANALYTICS)?.to_string(),
         );
-        Ok(Self {
-            client,
-            pool,
-            report,
-        })
+        Ok(Self { bot, pool, report })
     }
 }
 
