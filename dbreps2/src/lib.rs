@@ -266,8 +266,7 @@ pub trait Report<T: Send + Sync> {
                     if debug_mode {
                         info!("{}", BLANK_WIKITEXT);
                     } else {
-                        save_page(page, BLANK_WIKITEXT.to_string())
-                            .await?;
+                        save_page(page, BLANK_WIKITEXT.to_string()).await?;
                     }
                 }
                 // Finally make sure the index page is up to date

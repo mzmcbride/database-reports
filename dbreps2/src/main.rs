@@ -27,12 +27,9 @@ async fn main() -> Result<()> {
     )
     .init();
     /* enwiki reports */
-    let enwiki_runner = dbreps2::Runner::new(
-        "en.wikipedia.org",
-        "enwiki",
-        args.report.clone(),
-    )
-    .await?;
+    let enwiki_runner =
+        dbreps2::Runner::new("en.wikipedia.org", "enwiki", args.report.clone())
+            .await?;
     (general::ArticlesMostRedirects {})
         .really_run(&enwiki_runner)
         .await;
