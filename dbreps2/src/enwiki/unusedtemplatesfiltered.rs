@@ -23,10 +23,12 @@ use mysql_async::prelude::*;
 use mysql_async::Conn;
 use std::collections::HashSet;
 
-const SKIP_SUFFIXES: [&str; 3] = ["/testcases", "/sandbox", "/rater-data.js"];
+const SKIP_SUFFIXES: [&str; 4] =
+    ["/testcases", "/sandbox", "/rater-data.js", "-stub"];
 
-const SKIP_PREFIXES: [&str; 12] = [
+const SKIP_PREFIXES: [&str; 13] = [
     "Adminstats/",
+    "AfC ",
     "Attached_KML/",
     "Cite_doi/",
     "Cite_pmid/",
