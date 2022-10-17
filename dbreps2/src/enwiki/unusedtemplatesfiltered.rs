@@ -89,7 +89,7 @@ impl Report<Row> for UnusedTemplatesFiltered {
     }
 
     fn rows_per_page(&self) -> Option<usize> {
-        Some(2000)
+        Some(4000)
     }
 
     fn query(&self) -> &'static str {
