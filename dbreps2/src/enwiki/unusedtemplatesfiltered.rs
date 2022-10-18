@@ -26,7 +26,7 @@ use std::collections::HashSet;
 const SKIP_SUFFIXES: [&str; 4] =
     ["/testcases", "/sandbox", "/rater-data.js", "-stub"];
 
-const SKIP_PREFIXES: [&str; 13] = [
+const SKIP_PREFIXES: [&str; 14] = [
     "Adminstats/",
     "AfC ",
     "Attached_KML/",
@@ -40,6 +40,7 @@ const SKIP_PREFIXES: [&str; 13] = [
     "POTD_protected/",
     "TemplateStyles_sandbox/",
     "TFA_title/",
+    "User ",
 ];
 
 /// Returned by the first main query
