@@ -40,7 +40,7 @@ const SKIP_PREFIXES: [&str; 14] = [
     "POTD_protected/",
     "TemplateStyles_sandbox/",
     "TFA_title/",
-    "User ",
+    "User_",
 ];
 
 /// Returned by the first main query
