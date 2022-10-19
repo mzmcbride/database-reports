@@ -229,3 +229,27 @@ ORDER BY
         include_str!("unusedtemplatesfiltered.rs")
     }
 }
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn test_no_spaces() {
+        let with_spaces: Vec<_> = super::SKIP_PREFIXES
+            .into_iter()
+            .filter(|p| p.contains(' '))
+            .collect();
+        assert!(
+            with_spaces.is_empty(),
+            "Items in SKIP_PREFIXES should use underscores instead of spaces"
+        );
+        let with_spaces: Vec<_> = super::SKIP_SUFFIXES
+            .into_iter()
+            .filter(|p| p.contains(' '))
+            .collect();
+        assert!(
+            with_spaces.is_empty(),
+            "Items in SKIP_SUFFIXES should use underscores instead of spaces"
+        );
+    }
+}
