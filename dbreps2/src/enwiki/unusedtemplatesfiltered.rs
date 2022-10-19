@@ -28,7 +28,7 @@ const SKIP_SUFFIXES: [&str; 4] =
 
 const SKIP_PREFIXES: [&str; 14] = [
     "Adminstats/",
-    "AfC ",
+    "AfC_",
     "Attached_KML/",
     "Cite_doi/",
     "Cite_pmid/",
