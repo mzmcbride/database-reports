@@ -240,6 +240,14 @@ LIMIT 12000;
         }
         Ok(())
     }
+
+    fn subpage(&self, index: usize) -> String {
+        format!("{}/{}", self.get_title(), index_to_range(index))
+    }
+
+    fn update_index(&self) -> bool {
+        false
+    }
 }
 
 fn index_to_range(index: usize) -> String {
