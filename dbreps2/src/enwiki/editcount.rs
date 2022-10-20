@@ -97,6 +97,28 @@ WHERE user_name = ?;
     Ok(formatted.join(", "))
 }
 
+async fn is_active(conn: &mut Conn, username: &str) -> Result<bool> {
+    debug!("Fetching activity level for {}", username);
+    let rows: Vec<usize> = conn
+        .exec_map(
+            r#"
+/* editcount.rs SLOW_OK */
+SELECT
+  1
+FROM
+  recentchanges_userindex
+  JOIN actor ON rc_actor = actor_id
+WHERE
+  actor_name = ?
+LIMIT 1
+"#,
+            (username,),
+            |(one,)| one,
+        )
+        .await?;
+    Ok(rows.len() == 1)
+}
+
 struct UserRow {
     user_name: String,
     user_editcount: u64,
@@ -106,6 +128,7 @@ pub struct Row {
     name: String,
     editcount: u64,
     groups: String,
+    is_active: bool,
 }
 
 pub struct EditCount {}
@@ -169,16 +192,19 @@ LIMIT 12000;
             {
                 continue;
             }
-            let (formatted_name, groups) = if opt_out.contains(&row.user_name) {
-                ("[Placeholder]".to_string(), "".to_string())
-            } else {
-                let groups = get_user_groups(conn, &row.user_name).await?;
-                (row.user_name, groups)
-            };
+            let (formatted_name, groups, is_active) =
+                if opt_out.contains(&row.user_name) {
+                    ("[Placeholder]".to_string(), "".to_string(), false)
+                } else {
+                    let groups = get_user_groups(conn, &row.user_name).await?;
+                    let is_active = is_active(conn, &row.user_name).await?;
+                    (row.user_name, groups, is_active)
+                };
             formatted.push(Row {
                 name: formatted_name,
                 editcount: row.user_editcount,
                 groups,
+                is_active,
             });
             processed += 1;
             if processed >= 10000 {
@@ -197,7 +223,15 @@ LIMIT 12000;
     }
 
     fn format_row(&self, row: &Row) -> Vec<String> {
-        str_vec![row.name, row.editcount.separate_with_commas(), row.groups]
+        str_vec![
+            if row.is_active {
+                format!("[[User:{}|{}]]", &row.name, &row.name)
+            } else {
+                row.name.to_string()
+            },
+            row.editcount.separate_with_commas(),
+            row.groups
+        ]
     }
 
     fn code(&self) -> &'static str {
