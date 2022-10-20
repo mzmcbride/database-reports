@@ -16,6 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 mod brokenwikiprojtemps;
 mod conflictedfiles;
+mod editcount;
 mod emptycats;
 mod linkedmiscapitalizations;
 mod linkedmisspellings;
@@ -50,7 +51,8 @@ mod usercats;
 
 pub use {
     brokenwikiprojtemps::BrokenWikiProjTemps, conflictedfiles::ConflictedFiles,
-    emptycats::EmptyCats, linkedmiscapitalizations::LinkedMiscapitalizations,
+    editcount::EditCount, emptycats::EmptyCats,
+    linkedmiscapitalizations::LinkedMiscapitalizations,
     linkedmisspellings::LinkedMisspellings, longstubs::LongStubs,
     lotnonfree::LotNonFree, newprojects::NewProjects,
     olddeletiondiscussions::OldDeletionDiscussions, orphanedafds::OrphanedAfds,

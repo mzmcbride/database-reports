@@ -59,6 +59,7 @@ async fn main() -> Result<()> {
     (enwiki::ConflictedFiles {})
         .really_run(&enwiki_runner)
         .await;
+    (enwiki::EditCount {}).really_run(&enwiki_runner).await;
     (enwiki::EmptyCats {}).really_run(&enwiki_runner).await;
     (enwiki::LinkedMiscapitalizations {})
         .really_run(&enwiki_runner)

@@ -122,7 +122,7 @@ pub trait Report<T: Send + Sync> {
 
     fn code(&self) -> &'static str;
 
-    fn get_intro(&self) -> String {
+    fn get_intro(&self, _index: usize) -> String {
         // TODO: is replag something we still need to care about? meh
         let mut intro = vec![
             format!(
@@ -168,7 +168,7 @@ pub trait Report<T: Send + Sync> {
     fn build_page(&self, rows: &[T], index: usize) -> String {
         // The first row starts at the # of previous pages times rows per page
         let mut row_num = (index - 1) * self.rows_per_page().unwrap_or(0);
-        let mut text = vec![self.get_intro()];
+        let mut text = vec![self.get_intro(index)];
         for row in rows {
             row_num += 1;
             text.push("|-".to_string());
@@ -199,6 +199,18 @@ pub trait Report<T: Send + Sync> {
         }
     }
 
+    async fn post_run(&self, _bot: &Bot, _debug_mode: bool) -> Result<()> {
+        Ok(())
+    }
+
+    fn subpage(&self, index: usize) -> String {
+        format!("{}/{}", self.get_title(), index)
+    }
+
+    fn update_index(&self) -> bool {
+        true
+    }
+
     async fn run(
         &self,
         debug_mode: bool,
@@ -214,7 +226,7 @@ pub trait Report<T: Send + Sync> {
                 self.get_title()
             );
             let title_for_update_check = match self.rows_per_page() {
-                Some(_) => format!("{}/1", self.get_title()),
+                Some(_) => self.subpage(1),
                 None => self.get_title(),
             };
             let page = bot.page(&title_for_update_check)?;
@@ -247,19 +259,14 @@ pub trait Report<T: Send + Sync> {
                     if debug_mode {
                         info!("{}", &text);
                     } else {
-                        let page = bot.page(&format!(
-                            "{}/{}",
-                            self.get_title(),
-                            index
-                        ))?;
+                        let page = bot.page(&self.subpage(index))?;
                         save_page(page, text).await?;
                     }
                 }
                 // Now "Blank" any other subpages
                 loop {
                     index += 1;
-                    let page =
-                        bot.page(&format!("{}/{}", self.get_title(), index))?;
+                    let page = bot.page(&self.subpage(index))?;
                     if !page.exists().await? {
                         break;
                     }
@@ -270,14 +277,16 @@ pub trait Report<T: Send + Sync> {
                     }
                 }
                 // Finally make sure the index page is up to date
-                if debug_mode {
-                    info!("{}", INDEX_WIKITEXT);
-                } else {
-                    save_page(
-                        bot.page(&self.get_title())?,
-                        INDEX_WIKITEXT.to_string(),
-                    )
-                    .await?;
+                if self.update_index() {
+                    if debug_mode {
+                        info!("{}", INDEX_WIKITEXT);
+                    } else {
+                        save_page(
+                            bot.page(&self.get_title())?,
+                            INDEX_WIKITEXT.to_string(),
+                        )
+                        .await?;
+                    }
                 }
             }
             None => {
@@ -316,6 +325,7 @@ pub trait Report<T: Send + Sync> {
             )
             .await?;
         }
+        self.post_run(bot, debug_mode).await?;
         Ok(())
     }
 }
