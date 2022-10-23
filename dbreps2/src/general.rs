@@ -15,6 +15,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 mod articlesmostredirects;
+mod blankpages;
 mod excessiveips;
 mod excessiveusers;
 mod indeffullredirects;
@@ -28,9 +29,10 @@ mod uncattemps;
 mod userlinksinarticles;
 
 pub use {
-    articlesmostredirects::ArticlesMostRedirects, excessiveips::ExcessiveIps,
-    excessiveusers::ExcessiveUsers, indeffullredirects::IndefFullRedirects,
-    indefips::IndefIPs, linkedemailsinarticles::LinkedEmailsInArticles,
+    articlesmostredirects::ArticlesMostRedirects, blankpages::BlankPages,
+    excessiveips::ExcessiveIps, excessiveusers::ExcessiveUsers,
+    indeffullredirects::IndefFullRedirects, indefips::IndefIPs,
+    linkedemailsinarticles::LinkedEmailsInArticles,
     linkedredlinkedcats::LinkedRedlinkedCats, oldeditors::OldEditors,
     pollcats::Pollcats, uncatcats::UncatCats, uncattemps::UncatTemps,
     userlinksinarticles::UserLinksInArticles,
