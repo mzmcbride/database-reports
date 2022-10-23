@@ -75,6 +75,10 @@ impl Report<Row> for UnusedTemplates {
         Some(2000)
     }
 
+    fn static_row_numbers(&self) -> bool {
+        true
+    }
+
     fn query(&self) -> &'static str {
         r#"
 /* unusedtemplates.rs SLOW_OK */

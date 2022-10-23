@@ -104,8 +104,12 @@ pub trait Report<T: Send + Sync> {
         None
     }
 
+    fn static_row_numbers(&self) -> bool {
+        false
+    }
+
     fn enumerate(&self) -> bool {
-        true
+        !self.static_row_numbers()
     }
 
     fn query(&self) -> &'static str;
@@ -124,15 +128,22 @@ pub trait Report<T: Send + Sync> {
 
     fn get_intro(&self, _index: usize) -> String {
         // TODO: is replag something we still need to care about? meh
-        let mut intro = vec![
-            format!(
-                "{}; data as of <onlyinclude>~~~~~</onlyinclude>.\n",
-                self.intro()
-            ),
-            r#"{| class="wikitable sortable"
-|- style="white-space: nowrap;""#
-                .to_string(),
-        ];
+        let mut intro = vec![format!(
+            "{}; data as of <onlyinclude>~~~~~</onlyinclude>.\n",
+            self.intro()
+        )];
+        if self.static_row_numbers() {
+            intro.push("{{static row numbers}}".to_string());
+        }
+        let mut classes = vec!["wikitable", "sortable"];
+        if self.static_row_numbers() {
+            classes.extend(["static-row-numbers", "static-row-header-text"]);
+        }
+        intro.push(format!(
+            r#"{{| class="{}"
+|- style="white-space: nowrap;""#,
+            classes.join(" ")
+        ));
         if self.enumerate() {
             intro.push("! No.".to_string());
         }
