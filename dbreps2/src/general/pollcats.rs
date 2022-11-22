@@ -34,7 +34,7 @@ impl Report<Row> for Pollcats {
     }
 
     fn frequency(&self) -> Frequency {
-        Frequency::Monthly
+        Frequency::Weekly
     }
 
     fn query(&self) -> &'static str {
