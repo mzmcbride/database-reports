@@ -47,6 +47,9 @@ async fn main() -> Result<()> {
     // Too slow, timing out
     // (general::LinkedRedlinkedCats {}).really_run(&enwiki_runner).await;
     (general::OldEditors {}).really_run(&enwiki_runner).await;
+    (general::Ownerlessuserpages {})
+        .really_run(&enwiki_runner)
+        .await;
     (general::Pollcats {}).really_run(&enwiki_runner).await;
     (general::UncatCats {}).really_run(&enwiki_runner).await;
     (general::UncatTemps {}).really_run(&enwiki_runner).await;
