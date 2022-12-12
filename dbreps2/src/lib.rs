@@ -222,6 +222,13 @@ pub trait Report<T: Send + Sync> {
         true
     }
 
+    fn centralauth(&self) -> Result<Pool> {
+        info!("Setting up MySQL connection pool for centralauth...");
+        Ok(Pool::new(
+            toolforge::connection_info!("centralauth", ANALYTICS)?.to_string(),
+        ))
+    }
+
     async fn run(
         &self,
         debug_mode: bool,
