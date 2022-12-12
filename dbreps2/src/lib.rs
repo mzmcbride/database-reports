@@ -225,7 +225,9 @@ pub trait Report<T: Send + Sync> {
     fn centralauth(&self) -> Result<Pool> {
         info!("Setting up MySQL connection pool for centralauth...");
         Ok(Pool::new(
-            toolforge::connection_info!("centralauth", ANALYTICS)?.to_string(),
+            toolforge::connection_info!("centralauth", ANALYTICS)?
+                .to_string()
+                .as_str(),
         ))
     }
 
@@ -371,7 +373,9 @@ impl Runner {
         .await?;
         info!("Setting up MySQL connection pool for {}...", dbname);
         let pool = Pool::new(
-            toolforge::connection_info!(dbname, ANALYTICS)?.to_string(),
+            toolforge::connection_info!(dbname, ANALYTICS)?
+                .to_string()
+                .as_str(),
         );
         Ok(Self { bot, pool, report })
     }
