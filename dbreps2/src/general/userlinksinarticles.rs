@@ -45,10 +45,14 @@ SELECT
 FROM
   page
   JOIN pagelinks ON pl_from = page_id
-  LEFT JOIN templatelinks ON tl_from = page_id
-  JOIN linktarget ON tl_target_id = lt_id
-  AND (
-    lt_namespace = 10
+WHERE
+  pl_from_namespace = 0
+  AND pl_namespace IN (2, 3)
+  AND NOT EXISTS (
+    SELECT 1 FROM templatelinks
+    JOIN linktarget ON tl_target_id = lt_id
+    WHERE tl_from = page_id
+    AND lt_namespace = 10
     AND lt_title IN (
       'Db-meta',
       'Under_construction',
@@ -56,11 +60,7 @@ FROM
       'Proposed_deletion/dated',
       'Wikipedia_person_user_link'
     )
-  )
-WHERE
-  pl_from_namespace = 0
-  AND pl_namespace IN (2, 3)
-  AND tl_from IS NULL;
+  );
 "#
     }
 
@@ -81,6 +81,6 @@ WHERE
     }
 
     fn code(&self) -> &'static str {
-        include_str!("linkedemailsinarticles.rs")
+        include_str!("userlinksinarticles.rs")
     }
 }
