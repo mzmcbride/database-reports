@@ -48,6 +48,7 @@ mod unusednonfree;
 mod unusedtemplates;
 mod unusedtemplatesfiltered;
 mod usercats;
+mod webhostpages;
 
 pub use {
     brokenwikiprojtemps::BrokenWikiProjTemps, conflictedfiles::ConflictedFiles,
@@ -69,4 +70,5 @@ pub use {
     untaggedunrefblps::UntaggedUnrefBLPs, unusednonfree::UnusedNonFree,
     unusedtemplates::UnusedTemplates,
     unusedtemplatesfiltered::UnusedTemplatesFiltered, usercats::UserCats,
+    webhostpages::WebhostPages,
 };

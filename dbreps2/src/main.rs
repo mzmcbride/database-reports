@@ -116,6 +116,7 @@ async fn main() -> Result<()> {
         .really_run(&enwiki_runner)
         .await;
     (enwiki::UserCats {}).really_run(&enwiki_runner).await;
+    (enwiki::WebhostPages {}).really_run(&enwiki_runner).await;
 
     // Cleanup
     enwiki_runner.pool.disconnect().await?;
