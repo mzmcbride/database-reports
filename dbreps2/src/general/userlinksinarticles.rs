@@ -58,7 +58,8 @@ WHERE
       'Under_construction',
       'GOCEinuse',
       'Proposed_deletion/dated',
-      'Wikipedia_person_user_link'
+      'Wikipedia_person_user_link',
+      'Cleanup_bare_URLs'
     )
   );
 "#
