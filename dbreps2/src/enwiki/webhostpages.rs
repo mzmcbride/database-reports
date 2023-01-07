@@ -92,7 +92,7 @@ LIMIT
     }
 
     fn format_row(&self, row: &Row) -> Vec<String> {
-        str_vec![Linker::new(32, &row.user_name), row.page_len, row.page_id]
+        str_vec![Linker::new(2, &row.user_name), row.page_len, row.page_id]
     }
 
     fn code(&self) -> &'static str {
