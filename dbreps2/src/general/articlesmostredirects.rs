@@ -1,5 +1,5 @@
 use anyhow::Result;
-use dbreps2::{str_vec, DbrLink, Frequency, Report};
+use dbreps2::{dbr_link, str_vec, Frequency, Report};
 use mysql_async::prelude::*;
 use mysql_async::Conn;
 
@@ -60,7 +60,7 @@ LIMIT 1500;
     }
 
     fn format_row(&self, row: &Row) -> Vec<String> {
-        str_vec![DbrLink::new(&row.rd_title), row.count]
+        str_vec![dbr_link(&row.rd_title), row.count]
     }
 
     fn code(&self) -> &'static str {
