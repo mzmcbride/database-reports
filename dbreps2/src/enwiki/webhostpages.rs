@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 use anyhow::Result;
-use dbreps2::{str_vec, Frequency, Linker, Report};
+use dbreps2::{linker, str_vec, Frequency, Report};
 use mysql_async::prelude::*;
 use mysql_async::Conn;
 
@@ -92,7 +92,7 @@ LIMIT
     }
 
     fn format_row(&self, row: &Row) -> Vec<String> {
-        str_vec![Linker::new(2, &row.user_name), row.page_len, row.page_id]
+        str_vec![linker(2, &row.user_name), row.page_len, row.page_id]
     }
 
     fn code(&self) -> &'static str {

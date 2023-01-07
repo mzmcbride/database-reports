@@ -20,7 +20,6 @@ use log::{error, info};
 use mwbot::{Bot, Page, SaveOptions};
 use mysql_async::{Conn, Pool};
 use regex::Regex;
-use std::fmt;
 use time::format_description::FormatItem;
 use time::macros::format_description;
 use time::{Duration, OffsetDateTime, PrimitiveDateTime};
@@ -381,42 +380,22 @@ impl Runner {
     }
 }
 
-pub struct DbrLink(String);
-
-impl DbrLink {
-    pub fn new(target: &str) -> Self {
-        Self(target.to_string())
-    }
+pub fn dbr_link(target: &str) -> String {
+    format!("{{{{dbr link|1={}}}}}", target.replace('_', " "))
 }
 
-impl fmt::Display for DbrLink {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{{{{dbr link|1={}}}}}", self.0.replace('_', " "))
-    }
-}
+pub fn linker(ns: u32, target: &str) -> String {
+    let colon = match ns {
+        // File | Category
+        6 | 14 => ":",
+        _ => "",
+    };
+    let ns_prefix = match ns {
+        0 => "".to_string(),
+        num => format!("{{{{subst:ns:{}}}}}:", num),
+    };
 
-pub struct Linker(u32, String);
-
-impl Linker {
-    pub fn new(ns: u32, target: &str) -> Self {
-        Self(ns, target.to_string())
-    }
-}
-
-impl fmt::Display for Linker {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let colon = match self.0 {
-            // File | Category
-            6 | 14 => ":",
-            _ => "",
-        };
-        let ns_prefix = match self.0 {
-            0 => "".to_string(),
-            num => format!("{{{{subst:ns:{}}}}}:", num),
-        };
-
-        write!(f, "[[{}{}{}]]", colon, ns_prefix, self.1)
-    }
+    format!("[[{colon}{ns_prefix}{target}]]")
 }
 
 /// "Escape" a block reason so it's safe for display
@@ -444,25 +423,22 @@ mod tests {
     use time::macros::{date, time};
 
     #[test]
-    fn test_dbrlink() {
+    fn test_dbr_link() {
         assert_eq!(
-            DbrLink::new("Taylor Swift").to_string(),
+            dbr_link("Taylor Swift"),
             "{{dbr link|1=Taylor Swift}}".to_string()
         );
     }
 
     #[test]
     fn test_linker() {
+        assert_eq!(linker(0, "Foo bar"), "[[Foo bar]]".to_string());
         assert_eq!(
-            Linker::new(0, "Foo bar").to_string(),
-            "[[Foo bar]]".to_string()
-        );
-        assert_eq!(
-            Linker::new(1, "Foo bar").to_string(),
+            linker(1, "Foo bar"),
             "[[{{subst:ns:1}}:Foo bar]]".to_string()
         );
         assert_eq!(
-            Linker::new(6, "Foo bar").to_string(),
+            linker(6, "Foo bar"),
             "[[:{{subst:ns:6}}:Foo bar]]".to_string()
         );
     }

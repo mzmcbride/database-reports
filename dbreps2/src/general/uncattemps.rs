@@ -1,5 +1,5 @@
 use anyhow::Result;
-use dbreps2::{str_vec, DbrLink, Frequency, Report};
+use dbreps2::{dbr_link, str_vec, Frequency, Report};
 use mysql_async::prelude::*;
 use mysql_async::Conn;
 
@@ -50,7 +50,7 @@ AND page_title NOT LIKE '%/%';
     }
 
     fn format_row(&self, row: &Row) -> Vec<String> {
-        str_vec![DbrLink::new(&row.page_title)]
+        str_vec![dbr_link(&row.page_title)]
     }
 
     fn code(&self) -> &'static str {
