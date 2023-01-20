@@ -33,6 +33,7 @@ async fn main() -> Result<()> {
     (general::ArticlesMostRedirects {})
         .really_run(&enwiki_runner)
         .await;
+    (general::BlankPages).really_run(&enwiki_runner).await;
     (general::ExcessiveIps {}).really_run(&enwiki_runner).await;
     (general::ExcessiveUsers {})
         .really_run(&enwiki_runner)
