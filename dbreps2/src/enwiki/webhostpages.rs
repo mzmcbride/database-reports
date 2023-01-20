@@ -25,6 +25,7 @@ pub struct Row {
     user_name: String,
     page_len: u64,
     page_id: u64,
+    user_editcount: u64,
 }
 
 pub struct WebhostPages {}
@@ -49,13 +50,15 @@ impl Report<Row> for WebhostPages {
 SELECT
   user_name,
   page_len,
-  page_id
+  page_id,
+  user_editcount
 FROM
   user
   JOIN page ON page_title = REPLACE(user_name, ' ', '_')
   AND page_namespace = 2
 WHERE
-  user_editcount < 50
+  page_len > 499
+  AND page_id < 58000000
   AND (
     SELECT
       COUNT(*)
@@ -65,10 +68,8 @@ WHERE
       JOIN page ON rev_page = page_id
     WHERE
       actor_name = user_name
-      AND page_namespace = 2
+      AND page_namespace IN (2, 3)
   ) = user_editcount
-  AND page_len > 499
-  AND page_id < 52000000
 ORDER BY
   user_id DESC
 LIMIT
@@ -78,21 +79,30 @@ LIMIT
 
     async fn run_query(&self, conn: &mut Conn) -> Result<Vec<Row>> {
         let rows = conn
-            .query_map(self.query(), |(user_name, page_len, page_id)| Row {
-                user_name,
-                page_len,
-                page_id,
-            })
+            .query_map(
+                self.query(),
+                |(user_name, page_len, page_id, user_editcount)| Row {
+                    user_name,
+                    page_len,
+                    page_id,
+                    user_editcount,
+                },
+            )
             .await?;
         Ok(rows)
     }
 
     fn headings(&self) -> Vec<&'static str> {
-        vec!["Page", "Length", "Page ID"]
+        vec!["Page", "Length", "Page ID", "Edit count"]
     }
 
     fn format_row(&self, row: &Row) -> Vec<String> {
-        str_vec![linker(2, &row.user_name), row.page_len, row.page_id]
+        str_vec![
+            linker(2, &row.user_name),
+            row.page_len,
+            row.page_id,
+            row.user_editcount
+        ]
     }
 
     fn code(&self) -> &'static str {
