@@ -35,8 +35,8 @@ impl Report<Row> for DupeFileNames {
         "
         /* dupefilenames.py SLOW_OK */
         SELECT
-          LOWER(page_title),
-          GROUP_CONCAT(page_title SEPARATOR '|'),
+          LOWER(CONVERT(page_title USING utf8mb4)),
+          GROUP_CONCAT(CONVERT(page_title USING utf8mb4) SEPARATOR '|'),
           COUNT(*)
         FROM page
         WHERE page_namespace = 6
