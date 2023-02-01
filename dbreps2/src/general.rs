@@ -16,6 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 mod articlesmostredirects;
 mod blankpages;
+mod dupefilenames;
 mod excessiveips;
 mod excessiveusers;
 mod indeffullredirects;
@@ -33,9 +34,9 @@ mod userstreaks;
 
 pub use {
     articlesmostredirects::ArticlesMostRedirects, blankpages::BlankPages,
-    excessiveips::ExcessiveIps, excessiveusers::ExcessiveUsers,
-    indeffullredirects::IndefFullRedirects, indefips::IndefIPs,
-    linkedemailsinarticles::LinkedEmailsInArticles,
+    dupefilenames::DupeFileNames, excessiveips::ExcessiveIps,
+    excessiveusers::ExcessiveUsers, indeffullredirects::IndefFullRedirects,
+    indefips::IndefIPs, linkedemailsinarticles::LinkedEmailsInArticles,
     linkedredlinkedcats::LinkedRedlinkedCats, oldeditors::OldEditors,
     ownerlessuserpages::Ownerlessuserpages, pollcats::Pollcats,
     uncatcats::UncatCats, uncattemps::UncatTemps,

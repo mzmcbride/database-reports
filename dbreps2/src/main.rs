@@ -34,6 +34,7 @@ async fn main() -> Result<()> {
         .really_run(&enwiki_runner)
         .await;
     (general::BlankPages).really_run(&enwiki_runner).await;
+    (general::DupeFileNames).really_run(&enwiki_runner).await;
     (general::ExcessiveIps {}).really_run(&enwiki_runner).await;
     (general::ExcessiveUsers {})
         .really_run(&enwiki_runner)
