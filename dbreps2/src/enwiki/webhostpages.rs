@@ -40,7 +40,11 @@ impl Report<Row> for WebhostPages {
         Frequency::Weekly
     }
 
-    fn enumerate(&self) -> bool {
+    fn rows_per_page(&self) -> Option<usize> {
+        Some(3000)
+    }
+
+    fn static_row_numbers(&self) -> bool {
         true
     }
 
@@ -73,7 +77,7 @@ WHERE
 ORDER BY
   user_id DESC
 LIMIT
-  3000;
+  21000;
 "#
     }
 
