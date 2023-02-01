@@ -18,7 +18,7 @@ struct Args {
 async fn main() -> Result<()> {
     let args = Args::parse();
     match &args.report {
-        Some(report) => println!("Only running the \"{}\" report", report),
+        Some(report) => println!("Only running the \"{report}\" report"),
         None => println!("Running all reports"),
     }
 
@@ -34,6 +34,7 @@ async fn main() -> Result<()> {
         .really_run(&enwiki_runner)
         .await;
     (general::BlankPages).really_run(&enwiki_runner).await;
+    (general::DupeFileNames).really_run(&enwiki_runner).await;
     (general::ExcessiveIps {}).really_run(&enwiki_runner).await;
     (general::ExcessiveUsers {})
         .really_run(&enwiki_runner)

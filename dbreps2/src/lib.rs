@@ -147,7 +147,7 @@ pub trait Report<T: Send + Sync> {
             intro.push("! No.".to_string());
         }
         for heading in self.headings() {
-            intro.push(format!("! {}", heading));
+            intro.push(format!("! {heading}"));
         }
         intro.join("\n")
     }
@@ -183,10 +183,10 @@ pub trait Report<T: Send + Sync> {
             row_num += 1;
             text.push("|-".to_string());
             if self.enumerate() {
-                text.push(format!("| {}", row_num));
+                text.push(format!("| {row_num}"));
             }
             for item in self.format_row(row) {
-                text.push(format!("| {}", item));
+                text.push(format!("| {item}"));
             }
         }
         text.push(self.get_footer());
@@ -323,7 +323,7 @@ pub trait Report<T: Send + Sync> {
             // every day
             1 => "day".to_string(),
             // every X days
-            num => format!("{} days", num),
+            num => format!("{num} days"),
         };
         let config = format!(
             r#"This report is updated every {}.
@@ -364,8 +364,8 @@ impl Runner {
     ) -> Result<Self> {
         let cfg = load_config().await?;
         let bot = Bot::builder(
-            format!("https://{}/w/api.php", domain),
-            format!("https://{}/api/rest_v1", domain),
+            format!("https://{domain}/w/api.php"),
+            format!("https://{domain}/api/rest_v1"),
         )
         .set_oauth2_token(cfg.auth.username, cfg.auth.oauth2_token)
         .build()
@@ -392,7 +392,7 @@ pub fn linker(ns: u32, target: &str) -> String {
     };
     let ns_prefix = match ns {
         0 => "".to_string(),
-        num => format!("{{{{subst:ns:{}}}}}:", num),
+        num => format!("{{{{subst:ns:{num}}}}}:"),
     };
 
     format!("[[{colon}{ns_prefix}{target}]]")
@@ -454,7 +454,7 @@ mod tests {
     #[test]
     fn test_timestamp() {
         let ts = "14:31, 3 January 2022 (UTC)";
-        let dt = PrimitiveDateTime::parse(&ts, &SIG_TIMESTAMP)
+        let dt = PrimitiveDateTime::parse(ts, &SIG_TIMESTAMP)
             .unwrap()
             .assume_utc();
         assert_eq!(dt.date(), date!(2022 - 01 - 03));

@@ -92,7 +92,7 @@ WHERE user_name = ?;
     rows.sort();
     let formatted: Vec<_> = rows
         .into_iter()
-        .map(|group| format!("{{{{subst:aug|1={}}}}}", group))
+        .map(|group| format!("{{{{subst:aug|1={group}}}}}"))
         .collect();
     Ok(formatted.join(", "))
 }
@@ -287,7 +287,7 @@ LIMIT 12000;
 fn index_to_range(index: usize) -> String {
     let start = ((index - 1) * 1000) + 1;
     let end = start + 999;
-    format!("{}–{}", start, end)
+    format!("{start}–{end}")
 }
 
 #[test]

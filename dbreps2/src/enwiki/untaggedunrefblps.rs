@@ -93,7 +93,7 @@ GROUP BY
                 if exclude_cats.is_match(category) {
                     None
                 } else {
-                    Some(format!("[[:Category:{}|]]", category))
+                    Some(format!("[[:Category:{category}|]]"))
                 }
             })
             .collect();
