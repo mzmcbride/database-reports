@@ -18,7 +18,7 @@ struct Args {
 async fn main() -> Result<()> {
     let args = Args::parse();
     match &args.report {
-        Some(report) => println!("Only running the \"{}\" report", report),
+        Some(report) => println!("Only running the \"{report}\" report"),
         None => println!("Running all reports"),
     }
 
