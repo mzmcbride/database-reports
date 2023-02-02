@@ -35,7 +35,7 @@ impl Report<Row> for EmptyCats {
     }
 
     fn frequency(&self) -> Frequency {
-        Frequency::Daily
+        Frequency::DailyAt(1)
     }
 
     fn query(&self) -> &'static str {
