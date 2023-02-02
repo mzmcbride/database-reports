@@ -20,6 +20,7 @@ use log::{error, info};
 use mwbot::{Bot, Page, SaveOptions};
 use mysql_async::{Conn, Pool};
 use regex::Regex;
+use std::fmt::{Display, Formatter};
 use time::format_description::FormatItem;
 use time::macros::format_description;
 use time::{Duration, OffsetDateTime, PrimitiveDateTime};
@@ -72,6 +73,8 @@ async fn save_page(page: Page, text: String) -> Result<()> {
 
 pub enum Frequency {
     Daily,
+    /// Daily, but at the specific hour too
+    DailyAt(u8),
     Weekly,
     Fortnightly,
     Monthly,
@@ -80,10 +83,33 @@ pub enum Frequency {
 impl Frequency {
     fn to_duration(&self) -> Duration {
         match &self {
-            Frequency::Daily => Duration::days(1),
+            Frequency::Daily | Frequency::DailyAt(_) => Duration::days(1),
             Frequency::Weekly => Duration::weeks(1),
             Frequency::Fortnightly => Duration::weeks(2),
             Frequency::Monthly => Duration::weeks(4),
+        }
+    }
+
+    fn at_hour(&self) -> Option<u8> {
+        if let Frequency::DailyAt(hour) = &self {
+            Some(*hour)
+        } else {
+            None
+        }
+    }
+}
+
+impl Display for Frequency {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        match self.to_duration().whole_days() {
+            // every day
+            1 => write!(f, "This report is updated every day")?,
+            // every X days
+            num => write!(f, "This report is updated every {num} days")?,
+        };
+        match self.at_hour() {
+            Some(hour) => write!(f, " at {hour}:00 UTC."),
+            None => write!(f, "."),
         }
     }
 }
@@ -128,8 +154,9 @@ pub trait Report<T: Send + Sync> {
     fn get_intro(&self, _index: usize) -> String {
         // TODO: is replag something we still need to care about? meh
         let mut intro = vec![format!(
-            "{}; data as of <onlyinclude>~~~~~</onlyinclude>.\n",
-            self.intro()
+            "{}; data as of <onlyinclude>~~~~~</onlyinclude>. {}\n",
+            self.intro(),
+            self.frequency()
         )];
         if self.static_row_numbers() {
             intro.push("{{static row numbers}}".to_string());
@@ -157,6 +184,13 @@ pub trait Report<T: Send + Sync> {
     }
 
     fn needs_update(&self, old_text: &str) -> Result<bool> {
+        if let Some(hour) = self.frequency().at_hour() {
+            // If we are supposed to run at a specific time
+            // and it is that time, then run!
+            if OffsetDateTime::now_utc().hour() == hour {
+                return Ok(true);
+            }
+        }
         let re = Regex::new("<onlyinclude>(.*?)</onlyinclude>").unwrap();
         let ts = match re.captures(old_text) {
             Some(cap) => cap[1].to_string(),
@@ -319,20 +353,14 @@ pub trait Report<T: Send + Sync> {
             }
         }
         // Finally, publish the /Configuration subpage
-        let days = match self.frequency().to_duration().whole_days() {
-            // every day
-            1 => "day".to_string(),
-            // every X days
-            num => format!("{num} days"),
-        };
         let config = format!(
-            r#"This report is updated every {}.
+            r#"{}
 
 == Source code ==
 <syntaxhighlight lang="rust">
 {}</syntaxhighlight>
 "#,
-            days,
+            self.frequency(),
             self.code()
         );
         if debug_mode {
@@ -465,5 +493,21 @@ mod tests {
     fn test_y_m_d() {
         assert_eq!(y_m_d("20010115192713"), "2001-01-15".to_string());
         assert_eq!(y_m_d("20221015001541"), "2022-10-15".to_string());
+    }
+
+    #[test]
+    fn test_frequency() {
+        assert_eq!(
+            &Frequency::Daily.to_string(),
+            "This report is updated every day."
+        );
+        assert_eq!(
+            &Frequency::Weekly.to_string(),
+            "This report is updated every 7 days."
+        );
+        assert_eq!(
+            &Frequency::DailyAt(3).to_string(),
+            "This report is updated every day at 3:00 UTC."
+        );
     }
 }
