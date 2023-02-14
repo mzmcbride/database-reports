@@ -504,6 +504,7 @@ dependencies = [
  "tokio",
  "toml",
  "toolforge",
+ "wikipedia_prosesize",
 ]
 
 [[package]]
@@ -3001,6 +3002,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b6c71e40d7d2c34a5106301fb632274ca37242cd0c9d3e64dbece371a40a2d87"
 dependencies = [
  "webpki",
+]
+
+[[package]]
+name = "wikipedia_prosesize"
+version = "0.1.0-alpha.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e585986491c0ec1d6d29f94ce1f84e22ef67e2748b2adb60ab9d3e33e3798b9d"
+dependencies = [
+ "parsoid",
 ]
 
 [[package]]

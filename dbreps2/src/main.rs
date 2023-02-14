@@ -70,6 +70,12 @@ async fn main() -> Result<()> {
         .await;
     (enwiki::EditCount {}).really_run(&enwiki_runner).await;
     (enwiki::EmptyCats {}).really_run(&enwiki_runner).await;
+    (enwiki::FeaturedBySize {
+        // FIXME: figure out a less terrible way to do this
+        bot: enwiki_runner.bot.clone(),
+    })
+    .really_run(&enwiki_runner)
+    .await;
     (enwiki::LinkedMiscapitalizations {})
         .really_run(&enwiki_runner)
         .await;

@@ -378,7 +378,7 @@ pub trait Report<T: Send + Sync> {
 }
 
 pub struct Runner {
-    bot: Bot,
+    pub bot: Bot,
     pub pool: Pool,
     /// Requested report with --report
     report: Option<String>,

@@ -21,3 +21,4 @@ time = { version = "0.3", features = ["formatting", "macros", "parsing"] }
 tokio = { version = "1.24", features = ["full"] }
 toml = "0.5.8"
 toolforge = { version = "5.0", features = ["mysql"] }
+wikipedia_prosesize = "0.1.0-alpha.1"
