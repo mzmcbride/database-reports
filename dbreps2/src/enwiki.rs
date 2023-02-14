@@ -18,6 +18,7 @@ mod brokenwikiprojtemps;
 mod conflictedfiles;
 mod editcount;
 mod emptycats;
+mod featuredbysize;
 mod linkedmiscapitalizations;
 mod linkedmisspellings;
 mod longstubs;
@@ -52,7 +53,7 @@ mod webhostpages;
 
 pub use {
     brokenwikiprojtemps::BrokenWikiProjTemps, conflictedfiles::ConflictedFiles,
-    editcount::EditCount, emptycats::EmptyCats,
+    editcount::EditCount, emptycats::EmptyCats, featuredbysize::FeaturedBySize,
     linkedmiscapitalizations::LinkedMiscapitalizations,
     linkedmisspellings::LinkedMisspellings, longstubs::LongStubs,
     lotnonfree::LotNonFree, newprojects::NewProjects,

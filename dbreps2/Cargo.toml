@@ -12,7 +12,7 @@ clap = { version = "3.0.14", features = ["derive"] }
 dirs = "4.0"
 env_logger = "0.8"
 log = "0.4"
-mwbot = "0.4.3"
+mwbot = "0.5.0-alpha.3"
 mysql_async = "0.31.2"
 regex = "1.5"
 serde = { version = "1.0", features = ["derive"] }
@@ -21,3 +21,4 @@ time = { version = "0.3", features = ["formatting", "macros", "parsing"] }
 tokio = { version = "1.24", features = ["full"] }
 toml = "0.5.8"
 toolforge = { version = "5.0", features = ["mysql"] }
+wikipedia_prosesize = "0.1.0-alpha.1"
