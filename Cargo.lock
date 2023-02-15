@@ -3006,9 +3006,9 @@ dependencies = [
 
 [[package]]
 name = "wikipedia_prosesize"
-version = "0.1.0-alpha.1"
+version = "0.1.0-alpha.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e585986491c0ec1d6d29f94ce1f84e22ef67e2748b2adb60ab9d3e33e3798b9d"
+checksum = "239311469a02f125936b72945850b4d40e60b6d3265333d380e9f6f51ecee3e3"
 dependencies = [
  "parsoid",
 ]
