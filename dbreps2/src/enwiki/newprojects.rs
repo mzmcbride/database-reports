@@ -83,7 +83,7 @@ ORDER BY
 
     fn format_row(&self, row: &Row) -> Vec<String> {
         let page = if row.page_is_redirect == 1 {
-            format!("''[[Project:{}|]]''", &row.rc_title)
+            format!("''[[Project:{}|]]'' (redirect)", &row.rc_title)
         } else {
             format!("[[Project:{}|]]", &row.rc_title)
         };
