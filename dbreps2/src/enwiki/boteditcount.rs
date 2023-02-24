@@ -184,7 +184,6 @@ impl Report<Row> for BotEditCount {
 ! No.
 ! User
 ! Edit count
-! User groups
 "#,
             index_to_range(index)
         )
