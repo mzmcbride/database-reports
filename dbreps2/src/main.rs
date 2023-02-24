@@ -65,6 +65,7 @@ async fn main() -> Result<()> {
     (enwiki::BrokenWikiProjTemps {})
         .really_run(&enwiki_runner)
         .await;
+    (enwiki::BotEditCount {}).really_run(&enwiki_runner).await;
     (enwiki::ConflictedFiles {})
         .really_run(&enwiki_runner)
         .await;
