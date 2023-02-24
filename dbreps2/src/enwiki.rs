@@ -14,6 +14,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+mod boteditcount;
 mod brokenwikiprojtemps;
 mod conflictedfiles;
 mod editcount;
@@ -52,8 +53,9 @@ mod usercats;
 mod webhostpages;
 
 pub use {
-    brokenwikiprojtemps::BrokenWikiProjTemps, conflictedfiles::ConflictedFiles,
-    editcount::EditCount, emptycats::EmptyCats, featuredbysize::FeaturedBySize,
+    boteditcount::BotEditCount, brokenwikiprojtemps::BrokenWikiProjTemps,
+    conflictedfiles::ConflictedFiles, editcount::EditCount,
+    emptycats::EmptyCats, featuredbysize::FeaturedBySize,
     linkedmiscapitalizations::LinkedMiscapitalizations,
     linkedmisspellings::LinkedMisspellings, longstubs::LongStubs,
     lotnonfree::LotNonFree, newprojects::NewProjects,
