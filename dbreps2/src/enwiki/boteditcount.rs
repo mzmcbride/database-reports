@@ -193,6 +193,10 @@ impl Report<Row> for BotEditCount {
         "|-\n|}\n".to_string()
     }
 
+    fn needs_update(&self, _old_text: &str) -> Result<bool> {
+        Ok(time::OffsetDateTime::now_utc().hour() == 4)
+    }
+
     async fn post_run(&self, bot: &Bot, debug_mode: bool) -> Result<()> {
         info!("Updating Wikipedia:List of bots by number of edits/Age");
 
