@@ -134,19 +134,5 @@ async fn main() -> Result<()> {
     // Cleanup
     enwiki_runner.pool.disconnect().await?;
 
-    /* commonswiki reports */
-    let commonswiki_runner = dbreps2::Runner::new(
-        "commons.wikimedia.org",
-        "commonswiki",
-        args.report.clone(),
-    )
-    .await?;
-    (general::ExcessiveIps {})
-        .really_run(&commonswiki_runner)
-        .await;
-
-    // Cleanup
-    commonswiki_runner.pool.disconnect().await?;
-
     Ok(())
 }
