@@ -130,7 +130,8 @@ WHERE
         'Language_user_templates',
         'Template_test_cases',
         'Template_sandboxes',
-        'Level-zero_userbox_templates'
+        'Level-zero_userbox_templates',
+        'Templates_for_deletion'
       )
       AND page_namespace = 10
   )
