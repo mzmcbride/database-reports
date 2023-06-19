@@ -230,6 +230,13 @@ pub trait Report<T: Send + Sync> {
         ))
     }
 
+    fn title_for_update_check(&self) -> String {
+        match self.rows_per_page() {
+            Some(_) => self.subpage(1),
+            None => self.get_title(),
+        }
+    }
+
     async fn run(
         &self,
         debug_mode: bool,
@@ -244,10 +251,7 @@ pub trait Report<T: Send + Sync> {
                 "{}: Checking when last results were published...",
                 self.get_title()
             );
-            let title_for_update_check = match self.rows_per_page() {
-                Some(_) => self.subpage(1),
-                None => self.get_title(),
-            };
+            let title_for_update_check = self.title_for_update_check();
             let page = bot.page(&title_for_update_check)?;
             if page.exists().await? {
                 let old_text = page.wikitext().await?;
