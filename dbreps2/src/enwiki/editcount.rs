@@ -257,8 +257,8 @@ LIMIT 12000;
         "|-\n|}\n".to_string()
     }
 
-    fn needs_update(&self, _old_text: &str) -> Result<bool> {
-        Ok(time::OffsetDateTime::now_utc().hour() == 4)
+    fn title_for_update_check(&self) -> String {
+        "Wikipedia:List of Wikipedians by number of edits/Age".to_string()
     }
 
     async fn post_run(&self, bot: &Bot, debug_mode: bool) -> Result<()> {
@@ -267,7 +267,7 @@ LIMIT 12000;
         if !debug_mode {
             bot.page("Wikipedia:List of Wikipedians by number of edits/Age")?
                 .save(
-                    "~~~~~",
+                    "<onlyinclude>~~~~~</onlyinclude>",
                     &SaveOptions::summary("[[WP:BOT|Bot]]: Updated page."),
                 )
                 .await?;
