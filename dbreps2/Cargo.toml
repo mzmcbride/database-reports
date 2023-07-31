@@ -10,7 +10,7 @@ anyhow = "1.0"
 async-trait = "0.1.50"
 clap = { version = "4.3.0", features = ["derive"] }
 dirs = "5.0.1"
-env_logger = "0.8"
+env_logger = "0.10.0"
 log = "0.4"
 mwbot = "0.5.0-alpha.3"
 mysql_async = { version = "0.32.2", default-features = false, features = ["minimal"] }
