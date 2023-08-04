@@ -78,7 +78,7 @@ WHERE
     }
 
     fn format_row(&self, row: &Row) -> Vec<String> {
-        str_vec![format!("[[{}]]", row.page_title)]
+        str_vec![format!("[[{}]]", row.page_title.replace('_', " "))]
     }
 
     fn code(&self) -> &'static str {
