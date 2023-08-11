@@ -26,10 +26,9 @@ use std::collections::HashSet;
 const SKIP_SUFFIXES: [&str; 4] =
     ["/testcases", "/sandbox", "/rater-data.js", "-stub"];
 
-const SKIP_PREFIXES: [&str; 14] = [
+const SKIP_PREFIXES: [&str; 13] = [
     "Adminstats/",
     "AfC_",
-    "Attached_KML/",
     "Cite_doi/",
     "Cite_pmid/",
     "Did_you_know_nominations/",
