@@ -60,6 +60,7 @@ WHERE
   page_namespace = 0
   AND page_is_redirect = 0
   AND page_title NOT LIKE 'List\\_of\\_%'
+  AND page_title NOT LIKE 'Lists\\_of\\_%'
   AND cl_from IS NULL
   AND page_len < 1500
 LIMIT
