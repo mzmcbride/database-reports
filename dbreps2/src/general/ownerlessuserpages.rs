@@ -97,10 +97,6 @@ impl Report<Row> for Ownerlessuserpages {
         Frequency::Daily
     }
 
-    fn static_row_numbers(&self) -> bool {
-        true
-    }
-
     fn query(&self) -> &'static str {
         r"
 /* ownerlessuserpages.rs SLOW_OK */
