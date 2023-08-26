@@ -42,10 +42,6 @@ impl Report<Row> for FeaturedBySize {
         Frequency::Weekly
     }
 
-    fn static_row_numbers(&self) -> bool {
-        true
-    }
-
     fn query(&self) -> &'static str {
         r#"
 /* featuredbysize.rs SLOW_OK */

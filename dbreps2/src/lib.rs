@@ -130,7 +130,8 @@ pub trait Report<T: Send + Sync> {
     }
 
     fn static_row_numbers(&self) -> bool {
-        false
+        // if this is a single page report (no rows per page) we use static row numbers
+        self.rows_per_page().is_none()
     }
 
     fn enumerate(&self) -> bool {
