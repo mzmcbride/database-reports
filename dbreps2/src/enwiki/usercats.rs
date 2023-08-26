@@ -42,7 +42,7 @@ impl Report<Row> for UserCats {
     }
 
     fn query(&self) -> &'static str {
-        r#"
+        r"
 /* usercats.rs SLOW_OK */
 SELECT
   page_title
@@ -51,7 +51,7 @@ FROM
 WHERE
   page_namespace = 14
   AND CONVERT(page_title USING utf8mb4) RLIKE '(?i)(wikipedian|\buser|wikiproject.*(participant|members)|(participant|members).*wikiproject)';
-"#
+"
     }
 
     async fn run_query(&self, conn: &mut Conn) -> Result<Vec<Row>> {

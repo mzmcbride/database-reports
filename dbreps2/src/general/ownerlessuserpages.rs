@@ -102,7 +102,7 @@ impl Report<Row> for Ownerlessuserpages {
     }
 
     fn query(&self) -> &'static str {
-        r#"
+        r"
 /* ownerlessuserpages.rs SLOW_OK */
 SELECT
   page_id,
@@ -119,7 +119,7 @@ WHERE
   AND NOT IS_IPV6(SUBSTRING_INDEX(page_title, '/', 1))
   AND page_title NOT RLIKE '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
   AND ISNULL(user_name);
-"#
+"
     }
 
     async fn run_query(&self, conn: &mut Conn) -> Result<Vec<Row>> {

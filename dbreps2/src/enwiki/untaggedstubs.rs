@@ -39,7 +39,7 @@ impl Report<Row> for UntaggedStubs {
     }
 
     fn query(&self) -> &'static str {
-        r#"
+        r"
 /* untaggedstubs.rs SLOW_OK */
 SELECT
   page_title,
@@ -65,7 +65,7 @@ WHERE
   AND page_len < 1500
 LIMIT
   1000;
-"#
+"
     }
 
     async fn run_query(&self, conn: &mut Conn) -> Result<Vec<Row>> {
