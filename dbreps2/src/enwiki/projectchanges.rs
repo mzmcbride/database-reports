@@ -42,7 +42,7 @@ impl Report<Row> for ProjectChanges {
     }
 
     fn query(&self) -> &'static str {
-        r#"
+        r"
 /* projectchanges.rs SLOW_OK */
 SELECT
   SUBSTRING_INDEX(page_title, '/', 1) AS project,
@@ -101,7 +101,7 @@ GROUP BY
   project
 ORDER BY
   count DESC
-"#
+"
     }
 
     async fn run_query(&self, conn: &mut Conn) -> Result<Vec<Row>> {

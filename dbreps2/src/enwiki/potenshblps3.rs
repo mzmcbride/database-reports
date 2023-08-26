@@ -38,7 +38,7 @@ impl Report<Row> for Potenshblps3 {
     }
 
     fn query(&self) -> &'static str {
-        r#"
+        r"
 /* potenshblps3.rs SLOW_OK */
 SELECT
   pg1.page_title
@@ -107,7 +107,7 @@ WHERE
   AND REPLACE(pg1.page_title, '_', ' ') NOT REGEXP '(^List of|^Line of|\bcontroversy\b|\belection\b|\bmurder(s)?\b|\binvestigation\b|\bkidnapping\b|\baffair\b|\ballegation\b|\brape(s)?\b| v. |\bfamily\b| and |\bband\b| of |\barchive\b|recordholders| & |^The|^[0-9]|\bfiction\b|\bcharacter\b| the |\bincident(s)?\b|\bprinciples\b|\bmost\b)'
 LIMIT
   1000;
-"#
+"
     }
 
     async fn run_query(&self, conn: &mut Conn) -> Result<Vec<Row>> {
