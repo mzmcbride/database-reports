@@ -59,9 +59,6 @@ impl Report<Row> for BlankPages {
 
     fn format_row(&self, Row { namespace, title }: &Row) -> Vec<String> {
         vec![match namespace {
-            6 | 14 => {
-                format!("{{{{plh|1=:{{{{subst:ns:{namespace}}}}}:{title}}}}}")
-            }
             0 => format!("{{{{plh|1={title}}}}}"),
             _ => format!("{{{{plh|1={{{{subst:ns:{namespace}}}}}:{title}}}}}"),
         }]
