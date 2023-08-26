@@ -57,9 +57,7 @@ class report(reports.report):
         ''', (self.site, ))
 
         for page_namespace, ns_name, page_title, page_len in cursor:
-            if page_namespace in (6, 14):
-                page_title = u'{{plh|1=:%s:%s}}' % (ns_name, page_title)
-            elif page_namespace == 0:
+            if page_namespace == 0:
                 page_title = u'{{plh|1=%s}}' % (page_title)
             else:
                 page_title = u'{{plh|1=%s:%s}}' % (ns_name, page_title)
