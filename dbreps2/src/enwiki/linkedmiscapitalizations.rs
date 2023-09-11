@@ -55,6 +55,7 @@ WHERE
   p1.page_namespace = 0
   AND p1.page_is_redirect = 1
   AND cl_to = 'Redirects_from_miscapitalisations'
+  AND NOT(p1.page_id = p2.page_id)
 GROUP BY
   1
 LIMIT
