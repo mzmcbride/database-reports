@@ -51,18 +51,17 @@ SELECT
 FROM
   page
   JOIN revision ON page_id = rev_page
-  LEFT JOIN pagelinks ON pl_title = page_title
-  AND pl_namespace = page_namespace
-  /* FIXME JOIN linktarget */
-  LEFT JOIN templatelinks ON tl_title = page_title
-  AND tl_namespace = page_namespace
+  LEFT JOIN linktarget ON lt_title = page_title
+  AND lt_namespace = page_namespace
+  LEFT JOIN pagelinks ON pl_target_id = lt_id
+  LEFT JOIN templatelinks ON tl_target_id = lt_id
 WHERE
   page_namespace = 4
   AND page_is_redirect = 0
   AND page_title LIKE "Articles_for_deletion/%"
   AND rev_parent_id = 0
-  AND ISNULL(pl_namespace)
-  AND ISNULL(tl_namespace);
+  AND ISNULL(tl_from)
+  AND ISNULL(pl_from);
 "#
     }
 
