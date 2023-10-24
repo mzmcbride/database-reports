@@ -32,16 +32,17 @@ async fn get_user_list(conn: &mut Conn, page: &str) -> Result<HashSet<String>> {
             r#"
 /* editcount.rs SLOW_OK */
 SELECT DISTINCT
- pl_title
+ lt_title
 FROM page
 JOIN pagelinks
 ON pl_from = page_id
+JOIN linktarget on pl_target_id = lt_id
 WHERE page_title = ?
 AND page_namespace = 4
-AND pl_namespace IN (2,3);
+AND lt_namespace IN (2,3);
 "#,
             (page,),
-            |(pl_title,)| pl_title,
+            |(lt_title,)| lt_title,
         )
         .await?;
     Ok(rows

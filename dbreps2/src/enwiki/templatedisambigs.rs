@@ -44,7 +44,7 @@ impl Report<Row> for TemplateDisambigs {
 /* templatedisambigs.rs SLOW_OK */
 SELECT
   pltmp.page_title AS template_title,
-  pltmp.pl_title AS disambiguation_title,
+  pltmp.lt_title AS disambiguation_title,
   (
     SELECT
       COUNT(*)
@@ -60,21 +60,22 @@ FROM
     SELECT
       page_namespace,
       page_title,
-      pl_namespace,
-      pl_title
+      lt_namespace,
+      lt_title
     FROM
       page
       JOIN pagelinks ON pl_from = page_id
+      JOIN linktarget ON pl_target_id = lt_id
     WHERE
       page_namespace = 10
-      AND pl_namespace = 0
+      AND lt_namespace = 0
     LIMIT
       1000000
   ) AS pltmp
   JOIN page AS pg2
   /* removes red links */
-  ON pltmp.pl_namespace = pg2.page_namespace
-  AND pltmp.pl_title = pg2.page_title
+  ON pltmp.lt_namespace = pg2.page_namespace
+  AND pltmp.lt_title = pg2.page_title
 WHERE
   EXISTS (
     SELECT

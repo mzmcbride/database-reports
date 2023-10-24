@@ -40,11 +40,12 @@ SELECT
 FROM page
 JOIN pagelinks
 ON pl_from = page_id
+JOIN linktarget on pl_target_id = lt_id
 JOIN user
-ON user_name = REPLACE(pl_title, "_", " ")
+ON user_name = REPLACE(lt_title, "_", " ")
 WHERE page_title = ?
 AND page_namespace = 4
-AND pl_namespace IN (2,3);
+AND lt_namespace IN (2,3);
 "#,
             (page,),
             |(user_name, user_editcount)| (user_name, user_editcount),

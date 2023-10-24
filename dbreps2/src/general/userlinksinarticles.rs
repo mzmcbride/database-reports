@@ -45,9 +45,10 @@ SELECT
 FROM
   page
   JOIN pagelinks ON pl_from = page_id
+  JOIN linktarget ON pl_target_id = lt_id
 WHERE
   pl_from_namespace = 0
-  AND pl_namespace IN (2, 3)
+  AND lt_namespace IN (2, 3)
   AND NOT EXISTS (
     SELECT 1 FROM templatelinks
     JOIN linktarget ON tl_target_id = lt_id
