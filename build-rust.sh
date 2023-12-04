@@ -1,2 +1,5 @@
 #!/bin/bash
-time jsub -N build -mem 2G -sync y -j y -stderr -cwd cargo build --release
+toolforge jobs run build \
+    --command "bash -c 'source ~/.profile && cd ~/src/database-reports/ && cargo build --release'" \
+    --image python3.11 --mem 2G --cpu 3
+echo "Build has been queued"
