@@ -1,6 +1,6 @@
 ---
 - name: rusty
   command: /usr/bin/timeout 59m /data/project/dbreps/src/database-reports/target/release/dbreps2
-  image: bullseye
+  image: bookworm
   schedule: "0 * * * * "
   emails: onfailure
