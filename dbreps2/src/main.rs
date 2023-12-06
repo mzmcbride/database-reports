@@ -58,9 +58,10 @@ async fn main() -> Result<()> {
     (general::UserLinksInArticles {})
         .really_run(&enwiki_runner)
         .await;
-    (general::UserArticleStreaks {})
-        .really_run(&enwiki_runner)
-        .await;
+    // taking longer than an hour
+    /*(general::UserArticleStreaks {})
+    .really_run(&enwiki_runner)
+    .await;*/
     (general::UserStreaks {}).really_run(&enwiki_runner).await;
     (enwiki::BrokenWikiProjTemps {})
         .really_run(&enwiki_runner)
