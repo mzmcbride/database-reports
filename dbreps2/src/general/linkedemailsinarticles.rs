@@ -46,7 +46,7 @@ FROM
   externallinks
   JOIN page ON el_from = page_id
 WHERE
-  el_index_60 LIKE 'mailto:%'
+  el_to_domain_index LIKE 'mailto:%'
   AND page_namespace = 0
 LIMIT
   1000;
