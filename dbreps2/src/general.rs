@@ -37,9 +37,8 @@ pub use {
     dupefilenames::DupeFileNames, excessiveips::ExcessiveIps,
     excessiveusers::ExcessiveUsers, indeffullredirects::IndefFullRedirects,
     indefips::IndefIPs, linkedemailsinarticles::LinkedEmailsInArticles,
-    linkedredlinkedcats::LinkedRedlinkedCats, oldeditors::OldEditors,
-    ownerlessuserpages::Ownerlessuserpages, pollcats::Pollcats,
-    uncatcats::UncatCats, uncattemps::UncatTemps,
+    oldeditors::OldEditors, ownerlessuserpages::Ownerlessuserpages,
+    pollcats::Pollcats, uncatcats::UncatCats, uncattemps::UncatTemps,
     userarticlestreaks::UserArticleStreaks,
     userlinksinarticles::UserLinksInArticles, userstreaks::UserStreaks,
 };
