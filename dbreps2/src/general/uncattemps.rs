@@ -9,7 +9,6 @@ pub struct Row {
 
 pub struct UncatTemps {}
 
-#[async_trait::async_trait]
 impl Report<Row> for UncatTemps {
     fn title(&self) -> &'static str {
         "Uncategorized templates"

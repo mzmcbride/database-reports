@@ -29,7 +29,6 @@ pub struct Row {
 
 pub struct Potenshblps2 {}
 
-#[async_trait::async_trait]
 impl Report<Row> for Potenshblps2 {
     fn title(&self) -> &'static str {
         "Potential biographies of living people (2)"

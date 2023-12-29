@@ -29,7 +29,6 @@ pub struct Row {
 
 pub struct LotNonFree {}
 
-#[async_trait::async_trait]
 impl Report<Row> for LotNonFree {
     fn title(&self) -> &'static str {
         "Pages containing an unusually high number of non-free files"

@@ -28,7 +28,6 @@ pub struct Row {
 
 pub struct LongStubs {}
 
-#[async_trait::async_trait]
 impl Report<Row> for LongStubs {
     fn title(&self) -> &'static str {
         "Long stubs"

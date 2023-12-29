@@ -29,7 +29,6 @@ pub struct Row {
 
 pub struct NewProjects {}
 
-#[async_trait::async_trait]
 impl Report<Row> for NewProjects {
     fn title(&self) -> &'static str {
         "New WikiProjects"

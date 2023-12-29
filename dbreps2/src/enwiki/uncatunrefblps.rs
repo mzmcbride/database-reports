@@ -27,7 +27,6 @@ pub struct Row {
 
 pub struct UncatUnrefBLPs {}
 
-#[async_trait::async_trait]
 impl Report<Row> for UncatUnrefBLPs {
     fn title(&self) -> &'static str {
         "Uncategorized and unreferenced biographies of living people"

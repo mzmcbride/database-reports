@@ -27,7 +27,6 @@ pub struct Row {
 
 pub struct UnsourcedBLPs {}
 
-#[async_trait::async_trait]
 impl Report<Row> for UnsourcedBLPs {
     fn title(&self) -> &'static str {
         "Biographies of living people containing unsourced statements"

@@ -28,7 +28,6 @@ pub struct Row {
 
 pub struct LinkedRedlinkedCats {}
 
-#[async_trait::async_trait]
 impl Report<Row> for LinkedRedlinkedCats {
     fn title(&self) -> &'static str {
         "Red-linked categories with incoming links"

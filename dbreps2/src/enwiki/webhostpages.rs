@@ -30,7 +30,6 @@ pub struct Row {
 
 pub struct WebhostPages {}
 
-#[async_trait::async_trait]
 impl Report<Row> for WebhostPages {
     fn title(&self) -> &'static str {
         "Potential U5s"

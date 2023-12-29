@@ -27,7 +27,6 @@ pub struct Row {
 
 pub struct Pollcats {}
 
-#[async_trait::async_trait]
 impl Report<Row> for Pollcats {
     fn title(&self) -> &'static str {
         "Polluted categories"

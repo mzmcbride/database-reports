@@ -27,7 +27,6 @@ pub struct Row {
 
 pub struct UserLinksInArticles {}
 
-#[async_trait::async_trait]
 impl Report<Row> for UserLinksInArticles {
     fn title(&self) -> &'static str {
         "Articles containing links to the user space"

@@ -28,7 +28,6 @@ pub struct Row {
 
 pub struct ShortestBios {}
 
-#[async_trait::async_trait]
 impl Report<Row> for ShortestBios {
     fn title(&self) -> &'static str {
         "Shortest biographies of living people"

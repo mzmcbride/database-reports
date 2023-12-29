@@ -28,7 +28,6 @@ pub struct Row {
 
 pub struct UntaggedStubs {}
 
-#[async_trait::async_trait]
 impl Report<Row> for UntaggedStubs {
     fn title(&self) -> &'static str {
         "Untagged stubs"

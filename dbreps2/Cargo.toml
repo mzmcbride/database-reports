@@ -7,7 +7,6 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0"
-async-trait = "0.1.50"
 clap = { version = "4.3.0", features = ["derive"] }
 dirs = "5.0.1"
 env_logger = "0.10.0"

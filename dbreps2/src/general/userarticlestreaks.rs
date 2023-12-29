@@ -38,7 +38,6 @@ pub struct Row {
 
 pub struct UserArticleStreaks {}
 
-#[async_trait::async_trait]
 impl Report<Row> for UserArticleStreaks {
     fn title(&self) -> &'static str {
         "Longest active user article editing streaks"

@@ -61,7 +61,6 @@ WHERE
     }
 }
 
-#[async_trait::async_trait]
 impl Report<Row> for UnusedTemplates {
     fn title(&self) -> &'static str {
         "Unused templates"

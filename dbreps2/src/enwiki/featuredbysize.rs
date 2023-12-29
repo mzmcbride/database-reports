@@ -32,7 +32,6 @@ pub struct FeaturedBySize {
     pub(crate) bot: Bot,
 }
 
-#[async_trait::async_trait]
 impl Report<Row> for FeaturedBySize {
     fn title(&self) -> &'static str {
         "Featured articles by size"

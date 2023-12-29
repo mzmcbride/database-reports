@@ -25,7 +25,6 @@ pub struct Row {
 
 pub struct BlankPages;
 
-#[async_trait::async_trait]
 impl Report<Row> for BlankPages {
     fn title(&self) -> &'static str {
         "Blank single-author pages"

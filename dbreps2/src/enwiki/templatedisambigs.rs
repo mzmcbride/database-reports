@@ -29,7 +29,6 @@ pub struct Row {
 
 pub struct TemplateDisambigs {}
 
-#[async_trait::async_trait]
 impl Report<Row> for TemplateDisambigs {
     fn title(&self) -> &'static str {
         "Templates containing links to disambiguation pages"

@@ -30,7 +30,6 @@ pub struct Row {
 
 pub struct OldDeletionDiscussions {}
 
-#[async_trait::async_trait]
 impl Report<Row> for OldDeletionDiscussions {
     fn title(&self) -> &'static str {
         "Old deletion discussions"

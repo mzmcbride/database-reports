@@ -31,7 +31,6 @@ pub struct Row {
 
 pub struct ExcessiveUsers {}
 
-#[async_trait::async_trait]
 impl Report<Row> for ExcessiveUsers {
     fn title(&self) -> &'static str {
         "Unusually long user blocks"
