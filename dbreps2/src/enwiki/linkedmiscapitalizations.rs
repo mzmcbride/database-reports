@@ -46,8 +46,9 @@ SELECT
 FROM
   page AS p1
   JOIN categorylinks ON p1.page_id = cl_from
-  JOIN pagelinks ON p1.page_title = pl_title
-  AND pl_namespace = 0
+  JOIN linktarget on p1.page_title = lt_title
+  AND lt_namespace = 0
+  JOIN pagelinks ON pl_target_id = lt_id
   JOIN page AS p2 ON pl_from = p2.page_id
   AND p2.page_namespace = 0
 WHERE
