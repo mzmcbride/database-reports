@@ -23,25 +23,6 @@ use mysql_async::prelude::*;
 use mysql_async::Conn;
 use std::collections::HashSet;
 
-const SKIP_SUFFIXES: [&str; 4] =
-    ["/testcases", "/sandbox", "/rater-data.js", "-stub"];
-
-const SKIP_PREFIXES: [&str; 13] = [
-    "Adminstats/",
-    "AfC_",
-    "Cite_doi/",
-    "Cite_pmid/",
-    "Did_you_know_nominations/",
-    "Editnotices/",
-    "PBB/",
-    "POTD_caption/",
-    "POTD_credit/",
-    "POTD_protected/",
-    "TemplateStyles_sandbox/",
-    "TFA_title/",
-    "User_",
-];
-
 /// Returned by the first main query
 struct FirstRow {
     page_id: u64,
@@ -64,9 +45,7 @@ pub struct Row {
 
 pub struct UnusedTemplatesFiltered {}
 
-impl UnusedTemplatesFiltered {
-    fn subquery(&self) -> &'static str {
-        r#"
+const SUBQUERY: &str = r#"
 /* unusedtemplatesfiltered.rs */
 SELECT
   actor_id,
@@ -76,9 +55,7 @@ FROM
   JOIN actor ON actor_id = rev_actor
 WHERE
   rev_page = ?;
-"#
-    }
-}
+"#;
 
 impl Report<Row> for UnusedTemplatesFiltered {
     fn title(&self) -> &'static str {
@@ -105,12 +82,30 @@ SELECT
   page_title
 FROM
   page
-  LEFT JOIN linktarget ON page_namespace = lt_namespace
+LEFT JOIN linktarget ON page_namespace = lt_namespace
   AND page_title = lt_title
+LEFT JOIN templatelinks ON tl_target_id=lt_id
 WHERE
   page_namespace = 10
   AND page_is_redirect = 0
-  AND lt_id IS NULL
+  AND tl_target_id IS NULL
+  AND page_title NOT LIKE "Adminstats/%"
+  AND page_title NOT LIKE "AfC_%"
+  AND page_title NOT LIKE "Cite_doi/%"
+  AND page_title NOT LIKE "Cite_pmid/%"
+  AND page_title NOT LIKE "Did_you_know_nominations/%"
+  AND page_title NOT LIKE "Editnotices/%"
+  AND page_title NOT LIKE "PBB/%"
+  AND page_title NOT LIKE "POTD_caption/%"
+  AND page_title NOT LIKE "POTD_credit/%"
+  AND page_title NOT LIKE "POTD_protected/%"
+  AND page_title NOT LIKE "TemplateStyles_sandbox/%"
+  AND page_title NOT LIKE "TFA_title/%"
+  AND page_title NOT LIKE "User_%"
+  AND page_title NOT LIKE "%/testcases"
+  AND page_title NOT LIKE "%/sandbox"
+  AND page_title NOT LIKE "%/rater-data.js"
+  AND page_title NOT LIKE "%-stub"
   AND page_title NOT IN (
     SELECT
       page_title
@@ -148,21 +143,10 @@ ORDER BY
         let mut rows = vec![];
         let mut stub_rows = vec![];
         for row in first_rows {
-            // Filter by page name
-            if SKIP_SUFFIXES
-                .iter()
-                .any(|suffix| row.page_title.ends_with(suffix))
-                || SKIP_PREFIXES
-                    .iter()
-                    .any(|prefix| row.page_title.starts_with(prefix))
-            {
-                debug!("Skipping {}", row.page_title);
-                continue;
-            }
             debug!("Running subquery for {}", &row.page_id);
             let second_rows = conn
                 .exec_map(
-                    self.subquery(),
+                    SUBQUERY,
                     (row.page_id,),
                     |(actor_id, rev_timestamp)| SecondRow {
                         actor_id,
@@ -230,29 +214,5 @@ ORDER BY
 
     fn code(&self) -> &'static str {
         include_str!("unusedtemplatesfiltered.rs")
-    }
-}
-
-#[cfg(test)]
-mod tests {
-
-    #[test]
-    fn test_no_spaces() {
-        let with_spaces: Vec<_> = super::SKIP_PREFIXES
-            .into_iter()
-            .filter(|p| p.contains(' '))
-            .collect();
-        assert!(
-            with_spaces.is_empty(),
-            "Items in SKIP_PREFIXES should use underscores instead of spaces"
-        );
-        let with_spaces: Vec<_> = super::SKIP_SUFFIXES
-            .into_iter()
-            .filter(|p| p.contains(' '))
-            .collect();
-        assert!(
-            with_spaces.is_empty(),
-            "Items in SKIP_SUFFIXES should use underscores instead of spaces"
-        );
     }
 }
