@@ -31,7 +31,6 @@ pub struct Row {
 
 pub struct ExcessiveIps {}
 
-#[async_trait::async_trait]
 impl Report<Row> for ExcessiveIps {
     fn title(&self) -> &'static str {
         "Unusually long IP blocks"

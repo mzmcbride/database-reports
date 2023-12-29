@@ -29,7 +29,6 @@ pub struct Row {
 
 pub struct StickyProdBLPs {}
 
-#[async_trait::async_trait]
 impl Report<Row> for StickyProdBLPs {
     fn title(&self) -> &'static str {
         "Biographies of living people possibly eligible for deletion"

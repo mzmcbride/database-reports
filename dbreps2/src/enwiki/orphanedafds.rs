@@ -28,7 +28,6 @@ pub struct Row {
 
 pub struct OrphanedAfds {}
 
-#[async_trait::async_trait]
 impl Report<Row> for OrphanedAfds {
     fn title(&self) -> &'static str {
         "Orphaned article deletion discussions"

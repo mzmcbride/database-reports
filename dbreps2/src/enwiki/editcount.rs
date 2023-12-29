@@ -133,7 +133,6 @@ pub struct Row {
 
 pub struct EditCount {}
 
-#[async_trait::async_trait]
 impl Report<Row> for EditCount {
     fn title(&self) -> &'static str {
         "<placeholder>"

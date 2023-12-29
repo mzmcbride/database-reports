@@ -28,7 +28,6 @@ pub struct Row {
 
 pub struct LinkedMiscapitalizations {}
 
-#[async_trait::async_trait]
 impl Report<Row> for LinkedMiscapitalizations {
     fn title(&self) -> &'static str {
         "Linked miscapitalizations"

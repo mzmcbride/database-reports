@@ -15,6 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#![allow(async_fn_in_trait)]
 use anyhow::Result;
 use log::{error, info};
 use mwbot::{Bot, Page, SaveOptions};
@@ -114,7 +115,6 @@ impl Display for Frequency {
     }
 }
 
-#[async_trait::async_trait]
 pub trait Report<T: Send + Sync> {
     // TODO: Make this per-wiki/language
     fn title(&self) -> &'static str;

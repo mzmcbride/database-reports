@@ -29,7 +29,6 @@ pub struct Row {
 
 pub struct OldEditors {}
 
-#[async_trait::async_trait]
 impl Report<Row> for OldEditors {
     fn title(&self) -> &'static str {
         "Active editors with the longest-established accounts"

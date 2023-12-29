@@ -27,7 +27,6 @@ pub struct Row {
 
 pub struct UnusedNonFree {}
 
-#[async_trait::async_trait]
 impl Report<Row> for UnusedNonFree {
     fn title(&self) -> &'static str {
         "Unused non-free files"

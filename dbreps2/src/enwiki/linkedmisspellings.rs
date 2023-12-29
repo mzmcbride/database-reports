@@ -28,7 +28,6 @@ pub struct Row {
 
 pub struct LinkedMisspellings {}
 
-#[async_trait::async_trait]
 impl Report<Row> for LinkedMisspellings {
     fn title(&self) -> &'static str {
         "Linked misspellings"

@@ -27,7 +27,6 @@ pub struct Row {
 
 pub struct UserCats {}
 
-#[async_trait::async_trait]
 impl Report<Row> for UserCats {
     fn title(&self) -> &'static str {
         "User categories"

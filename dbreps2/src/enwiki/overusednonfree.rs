@@ -28,7 +28,6 @@ pub struct Row {
 
 pub struct OverusedNonFree {}
 
-#[async_trait::async_trait]
 impl Report<Row> for OverusedNonFree {
     fn title(&self) -> &'static str {
         "Overused non-free files"

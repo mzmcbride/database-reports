@@ -107,7 +107,6 @@ pub struct Row {
 
 pub struct BotEditCount {}
 
-#[async_trait::async_trait]
 impl Report<Row> for BotEditCount {
     fn title(&self) -> &'static str {
         "<boteditcount>"

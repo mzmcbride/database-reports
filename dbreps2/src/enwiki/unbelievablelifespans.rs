@@ -31,7 +31,6 @@ pub struct Row {
 
 pub struct UnbelievableLifeSpans {}
 
-#[async_trait::async_trait]
 impl Report<Row> for UnbelievableLifeSpans {
     fn title(&self) -> &'static str {
         "Unbelievable life spans"

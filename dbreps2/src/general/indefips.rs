@@ -30,7 +30,6 @@ pub struct Row {
 
 pub struct IndefIPs {}
 
-#[async_trait::async_trait]
 impl Report<Row> for IndefIPs {
     fn title(&self) -> &'static str {
         "Indefinitely blocked IPs"

@@ -31,7 +31,6 @@ pub struct Row {
 
 pub struct ProjectChanges {}
 
-#[async_trait::async_trait]
 impl Report<Row> for ProjectChanges {
     fn title(&self) -> &'static str {
         "WikiProjects by changes"

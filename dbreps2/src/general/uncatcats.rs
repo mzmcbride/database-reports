@@ -31,7 +31,6 @@ pub struct Row {
 
 pub struct UncatCats {}
 
-#[async_trait::async_trait]
 impl Report<Row> for UncatCats {
     fn title(&self) -> &'static str {
         "Uncategorized categories"

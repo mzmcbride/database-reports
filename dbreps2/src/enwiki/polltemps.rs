@@ -27,7 +27,6 @@ pub struct Row {
 
 pub struct PollTemps {}
 
-#[async_trait::async_trait]
 impl Report<Row> for PollTemps {
     fn title(&self) -> &'static str {
         "Template categories containing articles"

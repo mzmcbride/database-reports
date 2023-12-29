@@ -30,7 +30,6 @@ pub struct Row {
 
 pub struct IndefFullRedirects {}
 
-#[async_trait::async_trait]
 impl Report<Row> for IndefFullRedirects {
     fn title(&self) -> &'static str {
         "Indefinitely fully protected redirects"

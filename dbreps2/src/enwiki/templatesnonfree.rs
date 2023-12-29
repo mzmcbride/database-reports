@@ -28,7 +28,6 @@ pub struct Row {
 
 pub struct TemplatesNonFree {}
 
-#[async_trait::async_trait]
 impl Report<Row> for TemplatesNonFree {
     fn title(&self) -> &'static str {
         "Templates containing non-free files"

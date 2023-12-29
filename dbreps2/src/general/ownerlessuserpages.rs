@@ -87,7 +87,6 @@ LIMIT
 
 pub struct Ownerlessuserpages {}
 
-#[async_trait::async_trait]
 impl Report<Row> for Ownerlessuserpages {
     fn title(&self) -> &'static str {
         "Ownerless pages in the user space"

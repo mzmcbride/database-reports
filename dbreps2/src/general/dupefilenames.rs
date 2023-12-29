@@ -13,7 +13,6 @@ pub struct Row {
     orig_names_str: String,
 }
 
-#[async_trait::async_trait]
 impl Report<Row> for DupeFileNames {
     fn title(&self) -> &'static str {
         "Largely duplicative file names"

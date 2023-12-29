@@ -28,7 +28,6 @@ pub struct Row {
 
 pub struct BrokenWikiProjTemps {}
 
-#[async_trait::async_trait]
 impl Report<Row> for BrokenWikiProjTemps {
     fn title(&self) -> &'static str {
         "Broken WikiProject templates"

@@ -27,7 +27,6 @@ pub struct Row {
 
 pub struct ConflictedFiles {}
 
-#[async_trait::async_trait]
 impl Report<Row> for ConflictedFiles {
     fn title(&self) -> &'static str {
         "Files with conflicting categorization"

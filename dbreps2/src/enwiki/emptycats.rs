@@ -28,7 +28,6 @@ pub struct Row {
 
 pub struct EmptyCats {}
 
-#[async_trait::async_trait]
 impl Report<Row> for EmptyCats {
     fn title(&self) -> &'static str {
         "Empty categories"

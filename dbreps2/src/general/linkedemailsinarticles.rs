@@ -27,7 +27,6 @@ pub struct Row {
 
 pub struct LinkedEmailsInArticles {}
 
-#[async_trait::async_trait]
 impl Report<Row> for LinkedEmailsInArticles {
     fn title(&self) -> &'static str {
         "Articles containing linked e-mail addresses"

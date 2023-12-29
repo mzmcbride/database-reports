@@ -10,7 +10,6 @@ pub struct Row {
 
 pub struct ArticlesMostRedirects {}
 
-#[async_trait::async_trait]
 impl Report<Row> for ArticlesMostRedirects {
     fn title(&self) -> &'static str {
         "Articles with the most redirects"
