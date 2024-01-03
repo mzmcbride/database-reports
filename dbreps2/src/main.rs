@@ -53,6 +53,7 @@ async fn main() -> Result<()> {
         .really_run(&enwiki_runner)
         .await;
     (general::Pollcats {}).really_run(&enwiki_runner).await;
+    (general::SelfCatCats {}).really_run(&enwiki_runner).await;
     (general::UncatCats {}).really_run(&enwiki_runner).await;
     (general::UncatTemps {}).really_run(&enwiki_runner).await;
     (general::UserLinksInArticles {})
