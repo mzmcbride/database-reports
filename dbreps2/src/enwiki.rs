@@ -32,6 +32,7 @@ mod overusednonfree;
 mod polltemps;
 mod potenshbdps1;
 mod potenshbdps3;
+mod potenshbdps4;
 mod potenshblps1;
 mod potenshblps2;
 mod potenshblps3;
@@ -62,11 +63,11 @@ pub use {
     olddeletiondiscussions::OldDeletionDiscussions, orphanedafds::OrphanedAfds,
     orphanedsubtalks::OrphanedSubTalks, overusednonfree::OverusedNonFree,
     polltemps::PollTemps, potenshbdps1::Potenshbdps1,
-    potenshbdps3::Potenshbdps3, potenshblps1::Potenshblps1,
-    potenshblps2::Potenshblps2, potenshblps3::Potenshblps3,
-    projectchanges::ProjectChanges, shortestbios::ShortestBios,
-    stickyprodblps::StickyProdBLPs, templatedisambigs::TemplateDisambigs,
-    templatesnonfree::TemplatesNonFree,
+    potenshbdps3::Potenshbdps3, potenshbdps4::Potenshbdps4,
+    potenshblps1::Potenshblps1, potenshblps2::Potenshblps2,
+    potenshblps3::Potenshblps3, projectchanges::ProjectChanges,
+    shortestbios::ShortestBios, stickyprodblps::StickyProdBLPs,
+    templatedisambigs::TemplateDisambigs, templatesnonfree::TemplatesNonFree,
     unbelievablelifespans::UnbelievableLifeSpans,
     uncatunrefblps::UncatUnrefBLPs, unsourcedblps::UnsourcedBLPs,
     untaggedblps::UntaggedBLPs, untaggedstubs::UntaggedStubs,
