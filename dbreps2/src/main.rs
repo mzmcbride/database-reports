@@ -96,6 +96,7 @@ async fn main() -> Result<()> {
     (enwiki::PollTemps {}).really_run(&enwiki_runner).await;
     (enwiki::Potenshbdps1 {}).really_run(&enwiki_runner).await;
     (enwiki::Potenshbdps3 {}).really_run(&enwiki_runner).await;
+    (enwiki::Potenshbdps4 {}).really_run(&enwiki_runner).await;
     (enwiki::Potenshblps1 {}).really_run(&enwiki_runner).await;
     (enwiki::Potenshblps2 {}).really_run(&enwiki_runner).await;
     (enwiki::Potenshblps3 {}).really_run(&enwiki_runner).await;
