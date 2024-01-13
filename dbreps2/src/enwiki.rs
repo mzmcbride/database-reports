@@ -20,6 +20,7 @@ mod conflictedfiles;
 mod editcount;
 mod emptycats;
 mod featuredbysize;
+mod goodarticlesbysize;
 mod linkedmiscapitalizations;
 mod linkedmisspellings;
 mod longstubs;
@@ -57,6 +58,7 @@ pub use {
     boteditcount::BotEditCount, brokenwikiprojtemps::BrokenWikiProjTemps,
     conflictedfiles::ConflictedFiles, editcount::EditCount,
     emptycats::EmptyCats, featuredbysize::FeaturedBySize,
+    goodarticlesbysize::GoodArticlesBySize,
     linkedmiscapitalizations::LinkedMiscapitalizations,
     linkedmisspellings::LinkedMisspellings, longstubs::LongStubs,
     lotnonfree::LotNonFree, newprojects::NewProjects,

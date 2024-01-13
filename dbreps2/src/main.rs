@@ -74,6 +74,12 @@ async fn main() -> Result<()> {
     })
     .really_run(&enwiki_runner)
     .await;
+    (enwiki::GoodArticlesBySize {
+        // FIXME: figure out a less terrible way to do this
+        bot: enwiki_runner.bot.clone(),
+    })
+    .really_run(&enwiki_runner)
+    .await;
     (enwiki::LinkedMiscapitalizations {})
         .really_run(&enwiki_runner)
         .await;
