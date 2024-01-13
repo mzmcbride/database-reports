@@ -33,11 +33,11 @@ mod config;
 macro_rules! str_vec {
     ( $( $item:expr ),* ) => {
         {
-            let mut temp_vec = Vec::new();
+            vec![
             $(
-                temp_vec.push($item.to_string());
+                $item.to_string(),
             )*
-            temp_vec
+            ]
         }
     };
 }
