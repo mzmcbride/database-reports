@@ -39,24 +39,25 @@ impl Report<Row> for UnusedNonFree {
     fn query(&self) -> &'static str {
         r#"
 /* unusednonfree.rs SLOW_OK */
-SELECT
-  page_title
-FROM
-  page
-  JOIN categorylinks AS cl1 ON cl1.cl_from = page_id
-  LEFT JOIN imagelinks ON il_to = page_title
-  AND page_namespace = 6
-  LEFT JOIN categorylinks AS cl2 ON cl2.cl_from = page_id
-  AND cl2.cl_to = 'All_orphaned_non-free_use_Wikipedia_files'
-  LEFT JOIN redirect ON rd_title = page_title
-  AND rd_namespace = 6
-WHERE
-  cl1.cl_to = 'All_non-free_media'
+SELECT img.page_title
+FROM categorylinks AS c1
+JOIN page AS img ON img.page_id = c1.cl_from
+LEFT JOIN categorylinks AS c2 ON c2.cl_from = c1.cl_from AND c2.cl_to = 'All_orphaned_non-free_use_Wikipedia_files'
+LEFT JOIN imagelinks ON il_to = img.page_title AND il_from_namespace = 0
+WHERE img.page_namespace = 6
+  AND c1.cl_to = 'All_non-free_media'
+  AND c2.cl_from IS NULL
   AND il_from IS NULL
-  AND cl2.cl_from IS NULL
-  AND rd_from IS NULL
-  AND page_is_redirect = 0
-  AND page_namespace = 6;
+  AND img.page_is_redirect = 0
+  AND NOT EXISTS
+    (SELECT 1
+     FROM redirect
+     JOIN page AS rdr ON rdr.page_id = rd_from
+     JOIN imagelinks ON il_to = rdr.page_title AND il_from_namespace = 0
+     WHERE rd_namespace = 6
+       AND rd_title = img.page_title
+       AND rdr.page_namespace = 6)
+ORDER BY page_title ASC;
 "#
     }
 
