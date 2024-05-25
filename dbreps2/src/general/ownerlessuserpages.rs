@@ -55,7 +55,10 @@ WHERE gu_name = ?
     Ok(row.is_some())
 }
 
-async fn lookup_revision(conn: &mut Conn, row: &FirstRow) -> Result<SecondRow> {
+async fn lookup_revision(
+    conn: &mut Conn,
+    row: &FirstRow,
+) -> Result<Option<SecondRow>> {
     Ok(conn
         .exec_map(
             r#"
@@ -81,8 +84,7 @@ LIMIT
         )
         .await?
         .into_iter()
-        .next()
-        .unwrap())
+        .next())
 }
 
 pub struct Ownerlessuserpages {}
@@ -143,7 +145,9 @@ WHERE
             if user_exists_globally(&mut ca_conn, &username).await? {
                 continue;
             }
-            let rev = lookup_revision(conn, &row).await?;
+            let Some(rev) = lookup_revision(conn, &row).await? else {
+                continue;
+            };
             last.push(Row {
                 page_namespace: row.page_namespace,
                 page_title: row.page_title,
