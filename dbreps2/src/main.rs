@@ -1,6 +1,7 @@
 use anyhow::Result;
 use clap::Parser;
 use dbreps2::Report;
+use log::info;
 
 mod enwiki;
 mod general;
@@ -16,16 +17,16 @@ struct Args {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let args = Args::parse();
-    match &args.report {
-        Some(report) => println!("Only running the \"{report}\" report"),
-        None => println!("Running all reports"),
-    }
-
     env_logger::Builder::from_env(
         env_logger::Env::default().default_filter_or("info"),
     )
     .init();
+    let args = Args::parse();
+    match &args.report {
+        Some(report) => info!("Only running the \"{report}\" report"),
+        None => info!("Running all reports"),
+    }
+
     /* enwiki reports */
     let enwiki_runner =
         dbreps2::Runner::new("en.wikipedia.org", "enwiki", args.report.clone())
