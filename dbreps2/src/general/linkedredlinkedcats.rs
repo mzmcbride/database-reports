@@ -44,9 +44,10 @@ SELECT
   cl_to,
   COUNT(*)
 FROM
+  /* FIXME when categorylinks gets normalized as well */
   categorylinks
-  JOIN pagelinks ON pl_title = cl_to
-  AND pl_namespace = 14
+  JOIN linktarget ON lt_title = cl_to AND lt_namespace = 14
+  JOIN pagelinks ON pl_target_id = lt_id
   JOIN page AS p1 ON pl_from = p1.page_id
   AND p1.page_namespace IN (0, 6, 10, 12, 14, 100)
   LEFT JOIN page AS p2 ON cl_to = p2.page_title
