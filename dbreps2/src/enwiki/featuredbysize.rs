@@ -69,7 +69,7 @@ WHERE
         }
         for handle in handles {
             let (title, size) = handle.await??;
-            println!("{title}");
+            /* println!("{title}"); */
             rows.push(Row {
                 title,
                 prose_size: size.prose_size(),
