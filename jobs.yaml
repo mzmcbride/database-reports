@@ -1,7 +1,7 @@
 ---
 - name: rusty
-  command: /usr/bin/timeout 59m /data/project/dbreps/src/database-reports/target/release/dbreps2
+  command: /usr/bin/timeout 119m /data/project/dbreps/src/database-reports/target/release/dbreps2
   image: bookworm
-  schedule: "0 * * * * "
+  schedule: "0 */2 * * * "
   cpu: 3
   emails: onfailure
