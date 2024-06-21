@@ -5,3 +5,10 @@
   schedule: "0 */2 * * * "
   cpu: "3"
   emails: onfailure
+  filelog-stdout: logs/rusty-stdout.log
+  filelog-stderr: logs/rusty-stderr.log
+- name: logrotate
+  command: "logrotate -v $TOOL_DATA_DIR/src/database-reports/logrotate.conf --state $TOOL_DATA_DIR/logrotate.state"
+  image: mariadb
+  schedule: "@daily"
+  emails: onfailure
