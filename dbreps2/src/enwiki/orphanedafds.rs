@@ -51,10 +51,9 @@ FROM
   page
   JOIN revision ON page_id = rev_page
   LEFT JOIN pagelinks ON pl_title = page_title
-  AND pl_namespace = page_namespace
-  /* FIXME JOIN linktarget */
+  JOIN linktarget AS lt1 ON lt1.lt_id = pl_target_id AND lt1.lt_namespace = 4
   LEFT JOIN templatelinks ON tl_title = page_title
-  AND tl_namespace = page_namespace
+  JOIN linktarget AS lt2 ON lt2.lt_id = tl_target_id AND lt2.lt_namespace = 4
 WHERE
   page_namespace = 4
   AND page_is_redirect = 0
