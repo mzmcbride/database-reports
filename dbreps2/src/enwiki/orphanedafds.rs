@@ -59,8 +59,8 @@ WHERE
   AND page_is_redirect = 0
   AND page_title LIKE "Articles_for_deletion/%"
   AND rev_parent_id = 0
-  AND ISNULL(pl_namespace)
-  AND ISNULL(tl_namespace);
+  AND ISNULL(pl_from)
+  AND ISNULL(tl_from);
 "#
     }
 
