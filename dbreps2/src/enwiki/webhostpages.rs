@@ -59,9 +59,9 @@ FROM
   user
   JOIN page ON page_title = REPLACE(user_name, ' ', '_')
   AND page_namespace = 2
+  AND user_id < 70000000
 WHERE
   page_len > 499
-  AND page_id < 58000000
   AND (
     SELECT
       COUNT(*)
