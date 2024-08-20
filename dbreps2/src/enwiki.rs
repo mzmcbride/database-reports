@@ -76,4 +76,5 @@ pub use {
     untaggedunrefblps::UntaggedUnrefBLPs, unusednonfree::UnusedNonFree,
     unusedtemplates::UnusedTemplates,
     unusedtemplatesfiltered::UnusedTemplatesFiltered, usercats::UserCats,
+    webhostpages::WebhostPages,
 };
