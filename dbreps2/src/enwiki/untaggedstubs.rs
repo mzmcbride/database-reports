@@ -48,6 +48,7 @@ FROM
   LEFT JOIN categorylinks ON cl_from = page_id
   AND (
     cl_to LIKE '%_stubs'
+    OR cl_to LIKE 'Redirects_to_Wiki%'
     OR cl_to IN (
       'All_disambiguation_pages',
       'All_set_index_articles',
