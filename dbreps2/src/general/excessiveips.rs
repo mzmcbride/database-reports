@@ -37,7 +37,7 @@ impl Report<Row> for ExcessiveIps {
     }
 
     fn frequency(&self) -> Frequency {
-        Frequency::Monthly
+        Frequency::Weekly
     }
 
     fn rows_per_page(&self) -> Option<usize> {
@@ -49,18 +49,20 @@ impl Report<Row> for ExcessiveIps {
 /* excessiveips.rs SLOW_OK */
 SELECT
   ipb_address,
-  ipb_by_text,
+  actor_name,
   ipb_timestamp,
   ipb_expiry,
-  ipb_reason
+  comment_text
 FROM
-  ipblocks_compat
+  ipblocks
+  JOIN actor ON ipb_by_actor = actor_id
+  JOIN comment ON ipb_reason_id = comment_id
 WHERE
   ipb_expiry > DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 YEAR), '%Y%m%d%H%i%s')
   AND ipb_expiry != "infinity"
-  AND ipb_user = 0
-  AND INSTR(LOWER(ipb_reason), 'proxy') = 0
-  AND INSTR(LOWER(ipb_reason), 'webhost') = 0;
+  AND ipb_user IS NULL
+  AND INSTR(LOWER(comment_text), 'proxy') = 0
+  AND INSTR(LOWER(comment_text), 'webhost') = 0;
 "#
     }
 
