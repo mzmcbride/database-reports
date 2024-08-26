@@ -55,8 +55,8 @@ SELECT
   comment_text
 FROM
   ipblocks
-  JOIN actor ON ipb_by_actor = actor_id
-  JOIN comment ON ipb_reason_id = comment_id
+  JOIN actor_ipblocks ON ipb_by_actor = actor_id
+  JOIN comment_ipblocks ON ipb_reason_id = comment_id
 WHERE
   ipb_expiry > DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 YEAR), '%Y%m%d%H%i%s')
   AND ipb_expiry != "infinity"
