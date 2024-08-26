@@ -6,6 +6,8 @@ use log::info;
 mod enwiki;
 mod general;
 
+const GIT_VERSION: &str = git_version::git_version!();
+
 /// Parsing args, yo
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
@@ -22,6 +24,7 @@ async fn main() -> Result<()> {
     )
     .init();
     let args = Args::parse();
+    info!("dbreps ({})", GIT_VERSION);
     match &args.report {
         Some(report) => info!("Only running the \"{report}\" report"),
         None => info!("Running all reports"),
