@@ -63,6 +63,7 @@ WHERE
   AND ipb_user IS NULL
   AND INSTR(LOWER(comment_text), 'proxy') = 0
   AND INSTR(LOWER(comment_text), 'webhost') = 0;
+  AND INSTR(LOWER(comment_text), 'cdnblock') = 0;
 "#
     }
 
@@ -89,7 +90,7 @@ WHERE
     }
 
     fn intro(&self) -> &'static str {
-        "Unusually long (more than two years) blocks of IPs whose block reasons do not contain \"proxy\" or \"webhost\""
+        "Unusually long (more than two years) blocks of IPs whose block reasons do not contain \"proxy\", \"webhost\", or \"cdnblock\""
     }
 
     fn headings(&self) -> Vec<&'static str> {
