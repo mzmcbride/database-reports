@@ -49,11 +49,13 @@ FROM
   AND (
     cl_to LIKE '%_stubs'
     OR cl_to LIKE 'Redirects_to_Wiki%'
+    OR cl_to LIKE 'Lists_of_%'
     OR cl_to IN (
       'All_disambiguation_pages',
       'All_set_index_articles',
       'Redirects_to_Wiktionary',
-      'Wikipedia_soft_redirects'
+      'Wikipedia_soft_redirects',
+      'All_redirects_for_discussion'
     )
   )
 WHERE
