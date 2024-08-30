@@ -33,6 +33,10 @@ impl Report<Row> for LongShortDescs {
         "Long short descriptions"
     }
 
+    fn intro(&self) -> &'static str {
+        "Pages with short descriptions that are longer than 100 characters"
+    }
+
     fn query(&self) -> &'static str {
         "
 SELECT
