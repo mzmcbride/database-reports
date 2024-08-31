@@ -34,7 +34,7 @@ impl Report<Row> for LongShortDescs {
     }
 
     fn intro(&self) -> &'static str {
-        "Pages with short descriptions that are longer than 100 characters"
+        "Pages with [[Wikipedia:Short description|short descriptions]] that are longer than 100 characters"
     }
 
     fn query(&self) -> &'static str {
