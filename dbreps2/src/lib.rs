@@ -192,6 +192,9 @@ pub trait Report<T: Send + Sync> {
                 return Ok(true);
             }
         }
+        if contains_nobot(old_text) {
+            return Ok(false);
+        }
         let re = Regex::new("<onlyinclude>(.*?)</onlyinclude>").unwrap();
         let ts = match re.captures(old_text) {
             Some(cap) => cap[1].to_string(),
@@ -450,6 +453,10 @@ pub fn y_m_d(input: &str) -> String {
         .unwrap_or_else(|_| input.to_string())
 }
 
+pub fn contains_nobot(text: &str) -> bool {
+    Regex::new("\\{\\{nobots}}").unwrap().is_match(text)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -513,6 +520,18 @@ mod tests {
         assert_eq!(
             &Frequency::DailyAt(3).to_string(),
             "This report is updated every day at 3:00 UTC."
+        );
+    }
+
+    #[test]
+    fn test_contains_nobot() {
+        assert_eq!(
+            contains_nobot("{{nobots}}. Some text here."),
+            true
+        );
+        assert_eq!(
+            contains_nobot("Some text here"),
+            false
         );
     }
 }
