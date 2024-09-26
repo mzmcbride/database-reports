@@ -192,7 +192,7 @@ pub trait Report<T: Send + Sync> {
                 return Ok(true);
             }
         }
-        if contains_nobot(old_text) {
+        if contains_database_report_template(old_text) {
             return Ok(false);
         }
         let re = Regex::new("<onlyinclude>(.*?)</onlyinclude>").unwrap();
@@ -453,8 +453,10 @@ pub fn y_m_d(input: &str) -> String {
         .unwrap_or_else(|_| input.to_string())
 }
 
-pub fn contains_nobot(text: &str) -> bool {
-    Regex::new("\\{\\{nobots}}").unwrap().is_match(text)
+pub fn contains_database_report_template(text: &str) -> bool {
+    Regex::new("\\{\\{[Dd]atabase report\\s*\\|")
+        .unwrap()
+        .is_match(text)
 }
 
 #[cfg(test)]
@@ -524,14 +526,18 @@ mod tests {
     }
 
     #[test]
-    fn test_contains_nobot() {
+    fn test_contains_database_report_template() {
+        assert_eq!(contains_database_report_template(
+            "Some text here. {{database report|sql=SELECT * FROM page LIMIT 10}}"), true);
         assert_eq!(
-            contains_nobot("{{nobots}}. Some text here."),
+            contains_database_report_template(
+                "Some text here. \
+            {{database report\
+            |sql=SELECT * FROM page LIMIT 10\
+            }}"
+            ),
             true
         );
-        assert_eq!(
-            contains_nobot("Some text here"),
-            false
-        );
+        assert_eq!(contains_database_report_template("Some text here"), false);
     }
 }
