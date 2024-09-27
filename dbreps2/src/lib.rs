@@ -192,6 +192,9 @@ pub trait Report<T: Send + Sync> {
                 return Ok(true);
             }
         }
+
+        // Pages with {{database report}} are maintained by SDZeroBot and contain the SQL queries
+        // directly. Skip updating the report if it has been migrated to use that template.
         if contains_database_report_template(old_text) {
             return Ok(false);
         }
