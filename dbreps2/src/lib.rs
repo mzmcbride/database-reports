@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #![allow(async_fn_in_trait)]
 use anyhow::Result;
-use log::{error, info};
+use log::{error, info, warn};
 use mwbot::{Bot, Page, SaveOptions};
 use mysql_async::{Conn, Pool};
 use regex::Regex;
@@ -196,6 +196,10 @@ pub trait Report<T: Send + Sync> {
         // Pages with {{database report}} are maintained by SDZeroBot and contain the SQL queries
         // directly. Skip updating the report if it has been migrated to use that template.
         if contains_database_report_template(old_text) {
+            warn!(
+                "Skipping [[{}]] because it contains {{database report}}",
+                self.title()
+            );
             return Ok(false);
         }
         let re = Regex::new("<onlyinclude>(.*?)</onlyinclude>").unwrap();
@@ -530,17 +534,14 @@ mod tests {
 
     #[test]
     fn test_contains_database_report_template() {
-        assert_eq!(contains_database_report_template(
-            "Some text here. {{database report|sql=SELECT * FROM page LIMIT 10}}"), true);
-        assert_eq!(
-            contains_database_report_template(
-                "Some text here. \
+        assert!(contains_database_report_template(
+            "Some text here. {{database report|sql=SELECT * FROM page LIMIT 10}}"));
+        assert!(contains_database_report_template(
+            "Some text here. \
             {{database report\
             |sql=SELECT * FROM page LIMIT 10\
             }}"
-            ),
-            true
-        );
-        assert_eq!(contains_database_report_template("Some text here"), false);
+        ));
+        assert!(!contains_database_report_template("Some text here"));
     }
 }
