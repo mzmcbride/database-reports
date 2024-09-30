@@ -192,6 +192,12 @@ pub trait Report<T: Send + Sync> {
                 return Ok(true);
             }
         }
+
+        // Pages with {{database report}} are maintained by SDZeroBot and contain the SQL queries
+        // directly. Skip updating the report if it has been migrated to use that template.
+        if contains_database_report_template(old_text) {
+            return Ok(false);
+        }
         let re = Regex::new("<onlyinclude>(.*?)</onlyinclude>").unwrap();
         let ts = match re.captures(old_text) {
             Some(cap) => cap[1].to_string(),
@@ -450,6 +456,12 @@ pub fn y_m_d(input: &str) -> String {
         .unwrap_or_else(|_| input.to_string())
 }
 
+pub fn contains_database_report_template(text: &str) -> bool {
+    Regex::new("\\{\\{[Dd]atabase report\\s*\\|")
+        .unwrap()
+        .is_match(text)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -514,5 +526,21 @@ mod tests {
             &Frequency::DailyAt(3).to_string(),
             "This report is updated every day at 3:00 UTC."
         );
+    }
+
+    #[test]
+    fn test_contains_database_report_template() {
+        assert_eq!(contains_database_report_template(
+            "Some text here. {{database report|sql=SELECT * FROM page LIMIT 10}}"), true);
+        assert_eq!(
+            contains_database_report_template(
+                "Some text here. \
+            {{database report\
+            |sql=SELECT * FROM page LIMIT 10\
+            }}"
+            ),
+            true
+        );
+        assert_eq!(contains_database_report_template("Some text here"), false);
     }
 }
