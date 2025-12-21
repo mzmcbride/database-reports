@@ -20,12 +20,14 @@ use anyhow::Result;
 use dbreps2::{str_vec, Frequency, Report};
 use mysql_async::prelude::*;
 use mysql_async::Conn;
-
+// Temporarily disabled because it's too slow
+#[allow(dead_code)]
 pub struct Row {
     cl_to: String,
     count: u64,
 }
 
+#[allow(dead_code)]
 pub struct LinkedRedlinkedCats {}
 
 impl Report<Row> for LinkedRedlinkedCats {

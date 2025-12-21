@@ -248,7 +248,7 @@ pub trait Report<T: Send + Sync> {
             match self.run(debug_mode, &runner.bot, &runner.pool).await {
                 Ok(_) => {}
                 Err(err) => {
-                    error!("{}", err.to_string());
+                    error!("{err}");
                 }
             }
         }
