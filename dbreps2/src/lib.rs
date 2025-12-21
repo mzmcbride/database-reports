@@ -406,13 +406,10 @@ impl Runner {
         report: Option<String>,
     ) -> Result<Self> {
         let cfg = load_config().await?;
-        let bot = Bot::builder(
-            format!("https://{domain}/w/api.php"),
-            format!("https://{domain}/api/rest_v1"),
-        )
-        .set_oauth2_token(cfg.auth.username, cfg.auth.oauth2_token)
-        .build()
-        .await?;
+        let bot = Bot::builder(format!("https://{domain}/w/"))
+            .set_oauth2_token(cfg.auth.username, cfg.auth.oauth2_token)
+            .build()
+            .await?;
         info!("Setting up MySQL connection pool for {}...", dbname);
         let pool = Pool::new(
             toolforge::connection_info!(dbname, ANALYTICS)?
