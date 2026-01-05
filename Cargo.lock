@@ -203,9 +203,9 @@ dependencies = [
 
 [[package]]
 name = "clap"
-version = "4.5.53"
+version = "4.5.54"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c9e340e012a1bf4935f5282ed1436d1489548e8f72308207ea5df0e23d2d03f8"
+checksum = "c6e6ff9dcd79cff5cd969a17a545d79e84ab086e444102a591e288a8aa3ce394"
 dependencies = [
  "clap_builder",
  "clap_derive",
@@ -213,9 +213,9 @@ dependencies = [
 
 [[package]]
 name = "clap_builder"
-version = "4.5.53"
+version = "4.5.54"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d76b5d13eaa18c901fd2f7fca939fefe3a0727a953561fefdf3b2922b8569d00"
+checksum = "fa42cf4d2b7a41bc8f663a7cab4031ebafa1bf3875705bfaf8466dc60ab52c00"
 dependencies = [
  "anstream",
  "anstyle",
@@ -447,7 +447,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "clap",
- "dirs 5.0.1",
+ "dirs 6.0.0",
  "env_logger",
  "git-version",
  "log",
@@ -728,9 +728,9 @@ dependencies = [
 
 [[package]]
 name = "fs-mistrust"
-version = "0.11.0"
+version = "0.13.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "014770a89b11a37073e580bfa4cf59a97549036f12d46b96343d2ee22658eff4"
+checksum = "f9148d54c4a9b8e67264799a1becec9479a00f98d10349865ce3510eccf04a53"
 dependencies = [
  "derive_builder_fork_arti",
  "dirs 6.0.0",
@@ -1408,9 +1408,9 @@ dependencies = [
 
 [[package]]
 name = "mwapi_responses"
-version = "0.5.0"
+version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3d94ac8169d1af6a4c36c5c394f68694c1643ce1dcecdb4598598b96954e9dc8"
+checksum = "7ac1e2352395b977943312bd5e101db41b71a59f4b676bc7cb8cbe0299814969"
 dependencies = [
  "mwapi",
  "mwapi_responses_derive",
@@ -1420,9 +1420,9 @@ dependencies = [
 
 [[package]]
 name = "mwapi_responses_derive"
-version = "0.5.0"
+version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2be441e5eba94d2c6edd1f3027a9055019cca9ab8b8b7cd875be566e3eb2a354"
+checksum = "b0277622d81595e0122aacef4f7a542c3570f92e232f051258d1ab06ca48a3ba"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1433,9 +1433,9 @@ dependencies = [
 
 [[package]]
 name = "mwbot"
-version = "0.7.0"
+version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "63cc08df277433dda776f6774c86b6b4377342611c4c24b47cede69362058f34"
+checksum = "2078d1272b1a328d8772a7fbc3a62a40f22ad14c8ce7bd3970bb8d4e9d1a19fa"
 dependencies = [
  "dirs 6.0.0",
  "fs-mistrust",
@@ -1458,9 +1458,9 @@ dependencies = [
 
 [[package]]
 name = "mwbot_derive"
-version = "0.7.0"
+version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "03ebe5cdfee37d8dd4d971776e580f270b1b4b5a54350ea8f3bbe7beeb135360"
+checksum = "e894f97c5d3aa859e17412270df4e940f5fc885e2ff0ca837687c034ca2b2481"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2599,9 +2599,9 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
 name = "tokio"
-version = "1.48.0"
+version = "1.49.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ff360e02eab121e0bc37a2d3b4d4dc622e6eda3a8e5253d5435ecf5bd4c68408"
+checksum = "72a2903cd7736441aac9df9d7688bd0ce48edccaadf181c3b90be801e81d3d86"
 dependencies = [
  "bytes",
  "libc",
