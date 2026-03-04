@@ -109,6 +109,6 @@ WHERE
     }
 
     fn code(&self) -> &'static str {
-        include_str!("linkedmisspellings.rs")
+        include_str!("stickyprodblps.rs")
     }
 }

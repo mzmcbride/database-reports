@@ -20,12 +20,7 @@ mod editcount;
 mod emptycats;
 mod featuredbysize;
 mod goodarticlesbysize;
-mod linkedmiscapitalizations;
-mod linkedmisspellings;
-mod longstubs;
-mod lotnonfree;
 mod newprojects;
-mod olddeletiondiscussions;
 mod orphanedafds;
 mod orphanedsubtalks;
 mod overusednonfree;
@@ -56,18 +51,15 @@ mod webhostpages;
 pub use {
     boteditcount::BotEditCount, brokenwikiprojtemps::BrokenWikiProjTemps,
     editcount::EditCount, emptycats::EmptyCats, featuredbysize::FeaturedBySize,
-    goodarticlesbysize::GoodArticlesBySize,
-    linkedmiscapitalizations::LinkedMiscapitalizations,
-    linkedmisspellings::LinkedMisspellings, longstubs::LongStubs,
-    lotnonfree::LotNonFree, newprojects::NewProjects,
-    olddeletiondiscussions::OldDeletionDiscussions, orphanedafds::OrphanedAfds,
-    orphanedsubtalks::OrphanedSubTalks, overusednonfree::OverusedNonFree,
-    polltemps::PollTemps, potenshbdps1::Potenshbdps1,
-    potenshbdps3::Potenshbdps3, potenshbdps4::Potenshbdps4,
-    potenshblps1::Potenshblps1, potenshblps2::Potenshblps2,
-    potenshblps3::Potenshblps3, projectchanges::ProjectChanges,
-    shortestbios::ShortestBios, stickyprodblps::StickyProdBLPs,
-    templatedisambigs::TemplateDisambigs, templatesnonfree::TemplatesNonFree,
+    goodarticlesbysize::GoodArticlesBySize, newprojects::NewProjects,
+    orphanedafds::OrphanedAfds, orphanedsubtalks::OrphanedSubTalks,
+    overusednonfree::OverusedNonFree, polltemps::PollTemps,
+    potenshbdps1::Potenshbdps1, potenshbdps3::Potenshbdps3,
+    potenshbdps4::Potenshbdps4, potenshblps1::Potenshblps1,
+    potenshblps2::Potenshblps2, potenshblps3::Potenshblps3,
+    projectchanges::ProjectChanges, shortestbios::ShortestBios,
+    stickyprodblps::StickyProdBLPs, templatedisambigs::TemplateDisambigs,
+    templatesnonfree::TemplatesNonFree,
     unbelievablelifespans::UnbelievableLifeSpans,
     uncatunrefblps::UncatUnrefBLPs, unsourcedblps::UnsourcedBLPs,
     untaggedblps::UntaggedBLPs, untaggedstubs::UntaggedStubs,

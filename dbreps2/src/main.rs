@@ -80,18 +80,7 @@ async fn main() -> Result<()> {
     })
     .really_run(&enwiki_runner)
     .await;
-    (enwiki::LinkedMiscapitalizations {})
-        .really_run(&enwiki_runner)
-        .await;
-    (enwiki::LinkedMisspellings {})
-        .really_run(&enwiki_runner)
-        .await;
-    (enwiki::LongStubs {}).really_run(&enwiki_runner).await;
-    (enwiki::LotNonFree {}).really_run(&enwiki_runner).await;
     (enwiki::NewProjects {}).really_run(&enwiki_runner).await;
-    (enwiki::OldDeletionDiscussions {})
-        .really_run(&enwiki_runner)
-        .await;
     (enwiki::OrphanedAfds {}).really_run(&enwiki_runner).await;
     (enwiki::OrphanedSubTalks {})
         .really_run(&enwiki_runner)
