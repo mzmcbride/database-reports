@@ -49,13 +49,15 @@ impl Report<Row> for GoodArticlesBySize {
         r#"
 /* goodarticlesbysize.rs SLOW_OK */
 SELECT
-  page_title
+    page_title
 FROM
-  page
-  JOIN categorylinks ON cl_from = page_id
+    page
+    JOIN categorylinks ON cl_from = page_id
+    JOIN linktarget ON cl_target_id = lt_id
 WHERE
-  cl_to = "Good_articles"
-  AND page_namespace = 0
+    lt_namespace = 14
+    AND lt_title = 'Good_articles'
+    AND page_namespace = 0
 "#
     }
 

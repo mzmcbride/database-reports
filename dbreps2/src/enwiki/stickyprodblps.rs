@@ -49,9 +49,11 @@ SELECT
       1
     FROM
       categorylinks
+      JOIN linktarget AS lt2 ON cl_target_id = lt2.lt_id
     WHERE
       cl_from = page_id
-      AND cl_to IN (
+      AND lt2.lt_namespace = 14
+      AND lt2.lt_title IN (
         'BLP_articles_proposed_for_deletion',
         'Articles_for_deletion'
       )
@@ -60,8 +62,10 @@ FROM
   page
   JOIN revision ON rev_page = page_id
   JOIN categorylinks ON cl_from = page_id
+  JOIN linktarget ON cl_target_id = lt_id
 WHERE
-  cl_to = 'All_unreferenced_BLPs'
+  lt_namespace = 14
+  AND lt_title = 'All_unreferenced_BLPs'
   AND page_namespace = 0
   AND page_is_redirect = 0
   AND rev_timestamp = (
@@ -109,6 +113,6 @@ WHERE
     }
 
     fn code(&self) -> &'static str {
-        include_str!("linkedmisspellings.rs")
+        include_str!("stickyprodblps.rs")
     }
 }

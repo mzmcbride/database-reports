@@ -16,31 +16,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 mod boteditcount;
 mod brokenwikiprojtemps;
-mod conflictedfiles;
 mod editcount;
 mod emptycats;
 mod featuredbysize;
 mod goodarticlesbysize;
-mod linkedmiscapitalizations;
-mod linkedmisspellings;
-mod longstubs;
-mod lotnonfree;
 mod newprojects;
-mod olddeletiondiscussions;
 mod orphanedafds;
 mod orphanedsubtalks;
-mod overusednonfree;
-mod polltemps;
-mod potenshbdps1;
-mod potenshbdps3;
 mod potenshbdps4;
-mod potenshblps1;
 mod potenshblps2;
-mod potenshblps3;
 mod projectchanges;
-mod shortestbios;
 mod stickyprodblps;
-mod templatedisambigs;
 mod templatesnonfree;
 mod unbelievablelifespans;
 mod uncatunrefblps;
@@ -56,20 +42,12 @@ mod webhostpages;
 
 pub use {
     boteditcount::BotEditCount, brokenwikiprojtemps::BrokenWikiProjTemps,
-    conflictedfiles::ConflictedFiles, editcount::EditCount,
-    emptycats::EmptyCats, featuredbysize::FeaturedBySize,
-    goodarticlesbysize::GoodArticlesBySize,
-    linkedmiscapitalizations::LinkedMiscapitalizations,
-    linkedmisspellings::LinkedMisspellings, longstubs::LongStubs,
-    lotnonfree::LotNonFree, newprojects::NewProjects,
-    olddeletiondiscussions::OldDeletionDiscussions, orphanedafds::OrphanedAfds,
-    orphanedsubtalks::OrphanedSubTalks, overusednonfree::OverusedNonFree,
-    polltemps::PollTemps, potenshbdps1::Potenshbdps1,
-    potenshbdps3::Potenshbdps3, potenshbdps4::Potenshbdps4,
-    potenshblps1::Potenshblps1, potenshblps2::Potenshblps2,
-    potenshblps3::Potenshblps3, projectchanges::ProjectChanges,
-    shortestbios::ShortestBios, stickyprodblps::StickyProdBLPs,
-    templatedisambigs::TemplateDisambigs, templatesnonfree::TemplatesNonFree,
+    editcount::EditCount, emptycats::EmptyCats, featuredbysize::FeaturedBySize,
+    goodarticlesbysize::GoodArticlesBySize, newprojects::NewProjects,
+    orphanedafds::OrphanedAfds, orphanedsubtalks::OrphanedSubTalks,
+    potenshbdps4::Potenshbdps4, potenshblps2::Potenshblps2,
+    projectchanges::ProjectChanges, stickyprodblps::StickyProdBLPs,
+    templatesnonfree::TemplatesNonFree,
     unbelievablelifespans::UnbelievableLifeSpans,
     uncatunrefblps::UncatUnrefBLPs, unsourcedblps::UnsourcedBLPs,
     untaggedblps::UntaggedBLPs, untaggedstubs::UntaggedStubs,

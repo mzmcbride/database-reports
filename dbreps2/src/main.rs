@@ -66,9 +66,6 @@ async fn main() -> Result<()> {
         .really_run(&enwiki_runner)
         .await;
     (enwiki::BotEditCount {}).really_run(&enwiki_runner).await;
-    (enwiki::ConflictedFiles {})
-        .really_run(&enwiki_runner)
-        .await;
     (enwiki::EditCount {}).really_run(&enwiki_runner).await;
     (enwiki::EmptyCats {}).really_run(&enwiki_runner).await;
     (enwiki::FeaturedBySize {
@@ -83,38 +80,15 @@ async fn main() -> Result<()> {
     })
     .really_run(&enwiki_runner)
     .await;
-    (enwiki::LinkedMiscapitalizations {})
-        .really_run(&enwiki_runner)
-        .await;
-    (enwiki::LinkedMisspellings {})
-        .really_run(&enwiki_runner)
-        .await;
-    (enwiki::LongStubs {}).really_run(&enwiki_runner).await;
-    (enwiki::LotNonFree {}).really_run(&enwiki_runner).await;
     (enwiki::NewProjects {}).really_run(&enwiki_runner).await;
-    (enwiki::OldDeletionDiscussions {})
-        .really_run(&enwiki_runner)
-        .await;
     (enwiki::OrphanedAfds {}).really_run(&enwiki_runner).await;
     (enwiki::OrphanedSubTalks {})
         .really_run(&enwiki_runner)
         .await;
-    (enwiki::OverusedNonFree {})
-        .really_run(&enwiki_runner)
-        .await;
-    (enwiki::PollTemps {}).really_run(&enwiki_runner).await;
-    (enwiki::Potenshbdps1 {}).really_run(&enwiki_runner).await;
-    (enwiki::Potenshbdps3 {}).really_run(&enwiki_runner).await;
     (enwiki::Potenshbdps4 {}).really_run(&enwiki_runner).await;
-    (enwiki::Potenshblps1 {}).really_run(&enwiki_runner).await;
     (enwiki::Potenshblps2 {}).really_run(&enwiki_runner).await;
-    (enwiki::Potenshblps3 {}).really_run(&enwiki_runner).await;
     (enwiki::ProjectChanges {}).really_run(&enwiki_runner).await;
-    (enwiki::ShortestBios {}).really_run(&enwiki_runner).await;
     (enwiki::StickyProdBLPs {}).really_run(&enwiki_runner).await;
-    (enwiki::TemplateDisambigs {})
-        .really_run(&enwiki_runner)
-        .await;
     (enwiki::TemplatesNonFree {})
         .really_run(&enwiki_runner)
         .await;

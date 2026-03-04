@@ -46,28 +46,32 @@ SELECT
 FROM
   page
   JOIN categorylinks AS c1 ON c1.cl_from = page_id
-  AND c1.cl_to = CONCAT(?, '_births')
+  JOIN linktarget AS lt1 ON c1.cl_target_id = lt1.lt_id
+    AND lt1.lt_namespace = 14
+    AND lt1.lt_title = CONCAT(?, '_births')
   LEFT JOIN categorylinks AS c2 ON c2.cl_from = page_id
-  AND (
-    c2.cl_to IN (
-      'Living_people',
-      'Possibly_living_people',
-      'Disappeared_people',
-      'Missing_people',
-      'Year_of_death_unknown',
-      'Date_of_death_unknown',
-      'Year_of_death_missing',
-      'Date_of_death_missing',
-      '20th-century_deaths',
-      '21st-century_deaths',
-      '1900s_deaths',
-      '2000s_deaths',
-      'People_declared_dead_in_absentia'
+  LEFT JOIN linktarget AS lt2 ON c2.cl_target_id = lt2.lt_id
+    AND lt2.lt_namespace = 14
+    AND (
+      lt2.lt_title IN (
+        'Living_people',
+        'Possibly_living_people',
+        'Disappeared_people',
+        'Missing_people',
+        'Year_of_death_unknown',
+        'Date_of_death_unknown',
+        'Year_of_death_missing',
+        'Date_of_death_missing',
+        '20th-century_deaths',
+        '21st-century_deaths',
+        '1900s_deaths',
+        '2000s_deaths',
+        'People_declared_dead_in_absentia'
+      )
+      OR lt2.lt_title REGEXP '^[0-9]{4}_deaths$'
+      OR lt2.lt_title REGEXP '^[0-9]{4}_suicides$'
+      OR lt2.lt_title REGEXP '^[0-9]{3}0s_deaths$'
     )
-    OR c2.cl_to REGEXP '^[0-9]{4}_deaths$'
-    OR c2.cl_to REGEXP '^[0-9]{4}_suicides$'
-    OR c2.cl_to REGEXP '^[0-9]{3}0s_deaths$'
-  )
 WHERE
   page_namespace = 0
   AND page_is_redirect = 0
