@@ -185,14 +185,6 @@ pub trait Report<T: Send + Sync> {
     }
 
     fn needs_update(&self, old_text: &str) -> Result<bool> {
-        if let Some(hour) = self.frequency().at_hour() {
-            // If we are supposed to run at a specific time
-            // and it is that time, then run!
-            if OffsetDateTime::now_utc().hour() == hour {
-                return Ok(true);
-            }
-        }
-
         // Pages with {{database report}} are maintained by SDZeroBot and contain the SQL queries
         // directly. Skip updating the report if it has been migrated to use that template.
         if contains_database_report_template(old_text) {
@@ -202,6 +194,15 @@ pub trait Report<T: Send + Sync> {
             );
             return Ok(false);
         }
+
+        if let Some(hour) = self.frequency().at_hour() {
+            // If we are supposed to run at a specific time
+            // and it is that time, then run!
+            if OffsetDateTime::now_utc().hour() == hour {
+                return Ok(true);
+            }
+        }
+
         let re = Regex::new("<onlyinclude>(.*?)</onlyinclude>").unwrap();
         let ts = match re.captures(old_text) {
             Some(cap) => cap[1].to_string(),
