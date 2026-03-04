@@ -23,18 +23,10 @@ mod goodarticlesbysize;
 mod newprojects;
 mod orphanedafds;
 mod orphanedsubtalks;
-mod overusednonfree;
-mod polltemps;
-mod potenshbdps1;
-mod potenshbdps3;
 mod potenshbdps4;
-mod potenshblps1;
 mod potenshblps2;
-mod potenshblps3;
 mod projectchanges;
-mod shortestbios;
 mod stickyprodblps;
-mod templatedisambigs;
 mod templatesnonfree;
 mod unbelievablelifespans;
 mod uncatunrefblps;
@@ -53,12 +45,8 @@ pub use {
     editcount::EditCount, emptycats::EmptyCats, featuredbysize::FeaturedBySize,
     goodarticlesbysize::GoodArticlesBySize, newprojects::NewProjects,
     orphanedafds::OrphanedAfds, orphanedsubtalks::OrphanedSubTalks,
-    overusednonfree::OverusedNonFree, polltemps::PollTemps,
-    potenshbdps1::Potenshbdps1, potenshbdps3::Potenshbdps3,
-    potenshbdps4::Potenshbdps4, potenshblps1::Potenshblps1,
-    potenshblps2::Potenshblps2, potenshblps3::Potenshblps3,
-    projectchanges::ProjectChanges, shortestbios::ShortestBios,
-    stickyprodblps::StickyProdBLPs, templatedisambigs::TemplateDisambigs,
+    potenshbdps4::Potenshbdps4, potenshblps2::Potenshblps2,
+    projectchanges::ProjectChanges, stickyprodblps::StickyProdBLPs,
     templatesnonfree::TemplatesNonFree,
     unbelievablelifespans::UnbelievableLifeSpans,
     uncatunrefblps::UncatUnrefBLPs, unsourcedblps::UnsourcedBLPs,

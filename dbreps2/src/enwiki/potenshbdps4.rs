@@ -40,27 +40,34 @@ impl Report<Row> for Potenshbdps4 {
     fn query(&self) -> &'static str {
         r#"
 /* potenshbdps4.rs SLOW_OK */
-select
+SELECT
   page_title,
-  cl_to
-from
-  page as p1
-  join categorylinks on cl_from = p1.page_id
-where
+  lt1.lt_title
+FROM
+  page AS p1
+  JOIN categorylinks AS cl1 ON cl1.cl_from = p1.page_id
+  JOIN linktarget AS lt1 ON cl1.cl_target_id = lt1.lt_id
+WHERE
   p1.page_namespace = 0
-  and cl_to like ?
-  and not exists (
-    select
-      *
-    from
+  AND lt1.lt_namespace = 14
+  AND lt1.lt_title LIKE ?
+  AND NOT EXISTS (
+    SELECT
+      1
+    FROM
       page AS p2
-      join categorylinks on p2.page_id = cl_from
-    where
+      JOIN categorylinks AS cl2 ON p2.page_id = cl2.cl_from
+      JOIN linktarget AS lt2 ON cl2.cl_target_id = lt2.lt_id
+    WHERE
       p2.page_title = p1.page_title
-      and p2.page_namespace = 0
-      and (cl_to like "%_deaths" or cl_to = "Year_of_death_unknown" or cl_to = "Year_of_death_missing")
-  );
-"#
+      AND p2.page_namespace = 0
+      AND lt2.lt_namespace = 14
+      AND (
+        lt2.lt_title LIKE '%_deaths'
+        OR lt2.lt_title = 'Year_of_death_unknown'
+        OR lt2.lt_title = 'Year_of_death_missing'
+      )
+  );"#
     }
 
     async fn run_query(&self, conn: &mut Conn) -> Result<Vec<Row>> {

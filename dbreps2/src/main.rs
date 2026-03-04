@@ -85,22 +85,10 @@ async fn main() -> Result<()> {
     (enwiki::OrphanedSubTalks {})
         .really_run(&enwiki_runner)
         .await;
-    (enwiki::OverusedNonFree {})
-        .really_run(&enwiki_runner)
-        .await;
-    (enwiki::PollTemps {}).really_run(&enwiki_runner).await;
-    (enwiki::Potenshbdps1 {}).really_run(&enwiki_runner).await;
-    (enwiki::Potenshbdps3 {}).really_run(&enwiki_runner).await;
     (enwiki::Potenshbdps4 {}).really_run(&enwiki_runner).await;
-    (enwiki::Potenshblps1 {}).really_run(&enwiki_runner).await;
     (enwiki::Potenshblps2 {}).really_run(&enwiki_runner).await;
-    (enwiki::Potenshblps3 {}).really_run(&enwiki_runner).await;
     (enwiki::ProjectChanges {}).really_run(&enwiki_runner).await;
-    (enwiki::ShortestBios {}).really_run(&enwiki_runner).await;
     (enwiki::StickyProdBLPs {}).really_run(&enwiki_runner).await;
-    (enwiki::TemplateDisambigs {})
-        .really_run(&enwiki_runner)
-        .await;
     (enwiki::TemplatesNonFree {})
         .really_run(&enwiki_runner)
         .await;
