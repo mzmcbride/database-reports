@@ -66,9 +66,6 @@ async fn main() -> Result<()> {
         .really_run(&enwiki_runner)
         .await;
     (enwiki::BotEditCount {}).really_run(&enwiki_runner).await;
-    (enwiki::ConflictedFiles {})
-        .really_run(&enwiki_runner)
-        .await;
     (enwiki::EditCount {}).really_run(&enwiki_runner).await;
     (enwiki::EmptyCats {}).really_run(&enwiki_runner).await;
     (enwiki::FeaturedBySize {

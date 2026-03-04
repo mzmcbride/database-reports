@@ -16,7 +16,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 mod boteditcount;
 mod brokenwikiprojtemps;
-mod conflictedfiles;
 mod editcount;
 mod emptycats;
 mod featuredbysize;
@@ -56,8 +55,7 @@ mod webhostpages;
 
 pub use {
     boteditcount::BotEditCount, brokenwikiprojtemps::BrokenWikiProjTemps,
-    conflictedfiles::ConflictedFiles, editcount::EditCount,
-    emptycats::EmptyCats, featuredbysize::FeaturedBySize,
+    editcount::EditCount, emptycats::EmptyCats, featuredbysize::FeaturedBySize,
     goodarticlesbysize::GoodArticlesBySize,
     linkedmiscapitalizations::LinkedMiscapitalizations,
     linkedmisspellings::LinkedMisspellings, longstubs::LongStubs,
