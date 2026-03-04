@@ -63,8 +63,10 @@ WHERE
     FROM
       page AS p2
       JOIN categorylinks ON cl_from = p2.page_id
+      JOIN linktarget ON cl_target_id = lt_id
     WHERE
-      cl_to = p1.page_title
+      lt_namespace = 14
+      AND lt_title = p1.page_title
       AND p2.page_namespace IN (2, 3)
   )
   AND EXISTS(
@@ -73,8 +75,10 @@ WHERE
     FROM
       page AS p3
       JOIN categorylinks ON cl_from = p3.page_id
+      JOIN linktarget ON cl_target_id = lt_id
     WHERE
-      cl_to = p1.page_title
+      lt_namespace = 14
+      AND lt_title = p1.page_title
       AND p3.page_namespace = 0
   )
 LIMIT
