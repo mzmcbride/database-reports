@@ -20,7 +20,6 @@ mod dupefilenames;
 mod excessiveips;
 mod excessiveusers;
 mod indeffullredirects;
-mod indefips;
 mod linkedemailsinarticles;
 mod linkedredlinkedcats;
 mod oldeditors;
@@ -35,9 +34,8 @@ pub use {
     articlesmostredirects::ArticlesMostRedirects, blankpages::BlankPages,
     dupefilenames::DupeFileNames, excessiveips::ExcessiveIps,
     excessiveusers::ExcessiveUsers, indeffullredirects::IndefFullRedirects,
-    indefips::IndefIPs, linkedemailsinarticles::LinkedEmailsInArticles,
-    oldeditors::OldEditors, ownerlessuserpages::Ownerlessuserpages,
-    pollcats::Pollcats, uncatcats::UncatCats,
-    userarticlestreaks::UserArticleStreaks,
+    linkedemailsinarticles::LinkedEmailsInArticles, oldeditors::OldEditors,
+    ownerlessuserpages::Ownerlessuserpages, pollcats::Pollcats,
+    uncatcats::UncatCats, userarticlestreaks::UserArticleStreaks,
     userlinksinarticles::UserLinksInArticles, userstreaks::UserStreaks,
 };

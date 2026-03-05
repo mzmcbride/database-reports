@@ -19,7 +19,6 @@ mod brokenwikiprojtemps;
 mod editcount;
 mod featuredbysize;
 mod goodarticlesbysize;
-mod newprojects;
 mod orphanedafds;
 mod orphanedsubtalks;
 mod potenshbdps4;
@@ -36,10 +35,10 @@ mod webhostpages;
 pub use {
     boteditcount::BotEditCount, brokenwikiprojtemps::BrokenWikiProjTemps,
     editcount::EditCount, featuredbysize::FeaturedBySize,
-    goodarticlesbysize::GoodArticlesBySize, newprojects::NewProjects,
-    orphanedafds::OrphanedAfds, orphanedsubtalks::OrphanedSubTalks,
-    potenshbdps4::Potenshbdps4, potenshblps2::Potenshblps2,
-    projectchanges::ProjectChanges, stickyprodblps::StickyProdBLPs,
+    goodarticlesbysize::GoodArticlesBySize, orphanedafds::OrphanedAfds,
+    orphanedsubtalks::OrphanedSubTalks, potenshbdps4::Potenshbdps4,
+    potenshblps2::Potenshblps2, projectchanges::ProjectChanges,
+    stickyprodblps::StickyProdBLPs,
     unbelievablelifespans::UnbelievableLifeSpans,
     untaggedunrefblps::UntaggedUnrefBLPs, unusedtemplates::UnusedTemplates,
     unusedtemplatesfiltered::UnusedTemplatesFiltered, usercats::UserCats,
