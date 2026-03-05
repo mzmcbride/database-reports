@@ -46,7 +46,6 @@ async fn main() -> Result<()> {
     (general::IndefFullRedirects {})
         .really_run(&enwiki_runner)
         .await;
-    (general::IndefIPs {}).really_run(&enwiki_runner).await;
     (general::LinkedEmailsInArticles {})
         .really_run(&enwiki_runner)
         .await;
@@ -78,7 +77,6 @@ async fn main() -> Result<()> {
     })
     .really_run(&enwiki_runner)
     .await;
-    (enwiki::NewProjects {}).really_run(&enwiki_runner).await;
     (enwiki::OrphanedAfds {}).really_run(&enwiki_runner).await;
     (enwiki::OrphanedSubTalks {})
         .really_run(&enwiki_runner)
