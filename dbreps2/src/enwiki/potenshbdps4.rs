@@ -23,7 +23,7 @@ use mysql_async::Conn;
 
 pub struct Row {
     page_title: String,
-    cl_to: String,
+    lt_title: String,
 }
 
 pub struct Potenshbdps4 {}
@@ -78,7 +78,10 @@ WHERE
                 .exec_map(
                     self.query(),
                     (format!("{year}_births"),),
-                    |(page_title, cl_to)| Row { page_title, cl_to },
+                    |(page_title, lt_title)| Row {
+                        page_title,
+                        lt_title,
+                    },
                 )
                 .await?;
             //dbg!((year, year_rows.len()));
@@ -96,7 +99,7 @@ WHERE
     }
 
     fn format_row(&self, row: &Row) -> Vec<String> {
-        str_vec![format!("[[{}]]", row.page_title), linker(14, &row.cl_to)]
+        str_vec![format!("[[{}]]", row.page_title), linker(14, &row.lt_title)]
     }
 
     fn code(&self) -> &'static str {

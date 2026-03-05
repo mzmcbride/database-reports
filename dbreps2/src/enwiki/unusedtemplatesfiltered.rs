@@ -84,7 +84,7 @@ FROM
   page
 LEFT JOIN linktarget ON page_namespace = lt_namespace
   AND page_title = lt_title
-LEFT JOIN templatelinks ON tl_target_id=lt_id
+LEFT JOIN templatelinks ON tl_target_id = lt_id
 WHERE
   page_namespace = 10
   AND page_is_redirect = 0
@@ -108,12 +108,13 @@ WHERE
   AND page_title NOT LIKE "%-stub"
   AND page_title NOT IN (
     SELECT
-      page_title
+      page.page_title
     FROM
       page
       JOIN categorylinks ON page_id = cl_from
+      JOIN linktarget AS lt_cat ON cl_target_id = lt_cat.lt_id
     WHERE
-      cl_to IN (
+      lt_cat.lt_title IN (
         'Wikipedia_substituted_templates',
         'Wikipedia_transclusionless_templates',
         'Deprecated_templates_kept_for_historical_reasons',
