@@ -28,7 +28,6 @@ mod projectchanges;
 mod stickyprodblps;
 mod unbelievablelifespans;
 mod untaggedunrefblps;
-mod unusednonfree;
 mod unusedtemplates;
 mod unusedtemplatesfiltered;
 mod usercats;
@@ -42,8 +41,7 @@ pub use {
     potenshbdps4::Potenshbdps4, potenshblps2::Potenshblps2,
     projectchanges::ProjectChanges, stickyprodblps::StickyProdBLPs,
     unbelievablelifespans::UnbelievableLifeSpans,
-    untaggedunrefblps::UntaggedUnrefBLPs, unusednonfree::UnusedNonFree,
-    unusedtemplates::UnusedTemplates,
+    untaggedunrefblps::UntaggedUnrefBLPs, unusedtemplates::UnusedTemplates,
     unusedtemplatesfiltered::UnusedTemplatesFiltered, usercats::UserCats,
     webhostpages::WebhostPages,
 };

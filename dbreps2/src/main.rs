@@ -57,7 +57,6 @@ async fn main() -> Result<()> {
         .really_run(&enwiki_runner)
         .await;
     (general::Pollcats {}).really_run(&enwiki_runner).await;
-    (general::SelfCatCats {}).really_run(&enwiki_runner).await;
     (general::UncatCats {}).really_run(&enwiki_runner).await;
     (general::UserLinksInArticles {})
         .really_run(&enwiki_runner)
@@ -94,7 +93,6 @@ async fn main() -> Result<()> {
     (enwiki::UntaggedUnrefBLPs {})
         .really_run(&enwiki_runner)
         .await;
-    (enwiki::UnusedNonFree {}).really_run(&enwiki_runner).await;
     (enwiki::UnusedTemplates {})
         .really_run(&enwiki_runner)
         .await;
