@@ -67,7 +67,6 @@ async fn main() -> Result<()> {
         .await;
     (enwiki::BotEditCount {}).really_run(&enwiki_runner).await;
     (enwiki::EditCount {}).really_run(&enwiki_runner).await;
-    (enwiki::EmptyCats {}).really_run(&enwiki_runner).await;
     (enwiki::FeaturedBySize {
         // FIXME: figure out a less terrible way to do this
         bot: enwiki_runner.bot.clone(),
@@ -89,16 +88,9 @@ async fn main() -> Result<()> {
     (enwiki::Potenshblps2 {}).really_run(&enwiki_runner).await;
     (enwiki::ProjectChanges {}).really_run(&enwiki_runner).await;
     (enwiki::StickyProdBLPs {}).really_run(&enwiki_runner).await;
-    (enwiki::TemplatesNonFree {})
-        .really_run(&enwiki_runner)
-        .await;
     (enwiki::UnbelievableLifeSpans {})
         .really_run(&enwiki_runner)
         .await;
-    (enwiki::UncatUnrefBLPs {}).really_run(&enwiki_runner).await;
-    (enwiki::UnsourcedBLPs {}).really_run(&enwiki_runner).await;
-    (enwiki::UntaggedBLPs {}).really_run(&enwiki_runner).await;
-    (enwiki::UntaggedStubs {}).really_run(&enwiki_runner).await;
     (enwiki::UntaggedUnrefBLPs {})
         .really_run(&enwiki_runner)
         .await;
