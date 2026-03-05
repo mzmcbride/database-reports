@@ -26,7 +26,6 @@ mod linkedredlinkedcats;
 mod oldeditors;
 mod ownerlessuserpages;
 mod pollcats;
-mod selfcatcats;
 mod uncatcats;
 mod userarticlestreaks;
 mod userlinksinarticles;
@@ -38,7 +37,7 @@ pub use {
     excessiveusers::ExcessiveUsers, indeffullredirects::IndefFullRedirects,
     indefips::IndefIPs, linkedemailsinarticles::LinkedEmailsInArticles,
     oldeditors::OldEditors, ownerlessuserpages::Ownerlessuserpages,
-    pollcats::Pollcats, selfcatcats::SelfCatCats, uncatcats::UncatCats,
+    pollcats::Pollcats, uncatcats::UncatCats,
     userarticlestreaks::UserArticleStreaks,
     userlinksinarticles::UserLinksInArticles, userstreaks::UserStreaks,
 };

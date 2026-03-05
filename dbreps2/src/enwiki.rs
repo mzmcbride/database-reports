@@ -17,7 +17,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 mod boteditcount;
 mod brokenwikiprojtemps;
 mod editcount;
-mod emptycats;
 mod featuredbysize;
 mod goodarticlesbysize;
 mod newprojects;
@@ -27,14 +26,8 @@ mod potenshbdps4;
 mod potenshblps2;
 mod projectchanges;
 mod stickyprodblps;
-mod templatesnonfree;
 mod unbelievablelifespans;
-mod uncatunrefblps;
-mod unsourcedblps;
-mod untaggedblps;
-mod untaggedstubs;
 mod untaggedunrefblps;
-mod unusednonfree;
 mod unusedtemplates;
 mod unusedtemplatesfiltered;
 mod usercats;
@@ -42,17 +35,13 @@ mod webhostpages;
 
 pub use {
     boteditcount::BotEditCount, brokenwikiprojtemps::BrokenWikiProjTemps,
-    editcount::EditCount, emptycats::EmptyCats, featuredbysize::FeaturedBySize,
+    editcount::EditCount, featuredbysize::FeaturedBySize,
     goodarticlesbysize::GoodArticlesBySize, newprojects::NewProjects,
     orphanedafds::OrphanedAfds, orphanedsubtalks::OrphanedSubTalks,
     potenshbdps4::Potenshbdps4, potenshblps2::Potenshblps2,
     projectchanges::ProjectChanges, stickyprodblps::StickyProdBLPs,
-    templatesnonfree::TemplatesNonFree,
     unbelievablelifespans::UnbelievableLifeSpans,
-    uncatunrefblps::UncatUnrefBLPs, unsourcedblps::UnsourcedBLPs,
-    untaggedblps::UntaggedBLPs, untaggedstubs::UntaggedStubs,
-    untaggedunrefblps::UntaggedUnrefBLPs, unusednonfree::UnusedNonFree,
-    unusedtemplates::UnusedTemplates,
+    untaggedunrefblps::UntaggedUnrefBLPs, unusedtemplates::UnusedTemplates,
     unusedtemplatesfiltered::UnusedTemplatesFiltered, usercats::UserCats,
     webhostpages::WebhostPages,
 };

@@ -23,7 +23,7 @@ use mysql_async::Conn;
 // Temporarily disabled because it's too slow
 #[allow(dead_code)]
 pub struct Row {
-    cl_to: String,
+    lt_title: String,
     count: u64,
 }
 
@@ -43,16 +43,16 @@ impl Report<Row> for LinkedRedlinkedCats {
         r#"
 /* linkedredlinkedcats.rs SLOW_OK */
 SELECT
-  cl_to,
+  lt_cat.lt_title,
   COUNT(*)
 FROM
-  /* FIXME when categorylinks gets normalized as well */
   categorylinks
-  JOIN linktarget ON lt_title = cl_to AND lt_namespace = 14
-  JOIN pagelinks ON pl_target_id = lt_id
+  JOIN linktarget AS lt_cat ON cl_target_id = lt_cat.lt_id
+  JOIN linktarget AS lt_pl ON lt_pl.lt_title = lt_cat.lt_title AND lt_pl.lt_namespace = 14
+  JOIN pagelinks ON pl_target_id = lt_pl.lt_id
   JOIN page AS p1 ON pl_from = p1.page_id
   AND p1.page_namespace IN (0, 6, 10, 12, 14, 100)
-  LEFT JOIN page AS p2 ON cl_to = p2.page_title
+  LEFT JOIN page AS p2 ON lt_cat.lt_title = p2.page_title
   AND p2.page_namespace = 14
 WHERE
   p2.page_title IS NULL
@@ -65,7 +65,10 @@ LIMIT
 
     async fn run_query(&self, conn: &mut Conn) -> Result<Vec<Row>> {
         let rows = conn
-            .query_map(self.query(), |(cl_to, count)| Row { cl_to, count })
+            .query_map(self.query(), |(lt_title, count)| Row {
+                lt_title,
+                count,
+            })
             .await?;
         Ok(rows)
     }
@@ -78,7 +81,7 @@ LIMIT
         str_vec![
             format!(
                 "[[Special:WhatLinksHere/Category:{}|{}]]",
-                &row.cl_to, &row.cl_to
+                &row.lt_title, &row.lt_title
             ),
             row.count
         ]
