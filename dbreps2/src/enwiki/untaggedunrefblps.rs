@@ -43,13 +43,15 @@ impl Report<Row> for UntaggedUnrefBLPs {
 /* untaggedunrefblps.rs SLOW_OK */
 SELECT
   p1.page_title,
-  GROUP_CONCAT(cl2.cl_to SEPARATOR '|')
+  GROUP_CONCAT(cl2.cl_target_id SEPARATOR '|')
 FROM
   page AS p1
   JOIN categorylinks AS cl1 ON cl1.cl_from = p1.page_id
+  JOIN linktarget AS lt1 ON cl1.cl_target_id = lt1.lt_id
   JOIN categorylinks AS cl2 ON cl2.cl_from = p1.page_id
+  JOIN linktarget AS lt2 ON cl2.cl_target_id = lt2.lt_id
 WHERE
-  cl1.cl_to = 'All_unreferenced_BLPs'
+  lt1.lt_title = 'All_unreferenced_BLPs'
   AND p1.page_namespace = 0
   AND NOT EXISTS (
     SELECT

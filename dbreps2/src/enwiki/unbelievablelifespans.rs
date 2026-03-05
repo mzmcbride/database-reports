@@ -52,16 +52,22 @@ FROM
     SELECT
       page_namespace,
       page_title AS page_title,
-      CAST(SUBSTRING_INDEX(cl3.cl_to, '_', 1) AS UNSIGNED) AS deathyear
+      CAST(SUBSTRING_INDEX(lt3.lt_title, '_', 1) AS UNSIGNED) AS deathyear
     FROM
       categorylinks AS cl1
+      JOIN linktarget AS lt1 ON cl1.cl_target_id = lt1.lt_id
       LEFT JOIN categorylinks AS cl2 ON cl1.cl_from = cl2.cl_from
-      AND cl2.cl_to IN ('Longevity_traditions', 'Longevity_claims')
+      LEFT JOIN linktarget AS lt2 ON cl2.cl_target_id = lt2.lt_id
+        AND lt2.lt_namespace = 14
+        AND lt2.lt_title IN ('Longevity_traditions', 'Longevity_claims')
       JOIN categorylinks AS cl3 ON cl1.cl_from = cl3.cl_from
-      AND cl3.cl_to REGEXP '^[0-9]+_deaths$'
+      JOIN linktarget AS lt3 ON cl3.cl_target_id = lt3.lt_id
+        AND lt3.lt_namespace = 14
+        AND lt3.lt_title REGEXP '^[0-9]+_deaths$'
       JOIN page ON page_id = cl1.cl_from
     WHERE
-      cl1.cl_to = CONCAT(?, '_births')
+      lt1.lt_namespace = 14
+      AND lt1.lt_title = CONCAT(?, '_births')
       AND cl2.cl_from IS NULL
   ) AS BornAndDeads
 WHERE
