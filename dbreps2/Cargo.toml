@@ -7,9 +7,9 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0"
-clap = { version = "4.5.13", features = ["derive"] }
+clap = { version = "4.5.60", features = ["derive"] }
 dirs = "6.0"
-env_logger = "0.11.5"
+env_logger = "0.11.10"
 git-version = "0.3.9"
 log = "0.4"
 mwbot = "0.8.0-rc.1"
@@ -18,7 +18,7 @@ regex = "1.10"
 serde = { version = "1.0", features = ["derive"] }
 thousands = "0.2.0"
 time = { version = "0.3", features = ["formatting", "macros", "parsing"] }
-tokio = { version = "1.40", features = ["full"] }
-toml = "1.0"
+tokio = { version = "1.52", features = ["full"] }
+toml = "1.1"
 toolforge = { version = "5.0", features = ["mysql"] }
 wikipedia_prosesize = "0.4.0-rc.1"
