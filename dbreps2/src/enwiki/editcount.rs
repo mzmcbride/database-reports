@@ -225,7 +225,7 @@ LIMIT 12000;
     fn format_row(&self, row: &Row) -> Vec<String> {
         str_vec![
             if row.is_active {
-                format!("[[User:{}|{}]]", &row.name, &row.name)
+                format!("[[User:{}|{}]]", row.name, row.name)
             } else {
                 row.name.to_string()
             },

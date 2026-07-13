@@ -107,7 +107,7 @@ WHERE
     fn format_row(&self, row: &Row) -> Vec<String> {
         let mut link = dbr_link(&row.page_title);
         if row.is_categorized == 1 {
-            link = format!("<b>{}</b>", &link);
+            link = format!("<b>{}</b>", link);
         }
         str_vec![link, row.rev_timestamp]
     }

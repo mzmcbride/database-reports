@@ -130,7 +130,7 @@ ORDER BY
         let mut rows = vec![];
         let mut stub_rows = vec![];
         for row in first_rows {
-            debug!("Running subquery for {}", &row.page_id);
+            debug!("Running subquery for {}", row.page_id);
             let second_rows = conn
                 .exec_map(
                     self.subquery(),
