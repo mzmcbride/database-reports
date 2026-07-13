@@ -66,7 +66,7 @@ pub async fn load_config() -> Result<config::Config> {
 
 async fn save_page(page: Page, text: String) -> Result<()> {
     info!("Updating [[{}]]", page.title());
-    info!("{}", &text);
+    info!("{}", text);
     page.save(text, &SaveOptions::summary("Bot: updating database report"))
         .await?;
     Ok(())
@@ -316,7 +316,7 @@ pub trait Report<T: Send + Sync> {
         info!(
             "{}: Query finished, found {} rows",
             self.get_title(),
-            &rows.len()
+            rows.len()
         );
         match self.rows_per_page() {
             Some(rows_per_page) => {
@@ -326,7 +326,7 @@ pub trait Report<T: Send + Sync> {
                     index += 1;
                     let text = self.build_page(chunk, index);
                     if debug_mode {
-                        info!("{}", &text);
+                        info!("{}", text);
                     } else {
                         let page = bot.page(&self.subpage(index))?;
                         save_page(page, text).await?;
@@ -362,7 +362,7 @@ pub trait Report<T: Send + Sync> {
                 // Just dump it all into one page
                 let text = self.build_page(&rows, 1);
                 if debug_mode {
-                    info!("{}", &text);
+                    info!("{}", text);
                 } else {
                     save_page(bot.page(&self.get_title())?, text).await?;
                 }
@@ -380,7 +380,7 @@ pub trait Report<T: Send + Sync> {
             self.code()
         );
         if debug_mode {
-            info!("{}", &config);
+            info!("{}", config);
         } else {
             save_page(
                 bot.page(&format!("{}/Configuration", self.get_title()))?,

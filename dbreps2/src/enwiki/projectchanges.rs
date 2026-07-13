@@ -128,9 +128,9 @@ ORDER BY
 
     fn format_row(&self, row: &Row) -> Vec<String> {
         let page = if row.page_is_redirect.unwrap_or(0) == 1 {
-            format!("''[[Project:{}|]]''", &row.project)
+            format!("''[[Project:{}|]]''", row.project)
         } else {
-            format!("[[Project:{}|]]", &row.project)
+            format!("[[Project:{}|]]", row.project)
         };
         str_vec![page, row.count, row.no_bots_count]
     }
