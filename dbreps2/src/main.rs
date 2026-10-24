@@ -82,12 +82,8 @@ async fn main() -> Result<()> {
         .really_run(&enwiki_runner)
         .await;
     (enwiki::Potenshbdps4 {}).really_run(&enwiki_runner).await;
-    (enwiki::Potenshblps2 {}).really_run(&enwiki_runner).await;
     (enwiki::ProjectChanges {}).really_run(&enwiki_runner).await;
     (enwiki::StickyProdBLPs {}).really_run(&enwiki_runner).await;
-    (enwiki::UnbelievableLifeSpans {})
-        .really_run(&enwiki_runner)
-        .await;
     (enwiki::UntaggedUnrefBLPs {})
         .really_run(&enwiki_runner)
         .await;

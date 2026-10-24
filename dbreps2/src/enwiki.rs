@@ -22,10 +22,8 @@ mod goodarticlesbysize;
 mod orphanedafds;
 mod orphanedsubtalks;
 mod potenshbdps4;
-mod potenshblps2;
 mod projectchanges;
 mod stickyprodblps;
-mod unbelievablelifespans;
 mod untaggedunrefblps;
 mod unusedtemplates;
 mod unusedtemplatesfiltered;
@@ -37,9 +35,7 @@ pub use {
     editcount::EditCount, featuredbysize::FeaturedBySize,
     goodarticlesbysize::GoodArticlesBySize, orphanedafds::OrphanedAfds,
     orphanedsubtalks::OrphanedSubTalks, potenshbdps4::Potenshbdps4,
-    potenshblps2::Potenshblps2, projectchanges::ProjectChanges,
-    stickyprodblps::StickyProdBLPs,
-    unbelievablelifespans::UnbelievableLifeSpans,
+    projectchanges::ProjectChanges, stickyprodblps::StickyProdBLPs,
     untaggedunrefblps::UntaggedUnrefBLPs, unusedtemplates::UnusedTemplates,
     unusedtemplatesfiltered::UnusedTemplatesFiltered, usercats::UserCats,
     webhostpages::WebhostPages,
