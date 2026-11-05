@@ -25,7 +25,6 @@ mod potenshbdps4;
 mod projectchanges;
 mod stickyprodblps;
 mod untaggedunrefblps;
-mod unusedtemplatesfiltered;
 
 pub use {
     boteditcount::BotEditCount, brokenwikiprojtemps::BrokenWikiProjTemps,
@@ -34,5 +33,4 @@ pub use {
     orphanedsubtalks::OrphanedSubTalks, potenshbdps4::Potenshbdps4,
     projectchanges::ProjectChanges, stickyprodblps::StickyProdBLPs,
     untaggedunrefblps::UntaggedUnrefBLPs,
-    unusedtemplatesfiltered::UnusedTemplatesFiltered,
 };
