@@ -76,9 +76,6 @@ async fn main() -> Result<()> {
     (enwiki::UntaggedUnrefBLPs {})
         .really_run(&enwiki_runner)
         .await;
-    (enwiki::UnusedTemplatesFiltered {})
-        .really_run(&enwiki_runner)
-        .await;
     // these can be slow and are mostly just for fun, so run them last
     (general::UserStreaks {}).really_run(&enwiki_runner).await;
     (general::UserArticleStreaks {})
