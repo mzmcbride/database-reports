@@ -298,6 +298,27 @@ pub trait Report<T: Send + Sync> {
                 self.get_title()
             );
             let title_for_update_check = self.title_for_update_check();
+            let mut titles_to_check = vec![title_for_update_check.clone()];
+            if self.rows_per_page().is_some() {
+                let index = self.get_title();
+                if index != title_for_update_check {
+                    titles_to_check.push(index);
+                }
+            }
+            for title in &titles_to_check {
+                let page = bot.page(title)?;
+                if page.exists().await?
+                    && contains_database_report_template(
+                        &page.wikitext().await?,
+                    )
+                {
+                    warn!(
+                        "Skipping [[{}]] because it contains {{database report}}",
+                        self.title()
+                    );
+                    return Ok(());
+                }
+            }
             let page = bot.page(&title_for_update_check)?;
             if page.exists().await? {
                 let old_text = page.wikitext().await?;
