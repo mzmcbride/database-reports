@@ -25,10 +25,7 @@ mod potenshbdps4;
 mod projectchanges;
 mod stickyprodblps;
 mod untaggedunrefblps;
-mod unusedtemplates;
 mod unusedtemplatesfiltered;
-mod usercats;
-mod webhostpages;
 
 pub use {
     boteditcount::BotEditCount, brokenwikiprojtemps::BrokenWikiProjTemps,
@@ -36,7 +33,6 @@ pub use {
     goodarticlesbysize::GoodArticlesBySize, orphanedafds::OrphanedAfds,
     orphanedsubtalks::OrphanedSubTalks, potenshbdps4::Potenshbdps4,
     projectchanges::ProjectChanges, stickyprodblps::StickyProdBLPs,
-    untaggedunrefblps::UntaggedUnrefBLPs, unusedtemplates::UnusedTemplates,
-    unusedtemplatesfiltered::UnusedTemplatesFiltered, usercats::UserCats,
-    webhostpages::WebhostPages,
+    untaggedunrefblps::UntaggedUnrefBLPs,
+    unusedtemplatesfiltered::UnusedTemplatesFiltered,
 };

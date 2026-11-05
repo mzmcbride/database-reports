@@ -43,21 +43,10 @@ async fn main() -> Result<()> {
     (general::ExcessiveUsers {})
         .really_run(&enwiki_runner)
         .await;
-    (general::IndefFullRedirects {})
-        .really_run(&enwiki_runner)
-        .await;
-    (general::LinkedEmailsInArticles {})
-        .really_run(&enwiki_runner)
-        .await;
     // Too slow, timing out
     // (general::LinkedRedlinkedCats {}).really_run(&enwiki_runner).await;
     (general::OldEditors {}).really_run(&enwiki_runner).await;
     (general::Ownerlessuserpages {})
-        .really_run(&enwiki_runner)
-        .await;
-    (general::Pollcats {}).really_run(&enwiki_runner).await;
-    (general::UncatCats {}).really_run(&enwiki_runner).await;
-    (general::UserLinksInArticles {})
         .really_run(&enwiki_runner)
         .await;
     (enwiki::BrokenWikiProjTemps {})
@@ -87,14 +76,9 @@ async fn main() -> Result<()> {
     (enwiki::UntaggedUnrefBLPs {})
         .really_run(&enwiki_runner)
         .await;
-    (enwiki::UnusedTemplates {})
-        .really_run(&enwiki_runner)
-        .await;
     (enwiki::UnusedTemplatesFiltered {})
         .really_run(&enwiki_runner)
         .await;
-    (enwiki::UserCats {}).really_run(&enwiki_runner).await;
-    (enwiki::WebhostPages {}).really_run(&enwiki_runner).await;
     // these can be slow and are mostly just for fun, so run them last
     (general::UserStreaks {}).really_run(&enwiki_runner).await;
     (general::UserArticleStreaks {})

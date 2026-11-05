@@ -19,23 +19,16 @@ mod blankpages;
 mod dupefilenames;
 mod excessiveips;
 mod excessiveusers;
-mod indeffullredirects;
-mod linkedemailsinarticles;
 mod linkedredlinkedcats;
 mod oldeditors;
 mod ownerlessuserpages;
-mod pollcats;
-mod uncatcats;
 mod userarticlestreaks;
-mod userlinksinarticles;
 mod userstreaks;
 
 pub use {
     articlesmostredirects::ArticlesMostRedirects, blankpages::BlankPages,
     dupefilenames::DupeFileNames, excessiveips::ExcessiveIps,
-    excessiveusers::ExcessiveUsers, indeffullredirects::IndefFullRedirects,
-    linkedemailsinarticles::LinkedEmailsInArticles, oldeditors::OldEditors,
-    ownerlessuserpages::Ownerlessuserpages, pollcats::Pollcats,
-    uncatcats::UncatCats, userarticlestreaks::UserArticleStreaks,
-    userlinksinarticles::UserLinksInArticles, userstreaks::UserStreaks,
+    excessiveusers::ExcessiveUsers, oldeditors::OldEditors,
+    ownerlessuserpages::Ownerlessuserpages,
+    userarticlestreaks::UserArticleStreaks, userstreaks::UserStreaks,
 };
