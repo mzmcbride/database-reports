@@ -20,5 +20,5 @@ thousands = "0.2.0"
 time = { version = "0.3", features = ["formatting", "macros", "parsing"] }
 tokio = { version = "1.52", features = ["full"] }
 toml = "1.1"
-toolforge = { version = "5.8", features = ["mysql"] }
+toolforge = { version = "6.2", features = ["mysql"] }
 wikipedia_prosesize = "0.4.0-rc.1"
